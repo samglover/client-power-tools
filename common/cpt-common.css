@@ -1,0 +1,57 @@
+.cpt-this-expands {
+  display: none;
+}
+
+.cpt-message {
+  background-color: #fff;
+  box-shadow:
+    0 0 0 1px #ddd,
+    1px 1px 3px rgba( 0, 0, 0, 0.2 )
+  ;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+  .cpt-message:target .cpt-message-content {
+    background-color: lightyellow;
+  }
+
+  .cpt-message .cpt-message-content {
+    padding: 20px;
+  }
+
+    .cpt-message .cpt-message-content *:first-child {
+      margin-top: 0;
+    }
+
+    .cpt-message .cpt-message-content *:last-child {
+      margin-bottom: 0;
+    }
+
+  .cpt-message .cpt-message-meta {
+    border-top: 1px dashed #ddd;
+    padding: 10px 20px;
+  }
+
+    .cpt-message .cpt-message-meta p {
+      margin: 0;
+      padding: 0;
+    }
+
+.cpt-message.my-message {
+  margin-left: 33.333%;
+}
+
+.client-message .cpt-message-content {
+  background-color: lightblue;
+}
+
+.cpt-message.not-my-message {
+  margin-right: 33.333%;
+}
+
+.cpt-message.status-update-request {
+  margin-left: 0;
+  margin-right: 0;
+}

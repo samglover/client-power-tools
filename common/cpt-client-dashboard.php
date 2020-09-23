@@ -1,0 +1,231 @@
+<?php
+
+namespace Client_Power_Tools\Core\Common;
+
+
+/**
+* Noindex's the client dashboard because it's none of Google's business.
+*/
+function cpt_noindex_client_dashboard() {
+
+  if ( cpt_is_client_dashboard() ) {
+    echo '<meta name="robots" content="noindex" />';
+  }
+
+}
+
+add_action( 'wp_head',  __NAMESPACE__ . '\cpt_noindex_client_dashboard' );
+
+
+function cpt_client_dashboard( $content ) {
+
+  if ( cpt_is_client_dashboard() && is_main_query() ) {
+
+    if ( is_user_logged_in() ) {
+
+      $user_id      = get_current_user_id();
+      $user         = get_userdata( $user_id );
+      $client_data  = cpt_get_client_data( $user_id );
+
+      $request_frequency       = get_option( 'cpt_status_update_req_freq' );
+      $days_since_last_request = cpt_days_since_last_request( $user_id );
+
+      if ( in_array( 'cpt-client', $user->roles ) ) {
+
+        ob_start();
+
+          echo '<p>Welcome back, ' . $client_data[ 'first_name' ] . '!</p>';
+
+          cpt_get_results( 'cpt_new_message_result' );
+
+          if ( is_null( $days_since_last_request ) || $days_since_last_request > $request_frequency ) {
+            cpt_status_update_request_button( $user_id );
+          }
+
+          /**
+          * Removes the the_content filter so it doesn't execute within the
+          * nested query for client messages.
+          */
+          remove_filter( current_filter(), __FUNCTION__ );
+
+          cpt_messages( $user_id );
+
+        return ob_get_clean();
+
+      } else {
+
+        echo '<p>Sorry, you don\'t have permission to view this page.</p>';
+        echo '<p>(You are logged in, but your user account is missing the "Client" role.)</p>';
+
+      }
+
+    } else {
+
+      echo '<p>Please <a class="cpt-login-link" href="#">log in</a> to view your client dashboard.</p>';
+
+    }
+
+  } else {
+
+    return $content;
+
+  }
+
+}
+
+add_filter( 'the_content', __NAMESPACE__ . '\cpt_client_dashboard' );
+
+
+function cpt_status_update_request_button( $user_id ) {
+
+  ob_start();
+
+    ?>
+
+      <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST">
+
+        <?php wp_nonce_field( 'cpt_status_update_requested', 'cpt_status_update_request_nonce' ); ?>
+        <input name="action" value="cpt_status_update_requested" type="hidden">
+        <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
+        <p class="submit">
+          <input name="submit" id="submit" class="button button-primary" type="submit" value="Request Status Update">
+        </p>
+
+      </form>
+
+    <?php
+
+  echo ob_get_clean();
+
+}
+
+
+/**
+* Calculates the number of days since the client last clicked the status update
+* request button. (Since status updates are just cpt_message posts with a custom
+* field, this is based on a custom query.)
+*/
+function cpt_days_since_last_request( $user_id ) {
+
+  if ( ! $user_id ) { return; }
+
+  $last_request_date = null;
+
+  $args = [
+    'meta_query'      => [
+      'relation'      => 'AND',
+      [
+        'key'         => 'cpt_clients_user_id',
+        'value'       => $user_id,
+      ],
+      [
+        'key'         => 'cpt_status_update_request',
+        'value'       => true,
+      ],
+    ],
+    'order'           => 'DESC',
+    'orderby'         => 'post_date',
+    'post_type'       => 'cpt_message',
+    'posts_per_page'  => 1,
+  ];
+
+  $status_update_requests = new \WP_Query( $args );
+
+  if ( $status_update_requests->have_posts() ) : while ( $status_update_requests->have_posts() ) : $status_update_requests->the_post();
+
+    $last_request_date = new \DateTime( get_the_date( 'Y-m-d' ) );
+
+  endwhile; endif;
+
+  $current_date             = new \DateTime( strtotime( date( get_option( 'Y-m-d' ) ) ) );
+  $days_since_last_request  = $last_request_date ? $last_request_date->diff( $current_date )->days : null;
+
+  return $days_since_last_request;
+
+}
+
+
+function cpt_process_status_update_request() {
+
+  if ( isset( $_POST[ 'cpt_status_update_request_nonce' ] ) && wp_verify_nonce( $_POST[ 'cpt_status_update_request_nonce' ], 'cpt_status_update_requested' ) ) {
+
+    $status_update_request = [
+      'post_title'    => 'STATUS UPDATE REQUESTED',
+      'post_content'  => 'The client would like a status update.',
+      'post_name'     => md5( sanitize_text_field( current_time( 'timestamp' ) ) . random_int( 0, PHP_INT_MAX ) ),
+      'post_status'   => 'publish',
+      'post_type'     => 'cpt_message',
+      'meta_input'    => [
+        'cpt_clients_user_id'         => $_POST[ 'clients_user_id' ],
+        'cpt_status_update_request'   => true,
+      ],
+    ];
+
+    $post = wp_insert_post( $status_update_request, $wp_error );
+
+    if ( is_wp_error( $post ) ) {
+
+      $result = 'Your status update request could not be sent. Error message: ' . $post->get_error_message();
+
+    } else {
+
+      cpt_status_update_request_notification( $post );
+
+      $result = 'Status update requested!';
+
+    }
+
+    set_transient( 'cpt_new_message_result', $result, 45  );
+
+    wp_redirect( $_POST[ '_wp_http_referer' ] );
+    exit;
+
+  } else {
+
+    die();
+
+  }
+
+}
+
+add_action( 'admin_post_cpt_status_update_requested', __NAMESPACE__ . '\cpt_process_status_update_request' );
+
+
+function cpt_status_update_request_notification( $message_id ) {
+
+  if ( ! $message_id ) { return; }
+
+  $msg_obj        = get_post( $message_id );
+  $sender_id      = $msg_obj->post_author;
+  $client_obj     = get_userdata( get_post_meta( $message_id, 'cpt_clients_user_id', true ) );
+  $profile_url    = cpt_get_client_profile_url( $sender_id );
+
+  $from_name      = get_the_author_meta( 'display_name', $msg_obj->post_author );
+  $from_email     = get_the_author_meta( 'user_email', $msg_obj->post_author );
+
+  $headers[]      = 'Content-Type: text/html; charset=UTF-8';
+  $headers[]      = 'From: ' . $from_name . ' <' . $from_email . '>';
+
+  $to             = get_bloginfo( 'admin_email' );
+  $subject        = $msg_obj->post_title . ' by ' . $from_name;
+  $subject_html   = $msg_obj->post_title . '&nbsp;<br />' . 'by ' . $from_name;
+
+  ob_start();
+
+    echo get_email_styles();
+
+    ?>
+
+      <div class="cpt-card" align="left">
+        <h2><?php echo $subject_html; ?></h2>
+        <p>Please post an update.</p>
+        <p align="center"><a class="button" href="<?php echo $profile_url; ?>">Go to <?php echo $from_name; ?></a></p>
+      </div>
+
+    <?php
+
+  $message = ob_get_clean();
+
+  wp_mail( $to, $subject, $message, $headers );
+
+}

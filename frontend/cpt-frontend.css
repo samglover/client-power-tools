@@ -1,0 +1,136 @@
+.cpt-modal {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-areas: 'lbuffer modal rbuffer';
+  grid-template-columns: minmax( 10px, 1fr ) minmax( 300px, 500px ) minmax( 10px, 1fr );
+  margin: 0;
+  max-height: 80%;
+  overflow: scroll;
+  padding: 0;
+  position: fixed;
+    top: 10%;
+  width: 100%;
+  z-index: 100;
+}
+
+  .cpt-modal-card {
+    background-color: #fff;
+    box-shadow:
+      0 0 0 1px #ddd,
+      1px 1px 3px rgba( 0, 0, 0, 0.2 )
+    ;
+    box-sizing: border-box;
+    grid-area: modal;
+    margin: 3px;
+    padding: 30px;
+    position: relative;
+  }
+
+    .cpt-modal-card > *:last-child,
+    .cpt-modal-inner > *:last-child,
+    .cpt-modal-inner form > *:last-child {
+      margin-bottom: 0;
+    }
+
+  .cpt-modal-dismiss-button,
+  .cpt-notice-dismiss-button {
+    align-items: center;
+    background-color: #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    height: 30px;
+    justify-content: center;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+      top: 30px;
+      right: 30px;
+    text-decoration: none;
+    width: 30px;
+  }
+
+  .cpt-notice-dismiss-button {
+    height: 20px;
+    position: absolute;
+      top: 20px;
+      right: 20px;
+    width: 20px;
+  }
+
+  .cpt-modal-dismiss-button:hover,
+  .cpt-notice-dismiss-button:hover {
+    background-color: #ddd;
+    box-shadow: 1px 1px 3px rgba( 0, 0, 0, 0.4 );
+    text-decoration: none;
+  }
+
+  .cpt-modal-dismiss-button:active,
+  .cpt-notice-dismiss-button:active {
+    background-color: #bbb;
+    box-shadow: none;
+    text-decoration: none;
+  }
+
+    .cpt-modal-dismiss-button:active img,
+    .cpt-notice-dismiss-button:active img {
+      opacity: .75;
+    }
+
+  .cpt-modal h2 {
+    margin-top: 0;
+    padding-right: 50px;
+    padding-top: 0;
+  }
+
+  .cpt-modal form {
+    margin-bottom: 1em;
+  }
+
+  .cpt-modal .description {
+    font-size: 80%;
+    margin-bottom: 1.25em;
+  }
+
+.cpt-modal-screen {
+  background-color: rgb( 0, 0, 0, .4 );
+  height: 100%;
+  position: fixed;
+    left: 0;
+    top: 0;
+  width: 100%;
+  z-index: 99;
+}
+
+.cpt-error,
+.cpt-success {
+  background-color: #eee;
+  border-left: 4px solid;
+  padding: 20px;
+}
+
+.cpt-error {
+  border-left-color: red;
+}
+.cpt-success {
+  border-left-color: green;
+}
+
+
+
+.cpt-inline-modal {
+  background-color: #fff;
+  box-shadow:
+    0 0 0 1px #ddd,
+    1px 1px 3px rgba( 0, 0, 0, 0.2 )
+  ;
+  box-sizing: border-box;
+  margin: 3px 3px 2em 3px;
+  padding: 20px;
+  position: relative;
+}
+
+.cpt-inline-modal *:last-child {
+  margin-bottom: 0;
+}
