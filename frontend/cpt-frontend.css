@@ -79,18 +79,49 @@
     }
 
   .cpt-modal h2 {
+    border: none;
     margin-top: 0;
     padding-right: 50px;
     padding-top: 0;
   }
 
+    .cpt-modal h2::before {
+      content: none;
+    }
+
   .cpt-modal form {
     margin-bottom: 1em;
   }
 
-  .cpt-modal .description {
-    font-size: 80%;
-    margin-bottom: 1.25em;
+    .cpt-modal form p,
+    .cpt-modal form label,
+    .cpt-modal form input,
+    .cpt-modal form select,
+    .cpt-modal form textarea,
+    #cpt-new-message-form form p,
+    #cpt-new-message-form form label,
+    #cpt-new-message-form form input,
+    #cpt-new-message-form form select,
+    #cpt-new-message-form form textarea {
+      display: block;
+    }
+
+    .cpt-modal form .large-text,
+    #cpt-login form input[ type="password" ],
+    #cpt-login form input[ type="text" ],
+    #cpt-new-message-form form .large-text {
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .cpt-modal form .description {
+      font-size: 80%;
+      margin-bottom: 1.25em;
+    }
+
+  .cpt-modal a.button,
+  .cpt-modal button {
+    display: inline-block;
   }
 
 .cpt-modal-screen {

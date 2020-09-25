@@ -10,7 +10,9 @@ function cpt_messages( $user_id ) {
   cpt_message_list( $user_id );
 
   echo '<h2>New Message</h2>';
-  cpt_new_message_form( $user_id );
+  echo '<div id="cpt-new-message-form">';
+    cpt_new_message_form( $user_id );
+  echo '</div>';
 
 }
 
