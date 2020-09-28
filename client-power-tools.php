@@ -1,7 +1,7 @@
 <?php
 
 /*
-Plugin Name: Client Power Tools for WordPress
+Plugin Name: Client Power Tools
 Plugin URI: https://clientpowertools.com
 Description: Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
 Author: Sam Glover
