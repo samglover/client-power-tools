@@ -9,7 +9,7 @@ namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 use Client_Power_Tools\Core\Includes;
 
-class CPT_Message_List_Table extends Includes\WP_List_Table  {
+class CLIENT_POWER_TOOLS_Message_List_Table extends Includes\WP_List_Table  {
 
   function __construct() {
 

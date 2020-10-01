@@ -16,25 +16,25 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
 * Constants
 */
-define( 'CPT_PLUGIN_VERSION', '0.1.0' );
-define( 'CPT_DIR_PATH', plugin_dir_path( __FILE__ ) );
-define( 'CPT_DIR_URL', plugin_dir_url( __FILE__ ) );
+define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '0.1.0' );
+define( 'CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path( __FILE__ ) );
+define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 
 
 /**
 * Plugin Files
 */
-require_once( CPT_DIR_PATH . 'common/cpt-common.php' );
-require_once( CPT_DIR_PATH . 'common/cpt-client-dashboard.php' );
-require_once( CPT_DIR_PATH . 'common/cpt-messages.php' );
+require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common.php' );
+require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-client-dashboard.php' );
+require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php' );
 
 
 function cpt_register_common_scripts() {
 
-	wp_register_style( 'cpt-common-css', CPT_DIR_URL . 'common/cpt-common.css' );
+	wp_register_style( 'cpt-common-css', CLIENT_POWER_TOOLS_DIR_URL . 'common/cpt-common.css' );
 	wp_enqueue_style( 'cpt-common-css' );
 
-	wp_register_script( 'cpt-common-js', CPT_DIR_URL . 'common/cpt-common.js', [ 'jquery' ], '', true );
+	wp_register_script( 'cpt-common-js', CLIENT_POWER_TOOLS_DIR_URL . 'common/cpt-common.js', [ 'jquery' ], '', true );
 	wp_enqueue_script( 'cpt-common-js' );
 
 }
@@ -45,16 +45,16 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\cpt_register_common_scrip
 
 if ( ! is_admin() ) {
 
-	require_once( CPT_DIR_PATH . 'frontend/cpt-frontend.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-frontend.php' );
 
 	function cpt_register_frontend_scripts() {
 
 		global $post; // For localizing cpt-frontend.js
 
-		wp_register_style( 'cpt-frontend-css', CPT_DIR_URL . 'frontend/cpt-frontend.css' );
+		wp_register_style( 'cpt-frontend-css', CLIENT_POWER_TOOLS_DIR_URL . 'frontend/cpt-frontend.css' );
 		wp_enqueue_style( 'cpt-frontend-css' );
 
-		wp_register_script( 'cpt-frontend-js', CPT_DIR_URL . 'frontend/cpt-frontend.js', [ 'jquery' ], '', true );
+		wp_register_script( 'cpt-frontend-js', CLIENT_POWER_TOOLS_DIR_URL . 'frontend/cpt-frontend.js', [ 'jquery' ], '', true );
 		wp_localize_script( 'cpt-frontend-js', 'cpt_frontend_js_vars',
 			[
 				'postID'			=> $post->ID,
@@ -72,25 +72,25 @@ if ( ! is_admin() ) {
 
 if ( is_admin() ) {
 
-	require_once( CPT_DIR_PATH . 'includes/class-wp-list-table.php' );
-	require_once( CPT_DIR_PATH . 'admin/cpt-admin.php' );
-	require_once( CPT_DIR_PATH . 'admin/cpt-admin-messages.php' );
-	require_once( CPT_DIR_PATH . 'admin/cpt-admin-messages-table.php' );
-	require_once( CPT_DIR_PATH . 'admin/cpt-new-client.php' );
-	require_once( CPT_DIR_PATH . 'admin/cpt-clients.php' );
-	require_once( CPT_DIR_PATH . 'admin/cpt-client-table.php' );
-	require_once( CPT_DIR_PATH . 'admin/cpt-edit-client.php' );
-	require_once( CPT_DIR_PATH . 'admin/cpt-settings.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'includes/class-wp-list-table.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin-messages.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin-messages-table.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-client.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-clients.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-table.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-client.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-settings.php' );
 
 }
 
 
 function cpt_register_admin_styles() {
 
-	wp_register_style( 'cpt-admin-css', CPT_DIR_URL . 'admin/cpt-admin.css' );
+	wp_register_style( 'cpt-admin-css', CLIENT_POWER_TOOLS_DIR_URL . 'admin/cpt-admin.css' );
 	wp_enqueue_style( 'cpt-admin-css' );
 
-	wp_register_script( 'cpt-admin-js', CPT_DIR_URL . 'admin/cpt-admin.js', [ 'jquery' ], '', true );
+	wp_register_script( 'cpt-admin-js', CLIENT_POWER_TOOLS_DIR_URL . 'admin/cpt-admin.js', [ 'jquery' ], '', true );
 	wp_enqueue_script( 'cpt-admin-js' );
 
 }

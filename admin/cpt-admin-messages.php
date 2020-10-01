@@ -12,7 +12,7 @@ function cpt_admin_messages() {
       <div id="cpt-admin" class="wrap">
 
         <div id="cpt-admin-header">
-          <img src="<?php echo CPT_DIR_URL; ?>admin/images/cpt-logo.svg" height="auto" width="100%" />
+          <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>admin/images/cpt-logo.svg" height="auto" width="100%" />
           <div id="cpt-admin-page-title">
             <h1 id="cpt-page-title">Messages</h1>
             <p id="cpt-subtitle">Client Power Tools</p>
@@ -34,7 +34,7 @@ function cpt_get_message_list() {
 
   ob_start();
 
-    $message_list = new CPT_Message_List_Table();
+    $message_list = new CLIENT_POWER_TOOLS_Message_List_Table();
     $message_list->prepare_items();
 
     ?>

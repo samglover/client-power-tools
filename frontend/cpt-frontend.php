@@ -61,7 +61,7 @@ function cpt_login() {
         <div class="cpt-modal-card">
 
           <button class="cpt-modal-dismiss-button">
-            <img src="<?php echo CPT_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
+            <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
           </button>
 
           <?php
@@ -368,7 +368,7 @@ function cpt_notices() {
           <div class="cpt-modal-card">
 
             <button class="cpt-modal-dismiss-button">
-              <img src="<?php echo CPT_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
+              <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
             </button>
 
             <div class="cpt-modal-inner">
