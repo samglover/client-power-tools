@@ -108,7 +108,6 @@ function cpt_get_client_list() {
     ?>
 
       <form id="client-list" method="get">
-        <input type="hidden" name="page" value="<?php echo $_REQUEST[ 'page' ]; ?>" />
         <?php $client_list->views(); ?>
         <?php $client_list->display() ?>
       </form>

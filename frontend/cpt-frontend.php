@@ -276,6 +276,15 @@ function cpt_process_password_change() {
 
     $key        = $_REQUEST[ 'key' ];
     $login      = $_REQUEST[ 'login' ];
+
+    if ( empty( $key ) || ! is_string( $key ) ) {
+  		return new WP_Error( 'invalid_key', __( 'Invalid key.' ) );
+  	}
+
+  	if ( empty( $login ) || ! is_string( $login ) ) {
+  		return new WP_Error( 'invalid_key', __( 'Invalid key.' ) );
+  	}
+
     $user       = check_password_reset_key( $key, $login );
     $dashboard  = Common\cpt_get_client_dashboard_url();
 

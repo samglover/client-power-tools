@@ -40,7 +40,6 @@ function cpt_get_message_list() {
     ?>
 
       <form id="cpt-message-list" method="get">
-        <input type="hidden" name="page" value="<?php echo $_REQUEST[ 'page' ]; ?>" />
         <?php $message_list->display() ?>
       </form>
 
