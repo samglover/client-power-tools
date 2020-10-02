@@ -149,14 +149,16 @@ function cpt_process_status_update_request() {
 
   if ( isset( $_POST[ 'cpt_status_update_request_nonce' ] ) && wp_verify_nonce( $_POST[ 'cpt_status_update_request_nonce' ], 'cpt_status_update_requested' ) ) {
 
+    $clients_user_id = sanitize_key( intval( $_POST[ 'clients_user_id' ] ) );
+
     $status_update_request = [
       'post_title'    => 'STATUS UPDATE REQUESTED',
       'post_content'  => 'The client would like a status update.',
-      'post_name'     => md5( sanitize_text_field( current_time( 'timestamp' ) ) . random_int( 0, PHP_INT_MAX ) ),
+      'post_name'     => md5( current_time( 'timestamp' ) . random_int( 0, PHP_INT_MAX ) ),
       'post_status'   => 'publish',
       'post_type'     => 'cpt_message',
       'meta_input'    => [
-        'cpt_clients_user_id'         => $_POST[ 'clients_user_id' ],
+        'cpt_clients_user_id'         => $clients_user_id,
         'cpt_status_update_request'   => true,
       ],
     ];

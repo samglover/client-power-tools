@@ -21,7 +21,7 @@ function cpt_clients() {
 
     if ( isset( $_REQUEST[ 'user_id' ] ) ) {
 
-      $user_id        = intval( $_REQUEST[ 'user_id' ] );
+      $user_id        = sanitize_key( intval( $_REQUEST[ 'user_id' ] ) );
       $client_data    = Common\cpt_get_client_data( $user_id );
       $client_id      = $client_data[ 'client_id' ];
       $client_status  = $client_data[ 'status' ];
@@ -44,7 +44,7 @@ function cpt_clients() {
 
     }
 
-    $page_header .= '<p id="cpt-subtitle">Client Power Tools</p>' . "\n" . '</div>';
+    $page_header .= "\n" . '</div>';
 
     ?>
 
@@ -59,7 +59,7 @@ function cpt_clients() {
         ?>
 
         <div id="cpt-admin-header">
-          <img src="<?php echo CPT_DIR_URL; ?>admin/images/cpt-logo.svg" height="auto" width="100%" />
+          <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>admin/images/cpt-logo.svg" height="auto" width="100%" />
           <?php echo $page_header; ?>
         </div>
         <hr class="wp-header-end">
@@ -68,7 +68,7 @@ function cpt_clients() {
 
           if ( isset( $_REQUEST[ 'user_id' ] ) ) {
 
-            $user_id = intval( $_REQUEST[ 'user_id' ] );
+            $user_id = sanitize_key( intval( $_REQUEST[ 'user_id' ] ) );
             cpt_get_client_profile( $user_id );
 
           } else {
@@ -108,7 +108,6 @@ function cpt_get_client_list() {
     ?>
 
       <form id="client-list" method="get">
-        <input type="hidden" name="page" value="<?php echo $_REQUEST[ 'page' ]; ?>" />
         <?php $client_list->views(); ?>
         <?php $client_list->display() ?>
       </form>

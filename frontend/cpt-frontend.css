@@ -32,8 +32,8 @@
       margin-bottom: 0;
     }
 
-  .cpt-modal-dismiss-button,
-  .cpt-notice-dismiss-button {
+  button.cpt-modal-dismiss-button,
+  button.cpt-notice-dismiss-button {
     align-items: center;
     background-color: #ccc;
     border-radius: 50%;
@@ -51,7 +51,7 @@
     width: 30px;
   }
 
-  .cpt-notice-dismiss-button {
+  button.cpt-notice-dismiss-button {
     height: 20px;
     position: absolute;
       top: 20px;
@@ -59,22 +59,22 @@
     width: 20px;
   }
 
-  .cpt-modal-dismiss-button:hover,
-  .cpt-notice-dismiss-button:hover {
+  button.cpt-modal-dismiss-button:hover,
+  button.cpt-notice-dismiss-button:hover {
     background-color: #ddd;
     box-shadow: 1px 1px 3px rgba( 0, 0, 0, 0.4 );
     text-decoration: none;
   }
 
-  .cpt-modal-dismiss-button:active,
-  .cpt-notice-dismiss-button:active {
+  button.cpt-modal-dismiss-button:active,
+  button.cpt-notice-dismiss-button:active {
     background-color: #bbb;
     box-shadow: none;
     text-decoration: none;
   }
 
-    .cpt-modal-dismiss-button:active img,
-    .cpt-notice-dismiss-button:active img {
+    button.cpt-modal-dismiss-button:active img,
+    button.cpt-notice-dismiss-button:active img {
       opacity: .75;
     }
 

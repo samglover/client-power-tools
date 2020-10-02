@@ -8,8 +8,8 @@ use Client_Power_Tools\Core\Common;
 * Adds a body class to make it easy to override CPT styles.
 */
 add_filter( 'body_class', function( $classes ) {
-  return array_merge( $classes, array( 'customize-cpt' ) );
-} );
+  return array_merge( $classes, [ 'customize-cpt' ] );
+});
 
 
 /**
@@ -61,7 +61,7 @@ function cpt_login() {
         <div class="cpt-modal-card">
 
           <button class="cpt-modal-dismiss-button">
-            <img src="<?php echo CPT_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
+            <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
           </button>
 
           <?php
@@ -74,7 +74,10 @@ function cpt_login() {
               // cpt_login=setpw and a key and login.
               if ( $_REQUEST[ 'cpt_login' ] == 'setpw' && isset( $_REQUEST[ 'key' ] ) && isset( $_REQUEST[ 'login' ] ) ) {
 
-                cpt_password_change_form( $_REQUEST[ 'key' ], $_REQUEST[ 'login' ] );
+                $key    = sanitize_key( $_REQUEST[ 'key' ] );
+                $login  = sanitize_user( $_REQUEST[ 'login' ] );
+
+                cpt_password_change_form( $key, $login );
 
               // Otherwise, outputs the login/password reset form.
               } else {
@@ -90,7 +93,9 @@ function cpt_login() {
                       // successful password change.)
                       if ( isset( $_REQUEST[ 'cpt_success' ] ) ) {
 
-                        switch ( $_REQUEST[ 'cpt_success' ] ) {
+                        $success_message = sanitize_key( $_REQUEST[ 'cpt_success' ] );
+
+                        switch ( $success_message ) {
 
                           case 'password_changed':
                             echo '<p class="cpt-success">' . __( 'Password successfully changed.' ) . '</p>';
@@ -125,14 +130,16 @@ function cpt_login() {
                       // be shown a modal notice.)
                       if ( isset( $_REQUEST[ 'cpt_error' ] ) ) {
 
-                        switch ( $_REQUEST[ 'cpt_error' ] ) {
+                        $error_val = sanitize_key( $_REQUEST[ 'cpt_error' ] );
+
+                        switch ( $error_val ) {
 
                           case 'invalid_key':
                             echo '<p class="cpt-error">' . __( 'Your password reset key is invalid. Please try again.' ) . '</p>';
                             break;
 
                           default:
-                            echo '<p class="cpt-error">' . __( 'Error: ' ) . $_REQUEST[ 'cpt_error' ] . '</p>';
+                            echo '<p class="cpt-error">' . __( 'Error: ' ) . $error_val . '</p>';
 
                         }
 
@@ -226,7 +233,9 @@ function cpt_password_change_form( $key, $login ) {
 
         if ( isset( $_REQUEST[ 'cpt_error' ] ) ) {
 
-          switch ( $_REQUEST[ 'cpt_error' ] ) {
+          $error_val = sanitize_key( $_REQUEST[ 'cpt_error' ] );
+
+          switch ( $error_val ) {
 
             case 'password_reset_empty':
               echo '<p class="cpt-error">' . __( 'You did not enter a new password. Please try again.' ) . '</p>';
@@ -237,7 +246,7 @@ function cpt_password_change_form( $key, $login ) {
               break;
 
             default:
-              echo '<p class="cpt-error">' . __( 'Error: ' ) . $_REQUEST[ 'cpt_error' ] . '</p>';
+              echo '<p class="cpt-error">' . __( 'Error: ' ) . $error_val . '</p>';
 
           }
 
@@ -274,9 +283,10 @@ function cpt_process_password_change() {
 
   if ( $_SERVER[ 'REQUEST_METHOD' ] == 'POST' ) {
 
-    $key        = $_REQUEST[ 'key' ];
-    $login      = $_REQUEST[ 'login' ];
+    $key        = sanitize_key( $_REQUEST[ 'key' ] );
+    $login      = sanitize_user( $_REQUEST[ 'login' ] );
     $user       = check_password_reset_key( $key, $login );
+
     $dashboard  = Common\cpt_get_client_dashboard_url();
 
     if ( ! $user || is_wp_error( $user ) ) {
@@ -291,9 +301,12 @@ function cpt_process_password_change() {
 
     if ( isset( $_POST[ 'pass1' ] ) ) {
 
+      $pass1 = $_POST[ 'pass1' ];
+      $pass2 = $_POST[ 'pass2' ];
+
       // Sends back the password_reset_empty error code if the pass1 field is
       // blank.
-      if ( empty( $_POST[ 'pass1' ] ) ) {
+      if ( empty( $pass1 ) ) {
 
         $redirect_url = add_query_arg( 'cpt_login', 'setpw', $dashboard );
         $redirect_url = add_query_arg( 'key', $key, $redirect_url );
@@ -307,7 +320,7 @@ function cpt_process_password_change() {
 
       // Sends back the password_mismatch error code if the password fields
       // don't match.
-      if ( $_POST[ 'pass1' ] !== $_POST[ 'pass2' ] ) {
+      if ( $pass1 !== $pass2 ) {
 
         $redirect_url = add_query_arg( 'cpt_login', 'setpw', $dashboard );
         $redirect_url = add_query_arg( 'key', $key, $redirect_url );
@@ -320,7 +333,7 @@ function cpt_process_password_change() {
       }
 
       // Resets the password and sends back the password_changed success code.
-      reset_password( $user, $_POST[ 'pass1' ] );
+      reset_password( $user, $pass1 );
       wp_redirect( add_query_arg( 'cpt_success', 'password_changed', $dashboard ) );
 
     } else {
@@ -347,7 +360,9 @@ function cpt_notices() {
 
   if ( isset( $_REQUEST[ 'cpt_notice' ] ) ) {
 
-    switch ( $_REQUEST[ 'cpt_notice' ] ) {
+    $notice_val = sanitize_key( $_REQUEST[ 'cpt_notice' ] );
+
+    switch ( $notice_val ) {
 
       case 'rp_checkemail':
         $heading  = '<h2>' . __( 'Please Check Your Email' ) . '</h2>';
@@ -368,7 +383,7 @@ function cpt_notices() {
           <div class="cpt-modal-card">
 
             <button class="cpt-modal-dismiss-button">
-              <img src="<?php echo CPT_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
+              <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
             </button>
 
             <div class="cpt-modal-inner">

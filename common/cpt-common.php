@@ -102,7 +102,7 @@ function cpt_get_client_name( $user_id ) {
 
   if ( ! $user_id ) { return; }
 
-  $user_meta    = get_userdata( $user_id );
+  $user_meta = get_userdata( $user_id );
 
   if ( $user_meta->first_name && $user_meta->last_name ) {
     $client_name = $user_meta->first_name . ' ' . $user_meta->last_name;
@@ -230,7 +230,7 @@ function cpt_get_results( $transient_key ) {
         ?>
 
           <button class="cpt-notice-dismiss-button">
-            <img src="<?php echo CPT_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
+            <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
           </button>
 
         <?php
