@@ -79,22 +79,17 @@ function cpt_edit_client_form( $client_data ) {
 
                   <?php
 
-                    $options = [
-                      'Potential',
-                      'Active',
-                      'Billing',
-                      'Inactive',
-                    ];
+                    $statuses = $statuses_array = explode( "\n", get_option( 'cpt_client_statuses' ) );
 
-                    foreach ( $options as $option ) {
+                    foreach ( $statuses as $status ) {
 
-                      if ( $option == $client_data[ 'status' ] ) {
+                      if ( $status == $client_data[ 'status' ] ) {
                         echo '<option selected>';
                       } else {
                         echo '<option>';
                       }
 
-                      echo $option . '</option>';
+                      echo $status . '</option>';
 
                     }
 
