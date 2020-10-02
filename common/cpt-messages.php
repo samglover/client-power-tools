@@ -21,7 +21,7 @@ function cpt_message_list( $user_id ) {
 
   if ( ! $user_id ) { return; }
 
-  $paged = isset( $_GET[ 'paged' ] ) ? $_GET[ 'paged' ] : get_query_var( 'paged' );
+  $paged = isset( $_GET[ 'paged' ] ) ? sanitize_key( intval( $_GET[ 'paged' ] ) ) : get_query_var( 'paged' );
 
   $args = [
     'meta_key'        => 'cpt_clients_user_id',
@@ -244,30 +244,25 @@ function cpt_process_new_message() {
 
   if ( isset( $_POST[ 'cpt_new_message_nonce' ] ) && wp_verify_nonce( $_POST[ 'cpt_new_message_nonce' ], 'cpt_new_message_added' ) ) {
 
-    $post_title       = wp_strip_all_tags( $_POST[ 'subject_line' ] );
-    $post_content     = $_POST[ 'message' ];
-    $clients_user_id  = $_POST[ 'clients_user_id' ];
-
-    if ( ! empty( $post_title ) ) {
-      $new_message[ 'post_title' ]  = $post_title;
-    }
-
-    if ( ! empty( $post_content ) ) {
-      $new_message[ 'post_content' ] = $post_content;
-    }
-
-    if ( ! empty( $clients_user_id ) ) {
-      $new_message[ 'meta_input' ][ 'cpt_clients_user_id' ] = $clients_user_id;
-    }
+    $post_title       = wp_strip_all_tags( sanitize_text_field( $_POST[ 'subject_line' ] ) );
+    $post_content     = wp_kses_post( $_POST[ 'message' ] );
+    $clients_user_id  = sanitize_key( intval( $_POST[ 'clients_user_id' ] ) );
 
     /**
     * Note. When creating a new message, for the post slug we generate an md5
     * hash from the timestamp plus a random integer, making the message URL
     * pretty much impossible to guess.
     */
-    $new_message[ 'post_name' ]   = md5( time() . random_int( 0, PHP_INT_MAX ) );
-    $new_message[ 'post_status' ] = 'publish';
-    $new_message[ 'post_type' ]   = 'cpt_message';
+    $new_message = [
+      'post_name'     => md5( time() . random_int( 0, PHP_INT_MAX ) ),
+      'post_title'    => $post_title,
+      'post_content'  => $post_content,
+      'post_status'   => 'publish',
+      'post_type'     => 'cpt_message',
+      'meta_input'    => [
+        'cpt_clients_user_id' => $clients_user_id,
+      ],
+    ];
 
     $post = wp_insert_post( $new_message, $wp_error );
 
