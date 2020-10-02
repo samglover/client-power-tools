@@ -171,7 +171,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
   function get_views() {
 
     $statuses = explode( "\n", get_option( 'cpt_client_statuses' ) );
-    $current  = isset( $_REQUEST[ 'client_status' ] ) ? $_REQUEST[ 'client_status' ] : 'all';
+    $current  = isset( $_REQUEST[ 'client_status' ] ) ? sanitize_text_field( urldecode( $_REQUEST[ 'client_status' ] ) ) : 'all';
     $views    = array();
 
     array_unshift( $statuses, 'All' );
@@ -180,13 +180,13 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
       $class        = '';
       $status       = trim( $status );
-      $status_param = strtolower( preg_replace( '/\s+/', '_', $status ) );
+      $status_param = urlencode( $status );
 
       if ( $current == $status_param ) {
         $class = ' class="current"';
       }
 
-      if ( $status_param == 'all' ) {
+      if ( $status_param == 'All' ) {
         $link = '<a href="' . remove_query_arg( 'client_status' ) . '"' . $class . '>' . $status . '</a>';
       } else {
         $link = '<a href="' . add_query_arg( 'client_status', $status_param ) . '"' . $class . '>' . $status . '</a>';
@@ -223,8 +223,8 @@ class Client_List_Table extends Includes\WP_List_Table  {
     */
     $args = [
       'role'          => 'cpt-client',
-      'order'         => isset( $_REQUEST[ 'order' ] )    ? $_REQUEST[ 'order' ]    : 'ASC',
-      'orderby'       => isset( $_REQUEST[ 'orderby' ] )  ? $_REQUEST[ 'orderby' ]  : 'display_name',
+      'orderby'       => isset( $_REQUEST[ 'orderby' ] )  ? sanitize_key( $_REQUEST[ 'orderby' ] )  : 'display_name',
+      'order'         => isset( $_REQUEST[ 'order' ] )    ? sanitize_key( $_REQUEST[ 'order' ] )    : 'ASC',
     ];
 
     $client_query  = new \WP_USER_QUERY( $args );
@@ -262,9 +262,11 @@ class Client_List_Table extends Includes\WP_List_Table  {
     // Filters the data set.
     if ( isset( $_REQUEST[ 'client_status' ] ) ) {
 
+      $client_status_filter = sanitize_text_field( urldecode( $_REQUEST[ 'client_status' ] ) );
+
       foreach( $data as $i => $client ) {
 
-        if ( strtolower( $client[ 'client_status' ] ) !== $_REQUEST[ 'client_status' ] ) {
+        if ( $client[ 'client_status' ] !== $client_status_filter ) {
           unset( $data[ $i ] );
         }
 
@@ -273,8 +275,8 @@ class Client_List_Table extends Includes\WP_List_Table  {
     }
 
     // Sorts the data set.
-    $orderby  = isset( $_REQUEST[ 'orderby' ] ) ? $_REQUEST[ 'orderby' ] : 'client_name';
-    $order    = isset( $_REQUEST[ 'order' ] ) ? $_REQUEST[ 'order' ] : 'ASC';
+    $orderby  = isset( $_REQUEST[ 'orderby' ] )  ? sanitize_key( $_REQUEST[ 'orderby' ] )  : 'display_name',
+    $order    = isset( $_REQUEST[ 'order' ] )    ? sanitize_key( $_REQUEST[ 'order' ] )    : 'ASC',
 
     $data     = wp_list_sort( $data, $orderby, $order );
 
