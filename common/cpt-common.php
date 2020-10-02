@@ -102,7 +102,7 @@ function cpt_get_client_name( $user_id ) {
 
   if ( ! $user_id ) { return; }
 
-  $user_meta    = get_userdata( $user_id );
+  $user_meta = get_userdata( $user_id );
 
   if ( $user_meta->first_name && $user_meta->last_name ) {
     $client_name = $user_meta->first_name . ' ' . $user_meta->last_name;
