@@ -74,8 +74,8 @@ function cpt_login() {
               // cpt_login=setpw and a key and login.
               if ( $_REQUEST[ 'cpt_login' ] == 'setpw' && isset( $_REQUEST[ 'key' ] ) && isset( $_REQUEST[ 'login' ] ) ) {
 
-                $key    = sanitize_key( $_REQUEST[ 'key' ] );
-                $login  = sanitize_user( $_REQUEST[ 'login' ] );
+                $key    = sanitize_text_field( $_REQUEST[ 'key' ] );
+                $login  = sanitize_user( urldecode( $_REQUEST[ 'login' ] ) );
 
                 cpt_password_change_form( $key, $login );
 
@@ -283,7 +283,7 @@ function cpt_process_password_change() {
 
   if ( $_SERVER[ 'REQUEST_METHOD' ] == 'POST' ) {
 
-    $key        = sanitize_key( $_REQUEST[ 'key' ] );
+    $key        = sanitize_text_field( $_REQUEST[ 'key' ] );
     $login      = sanitize_user( $_REQUEST[ 'login' ] );
     $user       = check_password_reset_key( $key, $login );
 

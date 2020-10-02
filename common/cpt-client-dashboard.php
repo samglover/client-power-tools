@@ -30,7 +30,7 @@ function cpt_client_dashboard( $content ) {
       $request_frequency       = get_option( 'cpt_status_update_req_freq' );
       $days_since_last_request = cpt_days_since_last_request( $user_id );
 
-      if ( in_array( 'cpt-client', $user->roles ) ) {
+      if ( in_array( 'cpt-client', $user->roles ) && is_main_query() ) {
 
         ob_start();
 

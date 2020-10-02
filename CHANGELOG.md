@@ -5,6 +5,12 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 
 ## [Unreleased]
 
+## [1.0.1] - 2020-10-02
+
+### Fixed
+- Check for main query on client dashboard.
+- Fixed set/change password key sanitization.
+
 
 ## [1.0.0] - 2020-10-02
 
