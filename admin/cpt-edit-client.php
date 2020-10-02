@@ -123,7 +123,7 @@ function cpt_process_client_update() {
 
   if ( isset( $_POST[ 'cpt_client_updated_nonce' ] ) && wp_verify_nonce( $_POST[ 'cpt_client_updated_nonce' ], 'cpt_client_updated' ) ) {
 
-    $user_id = intval( $_POST[ 'clients_user_id' ] );
+    $user_id = sanitize_key( intval( $_POST[ 'clients_user_id' ] ) );
 
     $userdata = [
       'ID'            => $user_id,
@@ -141,8 +141,11 @@ function cpt_process_client_update() {
 
     } else {
 
-      update_user_meta( $user_id, 'cpt_client_id', sanitize_text_field( $_POST[ 'client_id' ] ) );
-      update_user_meta( $user_id, 'cpt_client_status', sanitize_text_field( $_POST[ 'client_status' ] ) );
+      $client_id      = sanitize_text_field( $_POST[ 'client_id' ] );
+      $client_status  = sanitize_text_field( $_POST[ 'client_status' ] );
+
+      update_user_meta( $user_id, 'cpt_client_id', $client_id );
+      update_user_meta( $user_id, 'cpt_client_status', $client_status );
 
       $result = 'Client updated.';
 
