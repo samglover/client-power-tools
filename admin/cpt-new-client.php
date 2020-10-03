@@ -185,7 +185,7 @@ function cpt_new_client_email( $user_id ) {
   $subject        = get_option( 'cpt_new_client_email_subject_line' );
 
   $activation_key = get_password_reset_key( $user );
-  $activation_url = Common\cpt_get_client_dashboard_url() . '?cpt_login=setpw&key=' . $activation_key . '&login=' . rawurlencode( $user->user_login );
+  $activation_url = Common\cpt_get_client_dashboard_url() . '?cpt_login=setpw&key=' . $activation_key . '&login=' . urlencode( $user->user_login );
 
   ob_start();
 

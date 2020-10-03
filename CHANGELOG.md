@@ -5,6 +5,13 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 
 ## [Unreleased]
 
+
+## [1.0.2] - 2020-10-02
+
+### Fixed
+- Fixed URL encoding.
+
+
 ## [1.0.1] - 2020-10-02
 
 ### Fixed

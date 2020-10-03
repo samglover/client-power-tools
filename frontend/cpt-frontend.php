@@ -202,7 +202,7 @@ add_action( 'wp_footer', __NAMESPACE__ . '\cpt_login' );
 function cpt_password_reset_message( $message, $key, $user_login, $user_data ) {
 
   $site_name  = get_option( 'cpt_new_client_email_from_name' );
-  $url        = Common\cpt_get_client_dashboard_url() . '?cpt_login=setpw&key=' . $key . '&login=' . rawurlencode( $user_login );
+  $url        = Common\cpt_get_client_dashboard_url() . '?cpt_login=setpw&key=' . $key . '&login=' . urlencode( $user_login );
 
   $message  = __( 'Someone has requested a password reset for the following account:' ) . "\r\n\r\n";
   $message .= sprintf( __( 'Site Name: %s' ), $site_name ) . "\r\n\r\n";
@@ -310,7 +310,7 @@ function cpt_process_password_change() {
 
         $redirect_url = add_query_arg( 'cpt_login', 'setpw', $dashboard );
         $redirect_url = add_query_arg( 'key', $key, $redirect_url );
-        $redirect_url = add_query_arg( 'login', rawurlencode( $login ), $redirect_url );
+        $redirect_url = add_query_arg( 'login', urlencode( $login ), $redirect_url );
         $redirect_url = add_query_arg( 'cpt_error', 'password_reset_empty', $redirect_url );
 
         wp_redirect( $redirect_url );
@@ -324,7 +324,7 @@ function cpt_process_password_change() {
 
         $redirect_url = add_query_arg( 'cpt_login', 'setpw', $dashboard );
         $redirect_url = add_query_arg( 'key', $key, $redirect_url );
-        $redirect_url = add_query_arg( 'login', rawurlencode( $login ), $redirect_url );
+        $redirect_url = add_query_arg( 'login', urlencode( $login ), $redirect_url );
         $redirect_url = add_query_arg( 'cpt_error', 'password_mismatch', $redirect_url );
 
         wp_redirect( $redirect_url );
