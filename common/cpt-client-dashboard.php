@@ -19,7 +19,7 @@ add_action( 'wp_head',  __NAMESPACE__ . '\cpt_noindex_client_dashboard' );
 
 function cpt_client_dashboard( $content ) {
 
-  if ( cpt_is_client_dashboard() && is_main_query() ) {
+  if ( cpt_is_client_dashboard() && in_the_loop() ) {
 
     if ( is_user_logged_in() ) {
 
@@ -50,8 +50,6 @@ function cpt_client_dashboard( $content ) {
 
           cpt_messages( $user_id );
 
-        return ob_get_clean();
-
       } else {
 
         echo '<p>Sorry, you don\'t have permission to view this page.</p>';
@@ -64,6 +62,8 @@ function cpt_client_dashboard( $content ) {
       echo '<p>Please <a class="cpt-login-link" href="#">log in</a> to view your client dashboard.</p>';
 
     }
+
+    return ob_get_clean();
 
   } else {
 
