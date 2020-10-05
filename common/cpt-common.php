@@ -47,8 +47,6 @@ function cpt_is_client( $user_id = null ) {
 
   if ( is_null( $user_id ) && is_user_logged_in() ) {
     $user_id = get_current_user_id();
-  } elseif ( ! is_user_logged_in() ) {
-    return false;
   }
 
   $user = get_userdata( $user_id );

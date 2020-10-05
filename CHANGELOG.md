@@ -6,6 +6,14 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 ## [Unreleased]
 
 
+## [1.0.3] - 2020-10-05
+
+### Fixed
+- Center the modal dismiss button.
+- Fix false negatives from cpt_is_client if the user is not logged in but the user ID is provided.
+- Prevent Client Power Tools from intercepting the password reset workflow for non-clients.
+
+
 ## [1.0.2] - 2020-10-02
 
 ### Fixed
