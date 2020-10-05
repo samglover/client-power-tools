@@ -146,11 +146,13 @@ function cpt_login() {
                       }
 
                     // Outputs a password reset request form.
+                    $cpt_lostpassword_url = remove_query_arg( 'action', wp_lostpassword_url() );
+                    $cpt_lostpassword_url = add_query_arg( 'action', 'cpt_lostpassword', $cpt_lostpassword_url );
 
                     ?>
 
                     <p><?php _e( 'Enter your email address and you will receive a link to reset your password.' ); ?></p>
-                    <form id="lostpasswordform" action="<?php echo wp_lostpassword_url(); ?>" method="post">
+                    <form id="lostpasswordform" action="<?php echo $cpt_lostpassword_url; ?>" method="post">
                       <p>
                         <label for="user_login"><?php _e( 'Email' ); ?></label>
                         <input type="text" name="user_login" id="user_login">
@@ -195,21 +197,43 @@ function cpt_login() {
 add_action( 'wp_footer', __NAMESPACE__ . '\cpt_login' );
 
 
+function cpt_process_password_reset_request() {
+
+  if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
+    retrieve_password();
+  }
+
+  $redirect_url = home_url();
+  $redirect_url = add_query_arg( 'cpt_notice', 'rp_checkemail', $redirect_url );
+
+  wp_safe_redirect( $redirect_url );
+  exit;
+
+}
+
+add_action( 'login_form_cpt_lostpassword', __NAMESPACE__ . '\cpt_process_password_reset_request' );
+
+
 /**
 * Alters the password reset email slightly, so that the URL points to the client
 * dashboard instead of wp-login.php.
 */
 function cpt_password_reset_message( $message, $key, $user_login, $user_data ) {
 
-  $site_name  = get_option( 'cpt_new_client_email_from_name' );
-  $url        = Common\cpt_get_client_dashboard_url() . '?cpt_login=setpw&key=' . $key . '&login=' . urlencode( $user_login );
+  if ( Common\cpt_is_client( $user_data->ID ) ) {
 
-  $message  = __( 'Someone has requested a password reset for the following account:' ) . "\r\n\r\n";
-  $message .= sprintf( __( 'Site Name: %s' ), $site_name ) . "\r\n\r\n";
-  $message .= sprintf( __( 'Username: %s' ), $user_login ) . "\r\n\r\n";
-  $message .= __( 'If this was a mistake, just ignore this email and nothing will happen.' ) . "\r\n\r\n";
-  $message .= __( 'To set a new password, visit the following address:' ) . "\r\n\r\n";
-  $message .= $url . "\r\n";
+    $site_name  = get_option( 'cpt_new_client_email_from_name' );
+    $url        = Common\cpt_get_client_dashboard_url() . '?cpt_login=setpw&key=' . $key . '&login=' . urlencode( $user_login );
+
+    $message  = __( 'Someone has requested a password reset for the following account:' ) . "\r\n\r\n";
+    $message .= 'User ID: ' . $user_data->ID . "\r\n\r\n";
+    $message .= sprintf( __( 'Site Name: %s' ), $site_name ) . "\r\n\r\n";
+    $message .= sprintf( __( 'Username: %s' ), $user_login ) . "\r\n\r\n";
+    $message .= __( 'If this was a mistake, just ignore this email and nothing will happen.' ) . "\r\n\r\n";
+    $message .= __( 'To set a new password, visit the following address:' ) . "\r\n\r\n";
+    $message .= $url . "\r\n";
+
+  }
 
   return $message;
 
@@ -406,21 +430,3 @@ function cpt_notices() {
 }
 
 add_action( 'wp_footer', __NAMESPACE__ . '\cpt_notices' );
-
-
-function cpt_process_password_reset_request() {
-
-  if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
-    retrieve_password();
-  }
-
-  $redirect_url = home_url();
-  $redirect_url = add_query_arg( 'cpt_notice', 'rp_checkemail', $redirect_url );
-
-  wp_redirect( $redirect_url );
-
-  exit;
-
-}
-
-add_action( 'login_form_lostpassword', __NAMESPACE__ . '\cpt_process_password_reset_request' );
