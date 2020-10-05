@@ -6,6 +6,12 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 ## [Unreleased]
 
 
+## [1.0.4] - 2020-10-05
+
+### Fixed
+- Prevent not-logged-in messages from displaying in the head when the_content filter is called (by Yoast SEO, for example).
+
+
 ## [1.0.3] - 2020-10-05
 
 ### Fixed
