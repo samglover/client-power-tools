@@ -4,7 +4,12 @@ All notable changes to this project will be documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com).
 
 ## [Unreleased]
-- Prevent error messages from displaying in the head when the_content filter is called (by Yoast SEO, for example).
+
+
+## [1.0.4] - 2020-10-05
+
+### Fixed
+- Prevent not-logged-in messages from displaying in the head when the_content filter is called (by Yoast SEO, for example).
 
 
 ## [1.0.3] - 2020-10-05
