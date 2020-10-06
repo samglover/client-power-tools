@@ -4,7 +4,7 @@ namespace Client_Power_Tools\Core\Common;
 
 /**
 * Adds the Client and Client Manager user roles and capabilities, and assigns
-* all CPT roles to admins.
+* all CPT capabilities to admins.
 */
 function cpt_add_roles() {
 
@@ -63,15 +63,6 @@ function cpt_get_client_profile_url( $user_id ) {
 }
 
 
-function cpt_get_client_profile_link( $user_id ) {
-
-  if ( ! $user_id ) { return; }
-
-  return '<a href="' . cpt_get_client_profile_url( $user_id ) . '">' . _( 'View profile.' ) . '</a>';
-
-}
-
-
 function cpt_get_client_dashboard_url() {
   $page_id = get_option( 'cpt_client_dashboard_page_selection' );
   return get_permalink( $page_id );
@@ -107,17 +98,6 @@ function cpt_get_client_name( $user_id ) {
   }
 
   return $client_name;
-
-}
-
-
-function cpt_get_client_id( $user_id ) {
-
-  if ( ! $user_id ) { return; }
-
-  $client_id = get_user_meta( $user_id, 'cpt_client_id', true );
-
-  return $client_id;
 
 }
 
