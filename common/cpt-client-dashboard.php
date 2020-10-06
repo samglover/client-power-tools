@@ -211,21 +211,11 @@ function cpt_status_update_request_notification( $message_id ) {
   $subject        = $msg_obj->post_title . ' by ' . $from_name;
   $subject_html   = $msg_obj->post_title . '&nbsp;<br />' . 'by ' . $from_name;
 
-  ob_start();
+  $message        = '<p>Please post an update.</p>';
 
-    echo get_email_styles();
+  $button_txt     = 'Go to ' . $from_name;
 
-    ?>
-
-      <div class="cpt-card" align="left">
-        <h2><?php echo $subject_html; ?></h2>
-        <p>Please post an update.</p>
-        <p align="center"><a class="button" href="<?php echo $profile_url; ?>">Go to <?php echo $from_name; ?></a></p>
-      </div>
-
-    <?php
-
-  $message = ob_get_clean();
+  $message        = cpt_get_email_card( $subject_html, $message, $button_txt, $profile_url );
 
   wp_mail( $to, $subject, $message, $headers );
 

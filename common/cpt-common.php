@@ -123,56 +123,29 @@ function cpt_get_client_data( $user_id ) {
 }
 
 
-function get_email_styles() {
+function cpt_get_email_card( $title = null, $content = null, $button_txt = 'Go', $button_url = null ) {
+
+  $card_style     = 'border: 1px solid #ddd; box-sizing: border-box; font-family: Jost, Helvetica, Arial, sans-serif; margin: 30px 3px 30px 0; padding: 30px; max-width: 500px;';
+  $h2_style       = 'margin-top: 0;';
+  $button_style   = 'background-color: #eee; border: 1px solid #ddd; box-sizing: border-box; display: block; margin: 0; padding: 1em; width: 100%; text-align: center;';
 
   ob_start();
 
-    ?>
+    echo '<div class="cpt-card" align="left" style="' . $card_style . '">';
 
-      <style>
+      if ( ! empty( $title ) ) {
+        echo '<h2 style="' . $h2_style . '">' . $title . '</h2>';
+      }
 
-        @import url( 'https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,700;1,400;1,700&display=swap' );
+      if ( ! empty( $content ) ) {
+        echo $content;
+      }
 
-        body {
-          font-family: 'Jost', sans-serif;
-        }
+      if ( ! empty( $button_url ) ) {
+        echo '<a class="button" href="' . $button_url . '" style="' . $button_style . '">' . $button_txt . '</a>';
+      }
 
-        .cpt-card {
-          background-color: #fff;
-          box-shadow:
-            0 0 0 1px #ddd,
-            1px 1px 3px rgba( 0, 0, 0, 0.2 )
-          ;
-          box-sizing: border-box;
-          margin: 30px 3px 30px 0;
-          padding: 30px;
-          max-width: 500px;
-        }
-
-        .cpt-card p {
-          margin: 0 0 1.5em 0;
-        }
-
-        .cpt-card *:first-child {
-          margin-top: 0;
-        }
-
-        .cpt-card *:last-child {
-          margin-bottom: 0;
-        }
-
-        .cpt-card .button {
-          background-color: #eee;
-          border: 1px solid #ddd;
-          box-sizing: border-box;
-          display: block;
-          padding: 1em;
-          width: 100%;
-        }
-
-      </style>
-
-    <?php
+    echo '</div>';
 
   return ob_get_clean();
 

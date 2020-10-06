@@ -7,6 +7,8 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - Remove unused capabilities from Client Manager role (for now).
 - General tidying up.
 - Remove unused functions cpt_get_client_profile_link and cpt_get_client_id.
+- Email notifications should now deliver with the intended formatting.
+
 
 ## [1.0.4] - 2020-10-05
 
