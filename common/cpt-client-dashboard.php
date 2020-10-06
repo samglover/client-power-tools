@@ -2,9 +2,8 @@
 
 namespace Client_Power_Tools\Core\Common;
 
-
 /**
-* Noindex's the client dashboard because it's none of Google's business.
+* Noindexes the client dashboard because it's none of Google's business.
 */
 function cpt_noindex_client_dashboard() {
 
@@ -30,13 +29,13 @@ function cpt_client_dashboard( $content ) {
       $request_frequency       = get_option( 'cpt_status_update_req_freq' );
       $days_since_last_request = cpt_days_since_last_request( $user_id );
 
-      if ( in_array( 'cpt-client', $user->roles ) && is_main_query() ) {
+      if ( cpt_is_client() ) {
 
         ob_start();
 
           echo '<p>Welcome back, ' . $client_data[ 'first_name' ] . '!</p>';
 
-          cpt_get_results( 'cpt_new_message_result' );
+          cpt_get_notices( 'cpt_new_message_result' );
 
           if ( is_null( $days_since_last_request ) || $days_since_last_request > $request_frequency ) {
             cpt_status_update_request_button( $user_id );

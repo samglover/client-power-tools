@@ -73,10 +73,10 @@ function cpt_is_client_dashboard() {
 
   global $wp_query;
 
-  $client_dashboard_ID  = get_option( 'cpt_client_dashboard_page_selection' );
-  $this_page_ID         = isset( $wp_query->post->ID ) ? $wp_query->post->ID : false;
+  $client_dashboard_id  = get_option( 'cpt_client_dashboard_page_selection' );
+  $this_page_id         = isset( $wp_query->post->ID ) ? $wp_query->post->ID : false;
 
-  if ( $this_page_ID && $client_dashboard_ID == $this_page_ID ) {
+  if ( $this_page_id && $client_dashboard_id == $this_page_id ) {
     return true;
   } else {
     return false;
@@ -184,7 +184,7 @@ function get_email_styles() {
 * outputs a notice. In the admin, this is a standard WordPress admin notice. On
 * the front end, this is a modal.
 */
-function cpt_get_results( $transient_key ) {
+function cpt_get_notices( $transient_key ) {
 
   if ( ! $transient_key ) { return; }
 
@@ -230,4 +230,4 @@ function cpt_get_results( $transient_key ) {
 
 }
 
-add_action( 'admin_notices', __NAMESPACE__ . '\cpt_get_results' );
+add_action( 'admin_notices', __NAMESPACE__ . '\cpt_get_notices' );

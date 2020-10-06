@@ -12,7 +12,7 @@ function cpt_new_client() {
     );
   }
 
-  cpt_get_results( 'cpt_new_client_result' );
+  cpt_get_notices( 'cpt_new_client_result' );
 
   ob_start();
 
