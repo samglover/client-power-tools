@@ -3,8 +3,8 @@
 namespace Client_Power_Tools\Core\Common;
 
 /**
-* Adds the Client and Client Manager user roles, and the cpt-manage-clients
-* capability for Client Managers.
+* Adds the Client and Client Manager user roles and capabilities, and assigns
+* all CPT roles to admins.
 */
 function cpt_add_roles() {
 
@@ -19,8 +19,6 @@ function cpt_add_roles() {
     [
       'cpt-view-clients'    => true,
       'cpt-manage-clients'  => true,
-      'cpt-manage-team'     => true,
-      'cpt-manage-settings' => true,
     ]
   );
 
@@ -143,6 +141,7 @@ function cpt_get_client_data( $user_id ) {
   return $client_data;
 
 }
+
 
 function get_email_styles() {
 
