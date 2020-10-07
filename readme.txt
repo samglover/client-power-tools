@@ -67,7 +67,7 @@ This is a bugfix release that resolves a few of lingering issues from the 1.0 re
 
 == Changelog ==
 
-## [1.0.5] - 2020-10-07
+= 1.0.5 =
 
 ### Changed
 - Handle frontend login error on the front end.
