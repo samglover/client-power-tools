@@ -9,6 +9,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 ## [1.0.5] - 2020-10-07
 
 ### Changed
+- Handle frontend login error on the front end.
 - General tidying up.
 
 ### Removed

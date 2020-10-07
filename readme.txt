@@ -70,6 +70,7 @@ This is a bugfix release that resolves a few of lingering issues from the 1.0 re
 ## [1.0.5] - 2020-10-07
 
 ### Changed
+- Handle frontend login error on the front end.
 - General tidying up.
 
 ### Removed

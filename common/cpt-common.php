@@ -204,3 +204,38 @@ function cpt_get_notices( $transient_key ) {
 }
 
 add_action( 'admin_notices', __NAMESPACE__ . '\cpt_get_notices' );
+
+
+/**
+* Redirects the user to the Client Dashboard page with an error query parameter
+* if the login form contained a redirect to the Client Dashboard. (In other
+* words, if the user started on the frontend login form.)
+*
+* Works when the username or password fields are empty.
+*
+* The error message itself is handled in cpt-frontend.php.
+*/
+function cpt_login_missing( $redirect_to, $requested_redirect_to, $user ) {
+
+  if ( $redirect_to == cpt_get_client_dashboard_url() ) {
+    wp_redirect( cpt_get_client_dashboard_url() . "?cpt_error" );
+    exit;
+  }
+
+}
+
+add_filter( 'login_redirect', __NAMESPACE__ . '\cpt_login_missing', 10, 3);
+
+/**
+* Same as above, but works when the login is entered but fails.
+*/
+function cpt_login_failure( $user_login ) {
+
+  if ( $_REQUEST[ 'redirect_to' ] == cpt_get_client_dashboard_url() ) {
+    wp_redirect( cpt_get_client_dashboard_url() . "?cpt_error" );
+    exit;
+  }
+
+}
+
+add_action( 'wp_login_failed', __NAMESPACE__ . '\cpt_login_failure' );
