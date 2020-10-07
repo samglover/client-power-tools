@@ -62,16 +62,22 @@ Client Power Tools is built to be customizable where you need it to be. Here are
 
 == Upgrade Notice ==
 
+This is a bugfix release that resolves a few of lingering issues from the 1.0 release. Plus general tidying up.
 
 
 == Changelog ==
 
-## [1.0.4] - 2020-10-05
+## [1.0.5] - 2020-10-07
+
+### Changed
+- General tidying up.
+
+### Removed
+- Remove unused capabilities from Client Manager role (for now).
+- Remove unused functions cpt_get_client_profile_link and cpt_get_client_id.
 
 ### Fixed
-- Prevent not-logged-in messages from displaying in the head when the_content filter is called (by Yoast SEO, for example).
-
-*For the full changelog, see changelog.txt.*
+- Email notifications should now deliver with the intended formatting.
 
 
 == Installation ==
