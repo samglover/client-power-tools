@@ -218,7 +218,7 @@ add_action( 'admin_notices', __NAMESPACE__ . '\cpt_get_notices' );
 function cpt_login_missing( $redirect_to, $requested_redirect_to, $user ) {
 
   if ( $redirect_to == cpt_get_client_dashboard_url() ) {
-    wp_redirect( cpt_get_client_dashboard_url() . "?cpt_error" );
+    wp_redirect( cpt_get_client_dashboard_url() . "?cpt_error=login_failed" );
     exit;
   }
 
@@ -232,7 +232,7 @@ add_filter( 'login_redirect', __NAMESPACE__ . '\cpt_login_missing', 10, 3);
 function cpt_login_failure( $user_login ) {
 
   if ( $_REQUEST[ 'redirect_to' ] == cpt_get_client_dashboard_url() ) {
-    wp_redirect( cpt_get_client_dashboard_url() . "?cpt_error" );
+    wp_redirect( cpt_get_client_dashboard_url() . "?cpt_error=login_failed" );
     exit;
   }
 
