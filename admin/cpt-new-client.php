@@ -12,7 +12,7 @@ function cpt_new_client() {
     );
   }
 
-  cpt_get_results( 'cpt_new_client_result' );
+  cpt_get_admin_notices( 'cpt_new_client_result' );
 
   ob_start();
 
@@ -189,20 +189,22 @@ function cpt_new_client_email( $user_id ) {
 
   ob_start();
 
-    echo Common\get_email_styles();
+    ?>
+
+      <p>Your username is your email address:</p>
+      <p><strong><?php echo $user->user_email; ?></strong></p>
+      <p>You will need to activate your account and set a password in order to access your client dashboard.</p>
+
+    <?php
+
+  $card_content = ob_get_clean();
+
+
+  ob_start();
 
     echo get_option( 'cpt_new_client_email_message_body' );
 
-    ?>
-
-      <div class="cpt-card" align="left">
-        <p>Your username is your email address:</p>
-        <p><strong><?php echo $user->user_email; ?></strong></p>
-        <p>You will need to activate your account and set a password in order to access your client dashboard.</p>
-        <p align="center"><a class="button" href="<?php echo $activation_url; ?>">Activate Your Account</a></p>
-      </div>
-
-    <?php
+    echo Common\cpt_get_email_card( $subject, $card_content, 'Activate Your Account', $activation_url );
 
   $message = ob_get_clean();
 

@@ -89,6 +89,11 @@ function cpt_login() {
 
                     <?php
 
+                      // Outputs any error messages.
+                      if ( isset( $_REQUEST[ 'cpt_error' ] ) ) {
+                        echo '<p class="cpt-error">' . __( 'Sorry, but the email address or password you entered didn\'t work. Please try again.' ) . '</p>';
+                      }
+
                       // Outputs any success messages. (Currently just for a
                       // successful password change.)
                       if ( isset( $_REQUEST[ 'cpt_success' ] ) ) {
@@ -110,8 +115,8 @@ function cpt_login() {
                       // log in.
                       $args = [
                         'label_username'  => __( 'Email Address' ),
-                        'redirect'  => Common\cpt_get_client_dashboard_url(),
-                        'remember'  => false,
+                        'redirect'        => Common\cpt_get_client_dashboard_url(),
+                        'remember'        => false,
                       ];
 
                       wp_login_form( $args );
@@ -359,14 +364,13 @@ function cpt_process_password_change() {
       // Resets the password and sends back the password_changed success code.
       reset_password( $user, $pass1 );
       wp_redirect( add_query_arg( 'cpt_success', 'password_changed', $dashboard ) );
+      exit;
 
     } else {
 
       echo "Invalid request.";
 
     }
-
-    exit;
 
   }
 

@@ -44,7 +44,6 @@ Using Client Power Tools to communicate with your clients keeps all your message
 
 When you send a message to your client, they will receive an email notification with a link to their client dashboard so they can read it and reply.
 
-
 #### Customization
 
 Client Power Tools is built to be customizable where you need it to be. Here are some of the things you can change to suit your needs:
@@ -57,17 +56,40 @@ Client Power Tools is built to be customizable where you need it to be. Here are
 * **Design.** The front-end design of Client Power Tools is as minimal as possible so that Client Power Tools blends into your existing theme. But you can override the Client Power Tools styles as long as you know a little CSS. (See the [documentation](https://clientpowertools.com/documentation/) for more details.)
 
 
+== Frequently Asked Questions ==
+
+
+
+== Upgrade Notice ==
+
+This is a bugfix release that resolves a few of lingering issues from the 1.0 release. Plus general tidying up.
+
+
+== Changelog ==
+
+## [1.0.5] - 2020-10-07
+
+### Changed
+- Handle frontend login error on the front end.
+- General tidying up.
+
+### Removed
+- Remove unused capabilities from Client Manager role (for now).
+- Remove unused functions cpt_get_client_profile_link and cpt_get_client_id.
+
+### Fixed
+- Email notifications should now deliver with the intended formatting.
+
+
 == Installation ==
 
 #### Automatic
 
 Automatic installation is the easiest option. To do an automatic install of WooCommerce, log in to your WordPress dashboard and go to **Plugins** / **Add New**. Enter “Client Power Tools" in the search field. To install Client Power Tools, click the **Install Now** button, then activate it by clicking the **Activate** button.
 
-
 #### Manual
 
 In order to install Client Power Tools manually, you will need to download the plugin here, then upload it to WordPress or use FTP software to upload it to your web server. [Visit the WordPress Codex for manual installation instructions.](https://wordpress.org/support/article/managing-plugins/#manual-upload-via-wordpress-admin)
-
 
 #### Updating
 

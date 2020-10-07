@@ -94,7 +94,7 @@ function cpt_menu_pages() {
 add_action( 'admin_menu', __NAMESPACE__ . '\cpt_menu_pages' );
 
 
-function cpt_get_results( $transient_key ) {
+function cpt_get_admin_notices( $transient_key ) {
 
   if ( ! $transient_key ) { return; }
 
@@ -117,7 +117,7 @@ function cpt_get_results( $transient_key ) {
 
 }
 
-add_action( 'admin_notices', __NAMESPACE__ . '\cpt_get_results' );
+add_action( 'admin_notices', __NAMESPACE__ . '\cpt_get_admin_notices' );
 
 
 function cpt_get_client_statuses_select( $name = 'cpt_client_statuses' ) {

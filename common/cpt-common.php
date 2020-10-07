@@ -3,8 +3,8 @@
 namespace Client_Power_Tools\Core\Common;
 
 /**
-* Adds the Client and Client Manager user roles, and the cpt-manage-clients
-* capability for Client Managers.
+* Adds the Client and Client Manager user roles and capabilities, and assigns
+* all CPT capabilities to admins.
 */
 function cpt_add_roles() {
 
@@ -19,8 +19,6 @@ function cpt_add_roles() {
     [
       'cpt-view-clients'    => true,
       'cpt-manage-clients'  => true,
-      'cpt-manage-team'     => true,
-      'cpt-manage-settings' => true,
     ]
   );
 
@@ -65,15 +63,6 @@ function cpt_get_client_profile_url( $user_id ) {
 }
 
 
-function cpt_get_client_profile_link( $user_id ) {
-
-  if ( ! $user_id ) { return; }
-
-  return '<a href="' . cpt_get_client_profile_url( $user_id ) . '">' . _( 'View profile.' ) . '</a>';
-
-}
-
-
 function cpt_get_client_dashboard_url() {
   $page_id = get_option( 'cpt_client_dashboard_page_selection' );
   return get_permalink( $page_id );
@@ -84,10 +73,10 @@ function cpt_is_client_dashboard() {
 
   global $wp_query;
 
-  $client_dashboard_ID  = get_option( 'cpt_client_dashboard_page_selection' );
-  $this_page_ID         = isset( $wp_query->post->ID ) ? $wp_query->post->ID : false;
+  $client_dashboard_id  = get_option( 'cpt_client_dashboard_page_selection' );
+  $this_page_id         = isset( $wp_query->post->ID ) ? $wp_query->post->ID : false;
 
-  if ( $this_page_ID && $client_dashboard_ID == $this_page_ID ) {
+  if ( $this_page_id && $client_dashboard_id == $this_page_id ) {
     return true;
   } else {
     return false;
@@ -113,17 +102,6 @@ function cpt_get_client_name( $user_id ) {
 }
 
 
-function cpt_get_client_id( $user_id ) {
-
-  if ( ! $user_id ) { return; }
-
-  $client_id = get_user_meta( $user_id, 'cpt_client_id', true );
-
-  return $client_id;
-
-}
-
-
 // Returns an array with the user's details.
 function cpt_get_client_data( $user_id ) {
 
@@ -144,56 +122,30 @@ function cpt_get_client_data( $user_id ) {
 
 }
 
-function get_email_styles() {
+
+function cpt_get_email_card( $title = null, $content = null, $button_txt = 'Go', $button_url = null ) {
+
+  $card_style     = 'border: 1px solid #ddd; box-sizing: border-box; font-family: Jost, Helvetica, Arial, sans-serif; margin: 30px 3px 30px 0; padding: 30px; max-width: 500px;';
+  $h2_style       = 'margin-top: 0;';
+  $button_style   = 'background-color: #eee; border: 1px solid #ddd; box-sizing: border-box; display: block; margin: 0; padding: 1em; width: 100%; text-align: center;';
 
   ob_start();
 
-    ?>
+    echo '<div class="cpt-card" align="left" style="' . $card_style . '">';
 
-      <style>
+      if ( ! empty( $title ) ) {
+        echo '<h2 style="' . $h2_style . '">' . $title . '</h2>';
+      }
 
-        @import url( 'https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,700;1,400;1,700&display=swap' );
+      if ( ! empty( $content ) ) {
+        echo $content;
+      }
 
-        body {
-          font-family: 'Jost', sans-serif;
-        }
+      if ( ! empty( $button_url ) ) {
+        echo '<a class="button" href="' . $button_url . '" style="' . $button_style . '">' . $button_txt . '</a>';
+      }
 
-        .cpt-card {
-          background-color: #fff;
-          box-shadow:
-            0 0 0 1px #ddd,
-            1px 1px 3px rgba( 0, 0, 0, 0.2 )
-          ;
-          box-sizing: border-box;
-          margin: 30px 3px 30px 0;
-          padding: 30px;
-          max-width: 500px;
-        }
-
-        .cpt-card p {
-          margin: 0 0 1.5em 0;
-        }
-
-        .cpt-card *:first-child {
-          margin-top: 0;
-        }
-
-        .cpt-card *:last-child {
-          margin-bottom: 0;
-        }
-
-        .cpt-card .button {
-          background-color: #eee;
-          border: 1px solid #ddd;
-          box-sizing: border-box;
-          display: block;
-          padding: 1em;
-          width: 100%;
-        }
-
-      </style>
-
-    <?php
+    echo '</div>';
 
   return ob_get_clean();
 
@@ -205,7 +157,7 @@ function get_email_styles() {
 * outputs a notice. In the admin, this is a standard WordPress admin notice. On
 * the front end, this is a modal.
 */
-function cpt_get_results( $transient_key ) {
+function cpt_get_notices( $transient_key ) {
 
   if ( ! $transient_key ) { return; }
 
@@ -251,4 +203,39 @@ function cpt_get_results( $transient_key ) {
 
 }
 
-add_action( 'admin_notices', __NAMESPACE__ . '\cpt_get_results' );
+add_action( 'admin_notices', __NAMESPACE__ . '\cpt_get_notices' );
+
+
+/**
+* Redirects the user to the Client Dashboard page with an error query parameter
+* if the login form contained a redirect to the Client Dashboard. (In other
+* words, if the user started on the frontend login form.)
+*
+* Works when the username or password fields are empty.
+*
+* The error message itself is handled in cpt-frontend.php.
+*/
+function cpt_login_missing( $redirect_to, $requested_redirect_to, $user ) {
+
+  if ( $redirect_to == cpt_get_client_dashboard_url() ) {
+    wp_redirect( cpt_get_client_dashboard_url() . "?cpt_error=login_failed" );
+    exit;
+  }
+
+}
+
+add_filter( 'login_redirect', __NAMESPACE__ . '\cpt_login_missing', 10, 3);
+
+/**
+* Same as above, but works when the login is entered but fails.
+*/
+function cpt_login_failure( $user_login ) {
+
+  if ( $_REQUEST[ 'redirect_to' ] == cpt_get_client_dashboard_url() ) {
+    wp_redirect( cpt_get_client_dashboard_url() . "?cpt_error=login_failed" );
+    exit;
+  }
+
+}
+
+add_action( 'wp_login_failed', __NAMESPACE__ . '\cpt_login_failure' );

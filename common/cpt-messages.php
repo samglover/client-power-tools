@@ -314,33 +314,19 @@ function cpt_message_notification( $message_id ) {
 
   if ( $sender_id == $clients_user_id ) {
 
-    $message      = 'To read your message, please visit your client dashboard.';
+    $message      = '<p>To read your message, please visit your client dashboard.</p>';
     $button_url   = cpt_get_client_profile_url( $clients_user_id ) . '#cpt-message-' . $message_id;
-    $button_txt   = 'Go to Message';
 
   } else {
 
-    $message      = 'To read this message, please view the client page.';
+    $message      = '<p>To read this message, please view the client page.</p>';
     $button_url   = cpt_get_client_dashboard_url() . '#cpt-message-' . $message_id;
-    $button_txt   = 'Go to Message';
 
   }
 
-  ob_start();
+  $button_txt     = 'Go to Message';
 
-    echo get_email_styles();
-
-    ?>
-
-      <div class="cpt-card" align="left">
-        <h2><?php echo $subject; ?></h2>
-        <p><?php echo $message; ?></p>
-        <p align="center"><a class="button" href="<?php echo $button_url; ?>"><?php echo $button_txt; ?></a></p>
-      </div>
-
-    <?php
-
-  $message = ob_get_clean();
+  $message = cpt_get_email_card( $subject, $message, $button_txt, $button_url );
 
   wp_mail( $to, $subject, $message, $headers );
 
