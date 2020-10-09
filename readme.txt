@@ -59,7 +59,6 @@ Client Power Tools is built to be customizable where you need it to be. Here are
 == Frequently Asked Questions ==
 
 
-
 == Upgrade Notice ==
 
 This is a bugfix release that resolves a few of lingering issues from the 1.0 release. Plus general tidying up.

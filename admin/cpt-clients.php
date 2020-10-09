@@ -117,3 +117,13 @@ function cpt_get_client_list() {
   echo ob_get_clean();
 
 }
+
+
+function cpt_archive_client( $user_id ) {
+
+}
+
+
+function cpt_delete_client( $user_id ) {
+
+}
