@@ -119,11 +119,18 @@ function cpt_get_client_list() {
 }
 
 
-function cpt_archive_client( $user_id ) {
+function cpt_archive_client( $clients_user_id ) {
 
-}
+  if ( ! $clients_user_id ) { return; }
 
+  // Get a list of the clients' message IDs.
+  $args = [
+    'fields'          => 'ids',
+    'meta_key'        => 'cpt_clients_user_id',
+    'meta_value'      => $clients_user_id,
+    'post_type'       => 'cpt_message',
+  ];
 
-function cpt_delete_client( $user_id ) {
+  $cpt_client_messages = new \WP_Query( $args );
 
 }
