@@ -229,19 +229,6 @@ function cpt_activate() {
 	add_action( 'init', __NAMESPACE__ . '\cpt_message_post_type', 0 );
 
 
-	// Register CPT Messages Custom Post Status "Archived"
-	function cpt_message_archived_status() {
-
-		register_post_status( 'cpt_archived', [
-			'internal'	=> true,
-			'public'		=> false,
-		] );
-
-	}
-
-	add_action( 'init', __NAMESPACE__ . '\cpt_message_archived_status' );
-
-
 	// Clears the permalinks.
 	flush_rewrite_rules();
 
