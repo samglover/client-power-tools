@@ -6,6 +6,12 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 ## [Unreleased]
 
 
+## [1.1.0] - 2020-10-20
+
+### Added
+- Delete a client from the client's profile page, under **Edit Client**.
+
+
 ## [1.0.5] - 2020-10-07
 
 ### Changed

@@ -13,6 +13,7 @@ function cpt_clients() {
   }
 
   Common\cpt_get_notices( 'cpt_update_client_result' );
+  Common\cpt_get_notices( 'cpt_delete_client_result' );
   Common\cpt_get_notices( 'cpt_new_message_result' );
 
   ob_start();

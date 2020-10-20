@@ -59,26 +59,17 @@ Client Power Tools is built to be customizable where you need it to be. Here are
 == Frequently Asked Questions ==
 
 
-
 == Upgrade Notice ==
 
-This is a bugfix release that resolves a few of lingering issues from the 1.0 release. Plus general tidying up.
+This release adds one important feature. Now you can delete clients from the client's profile page, under **Edit Client**!
 
 
 == Changelog ==
 
-## [1.0.5] - 2020-10-07
+= 1.1.0 =
 
-### Changed
-- Handle frontend login error on the front end.
-- General tidying up.
-
-### Removed
-- Remove unused capabilities from Client Manager role (for now).
-- Remove unused functions cpt_get_client_profile_link and cpt_get_client_id.
-
-### Fixed
-- Email notifications should now deliver with the intended formatting.
+### Added
+- Delete a client from the client's profile page, under **Edit Client**.
 
 
 == Installation ==

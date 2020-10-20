@@ -5,12 +5,12 @@ use Client_Power_Tools\Core\Common;
 
 function cpt_redirect_clients() {
 
-  global $pagenow;
-
-  /*
+  /**
   * The $pagenow !== 'admin-post.php' exception allows us to handle form
   * submissions by users (i.e., client messages).
   */
+
+  global $pagenow;
 
   if ( Common\cpt_is_client() && ! current_user_can( 'cpt-manage-clients' ) && $pagenow !== 'admin-post.php' ) {
     wp_safe_redirect( home_url() );
@@ -122,8 +122,8 @@ add_action( 'admin_notices', __NAMESPACE__ . '\cpt_get_admin_notices' );
 
 function cpt_get_client_statuses_select( $name = 'cpt_client_statuses' ) {
 
-  $statuses_array = explode( "\n", get_option( 'cpt_client_statuses' ) );
-  $default_status = get_option( 'cpt_default_client_status' );
+  $statuses_array   = explode( "\n", get_option( 'cpt_client_statuses' ) );
+  $default_status   = get_option( 'cpt_default_client_status' );
 
   ob_start();
 
