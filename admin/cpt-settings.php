@@ -198,6 +198,17 @@ function cpt_client_messaging_settings_init() {
     'cpt-settings',
   );
 
+  // Show Status Update Request Button
+  add_settings_field(
+    'cpt_show_status_update_req_button',
+    '<label for="cpt_show_status_update_req_button">Show Status Update Request Button?</label>',
+    __NAMESPACE__ . '\cpt_show_status_update_req_button',
+    'cpt-settings',
+    'cpt_client_messaging_settings',
+  );
+
+  register_setting( 'cpt-settings', 'cpt_show_status_update_req_button', 'absint' );
+
   // Status Update Request Frequency
   add_settings_field(
     'cpt_status_update_req_freq',
@@ -225,6 +236,17 @@ function cpt_client_messaging_settings_init() {
 add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_messaging_settings_init' );
 
 function cpt_client_messaging_section() {}
+
+function cpt_show_status_update_req_button() {
+
+  $show_button  = get_option( 'cpt_show_status_update_req_button', 'empty' );
+
+  if ( $show_button == 'empty' ) { $show_button = '1'; }
+
+  echo '<input name="cpt_show_status_update_req_button" type="checkbox" value="1"' . checked( 1, $show_button, false ) . '>';
+  echo '<p class="description">' . __( 'Uncheck this box to hide the Status Update Request Button on the client dashboard.' ) . '</p>';
+
+}
 
 function cpt_status_update_req_freq() {
   echo '<input name="cpt_status_update_req_freq" class="small-text" type="number" required aria-required="true" value="' . get_option( 'cpt_status_update_req_freq' ) . '"> days';

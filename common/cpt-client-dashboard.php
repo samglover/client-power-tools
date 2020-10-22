@@ -26,9 +26,6 @@ function cpt_client_dashboard( $content ) {
       $user         = get_userdata( $user_id );
       $client_data  = cpt_get_client_data( $user_id );
 
-      $request_frequency       = get_option( 'cpt_status_update_req_freq' );
-      $days_since_last_request = cpt_days_since_last_request( $user_id );
-
       if ( cpt_is_client() ) {
 
         ob_start();
@@ -36,10 +33,7 @@ function cpt_client_dashboard( $content ) {
           echo '<p>Welcome back, ' . $client_data[ 'first_name' ] . '!</p>';
 
           cpt_get_notices( 'cpt_new_message_result' );
-
-          if ( is_null( $days_since_last_request ) || $days_since_last_request > $request_frequency ) {
-            cpt_status_update_request_button( $user_id );
-          }
+          cpt_status_update_request_button( $user_id );
 
           /**
           * Removes the the_content filter so it doesn't execute within the
@@ -76,6 +70,21 @@ add_filter( 'the_content', __NAMESPACE__ . '\cpt_client_dashboard' );
 
 
 function cpt_status_update_request_button( $user_id ) {
+
+  if ( ! $user_id ) { return; }
+
+  // Return if the option to show the Status Update Request button is unchecked.
+  $show_button = get_option( 'cpt_show_status_update_req_button', 'empty' );
+
+  if ( $show_button == 'empty' ) { $value = '1'; }
+  if ( ! $show_button ) { return; }
+
+  // Return if the client clicked the button more recently than the request
+  // frequency option allows.
+  $request_frequency       = get_option( 'cpt_status_update_req_freq' );
+  $days_since_last_request = cpt_days_since_last_request( $user_id );
+
+  if ( ! is_null( $days_since_last_request ) && $days_since_last_request < $request_frequency ) { return; }
 
   ob_start();
 

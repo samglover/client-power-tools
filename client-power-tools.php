@@ -141,6 +141,7 @@ function cpt_activate() {
 	$defaults = [
 		'cpt_client_statuses'									=> 'Active' . "\n" . 'Potential' . "\n" . 'Inactive',
 		'cpt_default_client_status'						=> 'Active',
+		'cpt_show_status_update_req_button'		=> true,
 		'cpt_status_update_req_freq'					=> 30,
 		'cpt_status_update_req_notice_email'	=> get_bloginfo( 'admin_email' ),
     'cpt_new_client_email_from_name'     	=> '',
