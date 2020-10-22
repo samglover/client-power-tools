@@ -113,43 +113,63 @@ function cpt_process_new_client() {
 
   if ( isset( $_POST[ 'cpt_new_client_nonce' ] ) && wp_verify_nonce( $_POST[ 'cpt_new_client_nonce' ], 'cpt_new_client_added' ) ) {
 
-    /**
-    * Note. For some businesses (e.g., law firms), it could be a problem
-    * if it were easy to guess a client's user_nicename. For example, WordPress
-    * uses user_nicename for author URLs, so someone could find out whether the
-    * company has a particular client by checking for valid URLs based on a
-    * client's name or username. To avoid this, when creating a new user we
-    * generate an md5 hash from the client's name plus a random integer, making
-    * the user_nicename pretty much impossible to guess.
-    */
-    $userdata = [
-      'first_name'            => sanitize_text_field( $_POST[ 'first_name' ] ),
-      'last_name'             => sanitize_text_field( $_POST[ 'last_name' ] ),
-      'display_name'          => sanitize_text_field( $_POST[ 'first_name' ] ) . ' ' . sanitize_text_field( $_POST[ 'last_name' ] ),
-      'user_nicename'         => md5( sanitize_text_field( $_POST[ 'first_name' ] ) . sanitize_text_field( $_POST[ 'last_name' ] ) . random_int( 0, PHP_INT_MAX ) ),
-      'user_email'            => sanitize_email( $_POST[ 'email' ] ),
-      'user_login'            => sanitize_user( $_POST[ 'email' ] ),
-      'user_pass'             => null,
-      'role'                  => 'cpt-client',
-      'show_admin_bar_front'  => 'false',
-    ];
+    $client_email       = sanitize_email( $_POST[ 'email' ] );
+    $existing_client_id = email_exists( $client_email );
 
-    $new_user = wp_insert_user( $userdata );
+    if ( ! $existing_client_id ) {
 
-    if ( is_wp_error( $new_user ) ) {
+      /**
+      * Note. For some businesses (e.g., law firms), it could be a problem
+      * if it were easy to guess a client's user_nicename. For example, WordPress
+      * uses user_nicename for author URLs, so someone could find out whether the
+      * company has a particular client by checking for valid URLs based on a
+      * client's name or username. To avoid this, when creating a new user we
+      * generate an md5 hash from the client's name plus a random integer, making
+      * the user_nicename pretty much impossible to guess.
+      */
+      $userdata = [
+        'first_name'            => sanitize_text_field( $_POST[ 'first_name' ] ),
+        'last_name'             => sanitize_text_field( $_POST[ 'last_name' ] ),
+        'display_name'          => sanitize_text_field( $_POST[ 'first_name' ] ) . ' ' . sanitize_text_field( $_POST[ 'last_name' ] ),
+        'user_nicename'         => md5( sanitize_text_field( $_POST[ 'first_name' ] ) . sanitize_text_field( $_POST[ 'last_name' ] ) . random_int( 0, PHP_INT_MAX ) ),
+        'user_email'            => $client_email,
+        'user_login'            => sanitize_user( $_POST[ 'email' ] ),
+        'user_pass'             => null,
+        'role'                  => 'cpt-client',
+        'show_admin_bar_front'  => 'false',
+      ];
 
-      $result = 'Client could not be created. Error message: ' . $new_user->get_error_message();
+      $new_client = wp_insert_user( $userdata );
 
     } else {
 
-      update_user_meta( $new_user, 'cpt_client_id', sanitize_text_field( $_POST[ 'client_id' ] ) );
-      update_user_meta( $new_user, 'cpt_client_status', sanitize_text_field( $_POST[ 'client_status' ] ) );
+      $userdata = [
+        'ID'                    => $existing_client_id,
+        'first_name'            => sanitize_text_field( $_POST[ 'first_name' ] ),
+        'last_name'             => sanitize_text_field( $_POST[ 'last_name' ] ),
+      ];
 
-      cpt_new_client_email( $new_user );
+      if ( ! $existing_client_id ) { $new_client = wp_update_user( $userdata ); }
 
-      $client_profile_url = Common\cpt_get_client_profile_url( $new_user );
+      $user = new \WP_User( $new_client );
+      $user->add_role( 'cpt-client' );
 
-      $result = 'Client created. <a href="' . $client_profile_url . '">View ' . $userdata[ 'display_name' ] . '\'s profile</a>.';
+    }
+
+    if ( is_wp_error( $new_client ) ) {
+
+      $result = 'Client could not be created. Error message: ' . $new_client->get_error_message();
+
+    } else {
+
+      update_user_meta( $new_client, 'cpt_client_id', sanitize_text_field( $_POST[ 'client_id' ] ) );
+      update_user_meta( $new_client, 'cpt_client_status', sanitize_text_field( $_POST[ 'client_status' ] ) );
+
+      cpt_new_client_email( $new_client );
+
+      $client_profile_url = Common\cpt_get_client_profile_url( $new_client );
+
+      $result = 'Client created. <a href="' . $client_profile_url . '">View ' . Common\cpt_get_client_name( $new_client ) . '\'s profile</a>.';
 
     }
 

@@ -9,6 +9,9 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 ### Added
 - Setting to disable the status request button entirely.
 
+### Changed
+- Creating a new client with an existing user's email address now adds the Client role to the existing user instead of returning an error.
+
 
 ## [1.1.0] - 2020-10-20
 
