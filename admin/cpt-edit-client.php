@@ -179,7 +179,7 @@ function cpt_delete_client_modal( $user_id ) {
           <h2 style="color: red;"><?php _e( 'WARNING' ); ?></h2>
 
           <p><?php _e( '<strong>Deleting a client is permanent.</strong> There is no undo. Make sure you have a backup!' ); ?></p>
-          <p><?php _e( 'Deleting a client will also remove messages and other client information.' ); ?></p>
+          <p><?php _e( 'Deleting a client will also remove the associated user account, client messages, and other client information.' ); ?></p>
 
           <?php cpt_delete_client_button( $user_id ); ?>
           <button class="button cpt-cancel-delete-client"><?php _e( 'Cancel' ); ?></button>

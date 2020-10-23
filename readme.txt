@@ -61,15 +61,44 @@ Client Power Tools is built to be customizable where you need it to be. Here are
 
 == Upgrade Notice ==
 
-This release adds one important feature. Now you can delete clients from the client's profile page, under **Edit Client**!
+This release adds several user-requested features. In settings, now you can disable the status request button entirely. You can also change the default email notification behavior to include the full message, rather than just a notification, but you can override this default on individual messages.
+
+Finally, when you try to add a new client when there is already a WordPress user account with the same email address, the user is simply given the Client role rather than returning an error. (The documentation will be updated, as well.)
+
+There's also a bunch of smaller tweaks and improvements.
 
 
 == Changelog ==
 
-= 1.1.0 =
+### [1.2.0]
 
-### Added
+#### Added
+- Setting to disable the status request button entirely.
+- Setting to change the default email notification behavior to include the full message, rather than just a notification.
+- Override the default email behavior on individual messages.
+
+#### Changed
+- Creating a new client with an existing user's email address now adds the Client role to the existing user instead of returning an error.
+
+
+### 1.1.0
+
+#### Added
 - Delete a client from the client's profile page, under **Edit Client**.
+
+
+### 1.0.5
+
+#### Changed
+- Handle frontend login error on the front end.
+- General tidying up.
+
+#### Removed
+- Remove unused capabilities from Client Manager role (for now).
+- Remove unused functions cpt_get_client_profile_link and cpt_get_client_id.
+
+#### Fixed
+- Email notifications should now deliver with the intended formatting.
 
 
 == Installation ==

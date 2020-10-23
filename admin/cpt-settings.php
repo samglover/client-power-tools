@@ -188,15 +188,26 @@ function cpt_default_client_status() {
 }
 
 
-// Client Messaging Settings
-function cpt_client_messaging_settings_init() {
+// Status Update Request Button settings
+function cpt_status_update_request_button_settings_init() {
 
   add_settings_section(
-    'cpt_client_messaging_settings',
-    'Messages',
-    __NAMESPACE__ . '\cpt_client_messaging_section',
+    'cpt_status_update_request_button_settings',
+    'Status Update Request Button',
+    __NAMESPACE__ . '\cpt_status_update_request_button_section',
     'cpt-settings',
   );
+
+  // Show Status Update Request Button
+  add_settings_field(
+    'cpt_show_status_update_req_button',
+    'Show/Hide',
+    __NAMESPACE__ . '\cpt_show_status_update_req_button',
+    'cpt-settings',
+    'cpt_status_update_request_button_settings',
+  );
+
+  register_setting( 'cpt-settings', 'cpt_show_status_update_req_button', 'absint' );
 
   // Status Update Request Frequency
   add_settings_field(
@@ -204,7 +215,7 @@ function cpt_client_messaging_settings_init() {
     '<label for="cpt_status_update_req_freq">Status Update Request Frequency<br /><small>(required)</small></label>',
     __NAMESPACE__ . '\cpt_status_update_req_freq',
     'cpt-settings',
-    'cpt_client_messaging_settings',
+    'cpt_status_update_request_button_settings',
   );
 
   register_setting( 'cpt-settings', 'cpt_status_update_req_freq', 'absint' );
@@ -215,16 +226,39 @@ function cpt_client_messaging_settings_init() {
     '<label for="cpt_status_update_req_notice_email">Status Update Request Notification Email<br /><small>(required)</small></label>',
     __NAMESPACE__ . '\cpt_status_update_req_notice_email',
     'cpt-settings',
-    'cpt_client_messaging_settings',
+    'cpt_status_update_request_button_settings',
   );
 
   register_setting( 'cpt-settings', 'cpt_status_update_req_notice_email', 'sanitize_email' );
 
 }
 
-add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_messaging_settings_init' );
+add_action( 'admin_init', __NAMESPACE__ . '\cpt_status_update_request_button_settings_init' );
 
-function cpt_client_messaging_section() {}
+
+function cpt_status_update_request_button_section() {}
+
+function cpt_show_status_update_req_button() {
+
+  $show_button = get_option( 'cpt_show_status_update_req_button', true );
+
+  ob_start();
+
+    ?>
+
+      <fieldset>
+        <label for="cpt_show_status_update_req_button">
+          <input name="cpt_show_status_update_req_button" id="cpt_show_status_update_req_button" type="checkbox" value="1" <?php checked( $show_button ); ?>>
+          Show button?
+          <p class="description"><?php _e( 'Uncheck this box to hide the Status Update Request Button on the client dashboard.' ); ?></p>
+        </label>
+      </fieldset>
+
+    <?php
+
+  echo ob_get_clean();
+
+}
 
 function cpt_status_update_req_freq() {
   echo '<input name="cpt_status_update_req_freq" class="small-text" type="number" required aria-required="true" value="' . get_option( 'cpt_status_update_req_freq' ) . '"> days';
@@ -234,6 +268,57 @@ function cpt_status_update_req_freq() {
 function cpt_status_update_req_notice_email() {
   echo '<input name="cpt_status_update_req_notice_email" class="regular-text" type="email" required aria-required="true" value="' . get_option( 'cpt_status_update_req_notice_email' ) . '">';
   echo '<p class="description">' . __( 'When a client requests a status update, the notification will go to this email address.' ) . '</p>';
+}
+
+
+// Client Messaging Settings
+function cpt_client_messaging_settings_init() {
+
+  add_settings_section(
+    'cpt_client_messaging_settings',
+    'Messages',
+    __NAMESPACE__ . '\cpt_client_messaging_section',
+    'cpt-settings',
+  );
+
+  // Send Message Content
+  add_settings_field(
+    'cpt_send_message_content',
+    'Email Notification Content',
+    __NAMESPACE__ . '\cpt_send_message_content',
+    'cpt-settings',
+    'cpt_client_messaging_settings',
+  );
+
+  register_setting( 'cpt-settings', 'cpt_send_message_content', 'absint' );
+
+}
+
+add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_messaging_settings_init' );
+
+
+function cpt_client_messaging_section() {}
+
+function cpt_send_message_content() {
+
+  $send_message_content = get_option( 'cpt_send_message_content' );
+
+  ob_start();
+
+    ?>
+
+      <fieldset>
+        <label for="cpt_send_message_content">
+          <input name="cpt_send_message_content" id="cpt_send_message_content" type="checkbox" value="1" <?php checked( $send_message_content ); ?>>
+          Send message content
+          <p class="description"><?php _e( 'If checked, the client will receive the full content of messages by email instead of a notification with a prompt to log into their client portal. This is less secure.' ); ?></p>
+        </label>
+      </fieldset>
+
+    <?php
+
+  echo ob_get_clean();
+
 }
 
 
