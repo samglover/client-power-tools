@@ -68,20 +68,20 @@ This release adds one important feature. Now you can delete clients from the cli
 
 = 1.1.0 =
 
-### Added
+#### Added
 - Delete a client from the client's profile page, under **Edit Client**.
 
 = 1.0.5 =
 
-### Changed
+#### Changed
 - Handle frontend login error on the front end.
 - General tidying up.
 
-### Removed
+#### Removed
 - Remove unused capabilities from Client Manager role (for now).
 - Remove unused functions cpt_get_client_profile_link and cpt_get_client_id.
 
-### Fixed
+#### Fixed
 - Email notifications should now deliver with the intended formatting.
 
 

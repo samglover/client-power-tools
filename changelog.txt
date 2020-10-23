@@ -6,42 +6,42 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 
 ## [1.2.0]
 
-### Added
+#### Added
 - Setting to disable the status request button entirely.
 
-### Changed
+#### Changed
 - Creating a new client with an existing user's email address now adds the Client role to the existing user instead of returning an error.
 
 
 ## [1.1.0] - 2020-10-20
 
-### Added
+#### Added
 - Delete a client from the client's profile page, under **Edit Client**.
 
 
 ## [1.0.5] - 2020-10-07
 
-### Changed
+#### Changed
 - Handle frontend login error on the front end.
 - General tidying up.
 
-### Removed
+#### Removed
 - Remove unused capabilities from Client Manager role (for now).
 - Remove unused functions cpt_get_client_profile_link and cpt_get_client_id.
 
-### Fixed
+#### Fixed
 - Email notifications should now deliver with the intended formatting.
 
 
 ## [1.0.4] - 2020-10-05
 
-### Fixed
+#### Fixed
 - Prevent not-logged-in messages from displaying in the head when the_content filter is called (by Yoast SEO, for example).
 
 
 ## [1.0.3] - 2020-10-05
 
-### Fixed
+#### Fixed
 - Center the modal dismiss button.
 - Fix false negatives from cpt_is_client if the user is not logged in but the user ID is provided.
 - Prevent Client Power Tools from intercepting the password reset workflow for non-clients.
@@ -49,23 +49,23 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 
 ## [1.0.2] - 2020-10-02
 
-### Fixed
+#### Fixed
 - Fixed URL encoding.
 
 
 ## [1.0.1] - 2020-10-02
 
-### Fixed
+#### Fixed
 - Check for main query on client dashboard.
 - Fixed set/change password key sanitization.
 
 
 ## [1.0.0] - 2020-10-02
 
-### Added
+#### Added
 - Added some frontend form styles for greater compatibility with different themes.
 
-### Changed
+#### Changed
 - Override default button display style on dismiss button.
 - Change constant prefix from CPT_ to CLIENT_POWER_TOOLS_.
 - Data sanitization and validation.
@@ -73,5 +73,5 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 
 ## [0.1.0 (Beta)] - 2020-09-23
 
-### Added
+#### Added
 - Everything.
