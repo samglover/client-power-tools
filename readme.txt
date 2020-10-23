@@ -66,12 +66,12 @@ This release adds one important feature. Now you can delete clients from the cli
 
 == Changelog ==
 
-= 1.1.0 =
+### 1.1.0
 
 #### Added
 - Delete a client from the client's profile page, under **Edit Client**.
 
-= 1.0.5 =
+### 1.0.5
 
 #### Changed
 - Handle frontend login error on the front end.
