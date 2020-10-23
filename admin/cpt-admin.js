@@ -9,7 +9,7 @@
         break;
 
       case 'Cancel':
-      default :
+      default:
         $( this ).html( 'Edit Client' );
         break;
 

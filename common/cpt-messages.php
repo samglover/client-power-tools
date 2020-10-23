@@ -154,10 +154,36 @@ function cpt_new_message_form( $user_id ) {
                   <?php \wp_editor( '', 'cpt-message-editor', $editor_args ); ?>
                 </td>
               </tr>
+              <tr>
+                <th scope="row">
+                  Options
+                </th>
+                <td>
+                  <fieldset>
+
+                    <?php if ( get_option( 'cpt_send_message_content' ) == false ) { ?>
+
+                      <label for="send_message_content">
+                        <input name="send_message_content" id="send_message_content" type="checkbox" value="1">
+                        <?php _e( 'Send message content.' ); ?>
+                      </label>
+                      <p class="description"><?php _e( 'If checked, the client will receive the actual message by email instead of a notification with a prompt to log into their client portal. This is less secure.' ); ?></p>
+
+                    <?php } else { ?>
+
+                      <label for="send_notification_only">
+                        <input name="send_notification_only" id="send_notification_only" type="checkbox" value="1">
+                        <?php _e( 'Send notification only.' ); ?>
+                      </label>
+                      <p class="description"><?php _e( 'If checked, the client will receive an email letting them know they have a message, but they will have to log into their client dashboard to view the body of the message. This is more secure.' ); ?></p>
+
+                    <?php } ?>
+
+                  </fieldset>
+                </td>
+              </tr>
             </tbody>
           </table>
-
-          <p><?php _e( 'When you click send, this client will receive an email letting them know they have a message, but they will have to log into their client dashboard to view the body of the message.' ); ?></p>
 
           <p class="submit">
             <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e( 'Send Message' ); ?>">
@@ -244,6 +270,34 @@ function cpt_process_new_message() {
     $post_content     = wp_kses_post( $_POST[ 'message' ] );
     $clients_user_id  = sanitize_key( intval( $_POST[ 'clients_user_id' ] ) );
 
+    // Figures out whether to send the full content of this message.
+    $send_msg_content_default = get_option( 'cpt_send_message_content' );
+
+    switch ( $send_msg_content_default ) {
+
+      case ( $send_msg_content_default == true ):
+
+        if ( isset( $_POST[ 'send_notification_only' ] ) && $_POST[ 'send_notification_only' ] == 1 ) {
+          $send_this_msg_content = false;
+        } else {
+          $send_this_msg_content = true;
+        }
+
+        break;
+
+      case ( $send_msg_content_default == false ):
+      default:
+
+        if ( isset( $_POST[ 'send_message_content' ] ) && $_POST[ 'send_message_content' ] == 1 ) {
+          $send_this_msg_content = true;
+        } else {
+          $send_this_msg_content = false;
+        }
+
+        break;
+
+    }
+
     /**
     * Note. When creating a new message, for the post slug we generate an md5
     * hash from the timestamp plus a random integer, making the message URL
@@ -256,7 +310,8 @@ function cpt_process_new_message() {
       'post_status'   => 'publish',
       'post_type'     => 'cpt_message',
       'meta_input'    => [
-        'cpt_clients_user_id' => $clients_user_id,
+        'cpt_clients_user_id'       => $clients_user_id,
+        'cpt_send_message_content'  => $send_this_msg_content,
       ],
     ];
 
@@ -287,12 +342,14 @@ function cpt_process_new_message() {
 
 }
 
-add_action( 'admin_post_cpt_new_message_added', __NAMESPACE__ . '\cpt_process_new_message' );
+// add_action( 'admin_post_cpt_new_message_added', __NAMESPACE__ . '\cpt_process_new_message' );
 
 
 function cpt_message_notification( $message_id ) {
 
   if ( ! $message_id ) { return; }
+
+  $send_this_msg_content = get_post_meta( $message_id, 'cpt_send_message_content', true );
 
   $msg_obj          = get_post( $message_id );
   $sender_id        = $msg_obj->post_author;
@@ -308,21 +365,28 @@ function cpt_message_notification( $message_id ) {
   $to               = $client_obj->user_email;
   $subject          = $msg_obj->post_title ? $msg_obj->post_title : __( 'You have a new message from' ) . ' ' . $from_name;
 
-  if ( $sender_id == $clients_user_id ) {
+  if ( $send_this_msg_content ) {
 
-    $message      = '<p>' . __( 'To read your message, please visit your client dashboard.' ) . '</p>';
-    $button_url   = cpt_get_client_profile_url( $clients_user_id ) . '#cpt-message-' . $message_id;
+    $message = get_the_content( null, false, $msg_obj );
 
   } else {
 
-    $message      = '<p>' . __( 'To read this message, please view the client page.' ) . '</p>';
-    $button_url   = cpt_get_client_dashboard_url() . '#cpt-message-' . $message_id;
+    if ( $sender_id == $clients_user_id ) {
+
+      $message      = '<p>' . __( 'To read your message, please visit your client dashboard.' ) . '</p>';
+      $button_url   = cpt_get_client_profile_url( $clients_user_id ) . '#cpt-message-' . $message_id;
+
+    } else {
+
+      $message      = '<p>' . __( 'To read this message, please view the client page.' ) . '</p>';
+      $button_url   = cpt_get_client_dashboard_url() . '#cpt-message-' . $message_id;
+
+    }
+
+    $button_txt     = __( 'Go to Message' );
+    $message        = cpt_get_email_card( $subject, $message, $button_txt, $button_url );
 
   }
-
-  $button_txt     = __( 'Go to Message' );
-
-  $message = cpt_get_email_card( $subject, $message, $button_txt, $button_url );
 
   wp_mail( $to, $subject, $message, $headers );
 
