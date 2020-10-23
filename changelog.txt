@@ -12,6 +12,8 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 
 #### Added
 - Setting to disable the status request button entirely.
+- Setting to change the default email behavior to include the full message, rather than just a notification.
+- Override the default email behavior on individual messages.
 
 #### Changed
 - Creating a new client with an existing user's email address now adds the Client role to the existing user instead of returning an error.

@@ -273,28 +273,21 @@ function cpt_process_new_message() {
     // Figures out whether to send the full content of this message.
     $send_msg_content_default = get_option( 'cpt_send_message_content' );
 
-    switch ( $send_msg_content_default ) {
+    if ( ! $send_msg_content_default ) {
 
-      case ( $send_msg_content_default == true ):
+      if ( isset( $_POST[ 'send_message_content' ] ) && $_POST[ 'send_message_content' ] == 1 ) {
+        $send_this_msg_content = true;
+      } else {
+        $send_this_msg_content = false;
+      }
 
-        if ( isset( $_POST[ 'send_notification_only' ] ) && $_POST[ 'send_notification_only' ] == 1 ) {
-          $send_this_msg_content = false;
-        } else {
-          $send_this_msg_content = true;
-        }
+    } else {
 
-        break;
-
-      case ( $send_msg_content_default == false ):
-      default:
-
-        if ( isset( $_POST[ 'send_message_content' ] ) && $_POST[ 'send_message_content' ] == 1 ) {
-          $send_this_msg_content = true;
-        } else {
-          $send_this_msg_content = false;
-        }
-
-        break;
+      if ( isset( $_POST[ 'send_notification_only' ] ) && $_POST[ 'send_notification_only' ] == 1 ) {
+        $send_this_msg_content = false;
+      } else {
+        $send_this_msg_content = true;
+      }
 
     }
 
@@ -342,7 +335,7 @@ function cpt_process_new_message() {
 
 }
 
-// add_action( 'admin_post_cpt_new_message_added', __NAMESPACE__ . '\cpt_process_new_message' );
+add_action( 'admin_post_cpt_new_message_added', __NAMESPACE__ . '\cpt_process_new_message' );
 
 
 function cpt_message_notification( $message_id ) {
