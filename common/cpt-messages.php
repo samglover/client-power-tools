@@ -6,10 +6,10 @@ function cpt_messages( $user_id ) {
 
   if ( ! $user_id ) { return; }
 
-  echo '<h2>Messages</h2>';
+  echo '<h2>' . __( 'Messages' ) . '</h2>';
   cpt_message_list( $user_id );
 
-  echo '<h2>New Message</h2>';
+  echo '<h2>' . __( 'New Message' ) . '</h2>';
   echo '<div id="cpt-new-message-form">';
     cpt_new_message_form( $user_id );
   echo '</div>';
@@ -48,19 +48,19 @@ function cpt_message_list( $user_id ) {
 
             case ( get_current_user_id() ):
               $message_classes[]   = 'my-message';
-              $message_meta       .= 'Sent';
+              $message_meta       .= __( 'Sent' );
 
               break;
 
             case ( $user_id ):
               $message_classes[]   = 'client-message not-my-message';
-              $message_meta       .= 'Received from ' . get_the_author();
+              $message_meta       .= __( 'Received from' ) . ' ' . get_the_author();
 
               break;
 
             default:
               $message_classes[]   = 'not-my-message';
-              $message_meta       .= 'Sent by ' . get_the_author();
+              $message_meta       .= __( 'Sent by' ) . ' ' . get_the_author();
 
           }
 
@@ -105,11 +105,7 @@ function cpt_message_list( $user_id ) {
 
   else :
 
-    ?>
-
-      <p>No messages found.</p>
-
-    <?php
+    echo '<p>' . __( 'No messages found.' ) . '</p>';
 
   endif;
 
@@ -143,16 +139,16 @@ function cpt_new_message_form( $user_id ) {
             <tbody>
               <tr>
                 <th scope="row">
-                  <label for="subject_line">Subject Line</label>
+                  <label for="subject_line"><?php _e( 'Subject Line' ); ?></label>
                 </th>
                 <td>
                   <input name="subject_line" id="subject_line" class="large-text" type="text">
-                  <p>If you leave this field empty, the subject line will be "New message from <?php echo get_the_author(); ?>."</p>
+                  <p><?php echo __( 'If you leave this field empty, the subject line will be "New message from' ) . ' ' . get_the_author() . '."'; ?></p>
                 </td>
               </tr>
               <tr>
                 <th scope="row">
-                  <label for="message">Message</label>
+                  <label for="message"><?php _e( 'Message' ); ?></label>
                 </th>
                 <td>
                   <?php \wp_editor( '', 'cpt-message-editor', $editor_args ); ?>
@@ -161,10 +157,10 @@ function cpt_new_message_form( $user_id ) {
             </tbody>
           </table>
 
-          <p>When you click send, this client will receive an email letting them know they have a message, but they will have to log into their client dashboard to view the body of the message.</p>
+          <p><?php _e( 'When you click send, this client will receive an email letting them know they have a message, but they will have to log into their client dashboard to view the body of the message.' ); ?></p>
 
           <p class="submit">
-            <input name="submit" id="submit" class="button button-primary" type="submit" value="Send Message">
+            <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e( 'Send Message' ); ?>">
           </p>
 
         </form>
@@ -204,7 +200,7 @@ function cpt_new_message_form( $user_id ) {
             */
             echo sprintf(
               '<p>%s %s</p>',
-              sprintf( '<label for="subject_line">Subject Line<br /><small>(optional)</small></label>' ),
+              sprintf( '<label for="subject_line">' . _( 'Subject Line' ) . '<br /><small>' . __( '(optional)' ) . '</small></label>' ),
               sprintf( '<input name="subject_line" id="subject_line" class="large-text" type="text">' ),
             );
 
@@ -217,14 +213,14 @@ function cpt_new_message_form( $user_id ) {
             */
             echo sprintf(
               '<p style="margin-bottom: 0 !important;">%s</p>%s<p style="line-height: 0 !important;"> </p>',
-              sprintf( '<label for="message">Message<br /><small>(required)</small></label>' ),
+              sprintf( '<label for="message">' . __( 'Message' ) . '<br /><small>' . __( '(required)' ) . '</small></label>' ),
               sprintf( $message_editor ),
             );
 
           ?>
 
           <p class="submit">
-            <input name="submit" id="submit" class="button button-primary" type="submit" value="Send Message">
+            <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e( 'Send Message' ); ?>">
           </p>
 
         </form>
@@ -268,13 +264,13 @@ function cpt_process_new_message() {
 
     if ( is_wp_error( $post ) ) {
 
-      $result = 'Message could not be sent. Error message: ' . $post->get_error_message();
+      $result = __( 'Message could not be sent. Error message:' ) . ' ' . $post->get_error_message();
 
     } else {
 
       cpt_message_notification( $post );
 
-      $result = 'Message sent!';
+      $result = __( 'Message sent!' );
 
     }
 
@@ -310,21 +306,21 @@ function cpt_message_notification( $message_id ) {
   $headers[]        = 'From: ' . $from_name . ' <' . $from_email . '>';
 
   $to               = $client_obj->user_email;
-  $subject          = $msg_obj->post_title ? $msg_obj->post_title : 'You have a new message from ' . $from_name;
+  $subject          = $msg_obj->post_title ? $msg_obj->post_title : __( 'You have a new message from' ) . ' ' . $from_name;
 
   if ( $sender_id == $clients_user_id ) {
 
-    $message      = '<p>To read your message, please visit your client dashboard.</p>';
+    $message      = '<p>' . __( 'To read your message, please visit your client dashboard.' ) . '</p>';
     $button_url   = cpt_get_client_profile_url( $clients_user_id ) . '#cpt-message-' . $message_id;
 
   } else {
 
-    $message      = '<p>To read this message, please view the client page.</p>';
+    $message      = '<p>' . __( 'To read this message, please view the client page.' ) . '</p>';
     $button_url   = cpt_get_client_dashboard_url() . '#cpt-message-' . $message_id;
 
   }
 
-  $button_txt     = 'Go to Message';
+  $button_txt     = __( 'Go to Message' );
 
   $message = cpt_get_email_card( $subject, $message, $button_txt, $button_url );
 
