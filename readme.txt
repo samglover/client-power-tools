@@ -70,7 +70,7 @@ There's also a bunch of smaller tweaks and improvements.
 
 == Changelog ==
 
-### [1.2.0]
+### 1.2.0
 
 #### Added
 - Setting to disable the status request button entirely.
