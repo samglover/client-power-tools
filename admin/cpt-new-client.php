@@ -149,7 +149,7 @@ function cpt_process_new_client() {
         'last_name'             => sanitize_text_field( $_POST[ 'last_name' ] ),
       ];
 
-      if ( ! $existing_client_id ) { $new_client = wp_update_user( $userdata ); }
+      $new_client = wp_update_user( $userdata );
 
       $user = new \WP_User( $new_client );
       $user->add_role( 'cpt-client' );

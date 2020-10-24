@@ -8,7 +8,13 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - Prepare the plugin for internationalization.
 
 
-### [1.2.0]
+### 1.2.1 - 2020-10-24
+
+#### Fixed
+- Adding an existing user as a client now works as it should.
+
+
+### 1.2.0 - 2020-10-23
 
 #### Added
 - Setting to disable the status request button entirely.
@@ -19,13 +25,13 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - Creating a new client with an existing user's email address now adds the Client role to the existing user instead of returning an error.
 
 
-### [1.1.0] - 2020-10-20
+### 1.1.0 - 2020-10-20
 
 #### Added
 - Delete a client from the client's profile page, under **Edit Client**.
 
 
-### [1.0.5] - 2020-10-07
+### 1.0.5 - 2020-10-07
 
 #### Changed
 - Handle frontend login error on the front end.
@@ -39,13 +45,13 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - Email notifications should now deliver with the intended formatting.
 
 
-### [1.0.4] - 2020-10-05
+### 1.0.4 - 2020-10-05
 
 #### Fixed
 - Prevent not-logged-in messages from displaying in the head when the_content filter is called (by Yoast SEO, for example).
 
 
-### [1.0.3] - 2020-10-05
+### 1.0.3 - 2020-10-05
 
 #### Fixed
 - Center the modal dismiss button.
@@ -53,20 +59,20 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - Prevent Client Power Tools from intercepting the password reset workflow for non-clients.
 
 
-### [1.0.2] - 2020-10-02
+### 1.0.2 - 2020-10-02
 
 #### Fixed
 - Fixed URL encoding.
 
 
-### [1.0.1] - 2020-10-02
+### 1.0.1 - 2020-10-02
 
 #### Fixed
 - Check for main query on client dashboard.
 - Fixed set/change password key sanitization.
 
 
-### [1.0.0] - 2020-10-02
+### 1.0.0 - 2020-10-02
 
 #### Added
 - Added some frontend form styles for greater compatibility with different themes.
@@ -77,7 +83,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - Data sanitization and validation.
 
 
-### [0.1.0 (Beta)] - 2020-09-23
+### 0.1.0 (Beta) - 2020-09-23
 
 #### Added
 - Everything.

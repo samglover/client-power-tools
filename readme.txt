@@ -70,24 +70,30 @@ There's also a bunch of smaller tweaks and improvements.
 
 == Changelog ==
 
-### [1.2.0]
+### 1.2.1 - 2020-10-24
+
+#### Fixed
+- Adding an existing user as a client now works as it should.
+
+
+### 1.2.0 - 2020-10-23
 
 #### Added
 - Setting to disable the status request button entirely.
-- Setting to change the default email notification behavior to include the full message, rather than just a notification.
+- Setting to change the default email behavior to include the full message, rather than just a notification.
 - Override the default email behavior on individual messages.
 
 #### Changed
 - Creating a new client with an existing user's email address now adds the Client role to the existing user instead of returning an error.
 
 
-### 1.1.0
+### 1.1.0 - 2020-10-20
 
 #### Added
 - Delete a client from the client's profile page, under **Edit Client**.
 
 
-### 1.0.5
+### 1.0.5 - 2020-10-07
 
 #### Changed
 - Handle frontend login error on the front end.
