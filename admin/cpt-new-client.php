@@ -165,7 +165,7 @@ function cpt_process_new_client() {
       update_user_meta( $new_client, 'cpt_client_id', sanitize_text_field( $_POST[ 'client_id' ] ) );
       update_user_meta( $new_client, 'cpt_client_status', sanitize_text_field( $_POST[ 'client_status' ] ) );
 
-      cpt_new_client_email( $new_client );
+      if ( ! $existing_client_id ) { cpt_new_client_email( $new_client ); }
 
       $client_profile_url = Common\cpt_get_client_profile_url( $new_client );
 
