@@ -29,7 +29,7 @@ function cpt_security_warning() {
     ?>
 
       <div class="cpt-notice notice notice-warning">
-        <p><?php _e( '<strong>Warning!</strong> It doesn\'t look like your website is using SSL (HTTPS) for security. Before using Client Power Tools with your clients, you should get an SSL certificate for your website and consider additional security precautions. <a href="https://clientpowertools.com/security/">Learn more.</a>' ); ?></p>
+        <p><?php _e( '<strong>Warning!</strong> It doesn\'t look like your website is using SSL (HTTPS) for security. Before using Client Power Tools with your clients, you should get an SSL certificate for your website and consider additional security precautions. <a href="https://clientpowertools.com/security/?utm_source=cpt_user&utm_medium=cpt_ssl_warning">Learn more.</a>' ); ?></p>
       </div>
 
     <?php
