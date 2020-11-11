@@ -115,6 +115,7 @@ function cpt_get_client_data( $user_id ) {
     'last_name'   => get_user_meta( $user_id, 'last_name', true ),
     'email'       => $userdata->user_email,
     'client_id'   => get_user_meta( $user_id, 'cpt_client_id', true ),
+    'manager_id'  => get_user_meta( $user_id, 'cpt_client_manager', true ),
     'status'      => get_user_meta( $user_id, 'cpt_client_status', true ),
   ];
 

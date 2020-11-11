@@ -87,10 +87,18 @@ function cpt_new_client_form() {
             </tr>
             <tr>
               <th scope="row">
+                <label for="client_manager">Client Manager</label>
+              </th>
+              <td>
+                <?php echo cpt_get_client_manager_select() ?>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">
                 <label for="client_status">Client Status</label>
               </th>
               <td>
-                <?php echo cpt_get_client_statuses_select( 'client_status' ) ?>
+                <?php echo cpt_get_client_statuses_select() ?>
               </td>
             </tr>
           </tbody>

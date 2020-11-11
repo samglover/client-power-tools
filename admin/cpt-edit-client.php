@@ -75,30 +75,18 @@ function cpt_edit_client_form( $client_data ) {
             </tr>
             <tr>
               <th scope="row">
+                <label for="client_manager">Client Manager</label>
+              </th>
+              <td>
+                <?php echo cpt_get_client_manager_select( '', $client_data[ 'manager_id' ] ); ?>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">
                 <label for="client_status">Client Status</label>
               </th>
               <td>
-                <select name="client_status" id="client_status">
-
-                  <?php
-
-                    $statuses = $statuses_array = explode( "\n", get_option( 'cpt_client_statuses' ) );
-
-                    foreach ( $statuses as $status ) {
-
-                      if ( $status == $client_data[ 'status' ] ) {
-                        echo '<option selected>';
-                      } else {
-                        echo '<option>';
-                      }
-
-                      echo $status . '</option>';
-
-                    }
-
-                  ?>
-
-                </select>
+                <?php echo cpt_get_client_statuses_select( '', $client_data[ 'status' ] ); ?>
               </td>
             </tr>
           </tbody>
@@ -140,9 +128,11 @@ function cpt_process_client_update() {
     } else {
 
       $client_id      = sanitize_text_field( $_POST[ 'client_id' ] );
+      $client_manager = sanitize_text_field( $_POST[ 'client_manager' ] );
       $client_status  = sanitize_text_field( $_POST[ 'client_status' ] );
 
       update_user_meta( $user_id, 'cpt_client_id', $client_id );
+      update_user_meta( $user_id, 'cpt_client_manager', $client_manager );
       update_user_meta( $user_id, 'cpt_client_status', $client_status );
 
       $result = 'Client updated.';

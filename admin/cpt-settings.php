@@ -132,6 +132,16 @@ function cpt_client_profile_settings_init() {
   );
 
   add_settings_field(
+    'cpt_default_client_manager',
+    '<label for="cpt_default_client_manager">Default Client Manager</label>',
+    __NAMESPACE__ . '\cpt_default_client_manager',
+    'cpt-settings',
+    'cpt-client-profile-settings',
+  );
+
+  register_setting( 'cpt-settings', 'cpt_default_client_manager' );
+
+  add_settings_field(
     'cpt_client_statuses',
     '<label for="cpt_client_statuses">Statuses</label>',
     __NAMESPACE__ . '\cpt_client_statuses',
@@ -157,6 +167,11 @@ add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_profile_settings_init' );
 
 
 function cpt_client_profile_section() {}
+
+
+function cpt_default_client_manager() {
+  echo cpt_get_client_manager_select( 'cpt_default_client_manager', get_option( 'cpt_default_client_manager' ) );
+}
 
 
 function cpt_client_statuses() {

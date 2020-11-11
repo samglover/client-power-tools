@@ -51,7 +51,7 @@ Client Power Tools is built to be customizable where you need it to be. Here are
 * **New-client email.** You can customize the email sent to newly added clients so that it reflects the name, email address, subject line, and messaging you prefer.
 * **Client IDs.** When adding or updating a client, you can add a custom client ID.
 * **Client statuses.** You can customize the default statuses (potential, active, inactive).
-* **Status update request frequency.** Change how often the status update request button is available to your clients.
+* **Status update request frequency.** Change how often the status update request button is available to your clients, or turn it off.
 * **Status update request recipient.** Designate one person to field all the status update requests.
 * **Design.** The front-end design of Client Power Tools is as minimal as possible so that Client Power Tools blends into your existing theme. But you can override the Client Power Tools styles as long as you know a little CSS. (See the [documentation](https://clientpowertools.com/documentation/) for more details.)
 
