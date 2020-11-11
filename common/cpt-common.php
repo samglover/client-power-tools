@@ -110,16 +110,67 @@ function cpt_get_client_data( $user_id ) {
   $userdata = get_userdata( $user_id );
 
   $client_data = [
-    'user_id'     => $user_id,
-    'first_name'  => get_user_meta( $user_id, 'first_name', true ),
-    'last_name'   => get_user_meta( $user_id, 'last_name', true ),
-    'email'       => $userdata->user_email,
-    'client_id'   => get_user_meta( $user_id, 'cpt_client_id', true ),
-    'manager_id'  => get_user_meta( $user_id, 'cpt_client_manager', true ),
-    'status'      => get_user_meta( $user_id, 'cpt_client_status', true ),
+    'user_id'       => $user_id,
+    'first_name'    => get_user_meta( $user_id, 'first_name', true ),
+    'last_name'     => get_user_meta( $user_id, 'last_name', true ),
+    'email'         => $userdata->user_email,
+    'client_id'     => get_user_meta( $user_id, 'cpt_client_id', true ),
+    'manager_id'    => cpt_get_client_manager_id( $user_id ),
+    'manager_email' => cpt_get_client_manager_email( $user_id ),
+    'status'        => get_user_meta( $user_id, 'cpt_client_status', true ),
   ];
 
   return $client_data;
+
+}
+
+function cpt_get_client_manager_id( $clients_user_id ) {
+
+  if ( ! $clients_user_id ) { return; }
+
+  $userdata = get_userdata( get_user_meta( $clients_user_id, 'cpt_client_manager', true ) );
+
+  if ( $userdata && isset( $userdata->user_email ) ) {
+
+    $manager_id = $userdata->user_email;
+
+  } else if ( get_option( 'cpt_default_client_manager' ) ) {
+
+    $manager_id = get_option( 'cpt_default_client_manager' );
+
+  } else {
+
+    $userdata   = get_user_by_email( get_bloginfo( 'admin_email' ) );
+    $manager_id = $userdata->ID;
+
+  }
+
+  return $manager_id;
+
+}
+
+function cpt_get_client_manager_email( $clients_user_id ) {
+
+  if ( ! $clients_user_id ) { return; }
+
+  $userdata = get_userdata( get_user_meta( $clients_user_id, 'cpt_client_manager', true ) );
+
+  if ( $userdata && isset( $userdata->user_email ) ) {
+
+    $manager_email = $userdata->user_email;
+
+  } else if ( get_option( 'cpt_default_client_manager' ) ) {
+
+    $userdata       = get_userdata( get_option( 'cpt_default_client_manager' ) );
+    $manager_email  = $userdata->user_email;
+
+  } else {
+
+    $manager_email = get_bloginfo( 'admin_email' );
+
+  }
+
+  return $manager_email;
 
 }
 

@@ -205,26 +205,33 @@ function cpt_status_update_request_notification( $message_id ) {
 
   if ( ! $message_id ) { return; }
 
-  $msg_obj        = get_post( $message_id );
-  $sender_id      = $msg_obj->post_author;
-  $client_obj     = get_userdata( get_post_meta( $message_id, 'cpt_clients_user_id', true ) );
-  $profile_url    = cpt_get_client_profile_url( $sender_id );
+  $msg_obj          = get_post( $message_id );
+  $sender_id        = $msg_obj->post_author;
+  $clients_user_id  = get_post_meta( $message_id, 'cpt_clients_user_id', true );
+  $client_data      = cpt_get_client_data( $clients_user_id );
 
-  $from_name      = get_the_author_meta( 'display_name', $msg_obj->post_author );
-  $from_email     = get_the_author_meta( 'user_email', $msg_obj->post_author );
+  $from_name        = get_the_author_meta( 'display_name', $msg_obj->post_author );
+  $from_email       = get_the_author_meta( 'user_email', $msg_obj->post_author );
 
-  $headers[]      = 'Content-Type: text/html; charset=UTF-8';
-  $headers[]      = 'From: ' . $from_name . ' <' . $from_email . '>';
+  $headers[]        = 'Content-Type: text/html; charset=UTF-8';
+  $headers[]        = 'From: ' . $from_name . ' <' . $from_email . '>';
 
-  $to             = get_bloginfo( 'admin_email' );
-  $subject        = $msg_obj->post_title . ' by ' . $from_name;
-  $subject_html   = $msg_obj->post_title . '&nbsp;<br />' . 'by ' . $from_name;
+  $to               = $client_data[ 'manager_email' ];
 
-  $message        = '<p>Please post an update.</p>';
+  if ( get_option( 'cpt_status_update_req_notice_email' ) ) {
+    $cc             = get_option( 'cpt_status_update_req_notice_email' );
+    $headers[]      = 'Cc: ' . $cc;
+  }
 
-  $button_txt     = 'Go to ' . $from_name;
+  $subject          = $msg_obj->post_title . ' by ' . $from_name;
+  $subject_html     = $msg_obj->post_title . '&nbsp;<br />' . 'by ' . $from_name;
 
-  $message        = cpt_get_email_card( $subject_html, $message, $button_txt, $profile_url );
+  $message          = '<p>Please post an update.</p>';
+
+  $button_txt       = 'Go to ' . $from_name;
+  $profile_url      = cpt_get_client_profile_url( $sender_id );
+
+  $message          = cpt_get_email_card( $subject_html, $message, $button_txt, $profile_url );
 
   wp_mail( $to, $subject, $message, $headers );
 

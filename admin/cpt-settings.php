@@ -238,7 +238,7 @@ function cpt_status_update_request_button_settings_init() {
   // Status Update Request Notification Email
   add_settings_field(
     'cpt_status_update_req_notice_email',
-    '<label for="cpt_status_update_req_notice_email">Status Update Request Notification Email<br /><small>(required)</small></label>',
+    '<label for="cpt_status_update_req_notice_email">Additional Status Update Request Notification Email<br /><small>(optional)</small></label>',
     __NAMESPACE__ . '\cpt_status_update_req_notice_email',
     'cpt-settings',
     'cpt_status_update_request_button_settings',
@@ -281,8 +281,8 @@ function cpt_status_update_req_freq() {
 }
 
 function cpt_status_update_req_notice_email() {
-  echo '<input name="cpt_status_update_req_notice_email" class="regular-text" type="email" required aria-required="true" value="' . get_option( 'cpt_status_update_req_notice_email' ) . '">';
-  echo '<p class="description">' . __( 'When a client requests a status update, the notification will go to this email address.' ) . '</p>';
+  echo '<input name="cpt_status_update_req_notice_email" class="regular-text" type="email" value="' . get_option( 'cpt_status_update_req_notice_email' ) . '">';
+  echo '<p class="description">' . __( 'This address will be CC\'d when a client requests a status update.' ) . '</p>';
 }
 
 
