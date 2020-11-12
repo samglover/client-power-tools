@@ -30,9 +30,18 @@ function cpt_client_dashboard( $content ) {
 
         ob_start();
 
-          echo '<p>Welcome back, ' . $client_data[ 'first_name' ] . '!</p>';
-
           cpt_get_notices( 'cpt_new_message_result' );
+
+          echo '<p>';
+
+            echo '<strong>Welcome back, ' . $client_data[ 'first_name' ] . '!</strong>';
+
+            if ( isset( $client_data[ 'manager_id' ] ) ) {
+              echo ' You are working with ' . cpt_get_name( $client_data[ 'manager_id' ] ) . '.';
+            }
+
+          echo '</p>';
+
           cpt_status_update_request_button( $user_id );
 
           /**

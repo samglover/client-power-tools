@@ -90,12 +90,12 @@ function cpt_get_name( $user_id ) {
 
   if ( ! $user_id ) { return; }
 
-  $user_meta = get_userdata( $user_id );
+  $userdata = get_userdata( $user_id );
 
-  if ( $user_meta->first_name && $user_meta->last_name ) {
-    $name = $user_meta->first_name . ' ' . $user_meta->last_name;
+  if ( isset( $userdata->first_name ) && isset( $userdata->last_name ) ) {
+    $name = $userdata->first_name . ' ' . $userdata->last_name;
   } else {
-    $name = $user_meta->display_name;
+    $name = $userdata->display_name;
   }
 
   return $name;
@@ -132,9 +132,9 @@ function cpt_get_client_manager_id( $clients_user_id ) {
 
   $userdata = get_userdata( get_user_meta( $clients_user_id, 'cpt_client_manager', true ) );
 
-  if ( $userdata && isset( $userdata->user_email ) ) {
+  if ( $userdata && isset( $userdata->ID ) ) {
 
-    $manager_id = $userdata->user_email;
+    $manager_id = $userdata->ID;
 
   } else if ( get_option( 'cpt_default_client_manager' ) ) {
 

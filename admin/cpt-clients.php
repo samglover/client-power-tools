@@ -25,10 +25,9 @@ function cpt_clients() {
       $user_id        = sanitize_key( intval( $_REQUEST[ 'user_id' ] ) );
       $client_data    = Common\cpt_get_client_data( $user_id );
       $client_id      = $client_data[ 'client_id' ];
-      $client_status  = $client_data[ 'status' ];
 
-      if ( $client_status ) {
-        $page_header .= '<p id="cpt-client-status" class="dashicons-before status-' . strtolower( $client_status ) . '">' . $client_status . '</p>';
+      if ( isset( $client_data[ 'status' ] ) ) {
+        $page_header .= '<p id="cpt-client-status">' . $client_data[ 'status' ] . '</p>';
       }
 
       $page_header .= '<h1 id="cpt-page-title">' . Common\cpt_get_name( $user_id );
@@ -38,6 +37,20 @@ function cpt_clients() {
         }
 
       $page_header .= '</h1>';
+
+      if ( isset( $client_data[ 'manager_id' ] ) ) {
+
+        $page_header .= '<p id="cpt-client-manager">';
+
+        if ( get_current_user_id() == $client_data[ 'manager_id' ] ) {
+          $page_header .= 'Your Client';
+        } else {
+          $page_header .= Common\cpt_get_name( $client_data[ 'manager_id' ] ) . '\'s Client';
+        }
+
+        $page_header .= '</p>';
+
+      }
 
     } else {
 
