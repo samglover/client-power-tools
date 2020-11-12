@@ -58,8 +58,9 @@ function cpt_is_client( $user_id = null ) {
 }
 
 
-function cpt_get_client_profile_url( $user_id ) {
-  return add_query_arg( 'user_id', $user_id, admin_url( 'admin.php?page=cpt' ) );
+function cpt_get_client_profile_url( $clients_user_id ) {
+  if ( ! $clients_user_id ) { return; }
+  return add_query_arg( 'user_id', $clients_user_id, admin_url( 'admin.php?page=cpt' ) );
 }
 
 
@@ -85,44 +86,45 @@ function cpt_is_client_dashboard() {
 }
 
 
-function cpt_get_client_name( $user_id ) {
+function cpt_get_name( $user_id ) {
 
   if ( ! $user_id ) { return; }
 
   $user_meta = get_userdata( $user_id );
 
   if ( $user_meta->first_name && $user_meta->last_name ) {
-    $client_name = $user_meta->first_name . ' ' . $user_meta->last_name;
+    $name = $user_meta->first_name . ' ' . $user_meta->last_name;
   } else {
-    $client_name = $user_meta->display_name;
+    $name = $user_meta->display_name;
   }
 
-  return $client_name;
+  return $name;
 
 }
 
 
 // Returns an array with the user's details.
-function cpt_get_client_data( $user_id ) {
+function cpt_get_client_data( $clients_user_id ) {
 
-  if ( ! $user_id ) { return; }
+  if ( ! $clients_user_id ) { return; }
 
-  $userdata = get_userdata( $user_id );
+  $userdata = get_userdata( $clients_user_id );
 
   $client_data = [
-    'user_id'       => $user_id,
-    'first_name'    => get_user_meta( $user_id, 'first_name', true ),
-    'last_name'     => get_user_meta( $user_id, 'last_name', true ),
+    'user_id'       => $clients_user_id,
+    'first_name'    => get_user_meta( $clients_user_id, 'first_name', true ),
+    'last_name'     => get_user_meta( $clients_user_id, 'last_name', true ),
     'email'         => $userdata->user_email,
-    'client_id'     => get_user_meta( $user_id, 'cpt_client_id', true ),
-    'manager_id'    => cpt_get_client_manager_id( $user_id ),
-    'manager_email' => cpt_get_client_manager_email( $user_id ),
-    'status'        => get_user_meta( $user_id, 'cpt_client_status', true ),
+    'client_id'     => get_user_meta( $clients_user_id, 'cpt_client_id', true ),
+    'manager_id'    => cpt_get_client_manager_id( $clients_user_id ),
+    'manager_email' => cpt_get_client_manager_email( $clients_user_id ),
+    'status'        => get_user_meta( $clients_user_id, 'cpt_client_status', true ),
   ];
 
   return $client_data;
 
 }
+
 
 function cpt_get_client_manager_id( $clients_user_id ) {
 
@@ -148,6 +150,7 @@ function cpt_get_client_manager_id( $clients_user_id ) {
   return $manager_id;
 
 }
+
 
 function cpt_get_client_manager_email( $clients_user_id ) {
 

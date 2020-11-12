@@ -8,7 +8,7 @@ function cpt_edit_client( $user_id ) {
   if ( ! $user_id || ! is_user_logged_in() ) { return; }
 
   $client_data  = Common\cpt_get_client_data( $user_id );
-  $client_name  = Common\cpt_get_client_name( $user_id );
+  $client_name  = Common\cpt_get_name( $user_id );
 
   if ( is_admin() && current_user_can( 'cpt-manage-clients' ) ) {
 
@@ -189,7 +189,7 @@ function cpt_delete_client_button( $user_id ) {
 
   if ( ! $user_id ) { return; }
 
-  $client_name  = Common\cpt_get_client_name( $user_id );
+  $client_name  = Common\cpt_get_name( $user_id );
   $button_txt   = __( 'Delete' ) . ' ' . $client_name;
 
   ob_start();
@@ -217,7 +217,7 @@ function cpt_process_delete_client() {
   if ( isset( $_POST[ 'cpt_client_deleted_nonce' ] ) && wp_verify_nonce( $_POST[ 'cpt_client_deleted_nonce' ], 'cpt_client_deleted' ) ) {
 
     $user_id      = sanitize_key( intval( $_POST[ 'clients_user_id' ] ) );
-    $client_name  = Common\cpt_get_client_name( $user_id );
+    $client_name  = Common\cpt_get_name( $user_id );
 
     $args = [
       'fields'          => 'ids',

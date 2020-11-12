@@ -229,7 +229,7 @@ class CLIENT_POWER_TOOLS_Message_List_Table extends Includes\WP_List_Table  {
 
       $data[] = [
         'ID'              => $post_id,
-        'client_name'     => Common\cpt_get_client_name( $clients_user_id ),
+        'client_name'     => Common\cpt_get_name( $clients_user_id ),
         'clients_user_id' => $clients_user_id,
         'client_id'       => get_user_meta( $clients_user_id, 'cpt_client_id', true ),
         'sender'          => get_the_author(),

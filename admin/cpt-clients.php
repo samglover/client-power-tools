@@ -31,7 +31,7 @@ function cpt_clients() {
         $page_header .= '<p id="cpt-client-status" class="dashicons-before status-' . strtolower( $client_status ) . '">' . $client_status . '</p>';
       }
 
-      $page_header .= '<h1 id="cpt-page-title">' . Common\cpt_get_client_name( $user_id );
+      $page_header .= '<h1 id="cpt-page-title">' . Common\cpt_get_name( $user_id );
 
         if ( $client_id ) {
           $page_header .= ' <span style="color:silver">(' . $client_id . ')</span>';

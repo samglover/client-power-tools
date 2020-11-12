@@ -171,13 +171,14 @@ function cpt_process_new_client() {
     } else {
 
       update_user_meta( $new_client, 'cpt_client_id', sanitize_text_field( $_POST[ 'client_id' ] ) );
+      update_user_meta( $new_client, 'cpt_client_manager', sanitize_text_field( $_POST[ 'client_manager' ] ) );
       update_user_meta( $new_client, 'cpt_client_status', sanitize_text_field( $_POST[ 'client_status' ] ) );
 
       if ( ! $existing_client_id ) { cpt_new_client_email( $new_client ); }
 
       $client_profile_url = Common\cpt_get_client_profile_url( $new_client );
 
-      $result = 'Client created. <a href="' . $client_profile_url . '">View ' . Common\cpt_get_client_name( $new_client ) . '\'s profile</a>.';
+      $result = 'Client created. <a href="' . $client_profile_url . '">View ' . Common\cpt_get_name( $new_client ) . '\'s profile</a>.';
 
     }
 
@@ -197,14 +198,15 @@ function cpt_process_new_client() {
 add_action( 'admin_post_cpt_new_client_added', __NAMESPACE__ . '\cpt_process_new_client' );
 
 
-function cpt_new_client_email( $user_id ) {
+function cpt_new_client_email( $clients_user_id ) {
 
-  if ( ! $user_id ) { return; }
+  if ( ! $clients_user_id ) { return; }
 
-  $user           = get_userdata( $user_id );
+  $user           = get_userdata( $clients_user_id );
+  $client_data    = Common\cpt_get_client_data( $clients_user_id );
 
-  $from_name      = get_option( 'cpt_new_client_email_from_name' );
-  $from_email     = get_option( 'cpt_new_client_email_from_email' );
+  $from_name      = Common\cpt_get_name( $client_data[ 'manager_id' ] );
+  $from_email     = $client_data[ 'manager_email' ];
 
   $headers[]      = 'Content-Type: text/html; charset=UTF-8';
   $headers[]      = $from_name ? 'From: ' . $from_name . ' <' . $from_email . '>' : 'From: ' . $from_email;

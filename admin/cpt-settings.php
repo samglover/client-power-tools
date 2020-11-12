@@ -347,28 +347,6 @@ function cpt_new_client_email_settings_init() {
     'cpt-settings',
   );
 
-  // From Name
-  add_settings_field(
-    'cpt_new_client_email_from_name',
-    '<label for="cpt_new_client_email_from_name">From Name<br /><small>(optional)</small></label>',
-    __NAMESPACE__ . '\cpt_new_client_email_from_name',
-    'cpt-settings',
-    'cpt-new-client-email-settings',
-  );
-
-  register_setting( 'cpt-settings', 'cpt_new_client_email_from_name', 'sanitize_text_field' );
-
-  // From Email
-  add_settings_field(
-    'cpt_new_client_email_from_email',
-    '<label for="cpt_new_client_email_from_email">From Email<br /><small>(required)</small></label>',
-    __NAMESPACE__ . '\cpt_new_client_email_from_email',
-    'cpt-settings',
-    'cpt-new-client-email-settings',
-  );
-
-  register_setting( 'cpt-settings', 'cpt_new_client_email_from_email', 'sanitize_email' );
-
   // Subject Line
   add_settings_field(
     'cpt_new_client_email_subject_line',
@@ -397,15 +375,7 @@ add_action( 'admin_init', __NAMESPACE__ . '\cpt_new_client_email_settings_init' 
 
 
 function cpt_new_client_email_section() {
-  echo '<p>' . __( 'When you add a new client, they will receive an email notification with an account activation link.' ) . '</p>';
-}
-
-function cpt_new_client_email_from_name() {
-  echo '<input name="cpt_new_client_email_from_name" class="regular-text" type="text" value="' . get_option( 'cpt_new_client_email_from_name' ) . '">';
-}
-
-function cpt_new_client_email_from_email() {
-  echo '<input name="cpt_new_client_email_from_email" class="regular-text" type="email" required aria-required="true" value="' . get_option( 'cpt_new_client_email_from_email' ) . '">';
+  echo '<p>' . __( 'When you add a new client, they will receive an email notification from their client manager with an account activation link. If you like, you can customize the subject line or add a message to the body of the email.' ) . '</p>';
 }
 
 function cpt_new_client_email_subject_line() {
