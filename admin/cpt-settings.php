@@ -255,6 +255,26 @@ function cpt_client_managers() {
 }
 
 
+function cpt_process_new_client_manager() {
+
+  if ( isset( $_POST[ 'cpt_new_client_manager_nonce' ] ) && wp_verify_nonce( $_POST[ 'cpt_new_client_manager_nonce' ], 'cpt_new_client_manager_added' ) ) {
+
+    set_transient( 'cpt_new_client_manager_result', 'Success!', 45  );
+
+    wp_redirect( $_POST[ '_wp_http_referer' ] );
+    exit;
+
+  } else {
+
+    die();
+
+  }
+
+}
+
+add_action( 'admin_post_cpt_new_client_manager_added', __NAMESPACE__ . '\cpt_process_new_client_manager' );
+
+
 function cpt_default_client_manager() {
   echo cpt_get_client_manager_select( 'cpt_default_client_manager', get_option( 'cpt_default_client_manager' ) );
 }
