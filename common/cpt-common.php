@@ -275,6 +275,8 @@ function cpt_login_missing( $redirect_to, $requested_redirect_to, $user ) {
   if ( $redirect_to == cpt_get_client_dashboard_url() ) {
     wp_redirect( cpt_get_client_dashboard_url() . "?cpt_error=login_failed" );
     exit;
+  } else {
+    return $redirect_to;
   }
 
 }
