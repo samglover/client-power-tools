@@ -242,10 +242,6 @@ function cpt_client_managers() {
 
         </div>
 
-        <p></p>
-        <button class="button cpt-click-to-expand">Click to Expand</button>
-        <div class="cpt-this-expands"><h3>Hello world!</h3></div>
-
       <?php
 
     echo ob_get_clean();
