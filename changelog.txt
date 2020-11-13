@@ -17,6 +17,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 #### Changed
 - Messages and status update requests now go to the client manager. (The email will be CC'd to the now-optional status update request notification email address, if you have set one.)
 - New client emails will now come from the client manager instead of a default name and email address.
+- Expander script is now more sophisticated. It can handle multiple expanders on the same page, and form elements with data-required="true" will have the required attributes removed when hidden.
 
 #### Fixed
 - The standard login form no longer redirects to a blank page when a redirect is present.

@@ -46,7 +46,7 @@ function cpt_edit_client_form( $client_data ) {
                 <label for="first_name">First Name<br /><small>(required)</small></label>
               </th>
               <td>
-                <input name="first_name" id="first_name" class="regular-text" type="text" required aria-required="true" value="<?php echo $client_data[ 'first_name' ]; ?>">
+                <input name="first_name" id="first_name" class="regular-text" type="text" data-required="true" value="<?php echo $client_data[ 'first_name' ]; ?>">
               </td>
             </tr>
             <tr>
@@ -54,7 +54,7 @@ function cpt_edit_client_form( $client_data ) {
                 <label for="last_name">Last Name<br /><small>(required)</small></label>
               </th>
               <td>
-                <input name="last_name" id="last_name" class="regular-text" type="text" required aria-required="true" value="<?php echo $client_data[ 'last_name' ]; ?>">
+                <input name="last_name" id="last_name" class="regular-text" type="text" data-required="true" value="<?php echo $client_data[ 'last_name' ]; ?>">
               </td>
             </tr>
             <tr>
@@ -62,7 +62,7 @@ function cpt_edit_client_form( $client_data ) {
                 <label for="email">Email Address<br /><small>(required)</small></label>
               </th>
               <td>
-                <input name="email" id="email" class="regular-text" type="text" required aria-required="true" autocapitalize="none" autocorrect="off" value="<?php echo $client_data[ 'email' ]; ?>">
+                <input name="email" id="email" class="regular-text" type="text" data-required="true" autocapitalize="none" autocorrect="off" value="<?php echo $client_data[ 'email' ]; ?>">
               </td>
             </tr>
             <tr>

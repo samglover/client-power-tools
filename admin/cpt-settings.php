@@ -213,7 +213,7 @@ function cpt_client_managers() {
                     <label for="first_name">First Name<br /><small>(required)</small></label>
                   </th>
                   <td>
-                    <input name="first_name" id="first_name" class="regular-text" type="text" required aria-required="true">
+                    <input name="first_name" id="first_name" class="regular-text" type="text" data-required="true">
                   </td>
                 </tr>
                 <tr>
@@ -229,7 +229,7 @@ function cpt_client_managers() {
                     <label for="email">Email Address<br /><small>(required)</small></label>
                   </th>
                   <td>
-                    <input name="email" id="email" class="regular-text" type="text" required aria-required="true" autocapitalize="none" autocorrect="off">
+                    <input name="email" id="email" class="regular-text" type="text" data-required="true" autocapitalize="none" autocorrect="off">
                   </td>
               </tbody>
             </table>
@@ -241,6 +241,10 @@ function cpt_client_managers() {
           </form>
 
         </div>
+
+        <p></p>
+        <button class="button cpt-click-to-expand">Click to Expand</button>
+        <div class="cpt-this-expands"><h3>Hello world!</h3></div>
 
       <?php
 

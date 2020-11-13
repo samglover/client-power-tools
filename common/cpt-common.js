@@ -3,48 +3,58 @@
   // Expanders
   $( document ).ready( function(){
 
+    // When using the expander, every .cpt-click-to-expand should be followed by
+    // a .cpt-expand-this, so that the node list indexes match up.
     let expanderButtons = document.querySelectorAll( '.cpt-click-to-expand' );
-
-    console.log( expanderButtons );
+    let buttonText      = [];
+    let expandableDivs  = document.querySelectorAll( '.cpt-this-expands' );
 
     if ( expanderButtons.length > 0 ) {
 
-      expanderButtons.forEach ( function( button ){
+      for ( let i = 0; i < expanderButtons.length; i++ ) {
 
-        button.addEventListener( 'click', function( e ){
+        buttonText[i] = expanderButtons[i].innerHTML;
+
+        $( expanderButtons[i] ).click( function( event ) {
+
+          event.preventDefault();
+
+          $( expandableDivs[i] ).toggle( 'fast' );
+          $( expandableDivs[i] ).toggleClass( 'open' );
+
+          let formElements = expandableDivs[i].querySelectorAll( 'form input, form select, form textarea' );
+
+          if ( expandableDivs[i].classList.contains( 'open' ) ) {
+
+            expanderButtons[i].innerHTML = 'Cancel';
+
+            formElements.forEach( function( element ){
+
+              if ( element.dataset.required == 'true' ) {
+                element.setAttribute( 'required', '' );
+                element.setAttribute( 'aria-required', 'true' );
+              }
+
+            });
+
+          } else {
+
+            expanderButtons[i].innerHTML = buttonText[i];
+
+            formElements.forEach( function( element ){
+
+              if ( element.dataset.required == 'true' ) {
+                element.removeAttribute( 'required', '' );
+                element.removeAttribute( 'aria-required', 'true' );
+              }
+
+            });
+
+          }
 
         });
 
-        button.nextSibling( '.cpt-expand-this' ){
-
-        }
-
-      });
-
-    }
-
-  });
-
-
-  // Old Expander Function
-  let expandButtonText = $( '.cpt-click-to-expand' ).html();
-
-  $( '.cpt-click-to-expand' ).click( function() {
-
-    let requiredFields = $( this ).next( 'form' )
-
-    $( this ).next( '.cpt-this-expands' ).toggle( 'fast' ).toggleClass( 'cpt-this-is-open' );
-
-    switch ( $( this ).html() ) {
-
-      case expandButtonText:
-        $( this ).html( 'Cancel' );
-        break;
-
-      case 'Cancel':
-      default:
-        $( this ).html( expandButtonText );
-        break;
+      }
 
     }
 
