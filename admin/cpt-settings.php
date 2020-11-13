@@ -120,33 +120,101 @@ function cpt_client_dashboard_page_selection() {
 
 }
 
-
-// Client Profile
-function cpt_client_profile_settings_init() {
+// Client Managers
+function cpt_client_managers_settings_init() {
 
   add_settings_section(
-    'cpt-client-profile-settings',
-    'Client Profile',
-    __NAMESPACE__ . '\cpt_client_profile_section',
+    'cpt-client-managers-settings',
+    'Client Managers',
+    __NAMESPACE__ . '\cpt_client_managers_section',
     'cpt-settings',
   );
+
+  add_settings_field(
+    'cpt_client_managers',
+    '<label for="cpt_client_managers">Client Managers</label>',
+    __NAMESPACE__ . '\cpt_client_managers',
+    'cpt-settings',
+    'cpt-client-managers-settings',
+  );
+  // The client managers list isn't an actual setting, so there's no need to use register_setting.
 
   add_settings_field(
     'cpt_default_client_manager',
     '<label for="cpt_default_client_manager">Default Client Manager</label>',
     __NAMESPACE__ . '\cpt_default_client_manager',
     'cpt-settings',
-    'cpt-client-profile-settings',
+    'cpt-client-managers-settings',
   );
 
   register_setting( 'cpt-settings', 'cpt_default_client_manager' );
+
+}
+
+add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_managers_settings_init' );
+
+function cpt_client_managers_section() {
+  echo '<p>' . __( 'Client managers can be assigned to individual clients.' ) . '</p>';
+}
+
+
+function cpt_client_managers() {
+
+  $args = [
+    'role__in'  => [ 'administrator', 'cpt-client-manager' ],
+    'orderby'   => 'display_name',
+    'order'     => 'ASC',
+  ];
+
+  $client_managers_query  = new \WP_USER_QUERY( $args );
+  $client_managers        = $client_managers_query->get_results();
+
+  if ( ! empty( $client_managers ) ) {
+
+    echo '<ul id="client-managers">';
+
+      foreach ( $client_managers as $client_manager ) {
+
+        echo '<li>';
+
+          echo $client_manager->display_name;
+
+          if ( in_array( 'administrator', $client_manager->roles ) ) {
+            echo ' <span style="color: silver;">(admin)</span>';
+          }
+
+        echo '</li>';
+
+      }
+
+    echo '</ul>';
+
+  }
+
+}
+
+
+function cpt_default_client_manager() {
+  echo cpt_get_client_manager_select( 'cpt_default_client_manager', get_option( 'cpt_default_client_manager' ) );
+}
+
+
+// Client Statuses
+function cpt_client_status_settings_init() {
+
+  add_settings_section(
+    'cpt-client-status-settings',
+    'Client Statuses',
+    __NAMESPACE__ . '\cpt_client_status_section',
+    'cpt-settings',
+  );
 
   add_settings_field(
     'cpt_client_statuses',
     '<label for="cpt_client_statuses">Statuses</label>',
     __NAMESPACE__ . '\cpt_client_statuses',
     'cpt-settings',
-    'cpt-client-profile-settings',
+    'cpt-client-status-settings',
   );
 
   register_setting( 'cpt-settings', 'cpt_client_statuses' );
@@ -156,22 +224,17 @@ function cpt_client_profile_settings_init() {
     '<label for="cpt_default_client_status">Default Status</label>',
     __NAMESPACE__ . '\cpt_default_client_status',
     'cpt-settings',
-    'cpt-client-profile-settings',
+    'cpt-client-status-settings',
   );
 
   register_setting( 'cpt-settings', 'cpt_default_client_status' );
 
 }
 
-add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_profile_settings_init' );
+add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_status_settings_init' );
 
 
-function cpt_client_profile_section() {}
-
-
-function cpt_default_client_manager() {
-  echo cpt_get_client_manager_select( 'cpt_default_client_manager', get_option( 'cpt_default_client_manager' ) );
-}
+function cpt_client_status_section() {}
 
 
 function cpt_client_statuses() {
