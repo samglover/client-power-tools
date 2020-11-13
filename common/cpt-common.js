@@ -1,11 +1,39 @@
 ( function( $ ) {
 
-  // Expander
+  // Expanders
+  $( document ).ready( function(){
+
+    let expanderButtons = document.querySelectorAll( '.cpt-click-to-expand' );
+
+    console.log( expanderButtons );
+
+    if ( expanderButtons.length > 0 ) {
+
+      expanderButtons.forEach ( function( button ){
+
+        button.addEventListener( 'click', function( e ){
+
+        });
+
+        button.nextSibling( '.cpt-expand-this' ){
+
+        }
+
+      });
+
+    }
+
+  });
+
+
+  // Old Expander Function
   let expandButtonText = $( '.cpt-click-to-expand' ).html();
 
   $( '.cpt-click-to-expand' ).click( function() {
 
-    $( this ).next( '.cpt-this-expands' ).toggle( 'fast' );
+    let requiredFields = $( this ).next( 'form' )
+
+    $( this ).next( '.cpt-this-expands' ).toggle( 'fast' ).toggleClass( 'cpt-this-is-open' );
 
     switch ( $( this ).html() ) {
 
