@@ -1,9 +1,27 @@
 ( function( $ ) {
 
   // Expander
+  let expandButtonText = $( '.cpt-click-to-expand' ).html();
+
   $( '.cpt-click-to-expand' ).click( function() {
+
     $( this ).next( '.cpt-this-expands' ).toggle( 'fast' );
+
+    switch ( $( this ).html() ) {
+
+      case expandButtonText:
+        $( this ).html( 'Cancel' );
+        break;
+
+      case 'Cancel':
+      default:
+        $( this ).html( expandButtonText );
+        break;
+
+    }
+
   });
+
 
   // Adjust anchor targets.
   $( document ).ready( function(){

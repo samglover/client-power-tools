@@ -189,6 +189,63 @@ function cpt_client_managers() {
 
     echo '</ul>';
 
+    echo '<button class="button cpt-click-to-expand">' . __( 'Add a Client Manager' ) . '</button>';
+
+    ob_start();
+
+      ?>
+
+        <div class="cpt-this-expands">
+
+          <h4>Add a Client Manager</h4>
+
+          <p><?php _e( 'Assign the client manager role to a new or existing user. Add the first and last name as you want clients to see them.' ); ?></p>
+
+          <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST">
+
+            <?php wp_nonce_field( 'cpt_new_client_manager_added', 'cpt_new_client_manager_nonce' ); ?>
+            <input name="action" value="cpt_new_client_manager_added" type="hidden">
+
+            <table class="form-table" role="presentation">
+              <tbody>
+                <tr>
+                  <th scope="row">
+                    <label for="first_name">First Name<br /><small>(required)</small></label>
+                  </th>
+                  <td>
+                    <input name="first_name" id="first_name" class="regular-text" type="text" required aria-required="true">
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <label for="last_name">Last Name<br /><small>(required)</small></label>
+                  </th>
+                  <td>
+                    <input name="last_name" id="last_name" class="regular-text" type="text" data-required="true">
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <label for="email">Email Address<br /><small>(required)</small></label>
+                  </th>
+                  <td>
+                    <input name="email" id="email" class="regular-text" type="text" required aria-required="true" autocapitalize="none" autocorrect="off">
+                  </td>
+              </tbody>
+            </table>
+
+            <p class="submit">
+              <input name="submit" id="submit" class="button button-primary" type="submit" value="Add Client Manager">
+            </p>
+
+          </form>
+
+        </div>
+
+      <?php
+
+    echo ob_get_clean();
+
   }
 
 }
