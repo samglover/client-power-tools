@@ -12,6 +12,7 @@ function cpt_clients() {
     );
   }
 
+  Common\cpt_get_notices( 'cpt_new_client_result' );
   Common\cpt_get_notices( 'cpt_update_client_result' );
   Common\cpt_get_notices( 'cpt_delete_client_result' );
   Common\cpt_get_notices( 'cpt_new_message_result' );
@@ -87,7 +88,17 @@ function cpt_clients() {
 
           } else {
 
-            cpt_get_client_list();
+            ?>
+
+              <button class="button cpt-click-to-expand"><?php _e( 'Add a Client' ); ?></button>
+
+              <div class="cpt-this-expands">
+                <?php cpt_new_client_form(); ?>
+              </div>
+
+            <?php
+
+            cpt_client_list();
 
           }
 
@@ -112,7 +123,7 @@ function cpt_get_client_profile( $user_id ) {
 }
 
 
-function cpt_get_client_list() {
+function cpt_client_list() {
 
   ob_start();
 

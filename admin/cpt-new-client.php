@@ -105,7 +105,7 @@ function cpt_new_client_form() {
         </table>
 
         <p class="submit">
-          <input name="submit" id="submit" class="button button-primary" type="submit" value="Create Client">
+          <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e( 'Add Client' ); ?>">
         </p>
 
       </form>

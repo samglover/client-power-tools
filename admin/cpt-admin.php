@@ -73,11 +73,11 @@ function cpt_menu_pages() {
 
   add_submenu_page(
     'cpt',
-    'Client Power Tools: Add New Client',
-    'Add Client',
-    'cpt-manage-clients',
-    'cpt-new-client',
-    __NAMESPACE__ . '\cpt_new_client',
+    'Client Power Tools: Client Managers',
+    'Managers',
+    'cpt-manage-settings',
+    'cpt-managers',
+    __NAMESPACE__ . '\cpt_client_managers',
   );
 
   add_submenu_page(
