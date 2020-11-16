@@ -55,21 +55,19 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
   /**
   * Name Column Method
   */
-  function column_client_manager_name( $item ) {
+  function column_manager_name( $item ) {
 
-    // Build row actions.
     $actions = [
-      'remove' => '<a href="' . add_query_arg( 'user_id', $item[ 'ID' ] ) . '">Remove</a>',
+      'remove' => '<a href="' . add_query_arg( [ 'user_id' => $item[ 'ID' ], 'cpt_action' => 'cpt_remove_client_manager' ] ) . '">Remove</a>',
     ];
 
     // Return the contents.
     return sprintf( '<strong>%1$s</strong><br />%2$s',
       /* $1%s */ $item[ 'manager_name' ],
-      /* $2%s */ $this->row_actions( $actions )
+      /* $2%s */ $this->row_actions( $actions, true )
     );
 
   }
-
 
   /**
   * Get Columns
@@ -83,7 +81,6 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
     $columns = [
       // 'cb'              => '<input type="checkbox" />',
       'manager_name'     => 'Manager Name',
-      'manager_email'    => 'Email Address',
     ];
 
     return $columns;
@@ -176,8 +173,6 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
 
     // Creates the data set.
     if ( ! empty( $client_managers ) ) {
-
-      var_dump( $client_managers );
 
       foreach ( $client_managers as $client_manager ) {
 

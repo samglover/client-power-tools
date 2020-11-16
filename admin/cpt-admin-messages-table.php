@@ -9,7 +9,7 @@ namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 use Client_Power_Tools\Core\Includes;
 
-class CLIENT_POWER_TOOLS_Message_List_Table extends Includes\WP_List_Table  {
+class Message_List_Table extends Includes\WP_List_Table  {
 
   function __construct() {
 
@@ -70,7 +70,7 @@ class CLIENT_POWER_TOOLS_Message_List_Table extends Includes\WP_List_Table  {
     return sprintf( '<strong>%1$s</strong>%2$s<br />%3$s',
       /* $1%s */ $item[ 'client_name' ],
       /* $2%s */ $item[ 'client_id' ] ? ' <span style="color:silver">(' . $item[ 'client_id' ] . ')</span>' : '',
-      /* $3%s */ $this->row_actions( $actions )
+      /* $3%s */ $this->row_actions( $actions, true )
     );
 
   }

@@ -5,7 +5,7 @@ use Client_Power_Tools\Core\Common;
 
 function cpt_client_managers() {
 
-  if ( ! current_user_can( 'cpt-manage-settings' ) ) {
+  if ( ! current_user_can( 'cpt-manage-team' ) ) {
     wp_die(
       '<p>' . __( 'Sorry, you are not allowed to access this page.' ) . '</p>',
       403
@@ -112,8 +112,7 @@ function cpt_client_manager_list() {
 
     ?>
 
-      <form id="client-manager-list" method="get">
-        <?php $client_manager_list->views(); ?>
+      <form id="client-manager-list" method="GET">
         <?php $client_manager_list->display() ?>
       </form>
 

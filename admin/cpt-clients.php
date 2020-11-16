@@ -56,6 +56,7 @@ function cpt_clients() {
     } else {
 
       $page_header .= '<h1 id="cpt-page-title">Clients</h1>';
+      $page_header .= '<p id="cpt-subtitle">Client Power Tools</p>';
 
     }
 
@@ -132,7 +133,7 @@ function cpt_client_list() {
 
     ?>
 
-      <form id="client-list" method="get">
+      <form id="client-list" method="GET">
         <?php $client_list->views(); ?>
         <?php $client_list->display() ?>
       </form>

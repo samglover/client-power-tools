@@ -66,7 +66,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
     return sprintf( '<strong>%1$s</strong>%2$s<br />%3$s',
       /* $1%s */ $item[ 'client_name' ],
       /* $2%s */ $item[ 'client_id' ] ? ' <span style="color:silver">(' . $item[ 'client_id' ] . ')</span>' : '',
-      /* $3%s */ $this->row_actions( $actions )
+      /* $3%s */ $this->row_actions( $actions, true )
     );
 
   }

@@ -75,7 +75,7 @@ function cpt_menu_pages() {
     'cpt',
     'Client Power Tools: Client Managers',
     'Managers',
-    'cpt-manage-settings',
+    'cpt-manage-team',
     'cpt-managers',
     __NAMESPACE__ . '\cpt_client_managers',
   );
@@ -135,7 +135,7 @@ function cpt_get_client_manager_select( $name = null, $selected = null ) {
   * Query Client Managers
   */
   $args = [
-    'role__in'  => [ 'administrator', 'cpt-client-manager' ],
+    'role__in'  => [ 'cpt-client-manager' ],
     'orderby'   => 'display_name',
     'order'     => 'ASC',
   ];
