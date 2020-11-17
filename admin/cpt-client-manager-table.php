@@ -6,6 +6,7 @@
 */
 
 namespace Client_Power_Tools\Core\Admin;
+use Client_Power_Tools\Core\Common;
 use Client_Power_Tools\Core\Includes;
 
 class Client_Manager_List_Table extends Includes\WP_List_Table  {
@@ -74,7 +75,22 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
   * Clients Column Method
   */
   function column_managers_clients( $item ) {
-    echo var_dump( cpt_get_managers_clients( $item[ 'ID' ] ) );
+
+    $managers_client_data = cpt_get_managers_clients( $item[ 'ID' ] );
+
+    foreach ( $managers_client_data as $client_data ) {
+
+      $client = Common\cpt_get_name( $client_data[ 'user_id' ] );
+
+      if ( $client_data[ 'client_id' ] ) {
+        $client .= ' <span style="color:silver">(' . $client_data[ 'client_id' ] . ')</span>';
+      }
+
+      $clients[] = $client;
+    }
+
+    return implode( '<br/>' . "\n", $clients );
+
   }
 
 

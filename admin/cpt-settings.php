@@ -129,15 +129,6 @@ function cpt_client_managers_settings_init() {
   );
 
   add_settings_field(
-    'cpt_client_managers',
-    '<label for="cpt_client_managers">Client Managers</label>',
-    __NAMESPACE__ . '\cpt_client_managers',
-    'cpt-settings',
-    'cpt-client-managers-settings',
-  );
-  // The client managers list isn't an actual setting, so there's no need to use register_setting.
-
-  add_settings_field(
     'cpt_default_client_manager',
     '<label for="cpt_default_client_manager">Default Client Manager</label>',
     __NAMESPACE__ . '\cpt_default_client_manager',
@@ -151,29 +142,9 @@ function cpt_client_managers_settings_init() {
 
 add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_managers_settings_init' );
 
+
 function cpt_client_managers_section() {
-  echo '<p>' . __( 'Client managers can be assigned to individual clients.' ) . '</p>';
 }
-
-
-function cpt_process_new_client_manager() {
-
-  if ( isset( $_POST[ 'cpt_new_client_manager_nonce' ] ) && wp_verify_nonce( $_POST[ 'cpt_new_client_manager_nonce' ], 'cpt_new_client_manager_added' ) ) {
-
-    set_transient( 'cpt_new_client_manager_result', 'Success!', 45  );
-
-    wp_redirect( $_POST[ '_wp_http_referer' ] );
-    exit;
-
-  } else {
-
-    die();
-
-  }
-
-}
-
-add_action( 'admin_post_cpt_new_client_manager_added', __NAMESPACE__ . '\cpt_process_new_client_manager' );
 
 
 function cpt_default_client_manager() {

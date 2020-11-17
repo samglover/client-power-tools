@@ -103,6 +103,26 @@ function cpt_add_client_manager_form() {
 }
 
 
+function cpt_process_new_client_manager() {
+
+  if ( isset( $_POST[ 'cpt_new_client_manager_nonce' ] ) && wp_verify_nonce( $_POST[ 'cpt_new_client_manager_nonce' ], 'cpt_new_client_manager_added' ) ) {
+
+    set_transient( 'cpt_new_client_manager_result', 'Success!', 45  );
+
+    wp_redirect( $_POST[ '_wp_http_referer' ] );
+    exit;
+
+  } else {
+
+    die();
+
+  }
+
+}
+
+add_action( 'admin_post_cpt_new_client_manager_added', __NAMESPACE__ . '\cpt_process_new_client_manager' );
+
+
 function cpt_client_manager_list() {
 
   ob_start();
@@ -139,7 +159,11 @@ function cpt_get_managers_clients( $user_id ) {
   $client_query  = new \WP_USER_QUERY( $args );
   $clients       = $client_query->get_results();
 
-  return $clients;
+  foreach ( $clients as $client ) {
+    $client_data[] = Common\cpt_get_client_data( $client->ID );
+  }
+
+  return $client_data;
 
 }
 
