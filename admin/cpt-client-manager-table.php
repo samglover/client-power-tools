@@ -78,18 +78,26 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
 
     $managers_client_data = cpt_get_managers_clients( $item[ 'ID' ] );
 
-    foreach ( $managers_client_data as $client_data ) {
+    if ( $managers_client_data ) {
 
-      $client = Common\cpt_get_name( $client_data[ 'user_id' ] );
+      foreach ( $managers_client_data as $client_data ) {
 
-      if ( $client_data[ 'client_id' ] ) {
-        $client .= ' <span style="color:silver">(' . $client_data[ 'client_id' ] . ')</span>';
+        $client = Common\cpt_get_name( $client_data[ 'user_id' ] );
+
+        if ( $client_data[ 'client_id' ] ) {
+          $client .= ' <span style="color:silver">(' . $client_data[ 'client_id' ] . ')</span>';
+        }
+
+        $clients[] = $client;
       }
 
-      $clients[] = $client;
-    }
+      return implode( '<br/>' . "\n", $clients );
 
-    return implode( '<br/>' . "\n", $clients );
+    } else {
+
+      return '<span style="color:silver">None</span>';
+
+    }
 
   }
 
