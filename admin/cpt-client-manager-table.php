@@ -69,6 +69,15 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
 
   }
 
+
+  /**
+  * Clients Column Method
+  */
+  function column_managers_clients( $item ) {
+    echo var_dump( cpt_get_managers_clients( $item[ 'ID' ] ) );
+  }
+
+
   /**
   * Get Columns
   *
@@ -80,7 +89,8 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
 
     $columns = [
       // 'cb'              => '<input type="checkbox" />',
-      'manager_name'     => 'Manager Name',
+      'manager_name'      => 'Manager Name',
+      'managers_clients'  => 'Clients',
     ];
 
     return $columns;

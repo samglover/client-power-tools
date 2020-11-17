@@ -22,6 +22,7 @@
           $( expandableDivs[i] ).toggle( 'fast' );
           $( expandableDivs[i] ).toggleClass( 'open' );
 
+          // This adds/removes the *required* attribute based on form visibility.
           let formElements = expandableDivs[i].querySelectorAll( 'form input, form select, form textarea' );
 
           if ( expandableDivs[i].classList.contains( 'open' ) ) {
