@@ -30,7 +30,7 @@ function cpt_client_dashboard( $content ) {
 
         ob_start();
 
-          cpt_get_notices( 'cpt_new_message_result' );
+          cpt_get_notices( [ 'cpt_new_message_result' ] );
 
           echo '<p>';
 

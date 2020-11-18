@@ -212,49 +212,51 @@ function cpt_get_email_card( $title = null, $content = null, $button_txt = 'Go',
 * outputs a notice. In the admin, this is a standard WordPress admin notice. On
 * the front end, this is a modal.
 */
-function cpt_get_notices( $transient_key ) {
+function cpt_get_notices( $transient_key_array ) {
 
-  if ( ! $transient_key ) { return; }
+  if ( ! $transient_key_array ) { return; }
 
-  $result = get_transient( $transient_key );
+  foreach ( $transient_key_array as $notice ) {
 
-  if ( ! empty( $result ) ) {
+    $result = get_transient( $notice );
 
-    if ( is_admin() ) {
+    if ( ! empty( $result ) ) {
 
-      if ( is_wp_error( $result ) ) {
-        $wrapper = '<div class="cpt-notice notice notice-error is-dismissible">';
+      if ( is_admin() ) {
+
+        if ( is_wp_error( $result ) ) {
+          $wrapper = '<div class="cpt-notice notice notice-error is-dismissible">';
+        } else {
+          $wrapper = '<div class="cpt-notice notice notice-success is-dismissible">';
+        }
+
       } else {
-        $wrapper = '<div class="cpt-notice notice notice-success is-dismissible">';
+
+        ob_start();
+
+          ?>
+
+            <button class="cpt-notice-dismiss-button">
+              <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
+            </button>
+
+          <?php
+
+        $dismiss_button = ob_get_clean();
+
+        $wrapper = '<div class="cpt-inline-modal">' . "\n" . $dismiss_button;
+
       }
 
-    } else {
-
-      ob_start();
-
-        ?>
-
-          <button class="cpt-notice-dismiss-button">
-            <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
-          </button>
-
-        <?php
-
-      $dismiss_button = ob_get_clean();
-
-      $wrapper = '<div class="cpt-inline-modal">' . "\n" . $dismiss_button;
+      echo $wrapper;
+      echo '<p>' . __( $result ) . '</p>';
+      echo '</div>';
 
     }
 
-
-
-    echo $wrapper;
-    echo '<p>' . __( $result ) . '</p>';
-    echo '</div>';
+    delete_transient( $notice );
 
   }
-
-  delete_transient( $transient_key );
 
 }
 

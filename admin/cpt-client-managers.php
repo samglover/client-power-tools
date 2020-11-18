@@ -12,8 +12,14 @@ function cpt_client_managers() {
     );
   }
 
-  Common\cpt_get_notices( 'cpt_add_manager_result' );
-  Common\cpt_get_notices( 'cpt_remove_manager_result' );
+  if ( isset( $_POST[ 'cpt_new_client_manager_nonce' ] ) && wp_verify_nonce( $_POST[ 'cpt_new_client_manager_nonce' ], 'cpt_new_client_manager_added' )  ) {
+    
+  }
+
+  Common\cpt_get_notices( [
+    'cpt_add_manager_result',
+    'cpt_remove_manager_result'
+  ] );
 
   ob_start();
 

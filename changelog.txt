@@ -20,6 +20,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - New client emails will now come from the client manager instead of a default name and email address.
 - Expander script is now more sophisticated. It can handle multiple expanders on the same page, and form elements with data-required="true" will have the required attributes removed when hidden.
 - Add-client form moved to the Clients setting page.
+- Make cpt_get_notices() easier to use by changing the argument to an array so it only needs to be called once.
 
 #### Fixed
 - The standard login form no longer redirects to a blank page when a redirect is present.
