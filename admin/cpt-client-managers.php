@@ -12,10 +12,6 @@ function cpt_client_managers() {
     );
   }
 
-  if ( isset( $_POST[ 'cpt_new_client_manager_nonce' ] ) && wp_verify_nonce( $_POST[ 'cpt_new_client_manager_nonce' ], 'cpt_new_client_manager_added' )  ) {
-    
-  }
-
   Common\cpt_get_notices( [
     'cpt_add_manager_result',
     'cpt_remove_manager_result'
@@ -36,11 +32,15 @@ function cpt_client_managers() {
         </div>
         <hr class="wp-header-end">
 
-        <button class="button cpt-click-to-expand"><?php _e( 'Add a Client Manager' ); ?></button>
+        <?php if ( current_user_can( 'cpt-manage-team' ) ) { ?>
 
-        <div class="cpt-this-expands">
-          <?php cpt_add_client_manager_form(); ?>
-        </div>
+          <button class="button cpt-click-to-expand"><?php _e( 'Add a Client Manager' ); ?></button>
+
+          <div class="cpt-this-expands">
+            <?php cpt_add_client_manager_form(); ?>
+          </div>
+
+        <?php } ?>
 
         <?php cpt_client_manager_list(); ?>
 
@@ -59,14 +59,14 @@ function cpt_add_client_manager_form() {
 
     ?>
 
-      <h4>Add a Client Manager</h4>
+      <h3><?php _e( 'Add a Client Manager' ); ?></h3>
 
       <p><?php _e( 'Assign the client manager role to a new or existing user. Add the first and last name as you want clients to see them.' ); ?></p>
 
       <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST">
 
-        <?php wp_nonce_field( 'cpt_client_manager_added', 'cpt_client_manager_nonce' ); ?>
-        <input name="action" value="cpt_client_manager_added" type="hidden">
+        <?php wp_nonce_field( 'cpt_new_client_manager_added', 'cpt_new_client_manager_nonce' ); ?>
+        <input name="action" value="cpt_new_client_manager_added" type="hidden">
 
         <table class="form-table" role="presentation">
           <tbody>
@@ -113,7 +113,53 @@ function cpt_process_new_client_manager() {
 
   if ( isset( $_POST[ 'cpt_new_client_manager_nonce' ] ) && wp_verify_nonce( $_POST[ 'cpt_new_client_manager_nonce' ], 'cpt_new_client_manager_added' ) ) {
 
-    set_transient( 'cpt_new_client_manager_result', 'Success!', 45  );
+    $client_manager_email       = sanitize_email( $_POST[ 'email' ] );
+    $existing_client_manager_id = email_exists( $client_manager_email );
+
+    if ( ! $existing_client_manager_id ) {
+
+      $userdata = [
+        'first_name'            => sanitize_text_field( $_POST[ 'first_name' ] ),
+        'last_name'             => sanitize_text_field( $_POST[ 'last_name' ] ),
+        'display_name'          => sanitize_text_field( $_POST[ 'first_name' ] ) . ' ' . sanitize_text_field( $_POST[ 'last_name' ] ),
+        'user_email'            => $client_manager_email,
+        'user_login'            => sanitize_user( $_POST[ 'email' ] ),
+        'user_pass'             => null,
+        'role'                  => 'cpt-client-manager',
+        'show_admin_bar_front'  => 'false',
+      ];
+
+      $new_client_manager = wp_insert_user( $userdata );
+
+    } else {
+
+      $userdata = [
+        'ID'                    => $existing_client_manager_id,
+        'first_name'            => sanitize_text_field( $_POST[ 'first_name' ] ),
+        'last_name'             => sanitize_text_field( $_POST[ 'last_name' ] ),
+        'display_name'          => sanitize_text_field( $_POST[ 'first_name' ] ) . ' ' . sanitize_text_field( $_POST[ 'last_name' ] ),
+      ];
+
+      $new_client_manager = wp_update_user( $userdata );
+
+      $user = new \WP_User( $new_client_manager );
+      $user->add_role( 'cpt-client-manager' );
+
+    }
+
+    if ( is_wp_error( $new_client_manager ) ) {
+
+      $result = 'Client manager ' . $existing_client_manager_id . ' could not be added. Error message: ' . $new_client_manager->get_error_message();
+
+    } else {
+
+      if ( ! $existing_client_manager_id ) { cpt_new_client_manager_email( $new_client_manager ); }
+
+      $result = 'Client manager added.';
+
+    }
+
+    set_transient( 'cpt_add_manager_result', $result, 45  );
 
     wp_redirect( $_POST[ '_wp_http_referer' ] );
     exit;
@@ -127,6 +173,49 @@ function cpt_process_new_client_manager() {
 }
 
 add_action( 'admin_post_cpt_new_client_manager_added', __NAMESPACE__ . '\cpt_process_new_client_manager' );
+
+
+function cpt_new_client_manager_email( $user_id ) {
+
+  if ( ! $user_id ) { return; }
+
+  $user           = get_userdata( $user_id );
+  $current_user   = wp_get_current_user();
+
+  $from_name      = Common\cpt_get_name( $user->ID );
+  $from_email     = $user->user_email;
+
+  $headers[]      = 'Content-Type: text/html; charset=UTF-8';
+  $headers[]      = 'From: ' . Common\cpt_get_name( $current_user->ID ) . ' <' . $current_user->user_email . '>';
+
+  $to             = $user->user_email;
+  $subject        = 'Your client manager account has been created. Please set your password.';
+
+  $activation_key = get_password_reset_key( $user );
+  $activation_url = home_url() . '?cpt_login=setpw&key=' . $activation_key . '&login=' . urlencode( $user->user_login ) . '&redirect=' . esc_url( admin_url( 'admin.php?page=cpt' ) );
+
+  ob_start();
+
+    ?>
+
+      <p>Your username is your email address:</p>
+      <p><strong><?php echo $user->user_email; ?></strong></p>
+      <p>You will need to activate your account and set a password in order to access your clients.</p>
+
+    <?php
+
+  $card_content = ob_get_clean();
+
+
+  ob_start();
+
+    echo Common\cpt_get_email_card( $subject, $card_content, 'Activate Your Account', $activation_url );
+
+  $message = ob_get_clean();
+
+  wp_mail( $to, $subject, $message, $headers );
+
+}
 
 
 function cpt_client_manager_list() {
@@ -165,11 +254,19 @@ function cpt_get_managers_clients( $user_id ) {
   $client_query  = new \WP_USER_QUERY( $args );
   $clients       = $client_query->get_results();
 
-  foreach ( $clients as $client ) {
-    $client_data[] = Common\cpt_get_client_data( $client->ID );
-  }
+  if ( $clients ) {
 
-  return $client_data;
+    foreach ( $clients as $client ) {
+      $client_data[] = Common\cpt_get_client_data( $client->ID );
+    }
+
+    return $client_data;
+
+  } else {
+
+    return;
+
+  }
 
 }
 

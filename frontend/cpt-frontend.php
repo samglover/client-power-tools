@@ -227,7 +227,7 @@ function cpt_password_reset_message( $message, $key, $user_login, $user_data ) {
 
   if ( Common\cpt_is_client( $user_data->ID ) ) {
 
-    $site_name  = get_option( 'cpt_new_client_email_from_name' );
+    $site_name  = get_bloginfo( 'name' );
     $url        = Common\cpt_get_client_dashboard_url() . '?cpt_login=setpw&key=' . $key . '&login=' . urlencode( $user_login );
 
     $message  = __( 'Someone has requested a password reset for the following account:' ) . "\r\n\r\n";

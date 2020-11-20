@@ -66,7 +66,7 @@ function cpt_menu_pages() {
     'cpt',
     'Client Power Tools: Messages',
     'Messages',
-    'cpt-manage-clients',
+    'cpt-view-clients',
     'cpt-messages',
     __NAMESPACE__ . '\cpt_admin_messages',
   );

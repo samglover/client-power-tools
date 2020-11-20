@@ -3,48 +3,13 @@
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
-function cpt_new_client() {
-
-  if ( ! current_user_can( 'cpt-manage-clients' ) ) {
-    wp_die(
-      '<p>' . __( 'Sorry, you are not allowed to access this page.' ) . '</p>',
-      403
-    );
-  }
-
-  cpt_get_admin_notices( 'cpt_new_client_result' );
-
-  ob_start();
-
-    ?>
-
-      <div id="cpt-admin" class="wrap">
-
-        <div id="cpt-admin-header">
-          <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>admin/images/cpt-logo.svg" height="auto" width="100%" />
-          <div id="cpt-admin-page-title">
-            <h1 id="cpt-page-title">Add Client</h1>
-            <p id="cpt-subtitle">Client Power Tools</p>
-          </div>
-        </div>
-        <hr class="wp-header-end">
-
-        <?php cpt_new_client_form(); ?>
-
-      </div>
-
-    <?php
-
-  echo ob_get_clean();
-
-}
-
-
 function cpt_new_client_form() {
 
   ob_start();
 
     ?>
+
+      <h3><?php _e( 'Add a Client' ); ?></h3>
 
       <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST">
 

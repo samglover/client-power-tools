@@ -92,15 +92,19 @@ function cpt_clients() {
 
           } else {
 
-            ?>
+            if ( current_user_can( 'cpt-manage-clients' ) ) {
 
-              <button class="button cpt-click-to-expand"><?php _e( 'Add a Client' ); ?></button>
+              ?>
 
-              <div class="cpt-this-expands">
-                <?php cpt_new_client_form(); ?>
-              </div>
+                <button class="button cpt-click-to-expand"><?php _e( 'Add a Client' ); ?></button>
 
-            <?php
+                <div class="cpt-this-expands">
+                  <?php cpt_new_client_form(); ?>
+                </div>
+
+              <?php
+
+            }
 
             cpt_client_list();
 

@@ -151,8 +151,6 @@ function cpt_activate() {
 		'cpt_status_update_req_freq'					=> 30,
 		'cpt_status_update_req_notice_email'	=> null,
 		'cpt_send_message_content'						=> false,
-    'cpt_new_client_email_from_name'     	=> '',
-    'cpt_new_client_email_from_email'    	=> get_bloginfo( 'admin_email' ),
     'cpt_new_client_email_subject_line'  	=> 'Your client account has been created! Please set your password.',
     'cpt_new_client_email_message_body'  	=> '',
   ];
