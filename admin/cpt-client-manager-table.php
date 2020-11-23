@@ -59,13 +59,14 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
   function column_manager_name( $item ) {
 
     $actions = [
-      'remove' => '<a href="' . add_query_arg( [ 'user_id' => $item[ 'ID' ], 'cpt_action' => 'cpt_remove_client_manager' ] ) . '">Remove</a>',
+      'remove'    => '<a href="' . add_query_arg( [ 'user_id' => $item[ 'ID' ], 'cpt_action' => 'cpt_remove_client_manager' ] ) . '">Remove</a>',
+      'reassign'  => '<a href="' . add_query_arg( [ 'user_id' => $item[ 'ID' ], 'cpt_action' => 'cpt_reassign_client_manager' ] ) . '">Reassign All Clients</a>',
     ];
 
     // Return the contents.
     return sprintf( '<strong>%1$s</strong><br />%2$s',
       /* $1%s */ $item[ 'manager_name' ],
-      /* $2%s */ $this->row_actions( $actions, true )
+      /* $2%s */ $this->row_actions( $actions )
     );
 
   }
