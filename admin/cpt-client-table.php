@@ -7,6 +7,7 @@
 
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Includes;
+use Client_Power_Tools\Core\Common;
 
 class Client_List_Table extends Includes\WP_List_Table  {
 
@@ -73,14 +74,6 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
 
   /**
-  * Client Status Method
-  */
-  function column_client_status( $item ) {
-    return sprintf( $item[ 'client_status' ] );
-  }
-
-
-  /**
   * Client Messages Method
   */
   function column_client_messages( $item ) {
@@ -90,6 +83,29 @@ class Client_List_Table extends Includes\WP_List_Table  {
     }
 
   }
+
+
+  /**
+  * Client Status Method
+  */
+  function column_client_status( $item ) {
+    return sprintf( $item[ 'client_status' ] );
+  }
+
+
+  /**
+  * Client Manager Method
+  */
+  function column_client_manager( $item ) {
+
+    if ( $item[ 'client_manager' ] ) {
+      return sprintf( $item[ 'client_manager' ] );
+    }
+
+  }
+
+
+
 
 
   /**
@@ -106,6 +122,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       'client_name'     => 'Client',
       'client_messages' => 'Messages',
       'client_status'   => 'Status',
+      'client_manager'  => 'Manager',
     ];
 
     return $columns;
@@ -122,6 +139,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       'client_name'     => [ 'client_name', true ],
       'client_messages' => [ 'msg_count', false ],
       'client_status'   => [ 'client_status', false ],
+      'client_manager'  => [ 'client_manager', false ],
     ];
 
     return $sortable_columns;
@@ -247,12 +265,13 @@ class Client_List_Table extends Includes\WP_List_Table  {
         $cpt_messages = new \WP_Query( $args );
 
         $data[] = [
-          'ID'            => $client->ID,
-          'client_name'   => $client->display_name,
-          'client_email'  => $client->user_email,
-          'client_id'     => get_user_meta( $client->ID, 'cpt_client_id', true ),
-          'client_status' => get_user_meta( $client->ID, 'cpt_client_status', true ),
-          'msg_count'     => number_format_i18n( $cpt_messages->post_count ),
+          'ID'              => $client->ID,
+          'client_name'     => $client->display_name,
+          'client_email'    => $client->user_email,
+          'client_id'       => get_user_meta( $client->ID, 'cpt_client_id', true ),
+          'client_manager'  => trim( Common\cpt_get_name( get_user_meta( $client->ID, 'cpt_client_manager', true ) ) ),
+          'client_status'   => get_user_meta( $client->ID, 'cpt_client_status', true ),
+          'msg_count'       => number_format_i18n( $cpt_messages->post_count ),
         ];
 
       }
