@@ -105,9 +105,6 @@ class Client_List_Table extends Includes\WP_List_Table  {
   }
 
 
-
-
-
   /**
   * Get Columns
   *
@@ -188,26 +185,34 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
   function get_views() {
 
-    $statuses = explode( "\n", get_option( 'cpt_client_statuses' ) );
-    $current  = isset( $_REQUEST[ 'client_status' ] ) ? sanitize_text_field( urldecode( $_REQUEST[ 'client_status' ] ) ) : 'all';
-    $views    = array();
+    $params         = explode( "\n", get_option( 'cpt_client_statuses' ) );
+    $current_status = isset( $_REQUEST[ 'client_status' ] ) ? sanitize_text_field( urldecode( $_REQUEST[ 'client_status' ] ) ) : 'all';
+    $curr_mgr       = Common\cpt_get_name( get_current_user_id() );
+    $curr_mgr_param = isset( $_REQUEST[ 'client_manager' ] ) ? sanitize_text_field( urldecode( $_REQUEST[ 'client_manager' ] ) ) : '';
+    $views          = array();
 
-    array_unshift( $statuses, 'All' );
+    array_unshift( $params, 'All', 'Mine' );
 
-    foreach( $statuses as $status ) {
+    foreach( $params as $key => $val ) {
 
-      $class        = '';
-      $status       = trim( $status );
-      $status_param = urlencode( $status );
+      $class          = '';
+      $val            = trim( $val );
+      $status_param   = urlencode( $val );
 
-      if ( $current == $status_param ) {
+      if ( $current_status == $status_param || ( $key == 1 && $curr_mgr_param == $curr_mgr ) ) {
+        $class = ' class="current"';
+      } elseif ( $key == 0 && $current_status == 'all' ) {
         $class = ' class="current"';
       }
 
       if ( $status_param == 'All' ) {
-        $link = '<a href="' . remove_query_arg( 'client_status' ) . '"' . $class . '>' . $status . '</a>';
+        $link = '<a href="' . remove_query_arg( [ 'client_status', 'client_manager' ] ) . '"' . $class . '>' . $val . '</a>';
       } else {
-        $link = '<a href="' . add_query_arg( 'client_status', $status_param ) . '"' . $class . '>' . $status . '</a>';
+        $link = '<a href="' . add_query_arg( 'client_status', $status_param ) . '"' . $class . '>' . $val . '</a>';
+      }
+
+      if ( $status_param == 'Mine' ) {
+        $link = '<a href="' . add_query_arg( 'client_manager', $curr_mgr ) . '"' . $class . '>' . $val . '</a>';
       }
 
       $views[ $status_param ] = $link;
@@ -286,6 +291,20 @@ class Client_List_Table extends Includes\WP_List_Table  {
       foreach( $data as $i => $client ) {
 
         if ( $client[ 'client_status' ] !== $client_status_filter ) {
+          unset( $data[ $i ] );
+        }
+
+      }
+
+    }
+
+    if ( isset( $_REQUEST[ 'client_manager' ] ) ) {
+
+      $client_status_filter = sanitize_text_field( urldecode( $_REQUEST[ 'client_manager' ] ) );
+
+      foreach( $data as $i => $client ) {
+
+        if ( $client[ 'client_manager' ] !== $client_status_filter ) {
           unset( $data[ $i ] );
         }
 
