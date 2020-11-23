@@ -82,7 +82,10 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
 
       foreach ( $managers_client_data as $client_data ) {
 
-        $client = Common\cpt_get_name( $client_data[ 'user_id' ] );
+        $clients_url  = esc_url( admin_url( 'admin.php?page=cpt' ) );
+        $client_url   = add_query_arg( 'user_id', $client_data[ 'user_id' ], $clients_url );
+
+        $client       = '<a href="' . $client_url . '">' . Common\cpt_get_name( $client_data[ 'user_id' ] ) . '</a>';
 
         if ( $client_data[ 'client_id' ] ) {
           $client .= ' <span style="color:silver">(' . $client_data[ 'client_id' ] . ')</span>';

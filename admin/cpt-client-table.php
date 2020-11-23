@@ -58,16 +58,10 @@ class Client_List_Table extends Includes\WP_List_Table  {
   */
   function column_client_name( $item ) {
 
-    // Build row actions.
-    $actions = [
-      'view_client' => '<a href="' . add_query_arg( 'user_id', $item[ 'ID' ] ) . '">View Client</a>',
-    ];
-
     // Return the contents.
-    return sprintf( '<strong>%1$s</strong>%2$s<br />%3$s',
+    return sprintf( '<strong><a href="' . add_query_arg( 'user_id', $item[ 'ID' ] ) . '">%1$s</a></strong>%2$s',
       /* $1%s */ $item[ 'client_name' ],
       /* $2%s */ $item[ 'client_id' ] ? ' <span style="color:silver">(' . $item[ 'client_id' ] . ')</span>' : '',
-      /* $3%s */ $this->row_actions( $actions, true )
     );
 
   }

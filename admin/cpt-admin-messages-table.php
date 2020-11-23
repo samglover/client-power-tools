@@ -58,19 +58,10 @@ class Message_List_Table extends Includes\WP_List_Table  {
   */
   function column_client( $item ) {
 
-    $clients_url  = esc_url( admin_url( 'admin.php?page=cpt' ) );
-    $client_url   = add_query_arg( 'user_id', $item[ 'clients_user_id' ], $clients_url );
-
-    // Build row actions.
-    $actions = [
-      'view_client'   => sprintf( '<a href="' . $client_url . '">View Client</a>' ),
-    ];
-
     // Return the contents.
-    return sprintf( '<strong>%1$s</strong>%2$s<br />%3$s',
+    return sprintf( '<strong>%1$s</strong>%2$s',
       /* $1%s */ $item[ 'client_name' ],
       /* $2%s */ $item[ 'client_id' ] ? ' <span style="color:silver">(' . $item[ 'client_id' ] . ')</span>' : '',
-      /* $3%s */ $this->row_actions( $actions, true )
     );
 
   }
@@ -91,16 +82,10 @@ class Message_List_Table extends Includes\WP_List_Table  {
     $clients_url  = add_query_arg( 'user_id', $item[ 'clients_user_id' ], esc_url( admin_url( 'admin.php?page=cpt' ) ) );
     $msg_url      = $clients_url . '#cpt-message-' . $item[ 'ID' ];
 
-    // Build row actions.
-    $actions = [
-      'goto_msg'   => sprintf( '<a href="' . $msg_url . '">Go to Message</a>' ),
-    ];
-
     // Return the contents.
-    return sprintf( '<strong><a href="%1$s">%2$s</a></strong><br />%3$s',
+    return sprintf( '<strong><a href="%1$s">%2$s</a></strong>',
       /* $1%s */ $msg_url,
       /* $2%s */ $item[ 'subject' ],
-      /* $3%s */ $this->row_actions( $actions )
     );
 
   }
