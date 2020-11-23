@@ -197,25 +197,25 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
       $class          = '';
       $val            = trim( $val );
-      $status_param   = urlencode( $val );
+      $curr_param   = urlencode( $val );
 
-      if ( $current_status == $status_param || ( $key == 1 && $curr_mgr_param == $curr_mgr ) ) {
+      if ( $current_status == $curr_param || ( $key == 1 && $curr_mgr_param == $curr_mgr ) ) {
         $class = ' class="current"';
       } elseif ( $key == 0 && $current_status == 'all' ) {
         $class = ' class="current"';
       }
 
-      if ( $status_param == 'All' ) {
+      if ( $curr_param == 'All' ) {
         $link = '<a href="' . remove_query_arg( [ 'client_status', 'client_manager' ] ) . '"' . $class . '>' . $val . '</a>';
       } else {
-        $link = '<a href="' . add_query_arg( 'client_status', $status_param ) . '"' . $class . '>' . $val . '</a>';
+        $link = '<a href="' . add_query_arg( 'client_status', $curr_param ) . '"' . $class . '>' . $val . '</a>';
       }
 
-      if ( $status_param == 'Mine' ) {
+      if ( $curr_param == 'Mine' ) {
         $link = '<a href="' . add_query_arg( 'client_manager', $curr_mgr ) . '"' . $class . '>' . $val . '</a>';
       }
 
-      $views[ $status_param ] = $link;
+      $views[ $curr_param ] = $link;
 
     }
 
