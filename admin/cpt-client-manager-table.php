@@ -220,6 +220,12 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
 
     }
 
+    // Sorts the data set.
+    $orderby  = isset( $_REQUEST[ 'orderby' ] )  ? sanitize_key( $_REQUEST[ 'orderby' ] )  : 'display_name';
+    $order    = isset( $_REQUEST[ 'order' ] )    ? sanitize_key( $_REQUEST[ 'order' ] )    : 'ASC';
+
+    $data     = wp_list_sort( $data, $orderby, $order );
+
     /**
     * Pagination
     */
