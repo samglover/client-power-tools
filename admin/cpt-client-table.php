@@ -197,11 +197,11 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
       $class          = '';
       $val            = trim( $val );
-      $curr_param   = urlencode( $val );
+      $curr_param     = urlencode( $val );
 
       if ( $current_status == $curr_param || ( $key == 1 && $curr_mgr_param == $curr_mgr ) ) {
         $class = ' class="current"';
-      } elseif ( $key == 0 && $current_status == 'all' ) {
+      } elseif ( ! isset( $_REQUEST[ 'client_status' ] ) && ! isset( $_REQUEST[ 'client_manager' ] ) && $key == 0 && $current_status == 'all' ) {
         $class = ' class="current"';
       }
 
