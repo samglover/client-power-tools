@@ -263,12 +263,27 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
         $cpt_messages = new \WP_Query( $args );
 
+        $manager_data = get_userdata( get_user_meta( $client->ID, 'cpt_client_manager', true ) );
+
+        if ( $manager_data ) {
+
+          // Checks for clients whose manager is no longer assigned that role.
+          if ( ! in_array( 'cpt-client-manager', $manager_data->roles ) ) {
+            $manager_name = '<span style="color: silver;">Unassigned</span>';
+          } else {
+            $manager_name = trim( Common\cpt_get_name( $manager_data->ID ) );
+          }
+
+        } else {
+          $manager_name = '<span style="color: silver;">Unassigned</span>';
+        }
+
         $data[] = [
           'ID'              => $client->ID,
           'client_name'     => $client->display_name,
           'client_email'    => $client->user_email,
           'client_id'       => get_user_meta( $client->ID, 'cpt_client_id', true ),
-          'client_manager'  => trim( Common\cpt_get_name( get_user_meta( $client->ID, 'cpt_client_manager', true ) ) ),
+          'client_manager'  => $manager_name,
           'client_status'   => get_user_meta( $client->ID, 'cpt_client_status', true ),
           'msg_count'       => number_format_i18n( $cpt_messages->post_count ),
         ];

@@ -15,6 +15,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - Show client manager on client profile and client dashboard.
 - Client manager setting page with add-client manager form.
 - Filter the Clients list by clients assigned to you ("Mine").
+- Client manager role can be removed.
 
 #### Changed
 - Messages and status update requests now go to the client manager. (The email will be CC'd to the now-optional status update request notification email address, if you have set one.)

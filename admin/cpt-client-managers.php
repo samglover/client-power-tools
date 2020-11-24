@@ -12,9 +12,23 @@ function cpt_client_managers() {
     );
   }
 
+  if ( isset( $_REQUEST[ 'cpt_action' ] ) && isset( $_REQUEST[ 'user_id' ] ) ) {
+
+    $action_user_id = sanitize_key( intval( $_REQUEST[ 'user_id' ] ) );
+
+    switch ( sanitize_key( $_REQUEST[ 'cpt_action' ] ) ) {
+
+      case 'cpt_remove_client_manager':
+        cpt_remove_client_manager( $action_user_id );
+        break;
+
+    }
+
+  }
+
   Common\cpt_get_notices( [
     'cpt_add_manager_result',
-    'cpt_remove_manager_result'
+    'cpt_remove_manager_result',
   ] );
 
   ob_start();
@@ -274,5 +288,12 @@ function cpt_get_managers_clients( $user_id ) {
 function cpt_remove_client_manager( $user_id ) {
 
   if ( ! $user_id ) { return; }
+
+  $user = new \WP_User( $user_id );
+  $user->remove_role( 'cpt-client-manager' );
+
+  $result = 'Client manager removed.';
+
+  set_transient( 'cpt_remove_manager_result', $result, 45  );
 
 }

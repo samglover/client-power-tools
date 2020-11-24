@@ -60,7 +60,6 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
 
     $actions = [
       'remove'    => '<a href="' . add_query_arg( [ 'user_id' => $item[ 'ID' ], 'cpt_action' => 'cpt_remove_client_manager' ] ) . '">Remove</a>',
-      'reassign'  => '<a href="' . add_query_arg( [ 'user_id' => $item[ 'ID' ], 'cpt_action' => 'cpt_reassign_client_manager' ] ) . '">Reassign All Clients</a>',
     ];
 
     // Return the contents.
