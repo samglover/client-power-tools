@@ -18,7 +18,7 @@ function cpt_add_roles() {
     'Client Manager',
     [
       'cpt-view-clients'    => true,
-      'cpt-manage-clients'  => true,
+      'read',
     ]
   );
 
@@ -58,8 +58,9 @@ function cpt_is_client( $user_id = null ) {
 }
 
 
-function cpt_get_client_profile_url( $user_id ) {
-  return add_query_arg( 'user_id', $user_id, admin_url( 'admin.php?page=cpt' ) );
+function cpt_get_client_profile_url( $clients_user_id ) {
+  if ( ! $clients_user_id ) { return; }
+  return add_query_arg( 'user_id', $clients_user_id, admin_url( 'admin.php?page=cpt' ) );
 }
 
 
@@ -85,40 +86,94 @@ function cpt_is_client_dashboard() {
 }
 
 
-function cpt_get_client_name( $user_id ) {
-
-  if ( ! $user_id ) { return; }
-
-  $user_meta = get_userdata( $user_id );
-
-  if ( $user_meta->first_name && $user_meta->last_name ) {
-    $client_name = $user_meta->first_name . ' ' . $user_meta->last_name;
-  } else {
-    $client_name = $user_meta->display_name;
-  }
-
-  return $client_name;
-
-}
-
-
-// Returns an array with the user's details.
-function cpt_get_client_data( $user_id ) {
+function cpt_get_name( $user_id ) {
 
   if ( ! $user_id ) { return; }
 
   $userdata = get_userdata( $user_id );
 
+  if ( isset( $userdata->first_name ) && isset( $userdata->last_name ) ) {
+    $name = $userdata->first_name . ' ' . $userdata->last_name;
+  } else {
+    $name = $userdata->display_name;
+  }
+
+  return $name;
+
+}
+
+
+// Returns an array with the user's details.
+function cpt_get_client_data( $clients_user_id ) {
+
+  if ( ! $clients_user_id ) { return; }
+
+  $userdata = get_userdata( $clients_user_id );
+
   $client_data = [
-    'user_id'     => $user_id,
-    'first_name'  => get_user_meta( $user_id, 'first_name', true ),
-    'last_name'   => get_user_meta( $user_id, 'last_name', true ),
-    'email'       => $userdata->user_email,
-    'client_id'   => get_user_meta( $user_id, 'cpt_client_id', true ),
-    'status'      => get_user_meta( $user_id, 'cpt_client_status', true ),
+    'user_id'       => $clients_user_id,
+    'first_name'    => get_user_meta( $clients_user_id, 'first_name', true ),
+    'last_name'     => get_user_meta( $clients_user_id, 'last_name', true ),
+    'email'         => $userdata->user_email,
+    'client_id'     => get_user_meta( $clients_user_id, 'cpt_client_id', true ),
+    'manager_id'    => cpt_get_client_manager_id( $clients_user_id ),
+    'manager_email' => cpt_get_client_manager_email( $clients_user_id ),
+    'status'        => get_user_meta( $clients_user_id, 'cpt_client_status', true ),
   ];
 
   return $client_data;
+
+}
+
+
+function cpt_get_client_manager_id( $clients_user_id ) {
+
+  if ( ! $clients_user_id ) { return; }
+
+  $userdata = get_userdata( get_user_meta( $clients_user_id, 'cpt_client_manager', true ) );
+
+  if ( $userdata && isset( $userdata->ID ) ) {
+
+    $manager_id = $userdata->ID;
+
+  } else if ( get_option( 'cpt_default_client_manager' ) ) {
+
+    $manager_id = get_option( 'cpt_default_client_manager' );
+
+  } else {
+
+    $userdata   = get_user_by_email( get_bloginfo( 'admin_email' ) );
+    $manager_id = $userdata->ID;
+
+  }
+
+  return $manager_id;
+
+}
+
+
+function cpt_get_client_manager_email( $clients_user_id ) {
+
+  if ( ! $clients_user_id ) { return; }
+
+  $userdata = get_userdata( get_user_meta( $clients_user_id, 'cpt_client_manager', true ) );
+
+  if ( $userdata && isset( $userdata->user_email ) ) {
+
+    $manager_email = $userdata->user_email;
+
+  } else if ( get_option( 'cpt_default_client_manager' ) ) {
+
+    $userdata       = get_userdata( get_option( 'cpt_default_client_manager' ) );
+    $manager_email  = $userdata->user_email;
+
+  } else {
+
+    $manager_email = get_bloginfo( 'admin_email' );
+
+  }
+
+  return $manager_email;
 
 }
 
@@ -157,49 +212,51 @@ function cpt_get_email_card( $title = null, $content = null, $button_txt = 'Go',
 * outputs a notice. In the admin, this is a standard WordPress admin notice. On
 * the front end, this is a modal.
 */
-function cpt_get_notices( $transient_key ) {
+function cpt_get_notices( $transient_key_array ) {
 
-  if ( ! $transient_key ) { return; }
+  if ( ! $transient_key_array ) { return; }
 
-  $result = get_transient( $transient_key );
+  foreach ( $transient_key_array as $notice ) {
 
-  if ( ! empty( $result ) ) {
+    $result = get_transient( $notice );
 
-    if ( is_admin() ) {
+    if ( ! empty( $result ) ) {
 
-      if ( is_wp_error( $result ) ) {
-        $wrapper = '<div class="cpt-notice notice notice-error is-dismissible">';
+      if ( is_admin() ) {
+
+        if ( is_wp_error( $result ) ) {
+          $wrapper = '<div class="cpt-notice notice notice-error is-dismissible">';
+        } else {
+          $wrapper = '<div class="cpt-notice notice notice-success is-dismissible">';
+        }
+
       } else {
-        $wrapper = '<div class="cpt-notice notice notice-success is-dismissible">';
+
+        ob_start();
+
+          ?>
+
+            <button class="cpt-notice-dismiss-button">
+              <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
+            </button>
+
+          <?php
+
+        $dismiss_button = ob_get_clean();
+
+        $wrapper = '<div class="cpt-inline-modal">' . "\n" . $dismiss_button;
+
       }
 
-    } else {
-
-      ob_start();
-
-        ?>
-
-          <button class="cpt-notice-dismiss-button">
-            <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
-          </button>
-
-        <?php
-
-      $dismiss_button = ob_get_clean();
-
-      $wrapper = '<div class="cpt-inline-modal">' . "\n" . $dismiss_button;
+      echo $wrapper;
+      echo '<p>' . __( $result ) . '</p>';
+      echo '</div>';
 
     }
 
-
-
-    echo $wrapper;
-    echo '<p>' . __( $result ) . '</p>';
-    echo '</div>';
+    delete_transient( $notice );
 
   }
-
-  delete_transient( $transient_key );
 
 }
 
@@ -220,6 +277,8 @@ function cpt_login_missing( $redirect_to, $requested_redirect_to, $user ) {
   if ( $redirect_to == cpt_get_client_dashboard_url() ) {
     wp_redirect( cpt_get_client_dashboard_url() . "?cpt_error=login_failed" );
     exit;
+  } else {
+    return $redirect_to;
   }
 
 }

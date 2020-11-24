@@ -12,9 +12,13 @@ function cpt_clients() {
     );
   }
 
-  Common\cpt_get_notices( 'cpt_update_client_result' );
-  Common\cpt_get_notices( 'cpt_delete_client_result' );
-  Common\cpt_get_notices( 'cpt_new_message_result' );
+  Common\cpt_get_notices( [
+    'cpt_new_client_result',
+    'cpt_update_client_result',
+    'cpt_update_client_result',
+    'cpt_delete_client_result',
+    'cpt_new_message_result'
+  ] );
 
   ob_start();
 
@@ -25,13 +29,12 @@ function cpt_clients() {
       $user_id        = sanitize_key( intval( $_REQUEST[ 'user_id' ] ) );
       $client_data    = Common\cpt_get_client_data( $user_id );
       $client_id      = $client_data[ 'client_id' ];
-      $client_status  = $client_data[ 'status' ];
 
-      if ( $client_status ) {
-        $page_header .= '<p id="cpt-client-status" class="dashicons-before status-' . strtolower( $client_status ) . '">' . $client_status . '</p>';
+      if ( isset( $client_data[ 'status' ] ) ) {
+        $page_header .= '<p id="cpt-client-status">' . $client_data[ 'status' ] . '</p>';
       }
 
-      $page_header .= '<h1 id="cpt-page-title">' . Common\cpt_get_client_name( $user_id );
+      $page_header .= '<h1 id="cpt-page-title">' . Common\cpt_get_name( $user_id );
 
         if ( $client_id ) {
           $page_header .= ' <span style="color:silver">(' . $client_id . ')</span>';
@@ -39,9 +42,24 @@ function cpt_clients() {
 
       $page_header .= '</h1>';
 
+      if ( isset( $client_data[ 'manager_id' ] ) ) {
+
+        $page_header .= '<p id="cpt-client-manager">';
+
+        if ( get_current_user_id() == $client_data[ 'manager_id' ] ) {
+          $page_header .= 'Your Client';
+        } else {
+          $page_header .= Common\cpt_get_name( $client_data[ 'manager_id' ] ) . '\'s Client';
+        }
+
+        $page_header .= '</p>';
+
+      }
+
     } else {
 
       $page_header .= '<h1 id="cpt-page-title">Clients</h1>';
+      $page_header .= '<p id="cpt-subtitle">Client Power Tools</p>';
 
     }
 
@@ -74,7 +92,21 @@ function cpt_clients() {
 
           } else {
 
-            cpt_get_client_list();
+            if ( current_user_can( 'cpt-manage-clients' ) ) {
+
+              ?>
+
+                <button class="button cpt-click-to-expand"><?php _e( 'Add a Client' ); ?></button>
+
+                <div class="cpt-this-expands">
+                  <?php cpt_new_client_form(); ?>
+                </div>
+
+              <?php
+
+            }
+
+            cpt_client_list();
 
           }
 
@@ -99,7 +131,7 @@ function cpt_get_client_profile( $user_id ) {
 }
 
 
-function cpt_get_client_list() {
+function cpt_client_list() {
 
   ob_start();
 
@@ -108,7 +140,7 @@ function cpt_get_client_list() {
 
     ?>
 
-      <form id="client-list" method="get">
+      <form id="client-list" method="GET">
         <?php $client_list->views(); ?>
         <?php $client_list->display() ?>
       </form>

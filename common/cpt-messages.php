@@ -347,7 +347,7 @@ function cpt_message_notification( $message_id ) {
   $msg_obj          = get_post( $message_id );
   $sender_id        = $msg_obj->post_author;
   $clients_user_id  = get_post_meta( $message_id, 'cpt_clients_user_id', true );
-  $client_obj       = get_userdata( $clients_user_id );
+  $client_data      = cpt_get_client_data( $clients_user_id );
 
   $from_name        = get_the_author_meta( 'display_name', $msg_obj->post_author );
   $from_email       = get_the_author_meta( 'user_email', $msg_obj->post_author );
@@ -355,7 +355,6 @@ function cpt_message_notification( $message_id ) {
   $headers[]        = 'Content-Type: text/html; charset=UTF-8';
   $headers[]        = 'From: ' . $from_name . ' <' . $from_email . '>';
 
-  $to               = $client_obj->user_email;
   $subject          = $msg_obj->post_title ? $msg_obj->post_title : __( 'You have a new message from' ) . ' ' . $from_name;
 
   if ( $send_this_msg_content ) {
@@ -366,10 +365,14 @@ function cpt_message_notification( $message_id ) {
 
     if ( $sender_id == $clients_user_id ) {
 
+      $to           = $client_data[ 'manager_email' ];
+
       $message      = '<p>' . __( 'To read your message, please visit your client dashboard.' ) . '</p>';
       $button_url   = cpt_get_client_profile_url( $clients_user_id ) . '#cpt-message-' . $message_id;
 
     } else {
+
+      $to           = $client_data[ 'email' ];
 
       $message      = '<p>' . __( 'To read this message, please view the client page.' ) . '</p>';
       $button_url   = cpt_get_client_dashboard_url() . '#cpt-message-' . $message_id;

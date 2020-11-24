@@ -8,13 +8,31 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - Prepare the plugin for internationalization.
 
 
+### 1.3
+
+#### Added
+- Client managers can now be added and removed from the new **Managers** submenu, and are also shown in the client list and client profile. As you can when adding a client, you can add a new or existing WordPress user.
+- Assign a default client manager in the settings.
+- Filter the client list by clients assigned to you ("Mine").
+
+#### Changed
+- The add-client form is now on the Clients page.
+- Messages and status update requests now go to the client manager. (The email will be CC'd to the now-optional status update request notification email address, if you have set one.)
+- New client emails will now come from the client manager instead of a default name and email address.
+- Update the element expander script so it can handle multiple expanders on the same page. Also, form elements within an expander with data-required="true" will have the required attributes removed when hidden.
+- Make cpt_get_notices() easier to use by changing the argument to an array so it only needs to be called once.
+
+#### Fixed
+- The standard login form no longer redirects to a blank page when a redirect is present.
+
+
 ### 1.2.1 - 2020-10-24
 
 #### Fixed
 - Adding an existing user as a client now works as it should.
 
 
-### 1.2.0 - 2020-10-23
+### 1.2 - 2020-10-23
 
 #### Added
 - Setting to disable the status request button entirely.
@@ -25,7 +43,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - Creating a new client with an existing user's email address now adds the Client role to the existing user instead of returning an error.
 
 
-### 1.1.0 - 2020-10-20
+### 1.1 - 2020-10-20
 
 #### Added
 - Delete a client from the client's profile page, under **Edit Client**.
@@ -72,7 +90,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - Fixed set/change password key sanitization.
 
 
-### 1.0.0 - 2020-10-02
+### 1.0 - 2020-10-02
 
 #### Added
 - Added some frontend form styles for greater compatibility with different themes.
@@ -83,7 +101,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - Data sanitization and validation.
 
 
-### 0.1.0 (Beta) - 2020-09-23
+### 0.1 (Beta) - 2020-09-23
 
 #### Added
 - Everything.

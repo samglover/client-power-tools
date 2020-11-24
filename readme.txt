@@ -3,13 +3,13 @@
 Contributors: samglover
 Tags: access control,clients,communication,portal,restrict access,restrict pages
 Requires at least: 5.5
-Tested up to: 5.5.1
+Tested up to: 5.5.3
 Requires PHP: 7.3.5
 Stable tag: trunk
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-A free, easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
+A free, easy-to-use client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
 
 
 == Description ==
@@ -51,8 +51,9 @@ Client Power Tools is built to be customizable where you need it to be. Here are
 * **New-client email.** You can customize the email sent to newly added clients so that it reflects the name, email address, subject line, and messaging you prefer.
 * **Client IDs.** When adding or updating a client, you can add a custom client ID.
 * **Client statuses.** You can customize the default statuses (potential, active, inactive).
-* **Status update request frequency.** Change how often the status update request button is available to your clients.
-* **Status update request recipient.** Designate one person to field all the status update requests.
+* **Client managers.** You can assign a client manager to each client.
+* **Status update request frequency.** Change how often the status update request button is available to your clients, or turn it off.
+* **Status update request recipient.** Designate one person to get notified of all status update requests.
 * **Design.** The front-end design of Client Power Tools is as minimal as possible so that Client Power Tools blends into your existing theme. But you can override the Client Power Tools styles as long as you know a little CSS. (See the [documentation](https://clientpowertools.com/documentation/) for more details.)
 
 
@@ -61,14 +62,34 @@ Client Power Tools is built to be customizable where you need it to be. Here are
 
 == Upgrade Notice ==
 
-This release adds several user-requested features. In settings, now you can disable the status request button entirely. You can also change the default email notification behavior to include the full message, rather than just a notification, but you can override this default on individual messages.
+This release adds client managers. You can manage client managers from the new **Managers** submenu, managers appear next to their clients in the client list, and clients appear with their manager in the manager list.
 
-Finally, when you try to add a new client when there is already a WordPress user account with the same email address, the user is simply given the Client role rather than returning an error. (The documentation will be updated, as well.)
+Messages and status update requests now go to the client manager. (The email will be CC'd to the now-optional status update request notification email address, if you have set one.) New client emails will now come from the client manager instead of a default name and email address.
 
-There's also a bunch of smaller tweaks and improvements.
+The add-client form has been moved to the Clients page.
+
+There's also the usual tweaks and improvements.
 
 
 == Changelog ==
+
+### 1.3
+
+#### Added
+- Client managers can now be added and removed from the new **Managers** submenu, and are also shown in the client list and client profile. As you can when adding a client, you can add a new or existing WordPress user.
+- Assign a default client manager in the settings.
+- Filter the client list by clients assigned to you ("Mine").
+
+#### Changed
+- The add-client form is now on the Clients page.
+- Messages and status update requests now go to the client manager. (The email will be CC'd to the now-optional status update request notification email address, if you have set one.)
+- New client emails will now come from the client manager instead of a default name and email address.
+- Update the element expander script so it can handle multiple expanders on the same page. Also, form elements within an expander with data-required="true" will have the required attributes removed when hidden.
+- Make cpt_get_notices() easier to use by changing the argument to an array so it only needs to be called once.
+
+#### Fixed
+- The standard login form no longer redirects to a blank page when a redirect is present.
+
 
 ### 1.2.1 - 2020-10-24
 
@@ -76,7 +97,7 @@ There's also a bunch of smaller tweaks and improvements.
 - Adding an existing user as a client now works as it should.
 
 
-### 1.2.0 - 2020-10-23
+### 1.2 - 2020-10-23
 
 #### Added
 - Setting to disable the status request button entirely.
@@ -87,7 +108,7 @@ There's also a bunch of smaller tweaks and improvements.
 - Creating a new client with an existing user's email address now adds the Client role to the existing user instead of returning an error.
 
 
-### 1.1.0 - 2020-10-20
+### 1.1 - 2020-10-20
 
 #### Added
 - Delete a client from the client's profile page, under **Edit Client**.

@@ -3,48 +3,13 @@
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
-function cpt_new_client() {
-
-  if ( ! current_user_can( 'cpt-manage-clients' ) ) {
-    wp_die(
-      '<p>' . __( 'Sorry, you are not allowed to access this page.' ) . '</p>',
-      403
-    );
-  }
-
-  cpt_get_admin_notices( 'cpt_new_client_result' );
-
-  ob_start();
-
-    ?>
-
-      <div id="cpt-admin" class="wrap">
-
-        <div id="cpt-admin-header">
-          <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>admin/images/cpt-logo.svg" height="auto" width="100%" />
-          <div id="cpt-admin-page-title">
-            <h1 id="cpt-page-title">Add Client</h1>
-            <p id="cpt-subtitle">Client Power Tools</p>
-          </div>
-        </div>
-        <hr class="wp-header-end">
-
-        <?php cpt_new_client_form(); ?>
-
-      </div>
-
-    <?php
-
-  echo ob_get_clean();
-
-}
-
-
 function cpt_new_client_form() {
 
   ob_start();
 
     ?>
+
+      <h3><?php _e( 'Add a Client' ); ?></h3>
 
       <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST">
 
@@ -87,17 +52,25 @@ function cpt_new_client_form() {
             </tr>
             <tr>
               <th scope="row">
+                <label for="client_manager">Client Manager</label>
+              </th>
+              <td>
+                <?php echo cpt_get_client_manager_select() ?>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">
                 <label for="client_status">Client Status</label>
               </th>
               <td>
-                <?php echo cpt_get_client_statuses_select( 'client_status' ) ?>
+                <?php echo cpt_get_client_statuses_select() ?>
               </td>
             </tr>
           </tbody>
         </table>
 
         <p class="submit">
-          <input name="submit" id="submit" class="button button-primary" type="submit" value="Create Client">
+          <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e( 'Add Client' ); ?>">
         </p>
 
       </form>
@@ -163,13 +136,14 @@ function cpt_process_new_client() {
     } else {
 
       update_user_meta( $new_client, 'cpt_client_id', sanitize_text_field( $_POST[ 'client_id' ] ) );
+      update_user_meta( $new_client, 'cpt_client_manager', sanitize_text_field( $_POST[ 'client_manager' ] ) );
       update_user_meta( $new_client, 'cpt_client_status', sanitize_text_field( $_POST[ 'client_status' ] ) );
 
       if ( ! $existing_client_id ) { cpt_new_client_email( $new_client ); }
 
       $client_profile_url = Common\cpt_get_client_profile_url( $new_client );
 
-      $result = 'Client created. <a href="' . $client_profile_url . '">View ' . Common\cpt_get_client_name( $new_client ) . '\'s profile</a>.';
+      $result = 'Client created. <a href="' . $client_profile_url . '">View ' . Common\cpt_get_name( $new_client ) . '\'s profile</a>.';
 
     }
 
@@ -189,14 +163,15 @@ function cpt_process_new_client() {
 add_action( 'admin_post_cpt_new_client_added', __NAMESPACE__ . '\cpt_process_new_client' );
 
 
-function cpt_new_client_email( $user_id ) {
+function cpt_new_client_email( $clients_user_id ) {
 
-  if ( ! $user_id ) { return; }
+  if ( ! $clients_user_id ) { return; }
 
-  $user           = get_userdata( $user_id );
+  $user           = get_userdata( $clients_user_id );
+  $client_data    = Common\cpt_get_client_data( $clients_user_id );
 
-  $from_name      = get_option( 'cpt_new_client_email_from_name' );
-  $from_email     = get_option( 'cpt_new_client_email_from_email' );
+  $from_name      = Common\cpt_get_name( $client_data[ 'manager_id' ] );
+  $from_email     = $client_data[ 'manager_email' ];
 
   $headers[]      = 'Content-Type: text/html; charset=UTF-8';
   $headers[]      = $from_name ? 'From: ' . $from_name . ' <' . $from_email . '>' : 'From: ' . $from_email;

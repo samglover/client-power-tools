@@ -5,7 +5,7 @@ Plugin Name: Client Power Tools
 Plugin URI: https://clientpowertools.com
 Description: Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
 Author: Sam Glover
-Version: 1.2.1
+Version: 1.3
 Author URI: https://samglover.net
 */
 
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
 * Constants
 */
-define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.2.1' );
+define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.3' );
 define( 'CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 
@@ -80,6 +80,8 @@ if ( is_admin() ) {
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-clients.php' );
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-table.php' );
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-client.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-managers.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-manager-table.php' );
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-settings.php' );
 
 }
@@ -138,15 +140,17 @@ function cpt_activate() {
 	/*
 	* Checks for default options and adds them if necessary.
 	*/
+
+	$admin = get_user_by_email( get_bloginfo( 'admin_email' ) );
+
 	$defaults = [
 		'cpt_client_statuses'									=> 'Active' . "\n" . 'Potential' . "\n" . 'Inactive',
+		'cpt_default_client_manager'					=> $admin->ID,
 		'cpt_default_client_status'						=> 'Active',
 		'cpt_show_status_update_req_button'		=> true,
 		'cpt_status_update_req_freq'					=> 30,
-		'cpt_status_update_req_notice_email'	=> get_bloginfo( 'admin_email' ),
+		'cpt_status_update_req_notice_email'	=> null,
 		'cpt_send_message_content'						=> false,
-    'cpt_new_client_email_from_name'     	=> '',
-    'cpt_new_client_email_from_email'    	=> get_bloginfo( 'admin_email' ),
     'cpt_new_client_email_subject_line'  	=> 'Your client account has been created! Please set your password.',
     'cpt_new_client_email_message_body'  	=> '',
   ];

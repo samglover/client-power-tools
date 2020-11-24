@@ -40,8 +40,6 @@ function cpt_settings() {
           <?php submit_button( 'Save Settings' ); ?>
         </form>
 
-        <!-- Insert selector for frontend client dashboard page. -->
-
       </div>
 
     <?php
@@ -120,14 +118,47 @@ function cpt_client_dashboard_page_selection() {
 
 }
 
-
-// Client Profile
-function cpt_client_profile_settings_init() {
+// Client Managers
+function cpt_client_managers_settings_init() {
 
   add_settings_section(
-    'cpt-client-profile-settings',
-    'Client Profile',
-    __NAMESPACE__ . '\cpt_client_profile_section',
+    'cpt-client-managers-settings',
+    'Client Managers',
+    __NAMESPACE__ . '\cpt_client_managers_section',
+    'cpt-settings',
+  );
+
+  add_settings_field(
+    'cpt_default_client_manager',
+    '<label for="cpt_default_client_manager">Default Client Manager</label>',
+    __NAMESPACE__ . '\cpt_default_client_manager',
+    'cpt-settings',
+    'cpt-client-managers-settings',
+  );
+
+  register_setting( 'cpt-settings', 'cpt_default_client_manager' );
+
+}
+
+add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_managers_settings_init' );
+
+
+function cpt_client_managers_section() {
+}
+
+
+function cpt_default_client_manager() {
+  echo cpt_get_client_manager_select( 'cpt_default_client_manager', get_option( 'cpt_default_client_manager' ) );
+}
+
+
+// Client Statuses
+function cpt_client_status_settings_init() {
+
+  add_settings_section(
+    'cpt-client-status-settings',
+    'Client Statuses',
+    __NAMESPACE__ . '\cpt_client_status_section',
     'cpt-settings',
   );
 
@@ -136,7 +167,7 @@ function cpt_client_profile_settings_init() {
     '<label for="cpt_client_statuses">Statuses</label>',
     __NAMESPACE__ . '\cpt_client_statuses',
     'cpt-settings',
-    'cpt-client-profile-settings',
+    'cpt-client-status-settings',
   );
 
   register_setting( 'cpt-settings', 'cpt_client_statuses' );
@@ -146,17 +177,17 @@ function cpt_client_profile_settings_init() {
     '<label for="cpt_default_client_status">Default Status</label>',
     __NAMESPACE__ . '\cpt_default_client_status',
     'cpt-settings',
-    'cpt-client-profile-settings',
+    'cpt-client-status-settings',
   );
 
   register_setting( 'cpt-settings', 'cpt_default_client_status' );
 
 }
 
-add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_profile_settings_init' );
+add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_status_settings_init' );
 
 
-function cpt_client_profile_section() {}
+function cpt_client_status_section() {}
 
 
 function cpt_client_statuses() {
@@ -223,7 +254,7 @@ function cpt_status_update_request_button_settings_init() {
   // Status Update Request Notification Email
   add_settings_field(
     'cpt_status_update_req_notice_email',
-    '<label for="cpt_status_update_req_notice_email">Status Update Request Notification Email<br /><small>(required)</small></label>',
+    '<label for="cpt_status_update_req_notice_email">Additional Status Update Request Notification Email<br /><small>(optional)</small></label>',
     __NAMESPACE__ . '\cpt_status_update_req_notice_email',
     'cpt-settings',
     'cpt_status_update_request_button_settings',
@@ -266,8 +297,8 @@ function cpt_status_update_req_freq() {
 }
 
 function cpt_status_update_req_notice_email() {
-  echo '<input name="cpt_status_update_req_notice_email" class="regular-text" type="email" required aria-required="true" value="' . get_option( 'cpt_status_update_req_notice_email' ) . '">';
-  echo '<p class="description">' . __( 'When a client requests a status update, the notification will go to this email address.' ) . '</p>';
+  echo '<input name="cpt_status_update_req_notice_email" class="regular-text" type="email" value="' . get_option( 'cpt_status_update_req_notice_email' ) . '">';
+  echo '<p class="description">' . __( 'This address will be CC\'d when a client requests a status update.' ) . '</p>';
 }
 
 
@@ -332,28 +363,6 @@ function cpt_new_client_email_settings_init() {
     'cpt-settings',
   );
 
-  // From Name
-  add_settings_field(
-    'cpt_new_client_email_from_name',
-    '<label for="cpt_new_client_email_from_name">From Name<br /><small>(optional)</small></label>',
-    __NAMESPACE__ . '\cpt_new_client_email_from_name',
-    'cpt-settings',
-    'cpt-new-client-email-settings',
-  );
-
-  register_setting( 'cpt-settings', 'cpt_new_client_email_from_name', 'sanitize_text_field' );
-
-  // From Email
-  add_settings_field(
-    'cpt_new_client_email_from_email',
-    '<label for="cpt_new_client_email_from_email">From Email<br /><small>(required)</small></label>',
-    __NAMESPACE__ . '\cpt_new_client_email_from_email',
-    'cpt-settings',
-    'cpt-new-client-email-settings',
-  );
-
-  register_setting( 'cpt-settings', 'cpt_new_client_email_from_email', 'sanitize_email' );
-
   // Subject Line
   add_settings_field(
     'cpt_new_client_email_subject_line',
@@ -382,15 +391,7 @@ add_action( 'admin_init', __NAMESPACE__ . '\cpt_new_client_email_settings_init' 
 
 
 function cpt_new_client_email_section() {
-  echo '<p>' . __( 'When you add a new client, they will receive an email notification with an account activation link.' ) . '</p>';
-}
-
-function cpt_new_client_email_from_name() {
-  echo '<input name="cpt_new_client_email_from_name" class="regular-text" type="text" value="' . get_option( 'cpt_new_client_email_from_name' ) . '">';
-}
-
-function cpt_new_client_email_from_email() {
-  echo '<input name="cpt_new_client_email_from_email" class="regular-text" type="email" required aria-required="true" value="' . get_option( 'cpt_new_client_email_from_email' ) . '">';
+  echo '<p>' . __( 'When you add a new client, they will receive an email notification from their client manager with an account activation link. If you like, you can customize the subject line or add a message to the body of the email.' ) . '</p>';
 }
 
 function cpt_new_client_email_subject_line() {

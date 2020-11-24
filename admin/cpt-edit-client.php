@@ -8,7 +8,7 @@ function cpt_edit_client( $user_id ) {
   if ( ! $user_id || ! is_user_logged_in() ) { return; }
 
   $client_data  = Common\cpt_get_client_data( $user_id );
-  $client_name  = Common\cpt_get_client_name( $user_id );
+  $client_name  = Common\cpt_get_name( $user_id );
 
   if ( is_admin() && current_user_can( 'cpt-manage-clients' ) ) {
 
@@ -46,7 +46,7 @@ function cpt_edit_client_form( $client_data ) {
                 <label for="first_name">First Name<br /><small>(required)</small></label>
               </th>
               <td>
-                <input name="first_name" id="first_name" class="regular-text" type="text" required aria-required="true" value="<?php echo $client_data[ 'first_name' ]; ?>">
+                <input name="first_name" id="first_name" class="regular-text" type="text" data-required="true" value="<?php echo $client_data[ 'first_name' ]; ?>">
               </td>
             </tr>
             <tr>
@@ -54,7 +54,7 @@ function cpt_edit_client_form( $client_data ) {
                 <label for="last_name">Last Name<br /><small>(required)</small></label>
               </th>
               <td>
-                <input name="last_name" id="last_name" class="regular-text" type="text" required aria-required="true" value="<?php echo $client_data[ 'last_name' ]; ?>">
+                <input name="last_name" id="last_name" class="regular-text" type="text" data-required="true" value="<?php echo $client_data[ 'last_name' ]; ?>">
               </td>
             </tr>
             <tr>
@@ -62,7 +62,7 @@ function cpt_edit_client_form( $client_data ) {
                 <label for="email">Email Address<br /><small>(required)</small></label>
               </th>
               <td>
-                <input name="email" id="email" class="regular-text" type="text" required aria-required="true" autocapitalize="none" autocorrect="off" value="<?php echo $client_data[ 'email' ]; ?>">
+                <input name="email" id="email" class="regular-text" type="text" data-required="true" autocapitalize="none" autocorrect="off" value="<?php echo $client_data[ 'email' ]; ?>">
               </td>
             </tr>
             <tr>
@@ -75,30 +75,18 @@ function cpt_edit_client_form( $client_data ) {
             </tr>
             <tr>
               <th scope="row">
+                <label for="client_manager">Client Manager</label>
+              </th>
+              <td>
+                <?php echo cpt_get_client_manager_select( '', $client_data[ 'manager_id' ] ); ?>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">
                 <label for="client_status">Client Status</label>
               </th>
               <td>
-                <select name="client_status" id="client_status">
-
-                  <?php
-
-                    $statuses = $statuses_array = explode( "\n", get_option( 'cpt_client_statuses' ) );
-
-                    foreach ( $statuses as $status ) {
-
-                      if ( $status == $client_data[ 'status' ] ) {
-                        echo '<option selected>';
-                      } else {
-                        echo '<option>';
-                      }
-
-                      echo $status . '</option>';
-
-                    }
-
-                  ?>
-
-                </select>
+                <?php echo cpt_get_client_statuses_select( '', $client_data[ 'status' ] ); ?>
               </td>
             </tr>
           </tbody>
@@ -140,9 +128,11 @@ function cpt_process_client_update() {
     } else {
 
       $client_id      = sanitize_text_field( $_POST[ 'client_id' ] );
+      $client_manager = sanitize_text_field( $_POST[ 'client_manager' ] );
       $client_status  = sanitize_text_field( $_POST[ 'client_status' ] );
 
       update_user_meta( $user_id, 'cpt_client_id', $client_id );
+      update_user_meta( $user_id, 'cpt_client_manager', $client_manager );
       update_user_meta( $user_id, 'cpt_client_status', $client_status );
 
       $result = 'Client updated.';
@@ -199,7 +189,7 @@ function cpt_delete_client_button( $user_id ) {
 
   if ( ! $user_id ) { return; }
 
-  $client_name  = Common\cpt_get_client_name( $user_id );
+  $client_name  = Common\cpt_get_name( $user_id );
   $button_txt   = __( 'Delete' ) . ' ' . $client_name;
 
   ob_start();
@@ -227,7 +217,7 @@ function cpt_process_delete_client() {
   if ( isset( $_POST[ 'cpt_client_deleted_nonce' ] ) && wp_verify_nonce( $_POST[ 'cpt_client_deleted_nonce' ], 'cpt_client_deleted' ) ) {
 
     $user_id      = sanitize_key( intval( $_POST[ 'clients_user_id' ] ) );
-    $client_name  = Common\cpt_get_client_name( $user_id );
+    $client_name  = Common\cpt_get_name( $user_id );
 
     $args = [
       'fields'          => 'ids',

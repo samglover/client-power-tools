@@ -29,7 +29,7 @@ function cpt_security_warning() {
     ?>
 
       <div class="cpt-notice notice notice-warning">
-        <p><?php _e( '<strong>Warning!</strong> It doesn\'t look like your website is using SSL (HTTPS) for security. Before using Client Power Tools with your clients, you should get an SSL certificate for your website and consider additional security precautions. <a href="https://clientpowertools.com/security/?utm_source=cpt_user&utm_medium=cpt_ssl_warning">Learn more.</a>' ); ?></p>
+        <p><?php _e( '<strong>Warning!</strong> It doesn\'t look like your website is using SSL (HTTPS). Before using Client Power Tools with your clients, it\'s a good idea to get an SSL certificate for your website and consider additional security measures. <a href="https://clientpowertools.com/security/?utm_source=cpt_user&utm_medium=cpt_ssl_warning" target="_blank">Learn more.</a>' ); ?></p>
       </div>
 
     <?php
@@ -66,18 +66,18 @@ function cpt_menu_pages() {
     'cpt',
     'Client Power Tools: Messages',
     'Messages',
-    'cpt-manage-clients',
+    'cpt-view-clients',
     'cpt-messages',
     __NAMESPACE__ . '\cpt_admin_messages',
   );
 
   add_submenu_page(
     'cpt',
-    'Client Power Tools: Add New Client',
-    'Add Client',
-    'cpt-manage-clients',
-    'cpt-new-client',
-    __NAMESPACE__ . '\cpt_new_client',
+    'Client Power Tools: Client Managers',
+    'Managers',
+    'cpt-manage-team',
+    'cpt-managers',
+    __NAMESPACE__ . '\cpt_client_managers',
   );
 
   add_submenu_page(
@@ -120,10 +120,61 @@ function cpt_get_admin_notices( $transient_key ) {
 add_action( 'admin_notices', __NAMESPACE__ . '\cpt_get_admin_notices' );
 
 
-function cpt_get_client_statuses_select( $name = 'cpt_client_statuses' ) {
+function cpt_get_client_manager_select( $name = null, $selected = null ) {
 
-  $statuses_array   = explode( "\n", get_option( 'cpt_client_statuses' ) );
-  $default_status   = get_option( 'cpt_default_client_status' );
+  if ( ! $name ) {
+    $name = 'client_manager';
+  }
+
+  if ( ! $selected ) {
+    $admin    = get_user_by_email( get_bloginfo( 'admin_email' ) );
+    $selected = get_option( 'cpt_default_client_manager' ) ? get_option( 'cpt_default_client_manager' ) : $admin->ID;
+  }
+
+  /**
+  * Query Client Managers
+  */
+  $args = [
+    'role__in'  => [ 'cpt-client-manager' ],
+    'orderby'   => 'display_name',
+    'order'     => 'ASC',
+  ];
+
+  $client_manager_query = new \WP_USER_QUERY( $args );
+  $client_managers      = $client_manager_query->get_results();
+
+  ob_start();
+
+    echo '<select name="' . $name . '" id="' . $name . '">';
+
+    foreach ( $client_managers as $client_manager ) {
+      echo '<option value="' . $client_manager->ID . '"';
+
+      if ( $client_manager->ID == $selected ) {
+        echo ' selected';
+      }
+
+      echo '>' . $client_manager->display_name . '</option>';
+    }
+
+    echo '</select>';
+
+  return ob_get_clean();
+
+}
+
+
+function cpt_get_client_statuses_select( $name = null, $selected = null ) {
+
+  $statuses_array = explode( "\n", get_option( 'cpt_client_statuses' ) );
+
+  if ( ! $name ) {
+    $name = 'client_status';
+  }
+
+  if ( ! $selected ) {
+    $selected = get_option( 'cpt_default_client_status' );
+  }
 
   ob_start();
 
@@ -133,7 +184,7 @@ function cpt_get_client_statuses_select( $name = 'cpt_client_statuses' ) {
 
       echo '<option value="' . $status . '"';
 
-      if ( trim( $status ) == $default_status ) {
+      if ( trim( $status ) == $selected ) {
         echo ' selected';
       }
 

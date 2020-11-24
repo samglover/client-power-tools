@@ -40,7 +40,7 @@
     }
 
 .cpt-message.my-message {
-  margin-left: 33.333%;
+  margin-left: 10%;
 }
 
 .client-message .cpt-message-content {
@@ -48,7 +48,7 @@
 }
 
 .cpt-message.not-my-message {
-  margin-right: 33.333%;
+  margin-right: 10%;
 }
 
 .cpt-message.status-update-request {

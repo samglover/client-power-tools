@@ -7,6 +7,7 @@
 
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Includes;
+use Client_Power_Tools\Core\Common;
 
 class Client_List_Table extends Includes\WP_List_Table  {
 
@@ -57,17 +58,23 @@ class Client_List_Table extends Includes\WP_List_Table  {
   */
   function column_client_name( $item ) {
 
-    // Build row actions.
-    $actions = [
-      'view_client' => '<a href="' . add_query_arg( 'user_id', $item[ 'ID' ] ) . '">View Client</a>',
-    ];
-
     // Return the contents.
-    return sprintf( '<strong>%1$s</strong>%2$s<br />%3$s',
+    return sprintf( '<strong><a href="' . add_query_arg( 'user_id', $item[ 'ID' ] ) . '">%1$s</a></strong>%2$s',
       /* $1%s */ $item[ 'client_name' ],
       /* $2%s */ $item[ 'client_id' ] ? ' <span style="color:silver">(' . $item[ 'client_id' ] . ')</span>' : '',
-      /* $3%s */ $this->row_actions( $actions )
     );
+
+  }
+
+
+  /**
+  * Client Messages Method
+  */
+  function column_client_messages( $item ) {
+
+    if ( $item[ 'msg_count' ] ) {
+      return sprintf( $item[ 'msg_count' ] );
+    }
 
   }
 
@@ -81,12 +88,12 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
 
   /**
-  * Client Messages Method
+  * Client Manager Method
   */
-  function column_client_messages( $item ) {
+  function column_client_manager( $item ) {
 
-    if ( $item[ 'msg_count' ] ) {
-      return sprintf( $item[ 'msg_count' ] );
+    if ( $item[ 'client_manager' ] ) {
+      return sprintf( $item[ 'client_manager' ] );
     }
 
   }
@@ -106,6 +113,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       'client_name'     => 'Client',
       'client_messages' => 'Messages',
       'client_status'   => 'Status',
+      'client_manager'  => 'Manager',
     ];
 
     return $columns;
@@ -122,6 +130,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       'client_name'     => [ 'client_name', true ],
       'client_messages' => [ 'msg_count', false ],
       'client_status'   => [ 'client_status', false ],
+      'client_manager'  => [ 'client_manager', false ],
     ];
 
     return $sortable_columns;
@@ -170,29 +179,37 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
   function get_views() {
 
-    $statuses = explode( "\n", get_option( 'cpt_client_statuses' ) );
-    $current  = isset( $_REQUEST[ 'client_status' ] ) ? sanitize_text_field( urldecode( $_REQUEST[ 'client_status' ] ) ) : 'all';
-    $views    = array();
+    $params         = explode( "\n", get_option( 'cpt_client_statuses' ) );
+    $current_status = isset( $_REQUEST[ 'client_status' ] ) ? sanitize_text_field( urldecode( $_REQUEST[ 'client_status' ] ) ) : 'all';
+    $curr_mgr       = Common\cpt_get_name( get_current_user_id() );
+    $curr_mgr_param = isset( $_REQUEST[ 'client_manager' ] ) ? sanitize_text_field( urldecode( $_REQUEST[ 'client_manager' ] ) ) : '';
+    $views          = array();
 
-    array_unshift( $statuses, 'All' );
+    array_unshift( $params, 'All', 'Mine' );
 
-    foreach( $statuses as $status ) {
+    foreach( $params as $key => $val ) {
 
-      $class        = '';
-      $status       = trim( $status );
-      $status_param = urlencode( $status );
+      $class          = '';
+      $val            = trim( $val );
+      $curr_param     = urlencode( $val );
 
-      if ( $current == $status_param ) {
+      if ( $current_status == $curr_param || ( $key == 1 && $curr_mgr_param == $curr_mgr ) ) {
+        $class = ' class="current"';
+      } elseif ( ! isset( $_REQUEST[ 'client_status' ] ) && ! isset( $_REQUEST[ 'client_manager' ] ) && $key == 0 && $current_status == 'all' ) {
         $class = ' class="current"';
       }
 
-      if ( $status_param == 'All' ) {
-        $link = '<a href="' . remove_query_arg( 'client_status' ) . '"' . $class . '>' . $status . '</a>';
+      if ( $curr_param == 'All' ) {
+        $link = '<a href="' . remove_query_arg( [ 'client_status', 'client_manager' ] ) . '"' . $class . '>' . $val . '</a>';
       } else {
-        $link = '<a href="' . add_query_arg( 'client_status', $status_param ) . '"' . $class . '>' . $status . '</a>';
+        $link = '<a href="' . add_query_arg( 'client_status', $curr_param ) . '"' . $class . '>' . $val . '</a>';
       }
 
-      $views[ $status_param ] = $link;
+      if ( $curr_param == 'Mine' ) {
+        $link = '<a href="' . add_query_arg( 'client_manager', $curr_mgr ) . '"' . $class . '>' . $val . '</a>';
+      }
+
+      $views[ $curr_param ] = $link;
 
     }
 
@@ -246,13 +263,29 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
         $cpt_messages = new \WP_Query( $args );
 
+        $manager_data = get_userdata( get_user_meta( $client->ID, 'cpt_client_manager', true ) );
+
+        if ( $manager_data ) {
+
+          // Checks for clients whose manager is no longer assigned that role.
+          if ( ! in_array( 'cpt-client-manager', $manager_data->roles ) ) {
+            $manager_name = '<span style="color: silver;">Unassigned</span>';
+          } else {
+            $manager_name = trim( Common\cpt_get_name( $manager_data->ID ) );
+          }
+
+        } else {
+          $manager_name = '<span style="color: silver;">Unassigned</span>';
+        }
+
         $data[] = [
-          'ID'            => $client->ID,
-          'client_name'   => $client->display_name,
-          'client_email'  => $client->user_email,
-          'client_id'     => get_user_meta( $client->ID, 'cpt_client_id', true ),
-          'client_status' => get_user_meta( $client->ID, 'cpt_client_status', true ),
-          'msg_count'     => number_format_i18n( $cpt_messages->post_count ),
+          'ID'              => $client->ID,
+          'client_name'     => $client->display_name,
+          'client_email'    => $client->user_email,
+          'client_id'       => get_user_meta( $client->ID, 'cpt_client_id', true ),
+          'client_manager'  => $manager_name,
+          'client_status'   => get_user_meta( $client->ID, 'cpt_client_status', true ),
+          'msg_count'       => number_format_i18n( $cpt_messages->post_count ),
         ];
 
       }
@@ -267,6 +300,20 @@ class Client_List_Table extends Includes\WP_List_Table  {
       foreach( $data as $i => $client ) {
 
         if ( $client[ 'client_status' ] !== $client_status_filter ) {
+          unset( $data[ $i ] );
+        }
+
+      }
+
+    }
+
+    if ( isset( $_REQUEST[ 'client_manager' ] ) ) {
+
+      $client_status_filter = sanitize_text_field( urldecode( $_REQUEST[ 'client_manager' ] ) );
+
+      foreach( $data as $i => $client ) {
+
+        if ( $client[ 'client_manager' ] !== $client_status_filter ) {
           unset( $data[ $i ] );
         }
 

@@ -34,7 +34,7 @@ function cpt_get_message_list() {
 
   ob_start();
 
-    $message_list = new CLIENT_POWER_TOOLS_Message_List_Table();
+    $message_list = new Message_List_Table();
     $message_list->prepare_items();
 
     ?>

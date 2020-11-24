@@ -9,15 +9,15 @@ namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 use Client_Power_Tools\Core\Includes;
 
-class Message_List_Table extends Includes\WP_List_Table  {
+class Client_Manager_List_Table extends Includes\WP_List_Table  {
 
   function __construct() {
 
-    global $status, $page;
+    global $page;
 
     parent::__construct( [
-      'singular'  => 'message',
-      'plural'    => 'messages',
+      'singular'  => 'manager',
+      'plural'    => 'managers',
       'ajax'      => false,
     ]);
 
@@ -54,48 +54,54 @@ class Message_List_Table extends Includes\WP_List_Table  {
 
 
   /**
-  * Client Column Method
+  * Name Column Method
   */
-  function column_client( $item ) {
+  function column_manager_name( $item ) {
+
+    $actions = [
+      'remove'    => '<a href="' . add_query_arg( [ 'user_id' => $item[ 'ID' ], 'cpt_action' => 'cpt_remove_client_manager' ] ) . '">Remove</a>',
+    ];
 
     // Return the contents.
-    return sprintf( '<strong>%1$s</strong>%2$s',
-      /* $1%s */ $item[ 'client_name' ],
-      /* $2%s */ $item[ 'client_id' ] ? ' <span style="color:silver">(' . $item[ 'client_id' ] . ')</span>' : '',
-    );
-
-  }
-
-  /**
-  * Sender Column Method
-  */
-  function column_sender( $item ) {
-    return sprintf( $item[ 'sender' ] );
-  }
-
-
-  /**
-  * Subject Column Method
-  */
-  function column_subject( $item ) {
-
-    $clients_url  = add_query_arg( 'user_id', $item[ 'clients_user_id' ], esc_url( admin_url( 'admin.php?page=cpt' ) ) );
-    $msg_url      = $clients_url . '#cpt-message-' . $item[ 'ID' ];
-
-    // Return the contents.
-    return sprintf( '<strong><a href="%1$s">%2$s</a></strong>',
-      /* $1%s */ $msg_url,
-      /* $2%s */ $item[ 'subject' ],
+    return sprintf( '<strong>%1$s</strong><br />%2$s',
+      /* $1%s */ $item[ 'manager_name' ],
+      /* $2%s */ $this->row_actions( $actions )
     );
 
   }
 
 
   /**
-  * Date Column Method
+  * Clients Column Method
   */
-  function column_date( $item ) {
-    return sprintf( $item[ 'date' ] );
+  function column_managers_clients( $item ) {
+
+    $managers_client_data = cpt_get_managers_clients( $item[ 'ID' ] );
+
+    if ( $managers_client_data ) {
+
+      foreach ( $managers_client_data as $client_data ) {
+
+        $clients_url  = esc_url( admin_url( 'admin.php?page=cpt' ) );
+        $client_url   = add_query_arg( 'user_id', $client_data[ 'user_id' ], $clients_url );
+
+        $client       = '<a href="' . $client_url . '">' . Common\cpt_get_name( $client_data[ 'user_id' ] ) . '</a>';
+
+        if ( $client_data[ 'client_id' ] ) {
+          $client .= ' <span style="color:silver">(' . $client_data[ 'client_id' ] . ')</span>';
+        }
+
+        $clients[] = $client;
+      }
+
+      return implode( '<br/>' . "\n", $clients );
+
+    } else {
+
+      return '<span style="color:silver">None</span>';
+
+    }
+
   }
 
 
@@ -109,11 +115,9 @@ class Message_List_Table extends Includes\WP_List_Table  {
   function get_columns() {
 
     $columns = [
-      // 'cb'      => '<input type="checkbox" />',
-      'client'  => 'Client',
-      'sender'  => 'Sender',
-      'subject' => 'Subject',
-      'date'    => 'Date',
+      // 'cb'              => '<input type="checkbox" />',
+      'manager_name'      => 'Manager Name',
+      'managers_clients'  => 'Clients',
     ];
 
     return $columns;
@@ -126,10 +130,8 @@ class Message_List_Table extends Includes\WP_List_Table  {
   */
   function get_sortable_columns() {
 
-    return; // Remove this line to enable sortable columns.
-
     $sortable_columns = [
-      'date' => [ 'msg_count', true ],
+      'manager_name' => [ 'manager_name', true ],
     ];
 
     return $sortable_columns;
@@ -147,7 +149,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
     return; // Remove this line to enable bulk actions.
 
     $actions = [
-      'delete'  => 'Delete',
+      'remove'  => 'remove',
     ];
 
     return $actions;
@@ -161,8 +163,8 @@ class Message_List_Table extends Includes\WP_List_Table  {
 
     switch ( $action ) {
 
-      case 'delete':
-        wp_die( 'Delete something.' );
+      case 'remove':
+        wp_die( 'Remove client manager permissions.' );
         break;
 
       default:
@@ -194,36 +196,38 @@ class Message_List_Table extends Includes\WP_List_Table  {
 
 
     /**
-    * Query Messages
+    * Query Client Managers
     */
-    $data = [];
-
-    // Creates the data set.
     $args = [
-      'fields'          => 'ids',
-      'post_type'       => 'cpt_message',
-      'posts_per_page'  => -1,
+      'role'      => 'cpt-client-manager',
+      'orderby'   => 'display_name',
+      'order'     => 'ASC',
     ];
 
-    $cpt_messages = new \WP_Query( $args );
+    $client_managers_query  = new \WP_USER_QUERY( $args );
+    $client_managers        = $client_managers_query->get_results();
+    $data                   = [];
 
-    if ( $cpt_messages->have_posts() ) : while ( $cpt_messages->have_posts() ) : $cpt_messages->the_post();
+    // Creates the data set.
+    if ( ! empty( $client_managers ) ) {
 
-      $post_id          = get_the_ID();
-      $clients_user_id  = get_post_meta( $post_id, 'cpt_clients_user_id', true );
+      foreach ( $client_managers as $client_manager ) {
 
-      $data[] = [
-        'ID'              => $post_id,
-        'client_name'     => Common\cpt_get_name( $clients_user_id ),
-        'clients_user_id' => $clients_user_id,
-        'client_id'       => get_user_meta( $clients_user_id, 'cpt_client_id', true ),
-        'sender'          => get_the_author(),
-        'subject'         => get_the_title() ? get_the_title() : '[Message from ' . get_the_author() . ']',
-        'date'            => get_the_date(),
-      ];
+        $data[] = [
+          'ID'            => $client_manager->ID,
+          'manager_name'  => $client_manager->display_name,
+          'manager_email' => $client_manager->user_email,
+        ];
 
-    endwhile; endif;
+      }
 
+    }
+
+    // Sorts the data set.
+    $orderby  = isset( $_REQUEST[ 'orderby' ] )  ? sanitize_key( $_REQUEST[ 'orderby' ] )  : 'display_name';
+    $order    = isset( $_REQUEST[ 'order' ] )    ? sanitize_key( $_REQUEST[ 'order' ] )    : 'ASC';
+
+    $data     = wp_list_sort( $data, $orderby, $order );
 
     /**
     * Pagination
