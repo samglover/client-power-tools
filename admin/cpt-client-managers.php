@@ -206,7 +206,7 @@ function cpt_new_client_manager_email( $user_id ) {
   $subject        = 'Your client manager account has been created. Please set your password.';
 
   $activation_key = get_password_reset_key( $user );
-  $activation_url = home_url() . '?cpt_login=setpw&key=' . $activation_key . '&login=' . urlencode( $user->user_login ) . '&redirect=' . esc_url( admin_url( 'admin.php?page=cpt' ) );
+  $activation_url = home_url() . '?cpt_login=setpw&key=' . $activation_key . '&login=' . urlencode( $user->user_login );
 
   ob_start();
 

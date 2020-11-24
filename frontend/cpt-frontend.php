@@ -27,7 +27,7 @@ add_filter( 'body_class', function( $classes ) {
 *
 * If 3 or 4 are called for, either cpt_login=setpw in the URL for 3 or because
 * the user is logged in and clicks a login/logout link for 4, then they are
-* shown instead of the 1/2 modal.
+* shown the password change form instead of the 1/2 modal.
 */
 function cpt_login() {
 
@@ -361,9 +361,18 @@ function cpt_process_password_change() {
 
       }
 
-      // Resets the password and sends back the password_changed success code.
+      // Resets the password.
       reset_password( $user, $pass1 );
-      wp_redirect( add_query_arg( 'cpt_success', 'password_changed', $dashboard ) );
+
+      // Determines the $redirect destination based on the user's role.
+      if ( in_array( 'cpt-client-manager', $user->roles ) ) {
+        $redirect_url = admin_url( 'admin.php?page=cpt' );
+      } else {
+        $redirect_url = $dashboard;
+      }
+
+      // Redirect the user with the password_changed success code.
+      wp_redirect( add_query_arg( 'cpt_success', 'password_changed', $redirect_url ) );
       exit;
 
     } else {
