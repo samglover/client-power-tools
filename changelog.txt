@@ -11,17 +11,15 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 ### 1.3.0
 
 #### Added
-- Assign a client manager to each client and set a default client manager.
-- Show client manager on client profile and client dashboard.
-- Client manager setting page with add-client manager form.
-- Filter the Clients list by clients assigned to you ("Mine").
-- Client manager role can be removed.
+- Client managers can now be added and removed from the new **Managers** submenu, and are also shown in the client list and client profile. As you can when adding a client, you can add a new or existing WordPress user.
+- Assign a default client manager in the settings.
+- Filter the client list by clients assigned to you ("Mine").
 
 #### Changed
+- The add-client form is now on the Clients page.
 - Messages and status update requests now go to the client manager. (The email will be CC'd to the now-optional status update request notification email address, if you have set one.)
 - New client emails will now come from the client manager instead of a default name and email address.
-- Expander script is now more sophisticated. It can handle multiple expanders on the same page, and form elements with data-required="true" will have the required attributes removed when hidden.
-- Add-client form moved to the Clients setting page.
+- Update the element expander script so it can handle multiple expanders on the same page. Also, form elements within an expander with data-required="true" will have the required attributes removed when hidden.
 - Make cpt_get_notices() easier to use by changing the argument to an array so it only needs to be called once.
 
 #### Fixed
