@@ -73,7 +73,7 @@ There's also the usual tweaks and improvements.
 
 == Changelog ==
 
-### 1.3
+### 1.3 - 2020-11-24
 
 #### Added
 - Client managers can now be added and removed from the new **Managers** submenu, and are also shown in the client list and client profile. As you can when adding a client, you can add a new or existing WordPress user.
