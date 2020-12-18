@@ -24,12 +24,14 @@ add_action( 'admin_init', __NAMESPACE__ . '\cpt_redirect_clients' );
 
 function cpt_security_warning() {
 
-  if ( ! is_ssl() ) {
+  global $pagenow;
+
+  if ( ! is_ssl() && preg_match( '/cpt-?\S*/', $_GET[ 'page' ] ) ) {
 
     ?>
 
       <div class="cpt-notice notice notice-warning">
-        <p><?php _e( '<strong>Warning!</strong> It doesn\'t look like your website is using SSL (HTTPS). Before using Client Power Tools with your clients, it\'s a good idea to get an SSL certificate for your website and consider additional security measures. <a href="https://clientpowertools.com/security/?utm_source=cpt_user&utm_medium=cpt_ssl_warning" target="_blank">Learn more.</a>' ); ?></p>
+        <p><?php _e( 'It doesn\'t look like your website is using SSL (HTTPS). Before using Client Power Tools with your clients, it\'s a good idea to get an SSL certificate for your website and consider additional security measures. <a href="https://clientpowertools.com/security/?utm_source=cpt_user&utm_medium=cpt_ssl_warning" target="_blank">Learn more.</a>' ); ?></p>
       </div>
 
     <?php
