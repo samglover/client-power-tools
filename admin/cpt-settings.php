@@ -1,6 +1,7 @@
 <?php
 
 namespace Client_Power_Tools\Core\Admin;
+use Client_Power_Tools\Core\Common;
 
 function cpt_settings() {
 
@@ -109,6 +110,8 @@ function cpt_client_dashboard_page_selection() {
     endwhile;
 
     echo '</select>';
+
+    echo '<p class="description"><a href="' . Common\cpt_get_client_dashboard_url() . '">Link to Current Page</a></p>';
 
   else :
 
