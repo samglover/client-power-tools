@@ -62,16 +62,19 @@ Client Power Tools is built to be customizable where you need it to be. Here are
 
 == Upgrade Notice ==
 
-This release adds client managers. You can manage client managers from the new **Managers** submenu, managers appear next to their clients in the client list, and clients appear with their manager in the manager list.
-
-Messages and status update requests now go to the client manager. (The email will be CC'd to the now-optional status update request notification email address, if you have set one.) New client emails will now come from the client manager instead of a default name and email address.
-
-The add-client form has been moved to the Clients page.
-
-There's also the usual tweaks and improvements.
+This release is meant to help new Client Power Tools users get oriented so they can get up and running quickly.
 
 
 == Changelog ==
+
+### 1.3.1 - 2020-12-18
+
+#### Added
+- Welcome message.
+
+#### Changed
+- Only show the SSL warning on CPT admin pages.
+
 
 ### 1.3 - 2020-11-24
 

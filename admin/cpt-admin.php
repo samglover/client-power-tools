@@ -22,11 +22,39 @@ function cpt_redirect_clients() {
 add_action( 'admin_init', __NAMESPACE__ . '\cpt_redirect_clients' );
 
 
+function cpt_welcome_message() {
+
+  global $pagenow;
+
+if ( cpt_is_cpt_admin_page() && get_transient( 'cpt_show_welcome_message' ) ) {
+
+    ?>
+
+      <div class="cpt-notice notice notice-info">
+        <h2><?php _e( 'Welcome to Client Power Tools!' ); ?></h2>
+        <p style="font-size: 125%;"><?php _e( 'You can view and manage your clients here, in the WordPress dashboard. You can add your first client on the <a href="' . esc_url( admin_url( 'admin.php?page=cpt' ) ) . '" target="_blank">Clients page</a> (if you are an admin).' ); ?></p>
+        <p style="font-size: 125%;"><?php _e( 'Your clients can access their dashboard by visiting <a href="' . Common\cpt_get_client_dashboard_url() . '" target="_blank">this page</a> on the front end of your website (clients don\'t have access to the WordPress admin dashboard). You\'ll probably want to add that page to your navigation menu to make it easy for your clients to find.' ); ?></p>
+        <p style="font-size: 125%;"><?php _e( 'You can find options and customizations in the settings, and you can find additional documentation at <a href="https://clientpowertools.com/documentation/" target="_blank">clientpowertools.com</a>. If you need help, please use the <a href="https://wordpress.org/support/plugin/client-power-tools/" target="_blank">support forum</a>.' ); ?></p>
+        <p style="font-size: 125%;"><?php _e( 'Please let me know what you think on Twitter, where I\'m <a href="https://twitter.com/samglover" target="_blank">@samglover</a>, or <a href="https://wordpress.org/plugins/client-power-tools/#reviews" target="_blank">leave a review on WordPress.org</a>.' ); ?></p>
+        <p style="font-size: 125%;"><?php _e( '—Sam' ); ?></p>
+      </div>
+
+    <?php
+
+      delete_transient( 'cpt_show_welcome_message' );
+
+  }
+
+}
+
+add_action( 'admin_notices', __NAMESPACE__ . '\cpt_welcome_message' );
+
+
 function cpt_security_warning() {
 
   global $pagenow;
 
-  if ( ! is_ssl() && preg_match( '/cpt-?\S*/', $_GET[ 'page' ] ) ) {
+  if ( ! is_ssl() && cpt_is_cpt_admin_page() ) {
 
     ?>
 
@@ -120,6 +148,19 @@ function cpt_get_admin_notices( $transient_key ) {
 }
 
 add_action( 'admin_notices', __NAMESPACE__ . '\cpt_get_admin_notices' );
+
+
+function cpt_is_cpt_admin_page() {
+
+  global $pagenow;
+
+  if ( $pagenow == 'admin.php' && preg_match( '/cpt-?\S*/', $_GET[ 'page' ] ) ) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
 
 
 function cpt_get_client_manager_select( $name = null, $selected = null ) {
