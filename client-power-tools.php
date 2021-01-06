@@ -154,15 +154,21 @@ function cpt_activate() {
 	$admin = get_user_by_email( get_bloginfo( 'admin_email' ) );
 
 	$default_options = [
+		
 		'cpt_client_statuses'									=> 'Active' . "\n" . 'Potential' . "\n" . 'Inactive',
 		'cpt_default_client_manager'					=> $admin->ID,
 		'cpt_default_client_status'						=> 'Active',
-		'cpt_show_status_update_req_button'		=> true,
+
+		'cpt_new_client_email_subject_line'  	=> 'Your client account has been created! Please set your password.',
+    'cpt_new_client_email_message_body'  	=> '',
+
+		'cpt_module_status_update_req_button'	=> true,
 		'cpt_status_update_req_freq'					=> 30,
 		'cpt_status_update_req_notice_email'	=> null,
+
+		'cpt_module_messaging'								=> true,
 		'cpt_send_message_content'						=> false,
-    'cpt_new_client_email_subject_line'  	=> 'Your client account has been created! Please set your password.',
-    'cpt_new_client_email_message_body'  	=> '',
+
   ];
 
   foreach ( $default_options as $key => $val ) {

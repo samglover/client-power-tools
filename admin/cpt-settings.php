@@ -92,7 +92,7 @@ function cpt_general_settings_init() {
 
   add_settings_field(
     'cpt_default_client_status',
-    '<label for="cpt_default_client_status">Default Client Status</label>',
+    '<label for="cpt_default_client_status">Default New-Client Status</label>',
     __NAMESPACE__ . '\cpt_default_client_status',
     'cpt-settings',
     'cpt-general-settings',
@@ -106,6 +106,7 @@ add_action( 'admin_init', __NAMESPACE__ . '\cpt_general_settings_init' );
 
 
 function cpt_general_settings_section() {
+  echo '<p>' . __( 'Customize the core features of Client Power Tools.' ) . '</p>';
 }
 
 
@@ -240,44 +241,48 @@ function cpt_new_client_email_message_body() {
 function cpt_status_update_request_button_settings_init() {
 
   add_settings_section(
-    'cpt_status_update_request_button_settings',
+    'cpt-status-update-request-button-settings',
     'Status Update Request Button',
     __NAMESPACE__ . '\cpt_status_update_request_button_section',
     'cpt-settings',
   );
 
-  // Show Status Update Request Button
+  // Enable Status Update Request Button
   add_settings_field(
-    'cpt_show_status_update_req_button',
-    'Show/Hide',
-    __NAMESPACE__ . '\cpt_show_status_update_req_button',
+    'cpt_module_status_update_req_button',
+    'Enable',
+    __NAMESPACE__ . '\cpt_module_status_update_req_button',
     'cpt-settings',
-    'cpt_status_update_request_button_settings',
+    'cpt-status-update-request-button-settings',
   );
 
-  register_setting( 'cpt-settings', 'cpt_show_status_update_req_button', 'absint' );
+  register_setting( 'cpt-settings', 'cpt_module_status_update_req_button', 'absint' );
 
-  // Status Update Request Frequency
-  add_settings_field(
-    'cpt_status_update_req_freq',
-    '<label for="cpt_status_update_req_freq">Status Update Request Frequency<br /><small>(required)</small></label>',
-    __NAMESPACE__ . '\cpt_status_update_req_freq',
-    'cpt-settings',
-    'cpt_status_update_request_button_settings',
-  );
+  if ( get_option( 'cpt_module_status_update_req_button' ) ) {
 
-  register_setting( 'cpt-settings', 'cpt_status_update_req_freq', 'absint' );
+    // Status Update Request Frequency
+    add_settings_field(
+      'cpt_status_update_req_freq',
+      '<label for="cpt_status_update_req_freq">Status Update Request Frequency<br /><small>(required)</small></label>',
+      __NAMESPACE__ . '\cpt_status_update_req_freq',
+      'cpt-settings',
+      'cpt-status-update-request-button-settings',
+    );
 
-  // Status Update Request Notification Email
-  add_settings_field(
-    'cpt_status_update_req_notice_email',
-    '<label for="cpt_status_update_req_notice_email">Additional Status Update Request Notification Email<br /><small>(optional)</small></label>',
-    __NAMESPACE__ . '\cpt_status_update_req_notice_email',
-    'cpt-settings',
-    'cpt_status_update_request_button_settings',
-  );
+    register_setting( 'cpt-settings', 'cpt_status_update_req_freq', 'absint' );
 
-  register_setting( 'cpt-settings', 'cpt_status_update_req_notice_email', 'sanitize_email' );
+    // Status Update Request Notification Email
+    add_settings_field(
+      'cpt_status_update_req_notice_email',
+      '<label for="cpt_status_update_req_notice_email">Additional Status Update Request Notification Email<br /><small>(optional)</small></label>',
+      __NAMESPACE__ . '\cpt_status_update_req_notice_email',
+      'cpt-settings',
+      'cpt-status-update-request-button-settings',
+    );
+
+    register_setting( 'cpt-settings', 'cpt_status_update_req_notice_email', 'sanitize_email' );
+
+  }
 
 }
 
@@ -286,19 +291,16 @@ add_action( 'admin_init', __NAMESPACE__ . '\cpt_status_update_request_button_set
 
 function cpt_status_update_request_button_section() {}
 
-function cpt_show_status_update_req_button() {
-
-  $show_button = get_option( 'cpt_show_status_update_req_button', true );
+function cpt_module_status_update_req_button() {
 
   ob_start();
 
     ?>
 
       <fieldset>
-        <label for="cpt_show_status_update_req_button">
-          <input name="cpt_show_status_update_req_button" id="cpt_show_status_update_req_button" type="checkbox" value="1" <?php checked( $show_button ); ?>>
-          Show button?
-          <p class="description"><?php _e( 'Uncheck this box to hide the Status Update Request Button on the client dashboard.' ); ?></p>
+        <label for="cpt_module_status_update_req_button">
+          <input name="cpt_module_status_update_req_button" id="cpt_module_status_update_req_button" type="checkbox" value="1" <?php checked( get_option( 'cpt_module_status_update_req_button' ) ); ?>>
+          <?php _e( 'Enable the status update request button.'); ?>
         </label>
       </fieldset>
 
@@ -323,22 +325,37 @@ function cpt_status_update_req_notice_email() {
 function cpt_client_messaging_settings_init() {
 
   add_settings_section(
-    'cpt_client_messaging_settings',
-    'Messages',
+    'cpt-client-messaging-settings',
+    'Messaging',
     __NAMESPACE__ . '\cpt_client_messaging_section',
     'cpt-settings',
   );
 
-  // Send Message Content
+  // Enable Messaging
   add_settings_field(
-    'cpt_send_message_content',
-    'Email Notification Content',
-    __NAMESPACE__ . '\cpt_send_message_content',
+    'cpt_module_messaging',
+    'Enable',
+    __NAMESPACE__ . '\cpt_module_messaging',
     'cpt-settings',
-    'cpt_client_messaging_settings',
+    'cpt-client-messaging-settings',
   );
 
-  register_setting( 'cpt-settings', 'cpt_send_message_content', 'absint' );
+  register_setting( 'cpt-settings', 'cpt_module_messaging', 'absint' );
+
+  if ( get_option( 'cpt_module_messaging' ) ) {
+
+    // Send Message Content
+    add_settings_field(
+      'cpt_send_message_content',
+      'Email Notification Content',
+      __NAMESPACE__ . '\cpt_send_message_content',
+      'cpt-settings',
+      'cpt-client-messaging-settings',
+    );
+
+    register_setting( 'cpt-settings', 'cpt_send_message_content', 'absint' );
+
+  }
 
 }
 
@@ -346,6 +363,27 @@ add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_messaging_settings_init' 
 
 
 function cpt_client_messaging_section() {}
+
+
+function cpt_module_messaging() {
+
+  ob_start();
+
+    ?>
+
+      <fieldset>
+        <label for="cpt_module_messaging">
+          <input name="cpt_module_messaging" id="cpt_module_messaging" type="checkbox" value="1" <?php checked( get_option( 'cpt_module_messaging' ) ); ?>>
+          <?php _e( 'Enable messaging.'); ?>
+        </label>
+      </fieldset>
+
+    <?php
+
+  echo ob_get_clean();
+
+}
+
 
 function cpt_send_message_content() {
 
@@ -380,16 +418,30 @@ function cpt_knowledge_base_settings_init() {
     'cpt-settings',
   );
 
-
+  // Enable Messaging
   add_settings_field(
-    'cpt_knowledge_base_page_selection',
-    '<label for="cpt_knowledge_base_page_selection">Knowledge Base</label>',
-    __NAMESPACE__ . '\cpt_knowledge_base_page_selection',
+    'cpt_module_knowledge_base',
+    'Enable',
+    __NAMESPACE__ . '\cpt_module_knowledge_base',
     'cpt-settings',
     'cpt-knowledge-base-settings',
   );
 
-  register_setting( 'cpt-settings', 'cpt_knowledge_base_page_selection' );
+  register_setting( 'cpt-settings', 'cpt_module_knowledge_base', 'absint' );
+
+  if ( get_option( 'cpt_module_knowledge_base' ) ) {
+
+    add_settings_field(
+      'cpt_knowledge_base_page_selection',
+      '<label for="cpt_knowledge_base_page_selection">Knowledge Base</label>',
+      __NAMESPACE__ . '\cpt_knowledge_base_page_selection',
+      'cpt-settings',
+      'cpt-knowledge-base-settings',
+    );
+
+    register_setting( 'cpt-settings', 'cpt_knowledge_base_page_selection' );
+
+  }
 
 }
 
@@ -399,6 +451,27 @@ add_action( 'admin_init', __NAMESPACE__ . '\cpt_knowledge_base_settings_init' );
 function cpt_knowledge_base_section() {
   echo '<p>' . __( 'When clients visit the page selected below, they will be prompted to log in and then shown their client dashboard.' ) . '</p>';
 }
+
+
+function cpt_module_knowledge_base() {
+
+  ob_start();
+
+    ?>
+
+      <fieldset>
+        <label for="cpt_module_knowledge_base">
+          <input name="cpt_module_knowledge_base" id="cpt_module_knowledge_base" type="checkbox" value="1" <?php checked( get_option( 'cpt_module_knowledge_base' ) ); ?>>
+          <?php _e( 'Enable knowledge base.'); ?>
+        </label>
+      </fieldset>
+
+    <?php
+
+  echo ob_get_clean();
+
+}
+
 
 function cpt_knowledge_base_page_selection() {
 
@@ -432,7 +505,7 @@ function cpt_knowledge_base_page_selection() {
 
     echo '</select>';
 
-    echo '<p class="description"><a href="' . Common\cpt_get_knowledge_base_url() . '">Link to Current Page</a></p>';
+    echo '<p class="description"><a href="' . Common\cpt_get_knowledge_base_url() . '" target="_blank">Visit the knowledge base.</a></p>';
 
   else :
 

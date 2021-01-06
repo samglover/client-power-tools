@@ -83,7 +83,7 @@ function cpt_status_update_request_button( $user_id ) {
   if ( ! $user_id ) { return; }
 
   // Return if the option to show the Status Update Request button is unchecked.
-  $show_button = get_option( 'cpt_show_status_update_req_button', 'empty' );
+  $show_button = get_option( 'cpt_module_status_update_req_button', 'empty' );
 
   if ( $show_button == 'empty' ) { $value = '1'; }
   if ( ! $show_button ) { return; }
