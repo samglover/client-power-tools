@@ -26,7 +26,7 @@ function cpt_welcome_message() {
 
   global $pagenow;
 
-if ( cpt_is_cpt_admin_page() && get_transient( 'cpt_show_welcome_message' ) ) {
+  if ( cpt_is_cpt_admin_page() && get_transient( 'cpt_show_welcome_message' ) ) {
 
     ?>
 

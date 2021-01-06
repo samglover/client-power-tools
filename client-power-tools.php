@@ -154,7 +154,7 @@ function cpt_activate() {
 	$admin = get_user_by_email( get_bloginfo( 'admin_email' ) );
 
 	$default_options = [
-		
+
 		'cpt_client_statuses'									=> 'Active' . "\n" . 'Potential' . "\n" . 'Inactive',
 		'cpt_default_client_manager'					=> $admin->ID,
 		'cpt_default_client_status'						=> 'Active',

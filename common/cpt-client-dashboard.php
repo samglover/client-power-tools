@@ -25,6 +25,7 @@ function cpt_client_dashboard( $content ) {
       $user_id      = get_current_user_id();
       $user         = get_userdata( $user_id );
       $client_data  = cpt_get_client_data( $user_id );
+      $current_page = get_the_id();
 
       if ( cpt_is_client() ) {
 
@@ -35,14 +36,14 @@ function cpt_client_dashboard( $content ) {
             <div id="cpt-nav">
               <ul>
 
-                <li><a href="<?php echo cpt_get_client_dashboard_url(); ?>">Home</a></li>
+                <li><a href="<?php echo cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item">Dashboard</a></li>
 
                 <?php if ( get_option( 'cpt_module_messaging' ) ) { ?>
-                  <li><a href="#cpt-messages">Messages</a></li>
+                  <li><a href="#cpt-messages" class="cpt-nav-menu-item">Messages</a></li>
                 <?php } ?>
 
                 <?php if ( get_option( 'cpt_module_knowledge_base' ) ) { ?>
-                  <li><a href="#cpt-knowledge-base">Knowledge Base</a></li>
+                  <li><a href="#cpt-knowledge-base" class="cpt-nav-menu-item">Knowledge Base</a></li>
                 <?php } ?>
 
               </ul>
