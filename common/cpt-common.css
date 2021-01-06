@@ -2,6 +2,29 @@
   display: none;
 }
 
+#cpt-nav {
+  border-bottom: 1px solid;
+}
+
+  #cpt-nav ul {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #cpt-nav ul > li {
+    display: inline-block;
+    margin-right: 4px;
+    padding: 0;
+  }
+
+  #cpt-nav li > a {
+    background-color: lightgray;
+    display: block;
+    padding: 10px 20px;
+  }
+
 .cpt-message {
   background-color: #fff;
   box-shadow:

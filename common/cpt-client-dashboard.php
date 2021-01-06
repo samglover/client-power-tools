@@ -30,6 +30,28 @@ function cpt_client_dashboard( $content ) {
 
         ob_start();
 
+          ?>
+
+            <div id="cpt-nav">
+              <ul>
+
+                <li><a href="<?php echo cpt_get_client_dashboard_url(); ?>">Home</a></li>
+
+                <?php if ( get_option( 'cpt_module_messaging' ) ) { ?>
+                  <li><a href="#cpt-messages">Messages</a></li>
+                <?php } ?>
+
+                <?php if ( get_option( 'cpt_module_knowledge_base' ) ) { ?>
+                  <li><a href="#cpt-knowledge-base">Knowledge Base</a></li>
+                <?php } ?>
+
+              </ul>
+            </div>
+
+            <p style="line-height: 0 !important;"> </p>
+
+          <?php
+
           cpt_get_notices( [ 'cpt_new_message_result' ] );
 
           echo '<p>';
@@ -65,7 +87,9 @@ function cpt_client_dashboard( $content ) {
 
     }
 
-    return ob_get_clean();
+    $dashboard = ob_get_clean();
+
+    return $dashboard . $content;
 
   } else {
 

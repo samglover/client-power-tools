@@ -9,12 +9,16 @@ function cpt_messages( $user_id ) {
   // Return if the module is disabled.
   if ( ! get_option( 'cpt_module_messaging' ) ) { return; }
 
-  echo '<h2>' . __( 'Messages' ) . '</h2>';
-  cpt_message_list( $user_id );
+  echo '<div class="cpt-messages">';
 
-  echo '<h2>' . __( 'New Message' ) . '</h2>';
-  echo '<div id="cpt-new-message-form">';
-    cpt_new_message_form( $user_id );
+    echo '<h2>' . __( 'Messages' ) . '</h2>';
+    cpt_message_list( $user_id );
+
+    echo '<h2>' . __( 'New Message' ) . '</h2>';
+    echo '<div id="cpt-new-message-form">';
+      cpt_new_message_form( $user_id );
+    echo '</div>';
+
   echo '</div>';
 
 }
@@ -39,70 +43,66 @@ function cpt_message_list( $user_id ) {
 
     ob_start();
 
-      echo '<div class="cpt-messages">';
+      while ( $cpt_messages->have_posts() ) : $cpt_messages->the_post();
 
-        while ( $cpt_messages->have_posts() ) : $cpt_messages->the_post();
+        $message_id       = get_the_ID();
+        $message_classes  = [ 'cpt-message' ];
+        $message_meta     = '<p><small>';
 
-          $message_id       = get_the_ID();
-          $message_classes  = [ 'cpt-message' ];
-          $message_meta     = '<p><small>';
+        switch ( get_the_author_meta( 'ID' ) ) {
 
-          switch ( get_the_author_meta( 'ID' ) ) {
+          case ( get_current_user_id() ):
+            $message_classes[]   = 'my-message';
+            $message_meta       .= __( 'Sent' );
 
-            case ( get_current_user_id() ):
-              $message_classes[]   = 'my-message';
-              $message_meta       .= __( 'Sent' );
+            break;
 
-              break;
+          case ( $user_id ):
+            $message_classes[]   = 'client-message not-my-message';
+            $message_meta       .= __( 'Received from' ) . ' ' . get_the_author();
 
-            case ( $user_id ):
-              $message_classes[]   = 'client-message not-my-message';
-              $message_meta       .= __( 'Received from' ) . ' ' . get_the_author();
+            break;
 
-              break;
+          default:
+            $message_classes[]   = 'not-my-message';
+            $message_meta       .= __( 'Sent by' ) . ' ' . get_the_author();
 
-            default:
-              $message_classes[]   = 'not-my-message';
-              $message_meta       .= __( 'Sent by' ) . ' ' . get_the_author();
+        }
 
-          }
+        if ( get_post_meta( $message_id, 'cpt_status_update_request' ) ) {
+          $message_classes[]     = 'status-update-request';
+        }
 
-          if ( get_post_meta( $message_id, 'cpt_status_update_request' ) ) {
-            $message_classes[]     = 'status-update-request';
-          }
+        $message_meta .= ' on ' . get_the_date( 'F jS, Y, \a\t g:i a' ) . '</small></p>';
 
-          $message_meta .= ' on ' . get_the_date( 'F jS, Y, \a\t g:i a' ) . '</small></p>';
+        echo '<div id="cpt-message-' . $message_id . '" class="' . implode( ' ', $message_classes ) . '">';
 
-          echo '<div id="cpt-message-' . $message_id . '" class="' . implode( ' ', $message_classes ) . '">';
+          echo '<div class="cpt-message-content">';
 
-            echo '<div class="cpt-message-content">';
+            if ( get_the_title() ) {
+              echo '<h3 class="cpt-message-title">' . get_the_title() . '</h3>';
+            }
 
-              if ( get_the_title() ) {
-                echo '<h3 class="cpt-message-title">' . get_the_title() . '</h3>';
-              }
-
-              if ( ! get_post_meta( $message_id, 'cpt_status_update_request' ) ) {
-                the_content();
-              }
-
-            echo '</div>';
-
-            echo '<div class="cpt-message-meta">' . $message_meta . '</div>';
+            if ( ! get_post_meta( $message_id, 'cpt_status_update_request' ) ) {
+              the_content();
+            }
 
           echo '</div>';
 
-        endwhile;
+          echo '<div class="cpt-message-meta">' . $message_meta . '</div>';
 
-        $big = 999999;
+        echo '</div>';
 
-        echo paginate_links([
-          'base'    => str_replace( $big, '%#%', get_pagenum_link( $big, false ) ),
-          'format'  => '?paged=%#%',
-          'current' => max( 1, $paged ),
-          'total'   => $cpt_messages->max_num_pages,
-        ]);
+      endwhile;
 
-      echo '</div>';
+      $big = 999999;
+
+      echo paginate_links([
+        'base'    => str_replace( $big, '%#%', get_pagenum_link( $big, false ) ),
+        'format'  => '?paged=%#%',
+        'current' => max( 1, $paged ),
+        'total'   => $cpt_messages->max_num_pages,
+      ]);
 
     echo ob_get_clean();
 
