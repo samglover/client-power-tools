@@ -106,46 +106,54 @@ function cpt_activate() {
 	set_transient( 'cpt_show_welcome_message', true, 86400  );
 
 	/*
-	* Checks to see if there is already a Client Dashboard, and
-	* creates a page for it if not.
+	* Checks for page selections and creates pages if necessary.
 	*/
-	if ( ! get_option( 'cpt_client_dashboard_page_selection' ) ) {
 
-		$client_dashboard = [
-			'post_status'   => 'publish',
-      'post_title'    => __( 'Client Dashboard' ),
-			'post_type'     => 'page',
-		];
+	$cpt_pages = [
+		'cpt_client_dashboard_page_selection'	=> 'Client Dashboard',
+		'cpt_knowledge_base_page_selection'		=> 'Knowledge Base',
+	];
 
-		$page = wp_insert_post( $client_dashboard, $wp_error );
+	foreach ( $cpt_pages as $key => $val ) {
 
-		if ( is_wp_error( $page ) ) {
+		if ( ! get_option( $key ) ) {
 
-			?>
+			$new_page = [
+				'post_status'   => 'publish',
+	      'post_title'    => __( $val ),
+				'post_type'     => 'page',
+			];
 
-				<div class="cpt-notice notice notice-error is-dismissible">
-					<p><?php _e( 'Something went wrong when creating a page for your client dashboard. Please select a page from the <a href="' . admin_url( 'admin.php?page=cpt-settings' ) . '">Settings page</a>.' ); ?></p>
-					<p>Error message: <?php echo $post->get_error_message(); ?></p>
-				</div>
+			$page = wp_insert_post( $new_page, $wp_error );
 
-			<?php
+			if ( is_wp_error( $page ) ) {
 
-		} else {
+				?>
 
-			update_option( 'cpt_client_dashboard_page_selection', $page );
+					<div class="cpt-notice notice notice-error is-dismissible">
+						<p><?php _e( 'Something went wrong when creating a page. Please select a page from the <a href="' . admin_url( 'admin.php?page=cpt-settings' ) . '">Settings page</a>.' ); ?></p>
+						<p>Error message: <?php echo $post->get_error_message(); ?></p>
+					</div>
+
+				<?php
+
+			} else {
+
+				update_option( $key, $page );
+
+			}
 
 		}
 
-	}
+  }
 
 
 	/*
 	* Checks for default options and adds them if necessary.
 	*/
-
 	$admin = get_user_by_email( get_bloginfo( 'admin_email' ) );
 
-	$defaults = [
+	$default_options = [
 		'cpt_client_statuses'									=> 'Active' . "\n" . 'Potential' . "\n" . 'Inactive',
 		'cpt_default_client_manager'					=> $admin->ID,
 		'cpt_default_client_status'						=> 'Active',
@@ -157,7 +165,7 @@ function cpt_activate() {
     'cpt_new_client_email_message_body'  	=> '',
   ];
 
-  foreach ( $defaults as $key => $val ) {
+  foreach ( $default_options as $key => $val ) {
 
     if ( ! get_option( $key ) ) {
       update_option( $key, $val );

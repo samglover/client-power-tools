@@ -86,6 +86,12 @@ function cpt_is_client_dashboard() {
 }
 
 
+function cpt_get_knowledge_base_url() {
+  $page_id = get_option( 'cpt_knowledge_base_page_selection' );
+  return get_permalink( $page_id );
+}
+
+
 function cpt_get_name( $user_id ) {
 
   if ( ! $user_id ) { return; }

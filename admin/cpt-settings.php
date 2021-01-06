@@ -51,33 +51,63 @@ function cpt_settings() {
 
 
 // Client Dashboard
-function cpt_client_dashboard_settings_init() {
+function cpt_general_settings_init() {
 
   add_settings_section(
-    'cpt-client-dashboard-settings',
-    'Client Dashboard',
-    __NAMESPACE__ . '\cpt_client_dashboard_section',
+    'cpt-general-settings',
+    'General Settings',
+    __NAMESPACE__ . '\cpt_general_settings_section',
     'cpt-settings',
   );
 
   add_settings_field(
     'cpt_client_dashboard_page_selection',
-    '<label for="cpt_client_dashboard_page_selection">Select Page</label>',
+    '<label for="cpt_client_dashboard_page_selection">Client Dashboard Page</label>',
     __NAMESPACE__ . '\cpt_client_dashboard_page_selection',
     'cpt-settings',
-    'cpt-client-dashboard-settings',
+    'cpt-general-settings',
   );
 
   register_setting( 'cpt-settings', 'cpt_client_dashboard_page_selection' );
 
+  add_settings_field(
+    'cpt_default_client_manager',
+    '<label for="cpt_default_client_manager">Default Client Manager</label>',
+    __NAMESPACE__ . '\cpt_default_client_manager',
+    'cpt-settings',
+    'cpt-general-settings',
+  );
+
+  register_setting( 'cpt-settings', 'cpt_default_client_manager' );
+
+  add_settings_field(
+    'cpt_client_statuses',
+    '<label for="cpt_client_statuses">Client Statuses</label>',
+    __NAMESPACE__ . '\cpt_client_statuses',
+    'cpt-settings',
+    'cpt-general-settings',
+  );
+
+  register_setting( 'cpt-settings', 'cpt_client_statuses' );
+
+  add_settings_field(
+    'cpt_default_client_status',
+    '<label for="cpt_default_client_status">Default Client Status</label>',
+    __NAMESPACE__ . '\cpt_default_client_status',
+    'cpt-settings',
+    'cpt-general-settings',
+  );
+
+  register_setting( 'cpt-settings', 'cpt_default_client_status' );
+
 }
 
-add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_dashboard_settings_init' );
+add_action( 'admin_init', __NAMESPACE__ . '\cpt_general_settings_init' );
 
 
-function cpt_client_dashboard_section() {
-  echo '<p>' . __( 'When clients visit the page selected below, they will be prompted to log in and then shown their client dashboard.' ) . '</p>';
+function cpt_general_settings_section() {
 }
+
 
 function cpt_client_dashboard_page_selection() {
 
@@ -111,7 +141,7 @@ function cpt_client_dashboard_page_selection() {
 
     echo '</select>';
 
-    echo '<p class="description"><a href="' . Common\cpt_get_client_dashboard_url() . '">Link to Current Page</a></p>';
+    echo '<p class="description">' . __( 'When clients visit this page they will be prompted to log in and then shown their client dashboard.' ) . ' <a href="' . Common\cpt_get_client_dashboard_url() . '" target="_blank">Visit the client dashboard.</a></p>';
 
   else :
 
@@ -121,76 +151,10 @@ function cpt_client_dashboard_page_selection() {
 
 }
 
-// Client Managers
-function cpt_client_managers_settings_init() {
-
-  add_settings_section(
-    'cpt-client-managers-settings',
-    'Client Managers',
-    __NAMESPACE__ . '\cpt_client_managers_section',
-    'cpt-settings',
-  );
-
-  add_settings_field(
-    'cpt_default_client_manager',
-    '<label for="cpt_default_client_manager">Default Client Manager</label>',
-    __NAMESPACE__ . '\cpt_default_client_manager',
-    'cpt-settings',
-    'cpt-client-managers-settings',
-  );
-
-  register_setting( 'cpt-settings', 'cpt_default_client_manager' );
-
-}
-
-add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_managers_settings_init' );
-
-
-function cpt_client_managers_section() {
-}
-
 
 function cpt_default_client_manager() {
   echo cpt_get_client_manager_select( 'cpt_default_client_manager', get_option( 'cpt_default_client_manager' ) );
 }
-
-
-// Client Statuses
-function cpt_client_status_settings_init() {
-
-  add_settings_section(
-    'cpt-client-status-settings',
-    'Client Statuses',
-    __NAMESPACE__ . '\cpt_client_status_section',
-    'cpt-settings',
-  );
-
-  add_settings_field(
-    'cpt_client_statuses',
-    '<label for="cpt_client_statuses">Statuses</label>',
-    __NAMESPACE__ . '\cpt_client_statuses',
-    'cpt-settings',
-    'cpt-client-status-settings',
-  );
-
-  register_setting( 'cpt-settings', 'cpt_client_statuses' );
-
-  add_settings_field(
-    'cpt_default_client_status',
-    '<label for="cpt_default_client_status">Default Status</label>',
-    __NAMESPACE__ . '\cpt_default_client_status',
-    'cpt-settings',
-    'cpt-client-status-settings',
-  );
-
-  register_setting( 'cpt-settings', 'cpt_default_client_status' );
-
-}
-
-add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_status_settings_init' );
-
-
-function cpt_client_status_section() {}
 
 
 function cpt_client_statuses() {
@@ -219,6 +183,56 @@ function cpt_client_statuses() {
 
 function cpt_default_client_status() {
   echo cpt_get_client_statuses_select( 'cpt_default_client_status' );
+}
+
+
+// New Client Email Settings
+function cpt_new_client_email_settings_init() {
+
+  add_settings_section(
+    'cpt-new-client-email-settings',
+    'Client Account Activation Email',
+    __NAMESPACE__ . '\cpt_new_client_email_section',
+    'cpt-settings',
+  );
+
+  // Subject Line
+  add_settings_field(
+    'cpt_new_client_email_subject_line',
+    '<label for="cpt_new_client_email_subject_line">Subject Line<br /><small>(required)</small></label>',
+    __NAMESPACE__ . '\cpt_new_client_email_subject_line',
+    'cpt-settings',
+    'cpt-new-client-email-settings',
+  );
+
+  register_setting( 'cpt-settings', 'cpt_new_client_email_subject_line', 'sanitize_text_field' );
+
+  // Message Body
+  add_settings_field(
+    'cpt_new_client_email_message_body',
+    '<label for="cpt_new_client_email_message_body">Message Body<br /><small>(optional)</small></label>',
+    __NAMESPACE__ . '\cpt_new_client_email_message_body',
+    'cpt-settings',
+    'cpt-new-client-email-settings',
+  );
+
+  register_setting( 'cpt-settings', 'cpt_new_client_email_message_body', 'sanitize_textarea_field' );
+
+}
+
+add_action( 'admin_init', __NAMESPACE__ . '\cpt_new_client_email_settings_init' );
+
+
+function cpt_new_client_email_section() {
+  echo '<p>' . __( 'When you add a new client, they will receive an email notification from their client manager with an account activation link. If you like, you can customize the subject line or add a message to the body of the email.' ) . '</p>';
+}
+
+function cpt_new_client_email_subject_line() {
+  echo '<input name="cpt_new_client_email_subject_line" class="large-text" type="text" required aria-required="true" value="' . get_option( 'cpt_new_client_email_subject_line' ) . '">';
+}
+
+function cpt_new_client_email_message_body() {
+  echo '<textarea name="cpt_new_client_email_message_body" class="large-text" rows="5">' . get_option( 'cpt_new_client_email_message_body' ) . '</textarea>';
 }
 
 
@@ -356,51 +370,74 @@ function cpt_send_message_content() {
 }
 
 
-// New Client Email Settings
-function cpt_new_client_email_settings_init() {
+// Knowledge Base
+function cpt_knowledge_base_settings_init() {
 
   add_settings_section(
-    'cpt-new-client-email-settings',
-    'Client Account Activation Email',
-    __NAMESPACE__ . '\cpt_new_client_email_section',
+    'cpt-knowledge-base-settings',
+    'Knowledge Base',
+    __NAMESPACE__ . '\cpt_knowledge_base_section',
     'cpt-settings',
   );
 
-  // Subject Line
+
   add_settings_field(
-    'cpt_new_client_email_subject_line',
-    '<label for="cpt_new_client_email_subject_line">Subject Line<br /><small>(required)</small></label>',
-    __NAMESPACE__ . '\cpt_new_client_email_subject_line',
+    'cpt_knowledge_base_page_selection',
+    '<label for="cpt_knowledge_base_page_selection">Knowledge Base</label>',
+    __NAMESPACE__ . '\cpt_knowledge_base_page_selection',
     'cpt-settings',
-    'cpt-new-client-email-settings',
+    'cpt-knowledge-base-settings',
   );
 
-  register_setting( 'cpt-settings', 'cpt_new_client_email_subject_line', 'sanitize_text_field' );
-
-  // Message Body
-  add_settings_field(
-    'cpt_new_client_email_message_body',
-    '<label for="cpt_new_client_email_message_body">Message Body<br /><small>(optional)</small></label>',
-    __NAMESPACE__ . '\cpt_new_client_email_message_body',
-    'cpt-settings',
-    'cpt-new-client-email-settings',
-  );
-
-  register_setting( 'cpt-settings', 'cpt_new_client_email_message_body', 'sanitize_textarea_field' );
+  register_setting( 'cpt-settings', 'cpt_knowledge_base_page_selection' );
 
 }
 
-add_action( 'admin_init', __NAMESPACE__ . '\cpt_new_client_email_settings_init' );
+add_action( 'admin_init', __NAMESPACE__ . '\cpt_knowledge_base_settings_init' );
 
 
-function cpt_new_client_email_section() {
-  echo '<p>' . __( 'When you add a new client, they will receive an email notification from their client manager with an account activation link. If you like, you can customize the subject line or add a message to the body of the email.' ) . '</p>';
+function cpt_knowledge_base_section() {
+  echo '<p>' . __( 'When clients visit the page selected below, they will be prompted to log in and then shown their client dashboard.' ) . '</p>';
 }
 
-function cpt_new_client_email_subject_line() {
-  echo '<input name="cpt_new_client_email_subject_line" class="large-text" type="text" required aria-required="true" value="' . get_option( 'cpt_new_client_email_subject_line' ) . '">';
-}
+function cpt_knowledge_base_page_selection() {
 
-function cpt_new_client_email_message_body() {
-  echo '<textarea name="cpt_new_client_email_message_body" class="large-text" rows="5">' . get_option( 'cpt_new_client_email_message_body' ) . '</textarea>';
+  $args = [
+    'post_type'       => 'page',
+    'posts_per_page'  => -1,
+    'post_status'     => 'publish',
+  ];
+
+  $page_query = new \WP_Query( $args );
+
+  if ( $page_query->have_posts() ) :
+
+    echo '<select name="cpt_knowledge_base_page_selection">';
+
+    $selected = get_option( 'cpt_knowledge_base_page_selection' );
+
+    while ( $page_query->have_posts() ) : $page_query->the_post();
+
+      $page_id = get_the_ID();
+
+      echo '<option value="' . $page_id . '"';
+
+      if ( $selected == $page_id ) {
+        echo ' selected';
+      }
+
+      echo '>' . get_the_title() . '</option>';
+
+    endwhile;
+
+    echo '</select>';
+
+    echo '<p class="description"><a href="' . Common\cpt_get_knowledge_base_url() . '">Link to Current Page</a></p>';
+
+  else :
+
+    echo '<p>Sorry, you don\'t have any published pages.</p>';
+
+  endif;
+
 }

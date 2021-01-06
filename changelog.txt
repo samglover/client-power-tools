@@ -7,6 +7,13 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 ### Unreleased
 - Prepare the plugin for internationalization.
 
+### 1.4
+
+#### Added
+
+#### Changed
+- The settings page is better organized, with general/core settings, then settings for each "module."
+
 
 ### 1.3.1 - 2020-12-18
 
