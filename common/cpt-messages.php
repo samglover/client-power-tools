@@ -6,6 +6,9 @@ function cpt_messages( $user_id ) {
 
   if ( ! $user_id ) { return; }
 
+  // Return if the module is disabled.
+  if ( ! get_option( 'cpt_module_messaging' ) ) { return; }
+
   echo '<h2>' . __( 'Messages' ) . '</h2>';
   cpt_message_list( $user_id );
 

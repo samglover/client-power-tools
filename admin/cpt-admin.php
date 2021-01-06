@@ -92,14 +92,18 @@ function cpt_menu_pages() {
     __NAMESPACE__ . '\cpt_clients',
   );
 
-  add_submenu_page(
-    'cpt',
-    'Client Power Tools: Messages',
-    'Messages',
-    'cpt-view-clients',
-    'cpt-messages',
-    __NAMESPACE__ . '\cpt_admin_messages',
-  );
+  if ( get_option( 'cpt_module_messaging' ) ) {
+
+    add_submenu_page(
+      'cpt',
+      'Client Power Tools: Messages',
+      'Messages',
+      'cpt-view-clients',
+      'cpt-messages',
+      __NAMESPACE__ . '\cpt_admin_messages',
+    );
+
+  }
 
   add_submenu_page(
     'cpt',
