@@ -5,7 +5,7 @@ namespace Client_Power_Tools\Core\Common;
 function cpt_messages( $user_id ) {
 
   if ( ! $user_id ) { return; }
-  if ( ! cpt_is_messages() ) { return; }
+  if ( ! cpt_is_messages() && ! is_admin() ) { return; }
 
   // Return if the module is disabled.
   if ( ! get_option( 'cpt_module_messaging' ) ) { return; }

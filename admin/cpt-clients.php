@@ -126,6 +126,8 @@ function cpt_get_client_profile( $user_id ) {
   if ( ! $user_id ) { return; }
 
   cpt_edit_client( $user_id );
+
+  echo '<h2>' . __( 'Messages' ) . '</h2>';
   Common\cpt_messages( $user_id );
 
 }
