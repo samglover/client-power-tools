@@ -38,13 +38,13 @@ add_filter( 'the_title', __NAMESPACE__ . '\cpt_messages_page_title' );
 
 function cpt_message_list( $user_id ) {
 
+  if ( ! $user_id ) { return; }
+
   /**
   * Removes the the_title filter so it doesn't execute within the
   * nested query for client messages.
   */
   remove_filter( 'the_title', __NAMESPACE__ . '\cpt_messages_page_title' );
-
-  if ( ! $user_id ) { return; }
 
   $paged = isset( $_GET[ 'paged' ] ) ? sanitize_key( intval( $_GET[ 'paged' ] ) ) : get_query_var( 'paged' );
 
@@ -97,7 +97,7 @@ function cpt_message_list( $user_id ) {
 
           echo '<div class="cpt-message-content">';
 
-            if ( get_the_title() ) {
+            if ( get_the_title() && get_the_title() !== 'Untitled' ) {
               echo '<h3 class="cpt-message-title">' . get_the_title() . '</h3>';
             }
 
