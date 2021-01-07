@@ -3,8 +3,8 @@
 namespace Client_Power_Tools\Core\Common;
 
 /**
-* Noindexes the client dashboard because it's none of Google's business.
-*/
+ * Noindexes the client dashboard because it's none of Google's business.
+ */
 function cpt_noindex_client_dashboard() {
 
   if ( cpt_is_client_dashboard() ) {
@@ -24,64 +24,94 @@ function cpt_client_dashboard( $content ) {
 
       if ( is_user_logged_in() ) {
 
-        $user_id      = get_current_user_id();
-        $user         = get_userdata( $user_id );
-        $client_data  = cpt_get_client_data( $user_id );
-        $current_page = get_the_id();
-
         if ( cpt_is_client() ) {
 
-          cpt_nav();
+          $user_id = get_current_user_id();
 
           cpt_get_notices( [ 'cpt_new_message_result' ] );
 
+          cpt_nav();
+
           if ( ! cpt_is_messages() ) {
 
-            echo '<p>';
+            $user         = get_userdata( $user_id );
+            $client_data  = cpt_get_client_data( $user_id );
 
-              echo '<strong>Welcome back, ' . $client_data[ 'first_name' ] . '!</strong>';
-
-              if ( isset( $client_data[ 'manager_id' ] ) ) {
-                echo ' You are working with ' . cpt_get_name( $client_data[ 'manager_id' ] ) . '.';
-              }
-
-            echo '</p>';
+            /**
+             * translators:
+             * 1: html
+             * 2: client's name
+             * 3: html
+             */
+            printf( __( '%1$sWelcome back, %2$s!%3$s', 'client-power-tools' ),
+              '<p><strong>',
+              $client_data[ 'first_name' ],
+              '</strong></p>'
+            );
 
             cpt_status_update_request_button( $user_id );
+
+            return ob_get_clean() . $content;
+
+          } elseif ( cpt_is_messages() ) {
+
+            /**
+             * Removes the current the_content filter so it doesn't execute
+             * within the nested query for client messages.
+             */
+            remove_filter( current_filter(), __FUNCTION__ );
+
+            cpt_messages( $user_id );
+
+            return ob_get_clean();
+
           }
-
-          /**
-          * Removes the the_content filter so it doesn't execute within the
-          * nested query for client messages.
-          */
-          remove_filter( current_filter(), __FUNCTION__ );
-
-          cpt_messages( $user_id );
 
         } else {
 
-          echo '<p>Sorry, you don\'t have permission to view this page.</p>';
-          echo '<p>(You are logged in, but your user account is missing the "Client" role.)</p>';
+          /**
+           * translators:
+           * 1: html
+           * 2: html
+           */
+          printf( __( '%1$sSorry, you don\'t have permission to view this page.%2$s', 'client-power-tools' ),
+            '<p>',
+            '</p>'
+          );
+
+          /**
+           * translators:
+           * 1: html
+           * 2: html
+           */
+          printf( __( '%1$s(You are logged in, but your user account is missing the "Client" role.)%2$s', 'client-power-tools' ),
+            '<p>',
+            '</p>'
+          );
+
+          return ob_get_clean();
 
         }
 
       } else {
 
-        echo '<p>Please <a class="cpt-login-link" href="#">log in</a> to view your client dashboard.</p>';
+        /**
+         * translators:
+         * 1: html
+         * 2: html (<a> tag with link to launch login modal)
+         * 3: html (closes <a> tag)
+         * 4: html
+         */
+        printf( __( '%1$sPlease %2$slog in%3$s to view your client dashboard.', 'client-power-tools' ),
+          '<p>',
+          '<a class="cpt-login-link" href="#">',
+          '</a>',
+          '</p>'
+        );
+
+        return ob_get_clean();
 
       }
-
-    $dashboard = ob_get_clean();
-
-    if ( ! cpt_is_messages() ) {
-
-      return $dashboard . $content;
-
-    } else {
-
-      return $dashboard;
-
-    }
 
   } else {
 
@@ -162,10 +192,10 @@ function cpt_status_update_request_button( $user_id ) {
 
 
 /**
-* Calculates the number of days since the client last clicked the status update
-* request button. (Since status updates are just cpt_message posts with a custom
-* field, this is based on a custom query.)
-*/
+ * Calculates the number of days since the client last clicked the status update
+ * request button. (Since status updates are just cpt_message posts with a custom
+ * field, this is based on a custom query.)
+ */
 function cpt_days_since_last_request( $user_id ) {
 
   if ( ! $user_id ) { return; }
