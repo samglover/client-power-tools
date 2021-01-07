@@ -133,14 +133,14 @@ function cpt_nav() {
       <div id="cpt-nav">
         <ul>
 
-          <li><a href="<?php echo cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if ( cpt_is_client_dashboard() && ! cpt_is_messages() ) { echo ' current'; } ?>">Dashboard</a></li>
+          <li><a href="<?php echo cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if ( cpt_is_client_dashboard() && ! cpt_is_messages() ) { echo ' current'; } ?>"><?php _e( 'Dashboard', 'client-power-tools' ); ?></a></li>
 
           <?php if ( get_option( 'cpt_module_messaging' ) ) { ?>
-            <li><a href="<?php echo add_query_arg( 'tab', 'messages', cpt_get_client_dashboard_url() ); ?>" class="cpt-nav-menu-item<?php if ( cpt_is_messages() ) { echo ' current'; } ?>">Messages</a></li>
+            <li><a href="<?php echo add_query_arg( 'tab', 'messages', cpt_get_client_dashboard_url() ); ?>" class="cpt-nav-menu-item<?php if ( cpt_is_messages() ) { echo ' current'; } ?>"><?php _e( 'Messages', 'client-power-tools' ); ?></a></li>
           <?php } ?>
 
           <?php if ( get_option( 'cpt_module_knowledge_base' ) ) { ?>
-            <li><a href="<?php echo cpt_get_knowledge_base_url(); ?>" class="cpt-nav-menu-item<?php if ( cpt_is_knowledge_base() ) { echo ' current'; } ?>">Knowledge Base</a></li>
+            <li><a href="<?php echo cpt_get_knowledge_base_url(); ?>" class="cpt-nav-menu-item<?php if ( cpt_is_knowledge_base() ) { echo ' current'; } ?>"><?php _e( 'Knowledge Base', 'client-power-tools' ); ?></a></li>
           <?php } ?>
 
         </ul>
@@ -179,7 +179,7 @@ function cpt_status_update_request_button( $user_id ) {
         <input name="action" value="cpt_status_update_requested" type="hidden">
         <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
         <p class="submit">
-          <input name="submit" id="submit" class="button button-primary" type="submit" value="Request Status Update">
+          <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e( 'Request Status Update', 'client-power-tools' ); ?>">
         </p>
 
       </form>
@@ -243,8 +243,8 @@ function cpt_process_status_update_request() {
     $clients_user_id = sanitize_key( intval( $_POST[ 'clients_user_id' ] ) );
 
     $status_update_request = [
-      'post_title'    => 'STATUS UPDATE REQUESTED',
-      'post_content'  => 'The client would like a status update.',
+      'post_title'    => __( 'STATUS UPDATE REQUESTED', 'client-power-tools' ),
+      'post_content'  => __( 'The client would like a status update.' ),
       'post_name'     => md5( current_time( 'timestamp' ) . random_int( 0, PHP_INT_MAX ) ),
       'post_status'   => 'publish',
       'post_type'     => 'cpt_message',
