@@ -74,20 +74,14 @@ function cpt_client_dashboard( $content ) {
            * 1: html
            * 2: html
            */
-          printf( __( '%1$sSorry, you don\'t have permission to view this page.%2$s', 'client-power-tools' ),
-            '<p>',
-            '</p>'
-          );
+          printf( __( '%1$sSorry, you don\'t have permission to view this page.%2$s', 'client-power-tools' ), '<p>', '</p>' );
 
           /**
            * translators:
            * 1: html
            * 2: html
            */
-          printf( __( '%1$s(You are logged in, but your user account is missing the "Client" role.)%2$s', 'client-power-tools' ),
-            '<p>',
-            '</p>'
-          );
+          printf( __( '%1$s(You are logged in, but your user account is missing the "Client" role.)%2$s', 'client-power-tools' ), '<p>', '</p>' );
 
           return ob_get_clean();
 
@@ -244,7 +238,7 @@ function cpt_process_status_update_request() {
 
     $status_update_request = [
       'post_title'    => __( 'STATUS UPDATE REQUESTED', 'client-power-tools' ),
-      'post_content'  => __( 'The client would like a status update.' ),
+      'post_content'  => __( 'The client would like a status update.', 'client-power-tools' ),
       'post_name'     => md5( current_time( 'timestamp' ) . random_int( 0, PHP_INT_MAX ) ),
       'post_status'   => 'publish',
       'post_type'     => 'cpt_message',
@@ -258,13 +252,19 @@ function cpt_process_status_update_request() {
 
     if ( is_wp_error( $post ) ) {
 
-      $result = 'Your status update request could not be sent. Error message: ' . $post->get_error_message();
+      /**
+       * translators:
+       * 1: error message
+       */
+      $result = sprintf( __( 'Your status update request could not be sent. Error message: %1$s', 'client-power-tools' ),
+        $post->get_error_message()
+      );
 
     } else {
 
       cpt_status_update_request_notification( $post );
 
-      $result = 'Status update requested!';
+      $result = __( 'Status update requested!', 'client-power-tools' );
 
     }
 
@@ -306,12 +306,34 @@ function cpt_status_update_request_notification( $message_id ) {
     $headers[]      = 'Cc: ' . $cc;
   }
 
-  $subject          = $msg_obj->post_title . ' by ' . $from_name;
-  $subject_html     = $msg_obj->post_title . '&nbsp;<br />' . 'by ' . $from_name;
+                      /**
+                       * translators:
+                       * 1: message subject (already translated, above)
+                       * 2: sender's name
+                       */
+  $subject          = sprintf( __( '%1$s by %2$s', 'client-power-tools' ), $msg_obj->post_title, $from_name );
 
-  $message          = '<p>Please post an update.</p>';
+                      /**
+                       * translators:
+                       * 1: message subject (already translated, above)
+                       * 2: html
+                       * 3: sender's name
+                       */
+  $subject_html     = sprintf( __( '%1$s%2$s by %3$s', 'client-power-tools' ), $msg_obj->post_title, '&nbsp;<br />', $from_name );
 
-  $button_txt       = 'Go to ' . $from_name;
+                      /**
+                       * translators:
+                       * 1: html
+                       * 2: html
+                       */
+  $message          = sprintf( __( '%1$sPlease post an update.%2$s' , 'client-power-tools' ), '<p>', '</p>' );
+
+                      /**
+                       * translators:
+                       * 1: sender's name
+                       */
+  $button_txt       = sprintf( __( 'Go to %1$s', 'client-power-tools' ), $from_name );
+
   $profile_url      = cpt_get_client_profile_url( $sender_id );
 
   $message          = cpt_get_email_card( $subject_html, $message, $button_txt, $profile_url );
