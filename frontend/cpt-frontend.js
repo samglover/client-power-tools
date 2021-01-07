@@ -136,9 +136,6 @@
   // Navigation
   $( document ).ready( function() {
 
-    let currentPageID = cpt_frontend_js_vars.postID;
-    let dashboardID   = cpt_frontend_js_vars.dashboardID;
-
     let menuItems = document.querySelectorAll( '.cpt-nav-menu-item' );
 
     // Figure out how to decide what page we're on.

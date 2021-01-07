@@ -16,7 +16,7 @@
 
   #cpt-nav li {
     display: inline-block;
-    margin-right: 4px;
+    margin: 0 4px 0 0;
     padding: 0;
   }
 
@@ -24,8 +24,10 @@
     border-color: Silver;
     border-style: solid;
     border-width: 1px 1px 0 1px;
+    color: DarkSlateGray;
     display: block;
     padding: .5em 1em;
+    text-decoration: none;
   }
 
   #cpt-nav a.current {

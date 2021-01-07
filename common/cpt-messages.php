@@ -5,13 +5,13 @@ namespace Client_Power_Tools\Core\Common;
 function cpt_messages( $user_id ) {
 
   if ( ! $user_id ) { return; }
+  if ( ! cpt_is_messages() ) { return; }
 
   // Return if the module is disabled.
   if ( ! get_option( 'cpt_module_messaging' ) ) { return; }
 
   echo '<div class="cpt-messages">';
 
-    echo '<h2>' . __( 'Messages' ) . '</h2>';
     cpt_message_list( $user_id );
 
     echo '<h2>' . __( 'New Message' ) . '</h2>';
@@ -23,8 +23,26 @@ function cpt_messages( $user_id ) {
 
 }
 
+function cpt_messages_page_title( $title ) {
+
+  if ( cpt_is_messages() && in_the_loop() ) {
+    $title = $title . ': Messages';
+  }
+
+  return $title;
+
+}
+
+add_filter( 'the_title', __NAMESPACE__ . '\cpt_messages_page_title' );
+
 
 function cpt_message_list( $user_id ) {
+
+  /**
+  * Removes the the_title filter so it doesn't execute within the
+  * nested query for client messages.
+  */
+  remove_filter( 'the_title', __NAMESPACE__ . '\cpt_messages_page_title' );
 
   if ( ! $user_id ) { return; }
 

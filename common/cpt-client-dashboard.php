@@ -20,52 +20,35 @@ function cpt_client_dashboard( $content ) {
 
   if ( cpt_is_client_dashboard() && in_the_loop() ) {
 
-    if ( is_user_logged_in() ) {
+    ob_start();
 
-      $user_id      = get_current_user_id();
-      $user         = get_userdata( $user_id );
-      $client_data  = cpt_get_client_data( $user_id );
-      $current_page = get_the_id();
+      if ( is_user_logged_in() ) {
 
-      if ( cpt_is_client() ) {
+        $user_id      = get_current_user_id();
+        $user         = get_userdata( $user_id );
+        $client_data  = cpt_get_client_data( $user_id );
+        $current_page = get_the_id();
 
-        ob_start();
+        if ( cpt_is_client() ) {
 
-          ?>
-
-            <div id="cpt-nav">
-              <ul>
-
-                <li><a href="<?php echo cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item">Dashboard</a></li>
-
-                <?php if ( get_option( 'cpt_module_messaging' ) ) { ?>
-                  <li><a href="#cpt-messages" class="cpt-nav-menu-item">Messages</a></li>
-                <?php } ?>
-
-                <?php if ( get_option( 'cpt_module_knowledge_base' ) ) { ?>
-                  <li><a href="#cpt-knowledge-base" class="cpt-nav-menu-item">Knowledge Base</a></li>
-                <?php } ?>
-
-              </ul>
-            </div>
-
-            <p style="line-height: 0 !important;"> </p>
-
-          <?php
+          cpt_nav();
 
           cpt_get_notices( [ 'cpt_new_message_result' ] );
 
-          echo '<p>';
+          if ( ! cpt_is_messages() ) {
 
-            echo '<strong>Welcome back, ' . $client_data[ 'first_name' ] . '!</strong>';
+            echo '<p>';
 
-            if ( isset( $client_data[ 'manager_id' ] ) ) {
-              echo ' You are working with ' . cpt_get_name( $client_data[ 'manager_id' ] ) . '.';
-            }
+              echo '<strong>Welcome back, ' . $client_data[ 'first_name' ] . '!</strong>';
 
-          echo '</p>';
+              if ( isset( $client_data[ 'manager_id' ] ) ) {
+                echo ' You are working with ' . cpt_get_name( $client_data[ 'manager_id' ] ) . '.';
+              }
 
-          cpt_status_update_request_button( $user_id );
+            echo '</p>';
+
+            cpt_status_update_request_button( $user_id );
+          }
 
           /**
           * Removes the the_content filter so it doesn't execute within the
@@ -75,22 +58,30 @@ function cpt_client_dashboard( $content ) {
 
           cpt_messages( $user_id );
 
+        } else {
+
+          echo '<p>Sorry, you don\'t have permission to view this page.</p>';
+          echo '<p>(You are logged in, but your user account is missing the "Client" role.)</p>';
+
+        }
+
       } else {
 
-        echo '<p>Sorry, you don\'t have permission to view this page.</p>';
-        echo '<p>(You are logged in, but your user account is missing the "Client" role.)</p>';
+        echo '<p>Please <a class="cpt-login-link" href="#">log in</a> to view your client dashboard.</p>';
 
       }
 
-    } else {
-
-      echo '<p>Please <a class="cpt-login-link" href="#">log in</a> to view your client dashboard.</p>';
-
-    }
-
     $dashboard = ob_get_clean();
 
-    return $dashboard . $content;
+    if ( ! cpt_is_messages() ) {
+
+      return $dashboard . $content;
+
+    } else {
+
+      return $dashboard;
+
+    }
 
   } else {
 
@@ -101,6 +92,37 @@ function cpt_client_dashboard( $content ) {
 }
 
 add_filter( 'the_content', __NAMESPACE__ . '\cpt_client_dashboard' );
+
+
+function cpt_nav() {
+
+  ob_start();
+
+    ?>
+
+      <div id="cpt-nav">
+        <ul>
+
+          <li><a href="<?php echo cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if ( cpt_is_client_dashboard() && ! cpt_is_messages() ) { echo ' current'; } ?>">Dashboard</a></li>
+
+          <?php if ( get_option( 'cpt_module_messaging' ) ) { ?>
+            <li><a href="<?php echo add_query_arg( 'tab', 'messages', cpt_get_client_dashboard_url() ); ?>" class="cpt-nav-menu-item<?php if ( cpt_is_messages() ) { echo ' current'; } ?>">Messages</a></li>
+          <?php } ?>
+
+          <?php if ( get_option( 'cpt_module_knowledge_base' ) ) { ?>
+            <li><a href="<?php echo cpt_get_knowledge_base_url(); ?>" class="cpt-nav-menu-item<?php if ( cpt_is_knowledge_base() ) { echo ' current'; } ?>">Knowledge Base</a></li>
+          <?php } ?>
+
+        </ul>
+      </div>
+
+      <p style="line-height: 0 !important;"> </p>
+
+    <?php
+
+  echo ob_get_clean();
+
+}
 
 
 function cpt_status_update_request_button( $user_id ) {

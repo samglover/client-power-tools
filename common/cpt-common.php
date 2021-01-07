@@ -86,9 +86,36 @@ function cpt_is_client_dashboard() {
 }
 
 
+function cpt_is_messages() {
+
+  if ( cpt_is_client_dashboard() && isset( $_REQUEST[ 'tab' ] ) && $_REQUEST[ 'tab' ] == 'messages' ) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
+
 function cpt_get_knowledge_base_url() {
   $page_id = get_option( 'cpt_knowledge_base_page_selection' );
   return get_permalink( $page_id );
+}
+
+
+function cpt_is_knowledge_base() {
+
+  global $wp_query;
+
+  $knowledge_base_id    = get_option( 'cpt_knowledge_base_page_selection' );
+  $this_page_id         = isset( $wp_query->post->ID ) ? $wp_query->post->ID : false;
+
+  if ( $this_page_id && $knowledge_base_id == $this_page_id ) {
+    return true;
+  } else {
+    return false;
+  }
+
 }
 
 

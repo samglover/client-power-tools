@@ -46,6 +46,7 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\cpt_register_common_scrip
 if ( ! is_admin() ) {
 
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-frontend.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-knowledge-base.php' );
 
 	function cpt_register_frontend_scripts() {
 

@@ -11,10 +11,12 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 ### 1.4
 
 #### Added
+- Client Power Tools pages/sections now have navigation.
 
 #### Changed
 - The settings page is better organized, with general/core settings, then settings for each module.
-- It is now possible to disable the messaging module.
+- Now you can disable the messaging module.
+- You can now add content to the main client dashboard page, which will be shown below the welcome message and status update request button (if it is enabled).
 
 
 ### 1.3.1 - 2020-12-18
