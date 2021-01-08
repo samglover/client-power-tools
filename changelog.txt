@@ -11,6 +11,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 ### 1.4
 
 #### Added
+- The knowledge base is a restricted page you can use to share information and resources with your clients.
 - Client Power Tools pages/sections now have navigation.
 
 #### Changed

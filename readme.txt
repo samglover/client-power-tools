@@ -59,10 +59,43 @@ Client Power Tools is built to be customizable where you need it to be. Here are
 
 == Frequently Asked Questions ==
 
+= Where can I find Client Power Tools documentation and resources? =
+
+For help using Client Power Tools, see the [documentation](https://clientpowertools.com/documentation/).
+
+= I'm getting a warning that says my website is not using SSL (HTTPS). Should I be worried? =
+
+You can use Client Power Tools even if your website does not have an SSL certificate, but you should probably get one. For more information, see the [Securing WordPress for Client Power Tools](https://clientpowertools.com/security/) resource.
+
+= Where is my client dashboard? =
+
+You can find your client dashboard by checking your Client Power Tools settings page. In your WordPress dashboard, go to **Client Power Tools** / **Settings** and look for the **Client Dashboard Page** selection. There will be a link to your client dashboard, as well.
+
+You should probably add your client dashboard to your website navigation menu so it is easy for clients to find.
+
+= How do I add pages to my knowledge base? =
+
+To add pages to your knowledge base, just go to the page you want to add (or create a new page) and look for the **Page Attributes** widget in the sidebar. Select your knowledge base page from the **Parent Page** drop-down and save the page. Now the page will appear as a sub-page in your knowledge base.
+
 
 == Upgrade Notice ==
 
-This release is meant to help new Client Power Tools users get oriented so they can get up and running quickly.
+Version 1.4 adds four major features:
+
+1. A new module, the knowledge base!
+2. A navigation menu for the client dashboard.
+3. Now you can add your own content to the client dashboard.
+4. All modules can now be enabled/disabled.
+
+The **knowledge base** is a clients-only page—or a collection of pages—you can use to share information and resources with your clients. Like the client dashboard, the knowledge base is a regular WordPress page with special features, including breadcrumb navigation to help your clients find their way around.
+
+The client dashboard now features a tabbed navigation menu, with a separate tab for each enabled module. When developing the new knowledge base module, it became obvious that the client dashboard can't remain on a single page.
+
+And now that messaging isn't taking up the entire client dashboard, there is plenty of room for you to add your own content to the page. For example, you might want to show a welcome message to your clients and highlight some essential information or resources in your knowledge base.
+
+Finally, by popular demand each of the three existing modules (the status update request button, client messaging, or the knowledge base) can now be enabled or disabled from the settings page.
+
+As usual, there are also lots of smaller updates and tweaks.
 
 
 == Changelog ==
