@@ -5,7 +5,7 @@ Plugin Name: Client Power Tools
 Plugin URI: https://clientpowertools.com
 Description: Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
 Author: Sam Glover
-Version: 1.3.1
+Version: 1.4
 Author URI: https://samglover.net
 */
 
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
 * Constants
 */
-define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.3.1' );
+define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.4' );
 define( 'CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 
@@ -25,8 +25,6 @@ define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 * Plugin Files
 */
 require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common.php' );
-require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-client-dashboard.php' );
-require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php' );
 
 
 function cpt_register_common_scripts() {
@@ -46,6 +44,9 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\cpt_register_common_scrip
 if ( ! is_admin() ) {
 
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-frontend.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-client-dashboard.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-status-update-request-button.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-messages.php' );
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-knowledge-base.php' );
 
 	function cpt_register_frontend_scripts() {

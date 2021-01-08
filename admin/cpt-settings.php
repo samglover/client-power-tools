@@ -2,6 +2,7 @@
 
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
+use Client_Power_Tools\Core\Frontend;
 
 function cpt_settings() {
 
@@ -326,12 +327,12 @@ function cpt_status_update_req_notice_email() {
 }
 
 
-// Client Messaging Settings
+// Client Messages Settings
 function cpt_client_messaging_settings_init() {
 
   add_settings_section(
     'cpt-client-messaging-settings',
-    'Messaging',
+    __( 'Messages', 'client-power-tools' ),
     __NAMESPACE__ . '\cpt_client_messaging_section',
     'cpt-settings',
   );
@@ -339,7 +340,7 @@ function cpt_client_messaging_settings_init() {
   // Enable Messaging
   add_settings_field(
     'cpt_module_messaging',
-    'Enable',
+    __( 'Enable', 'client-power-tools' ),
     __NAMESPACE__ . '\cpt_module_messaging',
     'cpt-settings',
     'cpt-client-messaging-settings',
@@ -352,7 +353,7 @@ function cpt_client_messaging_settings_init() {
     // Send Message Content
     add_settings_field(
       'cpt_send_message_content',
-      'Email Notification Content',
+      __( 'Email Notification Content', 'client-power-tools' ),
       __NAMESPACE__ . '\cpt_send_message_content',
       'cpt-settings',
       'cpt-client-messaging-settings',
@@ -368,7 +369,7 @@ add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_messaging_settings_init' 
 
 
 function cpt_client_messaging_section() {
-  _e( 'Messaging lets you keep all your messages in one place so nothing gets lost. You can customize whether clients receive a notice of new messages or the full message.', 'client-power-tools' );
+  _e( 'Messages lets you keep all your client communications in one place so nothing gets lost. You can customize whether clients receive a notice of new messages or the full message.', 'client-power-tools' );
 }
 
 

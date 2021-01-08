@@ -1,6 +1,19 @@
 <?php
 
-namespace Client_Power_Tools\Core\Common;
+namespace Client_Power_Tools\Core\Frontend;
+use Client_Power_Tools\Core\Common;
+
+
+function cpt_is_messages() {
+
+  if ( cpt_is_client_dashboard() && isset( $_REQUEST[ 'tab' ] ) && $_REQUEST[ 'tab' ] == 'messages' ) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
 
 function cpt_messages( $user_id ) {
 

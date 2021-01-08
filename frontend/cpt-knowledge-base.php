@@ -8,7 +8,7 @@ use Client_Power_Tools\Core\Common;
 */
 function cpt_noindex_knowledge_base() {
 
-  if ( Common\cpt_is_knowledge_base() ) {
+  if ( cpt_is_knowledge_base() ) {
     echo '<meta name="robots" content="noindex" />';
   }
 
@@ -17,9 +17,26 @@ function cpt_noindex_knowledge_base() {
 add_action( 'wp_head',  __NAMESPACE__ . '\cpt_noindex_knowledge_base' );
 
 
+function cpt_is_knowledge_base() {
+
+  global $wp_query;
+
+  $knowledge_base_id    = get_option( 'cpt_knowledge_base_page_selection' );
+  $this_page_id         = isset( $wp_query->post->ID ) ? $wp_query->post->ID : false;
+  $this_page_ancestors  = get_post_ancestors( $this_page_id );
+
+  if ( $this_page_id && ( $knowledge_base_id == $this_page_id || in_array( $knowledge_base_id, $this_page_ancestors ) ) ) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
+
 function cpt_knowledge_base( $content ) {
 
-  if ( Common\cpt_is_knowledge_base() && in_the_loop() ) {
+  if ( cpt_is_knowledge_base() && in_the_loop() ) {
 
     ob_start();
 
@@ -27,24 +44,40 @@ function cpt_knowledge_base( $content ) {
 
         if ( Common\cpt_is_client() ) {
 
-          Common\cpt_nav();
+          cpt_nav();
+
+          if ( cpt_is_knowledge_base() ) {
+            return ob_get_clean() . $content;
+          }
 
         } else {
 
-          echo '<p>Sorry, you don\'t have permission to view this page.</p>';
-          echo '<p>(You are logged in, but your user account is missing the "Client" role.)</p>';
+          echo '<p>' . __( 'Sorry, you don\'t have permission to view this page.', 'client-power-tools' ) . '</p>';
+          echo '<p>' . __( '(You are logged in, but your user account is missing the "Client" role.)', 'client-power-tools' ) . '</p>';
+
+          return ob_get_clean();
 
         }
 
       } else {
 
-        echo '<p>Please <a class="cpt-login-link" href="#">log in</a> to view the knowledge base.</p>';
+        /**
+         * translators:
+         * 1: html
+         * 2: html (<a> tag with link to launch login modal)
+         * 3: html (closes <a> tag)
+         * 4: html
+         */
+        printf( __( '%1$sPlease %2$slog in%3$s to view your client dashboard.', 'client-power-tools' ),
+          '<p>',
+          '<a class="cpt-login-link" href="#">',
+          '</a>',
+          '</p>'
+        );
+
+        return ob_get_clean();
 
       }
-
-    $knowledge_base = ob_get_clean();
-
-    return $knowledge_base . $content;
 
   } else {
 
