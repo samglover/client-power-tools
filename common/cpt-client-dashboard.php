@@ -69,19 +69,8 @@ function cpt_client_dashboard( $content ) {
 
         } else {
 
-          /**
-           * translators:
-           * 1: html
-           * 2: html
-           */
-          printf( __( '%1$sSorry, you don\'t have permission to view this page.%2$s', 'client-power-tools' ), '<p>', '</p>' );
-
-          /**
-           * translators:
-           * 1: html
-           * 2: html
-           */
-          printf( __( '%1$s(You are logged in, but your user account is missing the "Client" role.)%2$s', 'client-power-tools' ), '<p>', '</p>' );
+          echo '<p>' . __( 'Sorry, you don\'t have permission to view this page.', 'client-power-tools' ) . '</p>';
+          echo '<p>' . __( '(You are logged in, but your user account is missing the "Client" role.)', 'client-power-tools' ) . '</p>';
 
           return ob_get_clean();
 
@@ -321,12 +310,7 @@ function cpt_status_update_request_notification( $message_id ) {
                        */
   $subject_html     = sprintf( __( '%1$s%2$s by %3$s', 'client-power-tools' ), $msg_obj->post_title, '&nbsp;<br />', $from_name );
 
-                      /**
-                       * translators:
-                       * 1: html
-                       * 2: html
-                       */
-  $message          = sprintf( __( '%1$sPlease post an update.%2$s' , 'client-power-tools' ), '<p>', '</p>' );
+  $message          = '<p>' . __( 'Please post an update.' , 'client-power-tools' ) . '</p>';
 
                       /**
                        * translators:
