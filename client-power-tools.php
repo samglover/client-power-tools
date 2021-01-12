@@ -25,6 +25,8 @@ define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 * Plugin Files
 */
 require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common.php' );
+require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-status-update-request-button.php' );
+require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php' );
 
 
 function cpt_register_common_scripts() {
@@ -45,8 +47,6 @@ if ( ! is_admin() ) {
 
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-frontend.php' );
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-client-dashboard.php' );
-	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-status-update-request-button.php' );
-	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-messages.php' );
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-knowledge-base.php' );
 
 	function cpt_register_frontend_scripts() {

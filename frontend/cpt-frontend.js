@@ -133,13 +133,4 @@
   });
 
 
-  // Navigation
-  $( document ).ready( function() {
-
-    let menuItems = document.querySelectorAll( '.cpt-nav-menu-item' );
-
-    // Figure out how to decide what page we're on.
-
-  });
-
 })( jQuery );

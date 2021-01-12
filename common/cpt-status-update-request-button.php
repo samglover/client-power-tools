@@ -1,7 +1,15 @@
 <?php
 
-namespace Client_Power_Tools\Core\Frontend;
-use Client_Power_Tools\Core\Common;
+namespace Client_Power_Tools\Core\Common;
+
+
+/*
+ * This has to be loaded as a common file in order to use the admin-post action
+ * hook. And it would probably be even more confusing to load it as a common
+ * file but store it in the frontend directory/namespace. Even that sentence is
+ * confusing.
+ */
+
 
 function cpt_status_update_request_button( $user_id ) {
 
@@ -10,13 +18,14 @@ function cpt_status_update_request_button( $user_id ) {
   // Return if the module is disabled.
   if ( ! get_option( 'cpt_module_status_update_req_button' ) ) { return; }
 
-  // Return if the client clicked the button more recently than the request
-  // frequency option allows.
+  // Return (i.e. don't output the button) if the client has clicked the button
+  // more recently than the request frequency option allows.
   $request_frequency       = get_option( 'cpt_status_update_req_freq' );
   $days_since_last_request = cpt_days_since_last_request( $user_id );
 
   if ( ! is_null( $days_since_last_request ) && $days_since_last_request < $request_frequency ) { return; }
 
+  // Output the button.
   ob_start();
 
     ?>

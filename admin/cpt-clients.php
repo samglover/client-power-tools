@@ -78,7 +78,7 @@ function cpt_clients() {
         ?>
 
         <div id="cpt-admin-header">
-          <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>admin/images/cpt-logo.svg" height="auto" width="100%" />
+          <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>common/images/cpt-logo.svg" height="auto" width="100%" />
           <?php echo $page_header; ?>
         </div>
         <hr class="wp-header-end">

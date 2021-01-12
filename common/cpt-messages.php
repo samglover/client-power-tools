@@ -1,18 +1,15 @@
 <?php
 
-namespace Client_Power_Tools\Core\Frontend;
-use Client_Power_Tools\Core\Common;
+namespace Client_Power_Tools\Core\Common;
+use Client_Power_Tools\Core\Frontend;
 
 
-function cpt_is_messages() {
-
-  if ( cpt_is_client_dashboard() && isset( $_REQUEST[ 'tab' ] ) && $_REQUEST[ 'tab' ] == 'messages' ) {
-    return true;
-  } else {
-    return false;
-  }
-
-}
+/*
+ * This has to be loaded as a common file in order to use the admin-post action
+ * hook. And it would probably be even more confusing to load it as a common
+ * file but store it in the frontend directory/namespace. Even that sentence is
+ * confusing.
+ */
 
 
 function cpt_messages( $user_id ) {
@@ -36,9 +33,11 @@ function cpt_messages( $user_id ) {
 
 }
 
-function cpt_messages_page_title( $title ) {
+function cpt_messages_page_title( $title, $id ) {
 
-  if ( cpt_is_messages() && in_the_loop() ) {
+  $client_dashboard_id = get_option( 'cpt_client_dashboard_page_selection' );
+
+  if ( cpt_is_messages() && $id == $client_dashboard_id && in_the_loop() ) {
     $title = $title . ': Messages';
   }
 
@@ -46,7 +45,7 @@ function cpt_messages_page_title( $title ) {
 
 }
 
-add_filter( 'the_title', __NAMESPACE__ . '\cpt_messages_page_title' );
+add_filter( 'the_title', __NAMESPACE__ . '\cpt_messages_page_title', 10, 2 );
 
 
 function cpt_message_list( $user_id ) {
@@ -57,7 +56,7 @@ function cpt_message_list( $user_id ) {
   * Removes the the_title filter so it doesn't execute within the
   * nested query for client messages.
   */
-  remove_filter( 'the_title', __NAMESPACE__ . '\cpt_messages_page_title' );
+  // remove_filter( 'the_title', __NAMESPACE__ . '\cpt_messages_page_title' );
 
   $paged = isset( $_GET[ 'paged' ] ) ? sanitize_key( intval( $_GET[ 'paged' ] ) ) : get_query_var( 'paged' );
 
