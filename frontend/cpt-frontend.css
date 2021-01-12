@@ -1,5 +1,5 @@
 #cpt-nav {
-  margin-bottom: 1em;
+  margin-bottom: 2em;
 }
 
   #cpt-nav ul.tabs {
@@ -27,23 +27,34 @@
   }
 
   #cpt-nav ul.tabs a.current {
-    background-color: Silver;
+    background-color: LightGray;
   }
 
   #cpt-nav ul.tabs a:hover,
   #cpt-nav ul.tabs a:focus {
-    background-color: LightGray;
+    background-color: Silver;
+  }
+
+  #cpt-nav .cpt-click-to-expand::after {
+    content: '\025BE';
+    display: inline-block;
+    margin-left: 4px;
+    opacity: .25;
+  }
+
+  #cpt-nav .open::after {
+    transform: rotatez( 180deg );
   }
 
 #cpt-knowledge-base-index {
   border-bottom: 1px solid Silver;
-  margin: 0 0 4rem 0;
-  padding: 4rem;
+  margin: 0 0 2em 0;
+  padding: 2em;
   position: relative;
 }
 
-#cpt-knowledge-base-index:before {
-  background-color: LightGray;
+#cpt-knowledge-base-index::before {
+  background-color: Silver;
   content: ' ';
   opacity: .5;
   position: absolute;

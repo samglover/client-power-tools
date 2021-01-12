@@ -12,7 +12,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 
 #### Added
 - The knowledge base is a restricted page you can use to share information and resources with your clients.
-- Client Power Tools pages/sections now have navigation.
+- Client dashboard pages now have navigation tabs, including breadcrumbs and a drop-down index to help clients navigate your knowledge base.
 
 #### Changed
 - The settings page is better organized, with general/core settings, then settings for each module.

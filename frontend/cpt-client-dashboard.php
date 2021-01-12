@@ -126,29 +126,18 @@ function cpt_nav() {
           <?php
 
             if ( get_option( 'cpt_module_knowledge_base' ) ) {
-              cpt_knowledge_base_index();
 
               $knowledge_base_id  = get_option( 'cpt_knowledge_base_page_selection' );
               $knowledge_base_url = Common\cpt_get_knowledge_base_url();
-              $child_pages        = cpt_get_child_pages( $knowledge_base_id );
-
-              $classes            = 'cpt-nav-menu-item';
               $title              = get_the_title( $knowledge_base_id );
+              $child_pages        = cpt_get_child_pages( $knowledge_base_id );
+              $classes            = 'cpt-nav-menu-item';
 
-              if ( Common\cpt_is_knowledge_base() ) {
-                $classes .= ' current';
-              }
+              Common\cpt_is_knowledge_base()  ? $classes .= ' current' : null;
+              $child_pages                    ? $classes .= ' cpt-click-to-expand' : null;
 
-              if ( $child_pages ) {
-
-                echo '<li><a href="' . $knowledge_base_url . '" class="' . $classes . ' cpt-click-to-expand" title="' . $title . '">' . $title . '</a></li>';
-                $knowledge_base_index = cpt_knowledge_base_index();
-
-              } else {
-
-                echo '<li><a href="' . $knowledge_base_url . '" class="' . $classes . '" title="' . $title . '">' . $title . '</a></li>';
-
-              }
+              echo '<li><a href="' . $knowledge_base_url . '" class="' . $classes . '" title="' . $title . '">' . $title . '</a></li>';
+              $knowledge_base_index = cpt_knowledge_base_index();
 
             }
 
@@ -156,7 +145,14 @@ function cpt_nav() {
 
         </ul>
 
-        <?php if ( $child_pages ) { echo $knowledge_base_index; } ?>
+        <?php
+
+          /**
+           * If adding more drop-down tabs, just keep them in the same order.
+           */
+          if ( get_option( 'cpt_module_knowledge_base' ) && $child_pages ) { echo $knowledge_base_index; }
+
+        ?>
 
       </nav>
 

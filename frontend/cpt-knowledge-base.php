@@ -185,39 +185,25 @@ function cpt_list_child_pages( $page_id ) {
 
 function cpt_knowledge_base_index() {
 
-  global $post;
-
   $knowledge_base_id    = get_option( 'cpt_knowledge_base_page_selection' );
-  $knowledge_base_url   = Common\cpt_get_knowledge_base_url();
-  $knowledge_base_title = get_the_title( $knowledge_base_id );
-  $current_page_id      = get_the_ID();
   $child_pages          = cpt_get_child_pages( $knowledge_base_id );
 
-  ob_start();
+  if ( $child_pages ) {
 
-    ?>
+    ob_start();
 
-      <div id="cpt-knowledge-base-index" class="cpt-this-expands">
-        <ul>
+      ?>
 
-          <?php
-
-            if ( $current_page_id == $knowledge_base_id ) {
-              echo '<li><strong>' . $knowledge_base_title . '</strong></li>';
-            } else {
-              echo '<li><a href="' . $knowledge_base_url . '" title="' . $knowledge_base_title . '">' . $knowledge_base_title . '</a></li>';
-            }
-
-          ?>
-
+        <div id="cpt-knowledge-base-index" class="cpt-this-expands cpt-nav-tabs-submenu">
           <ul>
-            <?php foreach( $child_pages as $child_page ) { cpt_list_child_pages( $child_page ); } ?>
+            <?php cpt_list_child_pages( $knowledge_base_id ); ?>
           </ul>
-        </ul>
-      </div>
+        </div>
 
-    <?php
+      <?php
 
-  return ob_get_clean();
+    return ob_get_clean();
+
+  }
 
 }

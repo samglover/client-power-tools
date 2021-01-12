@@ -20,6 +20,7 @@
           event.preventDefault();
 
           $( expandableDivs[i] ).toggle( 'fast' );
+          $( expanderButtons[i] ).toggleClass( 'open' );
           $( expandableDivs[i] ).toggleClass( 'open' );
 
           // This adds/removes the *required* attribute based on form visibility.
@@ -27,9 +28,11 @@
 
           if ( expandableDivs[i].classList.contains( 'open' ) ) {
 
-            expanderButtons[i].innerHTML = 'Cancel';
+            if ( ! expandableDivs[i].classList.contains( 'cpt-nav-tabs-submenu' ) ) {
+              expanderButtons[i].innerHTML = 'Cancel';
+            }
 
-            formElements.forEach( function( element ){
+            formElements.forEach( function( element ) {
 
               if ( element.dataset.required == 'true' ) {
                 element.setAttribute( 'required', '' );
