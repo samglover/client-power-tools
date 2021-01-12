@@ -126,7 +126,14 @@ function cpt_get_client_profile( $user_id ) {
   if ( ! $user_id ) { return; }
 
   cpt_edit_client( $user_id );
-  Common\cpt_messages( $user_id );
+
+  echo '<h2>' . __( 'Messages', 'client-power-tools' ) . '</h2>';
+
+  if ( get_option( 'cpt_module_messaging' ) ) {
+    Common\cpt_messages( $user_id );
+  } else {
+    echo '<p>' . __( 'The messaging module is disabled.', 'client-power-tools' ) . '</p>';
+  }
 
 }
 

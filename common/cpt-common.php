@@ -3,9 +3,9 @@
 namespace Client_Power_Tools\Core\Common;
 
 /**
-* Adds the Client and Client Manager user roles and capabilities, and assigns
-* all CPT capabilities to admins.
-*/
+ * Adds the Client and Client Manager user roles and capabilities, and assigns
+ * all CPT capabilities to admins.
+ */
 function cpt_add_roles() {
 
   add_role(
@@ -35,15 +35,17 @@ add_action( 'init', __NAMESPACE__ . '\cpt_add_roles' );
 
 
 /**
-* Checks to see whether the current user is a client. Returns true if the current
-* user has the cpt-client role, false if not.
-*
-* If no user ID is provided, checks to see whether a user is logged-in with the
-* cpt-client role.
-*/
+ * Checks to see whether the current user is a client. Returns true if the current
+ * user has the cpt-client role, false if not.
+ *
+ * If no user ID is provided, checks to see whether a user is logged-in with the
+ * cpt-client role.
+ */
 function cpt_is_client( $user_id = null ) {
 
-  if ( is_null( $user_id ) && is_user_logged_in() ) {
+  if ( is_null( $user_id ) && ! is_user_logged_in() ) {
+    return;
+  } else {
     $user_id = get_current_user_id();
   }
 
@@ -64,12 +66,6 @@ function cpt_get_client_profile_url( $clients_user_id ) {
 }
 
 
-function cpt_get_client_dashboard_url() {
-  $page_id = get_option( 'cpt_client_dashboard_page_selection' );
-  return get_permalink( $page_id );
-}
-
-
 function cpt_is_client_dashboard() {
 
   global $wp_query;
@@ -83,6 +79,46 @@ function cpt_is_client_dashboard() {
     return false;
   }
 
+}
+
+
+function cpt_get_client_dashboard_url() {
+  $page_id = get_option( 'cpt_client_dashboard_page_selection' );
+  return get_permalink( $page_id );
+}
+
+
+function cpt_is_messages() {
+
+  if ( cpt_is_client_dashboard() && isset( $_REQUEST[ 'tab' ] ) && $_REQUEST[ 'tab' ] == 'messages' ) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
+
+function cpt_is_knowledge_base() {
+
+  global $wp_query;
+
+  $knowledge_base_id    = get_option( 'cpt_knowledge_base_page_selection' );
+  $this_page_id         = isset( $wp_query->post->ID ) ? $wp_query->post->ID : false;
+  $this_page_ancestors  = get_post_ancestors( $this_page_id );
+
+  if ( $this_page_id && ( $knowledge_base_id == $this_page_id || in_array( $knowledge_base_id, $this_page_ancestors ) ) ) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
+
+function cpt_get_knowledge_base_url() {
+  $page_id = get_option( 'cpt_knowledge_base_page_selection' );
+  return get_permalink( $page_id );
 }
 
 
@@ -208,10 +244,10 @@ function cpt_get_email_card( $title = null, $content = null, $button_txt = 'Go',
 
 
 /**
-* Checks for a transient with the results of an action, and if one exists,
-* outputs a notice. In the admin, this is a standard WordPress admin notice. On
-* the front end, this is a modal.
-*/
+ * Checks for a transient with the results of an action, and if one exists,
+ * outputs a notice. In the admin, this is a standard WordPress admin notice. On
+ * the front end, this is a modal.
+ */
 function cpt_get_notices( $transient_key_array ) {
 
   if ( ! $transient_key_array ) { return; }
@@ -264,14 +300,14 @@ add_action( 'admin_notices', __NAMESPACE__ . '\cpt_get_notices' );
 
 
 /**
-* Redirects the user to the Client Dashboard page with an error query parameter
-* if the login form contained a redirect to the Client Dashboard. (In other
-* words, if the user started on the frontend login form.)
-*
-* Works when the username or password fields are empty.
-*
-* The error message itself is handled in cpt-frontend.php.
-*/
+ * Redirects the user to the Client Dashboard page with an error query parameter
+ * if the login form contained a redirect to the Client Dashboard. (In other
+ * words, if the user started on the frontend login form.)
+ *
+ * Works when the username or password fields are empty.
+ *
+ * The error message itself is handled in cpt-frontend.php.
+ */
 function cpt_login_missing( $redirect_to, $requested_redirect_to, $user ) {
 
   if ( $redirect_to == cpt_get_client_dashboard_url() ) {
@@ -286,8 +322,8 @@ function cpt_login_missing( $redirect_to, $requested_redirect_to, $user ) {
 add_filter( 'login_redirect', __NAMESPACE__ . '\cpt_login_missing', 10, 3);
 
 /**
-* Same as above, but works when the login is entered but fails.
-*/
+ * Same as above, but works when the login is entered but fails.
+ */
 function cpt_login_failure( $user_login ) {
 
   if ( $_REQUEST[ 'redirect_to' ] == cpt_get_client_dashboard_url() ) {

@@ -26,7 +26,7 @@ function cpt_welcome_message() {
 
   global $pagenow;
 
-if ( cpt_is_cpt_admin_page() && get_transient( 'cpt_show_welcome_message' ) ) {
+  if ( cpt_is_cpt_admin_page() && get_transient( 'cpt_show_welcome_message' ) ) {
 
     ?>
 
@@ -41,7 +41,7 @@ if ( cpt_is_cpt_admin_page() && get_transient( 'cpt_show_welcome_message' ) ) {
 
     <?php
 
-      delete_transient( 'cpt_show_welcome_message' );
+    delete_transient( 'cpt_show_welcome_message' );
 
   }
 
@@ -92,14 +92,18 @@ function cpt_menu_pages() {
     __NAMESPACE__ . '\cpt_clients',
   );
 
-  add_submenu_page(
-    'cpt',
-    'Client Power Tools: Messages',
-    'Messages',
-    'cpt-view-clients',
-    'cpt-messages',
-    __NAMESPACE__ . '\cpt_admin_messages',
-  );
+  if ( get_option( 'cpt_module_messaging' ) ) {
+
+    add_submenu_page(
+      'cpt',
+      'Client Power Tools: Messages',
+      'Messages',
+      'cpt-view-clients',
+      'cpt-messages',
+      __NAMESPACE__ . '\cpt_admin_messages',
+    );
+
+  }
 
   add_submenu_page(
     'cpt',

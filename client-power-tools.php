@@ -5,7 +5,7 @@ Plugin Name: Client Power Tools
 Plugin URI: https://clientpowertools.com
 Description: Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
 Author: Sam Glover
-Version: 1.3.1
+Version: 1.4
 Author URI: https://samglover.net
 */
 
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
 * Constants
 */
-define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.3.1' );
+define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.4' );
 define( 'CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 
@@ -25,7 +25,7 @@ define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 * Plugin Files
 */
 require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common.php' );
-require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-client-dashboard.php' );
+require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-status-update-request-button.php' );
 require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php' );
 
 
@@ -46,6 +46,8 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\cpt_register_common_scrip
 if ( ! is_admin() ) {
 
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-frontend.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-client-dashboard.php' );
+	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-knowledge-base.php' );
 
 	function cpt_register_frontend_scripts() {
 
@@ -106,58 +108,72 @@ function cpt_activate() {
 	set_transient( 'cpt_show_welcome_message', true, 86400  );
 
 	/*
-	* Checks to see if there is already a Client Dashboard, and
-	* creates a page for it if not.
+	* Checks for page selections and creates pages if necessary.
 	*/
-	if ( ! get_option( 'cpt_client_dashboard_page_selection' ) ) {
 
-		$client_dashboard = [
-			'post_status'   => 'publish',
-      'post_title'    => __( 'Client Dashboard' ),
-			'post_type'     => 'page',
-		];
+	$cpt_pages = [
+		'cpt_client_dashboard_page_selection'	=> 'Client Dashboard',
+		'cpt_knowledge_base_page_selection'		=> 'Knowledge Base',
+	];
 
-		$page = wp_insert_post( $client_dashboard, $wp_error );
+	foreach ( $cpt_pages as $key => $val ) {
 
-		if ( is_wp_error( $page ) ) {
+		if ( ! get_option( $key ) ) {
 
-			?>
+			$new_page = [
+				'post_status'   => 'publish',
+	      'post_title'    => __( $val ),
+				'post_type'     => 'page',
+			];
 
-				<div class="cpt-notice notice notice-error is-dismissible">
-					<p><?php _e( 'Something went wrong when creating a page for your client dashboard. Please select a page from the <a href="' . admin_url( 'admin.php?page=cpt-settings' ) . '">Settings page</a>.' ); ?></p>
-					<p>Error message: <?php echo $post->get_error_message(); ?></p>
-				</div>
+			$page = wp_insert_post( $new_page, $wp_error );
 
-			<?php
+			if ( is_wp_error( $page ) ) {
 
-		} else {
+				?>
 
-			update_option( 'cpt_client_dashboard_page_selection', $page );
+					<div class="cpt-notice notice notice-error is-dismissible">
+						<p><?php _e( 'Something went wrong when creating a page. Please select a page from the <a href="' . admin_url( 'admin.php?page=cpt-settings' ) . '">Settings page</a>.' ); ?></p>
+						<p>Error message: <?php echo $post->get_error_message(); ?></p>
+					</div>
+
+				<?php
+
+			} else {
+
+				update_option( $key, $page );
+
+			}
 
 		}
 
-	}
+  }
 
 
 	/*
 	* Checks for default options and adds them if necessary.
 	*/
-
 	$admin = get_user_by_email( get_bloginfo( 'admin_email' ) );
 
-	$defaults = [
+	$default_options = [
+
 		'cpt_client_statuses'									=> 'Active' . "\n" . 'Potential' . "\n" . 'Inactive',
 		'cpt_default_client_manager'					=> $admin->ID,
 		'cpt_default_client_status'						=> 'Active',
-		'cpt_show_status_update_req_button'		=> true,
+
+		'cpt_new_client_email_subject_line'  	=> 'Your client account has been created! Please set your password.',
+    'cpt_new_client_email_message_body'  	=> '',
+
+		'cpt_module_status_update_req_button'	=> true,
 		'cpt_status_update_req_freq'					=> 30,
 		'cpt_status_update_req_notice_email'	=> null,
+
+		'cpt_module_messaging'								=> true,
 		'cpt_send_message_content'						=> false,
-    'cpt_new_client_email_subject_line'  	=> 'Your client account has been created! Please set your password.',
-    'cpt_new_client_email_message_body'  	=> '',
+
   ];
 
-  foreach ( $defaults as $key => $val ) {
+  foreach ( $default_options as $key => $val ) {
 
     if ( ! get_option( $key ) ) {
       update_option( $key, $val );
@@ -169,33 +185,33 @@ function cpt_activate() {
 	function cpt_message_post_type() {
 
 		$labels = [
-			'name'                  => _x( 'Messages', 'Post Type General Name', 'text_domain' ),
-			'singular_name'         => _x( 'Message', 'Post Type Singular Name', 'text_domain' ),
-			'menu_name'             => __( 'Messages', 'text_domain' ),
-			'name_admin_bar'        => __( 'Message', 'text_domain' ),
-			'archives'              => __( 'Message Archives', 'text_domain' ),
-			'attributes'            => __( 'Message Attributes', 'text_domain' ),
-			'parent_item_colon'     => __( 'Parent Message:', 'text_domain' ),
-			'all_items'             => __( 'All Messages', 'text_domain' ),
-			'add_new_item'          => __( 'Add New Message', 'text_domain' ),
-			'add_new'               => __( 'Add New', 'text_domain' ),
-			'new_item'              => __( 'New Message', 'text_domain' ),
-			'edit_item'             => __( 'Edit Message', 'text_domain' ),
-			'update_item'           => __( 'Update Message', 'text_domain' ),
-			'view_item'             => __( 'View Message', 'text_domain' ),
-			'view_items'            => __( 'View Messages', 'text_domain' ),
-			'search_items'          => __( 'Search Messages', 'text_domain' ),
-			'not_found'             => __( 'Message Not found', 'text_domain' ),
-			'not_found_in_trash'    => __( 'Not found in Trash', 'text_domain' ),
-			'featured_image'        => __( 'Featured Image', 'text_domain' ),
-			'set_featured_image'    => __( 'Set featured image', 'text_domain' ),
-			'remove_featured_image' => __( 'Remove featured image', 'text_domain' ),
-			'use_featured_image'    => __( 'Use as featured image', 'text_domain' ),
-			'insert_into_item'      => __( 'Insert into message', 'text_domain' ),
-			'uploaded_to_this_item' => __( 'Uploaded to this message', 'text_domain' ),
-			'items_list'            => __( 'Messages list', 'text_domain' ),
-			'items_list_navigation' => __( 'Messages list navigation', 'text_domain' ),
-			'filter_items_list'     => __( 'Filter messages list', 'text_domain' ),
+			'name'                  => _x( 'Messages', 'Post Type General Name', 'client-power-tools' ),
+			'singular_name'         => _x( 'Message', 'Post Type Singular Name', 'client-power-tools' ),
+			'menu_name'             => __( 'Messages', 'client-power-tools' ),
+			'name_admin_bar'        => __( 'Message', 'client-power-tools' ),
+			'archives'              => __( 'Message Archives', 'client-power-tools' ),
+			'attributes'            => __( 'Message Attributes', 'client-power-tools' ),
+			'parent_item_colon'     => __( 'Parent Message:', 'client-power-tools' ),
+			'all_items'             => __( 'All Messages', 'client-power-tools' ),
+			'add_new_item'          => __( 'Add New Message', 'client-power-tools' ),
+			'add_new'               => __( 'Add New', 'client-power-tools' ),
+			'new_item'              => __( 'New Message', 'client-power-tools' ),
+			'edit_item'             => __( 'Edit Message', 'client-power-tools' ),
+			'update_item'           => __( 'Update Message', 'client-power-tools' ),
+			'view_item'             => __( 'View Message', 'client-power-tools' ),
+			'view_items'            => __( 'View Messages', 'client-power-tools' ),
+			'search_items'          => __( 'Search Messages', 'client-power-tools' ),
+			'not_found'             => __( 'Message Not found', 'client-power-tools' ),
+			'not_found_in_trash'    => __( 'Not found in Trash', 'client-power-tools' ),
+			'featured_image'        => __( 'Featured Image', 'client-power-tools' ),
+			'set_featured_image'    => __( 'Set featured image', 'client-power-tools' ),
+			'remove_featured_image' => __( 'Remove featured image', 'client-power-tools' ),
+			'use_featured_image'    => __( 'Use as featured image', 'client-power-tools' ),
+			'insert_into_item'      => __( 'Insert into message', 'client-power-tools' ),
+			'uploaded_to_this_item' => __( 'Uploaded to this message', 'client-power-tools' ),
+			'items_list'            => __( 'Messages list', 'client-power-tools' ),
+			'items_list_navigation' => __( 'Messages list navigation', 'client-power-tools' ),
+			'filter_items_list'     => __( 'Filter messages list', 'client-power-tools' ),
 		];
 
 		$capabilities = [
@@ -209,8 +225,8 @@ function cpt_activate() {
 		];
 
 		$args = [
-			'label'                 => __( 'Message', 'text_domain' ),
-			'description'           => __( 'Client Power Tools messages', 'text_domain' ),
+			'label'                 => __( 'Message', 'client-power-tools' ),
+			'description'           => __( 'Client Power Tools messages', 'client-power-tools' ),
 			'labels'                => $labels,
 			'supports'              => [ 'title', 'editor' ],
 			'hierarchical'          => false,

@@ -59,13 +59,62 @@ Client Power Tools is built to be customizable where you need it to be. Here are
 
 == Frequently Asked Questions ==
 
+= Where can I find Client Power Tools documentation and resources? =
+
+For help using Client Power Tools, see the [documentation](https://clientpowertools.com/documentation/).
+
+= I'm getting a warning that says my website is not using SSL (HTTPS). Should I be worried? =
+
+You can use Client Power Tools even if your website does not have an SSL certificate, but you should probably get one. For more information, see the [Securing WordPress for Client Power Tools](https://clientpowertools.com/security/) resource.
+
+= Where is my client dashboard? =
+
+You can find your client dashboard by checking your Client Power Tools settings page. In your WordPress dashboard, go to **Client Power Tools** / **Settings** and look for the **Client Dashboard Page** selection. There will be a link to your client dashboard, as well.
+
+You should probably add your client dashboard to your website navigation menu so it is easy for clients to find.
+
+= How do I add pages to my knowledge base? =
+
+To add pages to your knowledge base, just go to the page you want to add (or create a new page) and look for the **Page Attributes** widget in the sidebar. Select your knowledge base page from the **Parent Page** drop-down and save the page. Now the page will appear as a sub-page in your knowledge base.
+
 
 == Upgrade Notice ==
 
-This release is meant to help new Client Power Tools users get oriented so they can get up and running quickly.
+Version 1.4 adds four major features:
+
+1. NEW MODULE: Knowledge Base!
+2. Tabbed Navigation for the client dashboard and breadcrumb navigation within the knowledge base.
+3. Now you can add your own content to the client dashboard.
+4. All non-core modules can now be enabled/disabled.
+
+The **Knowledge Base** is a clients-only page—or a collection of pages—you can use to share information and resources with your clients. Like the client dashboard, the knowledge base is a regular WordPress page with special features, including a drop-down index and breadcrumb navigation to help your clients find their way around.
+
+The client dashboard now features a tabbed navigation menu, with a separate tab for each enabled module. When developing the new Knowledge Base module, it became obvious that the client dashboard is too big for a single page. With the tabbed navigation, there's room to grow.
+
+And now that messaging isn't taking up the entire client dashboard, there is plenty of room for you to add your own content to the page. For example, you might want to show a welcome message to your clients and highlight some essential information or resources in your knowledge base.
+
+Finally, by popular demand each of the three existing non-core modules can now be enabled or disabled from the settings page. Currently the non-core modules are the Status Update Request Button, Messaging, and Knowledge Base.
+
+As usual, there are also lots of smaller updates, improvements, and tweaks.
+
+For more information on how to take advantage of the new and updated features, plus ideas for how to use the Knowledge Base, see the [documentation](https://clientpowertools.com/documentation/).
 
 
 == Changelog ==
+
+### 1.4 - 2021-01-12
+
+#### Added
+- NEW MODULE: Knowledge Base! The knowledge base is a restricted page you can use to share information and resources with your clients. Add as many sub-pages as you like; they will be nicely organized in an index for your clients.
+- Client dashboard pages now have navigation tabs, including breadcrumbs and a drop-down index to help clients navigate your knowledge base.
+
+#### Changed
+- The settings page is better organized, with general/core settings, then settings for each module.
+- Each of the non-core modules can be disabled. Currently the non-core modules are Status Update Request Button, Messaging, and Knowledge Base.
+- You can now add content to the main client dashboard page, which will be shown below the welcome message and status update request button (if it is enabled).
+
+#### Fixed
+- Untitled messages no longer show "Untitled" as the title.
 
 ### 1.3.1 - 2020-12-18
 

@@ -2,99 +2,30 @@
 
 namespace Client_Power_Tools\Core\Common;
 
-/**
-* Noindexes the client dashboard because it's none of Google's business.
-*/
-function cpt_noindex_client_dashboard() {
 
-  if ( cpt_is_client_dashboard() ) {
-    echo '<meta name="robots" content="noindex" />';
-  }
-
-}
-
-add_action( 'wp_head',  __NAMESPACE__ . '\cpt_noindex_client_dashboard' );
-
-
-function cpt_client_dashboard( $content ) {
-
-  if ( cpt_is_client_dashboard() && in_the_loop() ) {
-
-    if ( is_user_logged_in() ) {
-
-      $user_id      = get_current_user_id();
-      $user         = get_userdata( $user_id );
-      $client_data  = cpt_get_client_data( $user_id );
-
-      if ( cpt_is_client() ) {
-
-        ob_start();
-
-          cpt_get_notices( [ 'cpt_new_message_result' ] );
-
-          echo '<p>';
-
-            echo '<strong>Welcome back, ' . $client_data[ 'first_name' ] . '!</strong>';
-
-            if ( isset( $client_data[ 'manager_id' ] ) ) {
-              echo ' You are working with ' . cpt_get_name( $client_data[ 'manager_id' ] ) . '.';
-            }
-
-          echo '</p>';
-
-          cpt_status_update_request_button( $user_id );
-
-          /**
-          * Removes the the_content filter so it doesn't execute within the
-          * nested query for client messages.
-          */
-          remove_filter( current_filter(), __FUNCTION__ );
-
-          cpt_messages( $user_id );
-
-      } else {
-
-        echo '<p>Sorry, you don\'t have permission to view this page.</p>';
-        echo '<p>(You are logged in, but your user account is missing the "Client" role.)</p>';
-
-      }
-
-    } else {
-
-      echo '<p>Please <a class="cpt-login-link" href="#">log in</a> to view your client dashboard.</p>';
-
-    }
-
-    return ob_get_clean();
-
-  } else {
-
-    return $content;
-
-  }
-
-}
-
-add_filter( 'the_content', __NAMESPACE__ . '\cpt_client_dashboard' );
+/*
+ * This has to be loaded as a common file in order to use the admin-post action
+ * hook. And it would probably be even more confusing to load it as a common
+ * file but store it in the frontend directory/namespace. Even that sentence is
+ * confusing.
+ */
 
 
 function cpt_status_update_request_button( $user_id ) {
 
   if ( ! $user_id ) { return; }
 
-  // Return if the option to show the Status Update Request button is unchecked.
-  $show_button = get_option( 'cpt_show_status_update_req_button', 'empty' );
+  // Return if the module is disabled.
+  if ( ! get_option( 'cpt_module_status_update_req_button' ) ) { return; }
 
-  if ( $show_button == 'empty' ) { $value = '1'; }
-  if ( ! $show_button ) { return; }
-
-  // Return if the client clicked the button more recently than the request
-  // frequency option allows.
+  // Return (i.e. don't output the button) if the client has clicked the button
+  // more recently than the request frequency option allows.
   $request_frequency       = get_option( 'cpt_status_update_req_freq' );
   $days_since_last_request = cpt_days_since_last_request( $user_id );
 
   if ( ! is_null( $days_since_last_request ) && $days_since_last_request < $request_frequency ) { return; }
 
+  // Output the button.
   ob_start();
 
     ?>
@@ -105,7 +36,7 @@ function cpt_status_update_request_button( $user_id ) {
         <input name="action" value="cpt_status_update_requested" type="hidden">
         <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
         <p class="submit">
-          <input name="submit" id="submit" class="button button-primary" type="submit" value="Request Status Update">
+          <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e( 'Request Status Update', 'client-power-tools' ); ?>">
         </p>
 
       </form>
@@ -118,10 +49,10 @@ function cpt_status_update_request_button( $user_id ) {
 
 
 /**
-* Calculates the number of days since the client last clicked the status update
-* request button. (Since status updates are just cpt_message posts with a custom
-* field, this is based on a custom query.)
-*/
+ * Calculates the number of days since the client last clicked the status update
+ * request button. (Since status updates are just cpt_message posts with a custom
+ * field, this is based on a custom query.)
+ */
 function cpt_days_since_last_request( $user_id ) {
 
   if ( ! $user_id ) { return; }
@@ -169,8 +100,8 @@ function cpt_process_status_update_request() {
     $clients_user_id = sanitize_key( intval( $_POST[ 'clients_user_id' ] ) );
 
     $status_update_request = [
-      'post_title'    => 'STATUS UPDATE REQUESTED',
-      'post_content'  => 'The client would like a status update.',
+      'post_title'    => __( 'STATUS UPDATE REQUESTED', 'client-power-tools' ),
+      'post_content'  => __( 'The client would like a status update.', 'client-power-tools' ),
       'post_name'     => md5( current_time( 'timestamp' ) . random_int( 0, PHP_INT_MAX ) ),
       'post_status'   => 'publish',
       'post_type'     => 'cpt_message',
@@ -184,13 +115,19 @@ function cpt_process_status_update_request() {
 
     if ( is_wp_error( $post ) ) {
 
-      $result = 'Your status update request could not be sent. Error message: ' . $post->get_error_message();
+      /**
+       * translators:
+       * 1: error message
+       */
+      $result = sprintf( __( 'Your status update request could not be sent. Error message: %1$s', 'client-power-tools' ),
+        $post->get_error_message()
+      );
 
     } else {
 
       cpt_status_update_request_notification( $post );
 
-      $result = 'Status update requested!';
+      $result = __( 'Status update requested!', 'client-power-tools' );
 
     }
 
@@ -232,12 +169,29 @@ function cpt_status_update_request_notification( $message_id ) {
     $headers[]      = 'Cc: ' . $cc;
   }
 
-  $subject          = $msg_obj->post_title . ' by ' . $from_name;
-  $subject_html     = $msg_obj->post_title . '&nbsp;<br />' . 'by ' . $from_name;
+                      /**
+                       * translators:
+                       * 1: message subject (already translated, above)
+                       * 2: sender's name
+                       */
+  $subject          = sprintf( __( '%1$s by %2$s', 'client-power-tools' ), $msg_obj->post_title, $from_name );
 
-  $message          = '<p>Please post an update.</p>';
+                      /**
+                       * translators:
+                       * 1: message subject (already translated, above)
+                       * 2: html
+                       * 3: sender's name
+                       */
+  $subject_html     = sprintf( __( '%1$s%2$s by %3$s', 'client-power-tools' ), $msg_obj->post_title, '&nbsp;<br />', $from_name );
 
-  $button_txt       = 'Go to ' . $from_name;
+  $message          = '<p>' . __( 'Please post an update.' , 'client-power-tools' ) . '</p>';
+
+                      /**
+                       * translators:
+                       * 1: sender's name
+                       */
+  $button_txt       = sprintf( __( 'Go to %1$s', 'client-power-tools' ), $from_name );
+
   $profile_url      = cpt_get_client_profile_url( $sender_id );
 
   $message          = cpt_get_email_card( $subject_html, $message, $button_txt, $profile_url );

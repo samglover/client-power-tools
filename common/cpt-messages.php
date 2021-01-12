@@ -1,25 +1,62 @@
 <?php
 
 namespace Client_Power_Tools\Core\Common;
+use Client_Power_Tools\Core\Frontend;
+
+
+/*
+ * This has to be loaded as a common file in order to use the admin-post action
+ * hook. And it would probably be even more confusing to load it as a common
+ * file but store it in the frontend directory/namespace. Even that sentence is
+ * confusing.
+ */
+
 
 function cpt_messages( $user_id ) {
 
   if ( ! $user_id ) { return; }
+  if ( ! cpt_is_messages() && ! is_admin() ) { return; }
 
-  echo '<h2>' . __( 'Messages' ) . '</h2>';
-  cpt_message_list( $user_id );
+  // Return if the module is disabled.
+  if ( ! get_option( 'cpt_module_messaging' ) ) { return; }
 
-  echo '<h2>' . __( 'New Message' ) . '</h2>';
-  echo '<div id="cpt-new-message-form">';
-    cpt_new_message_form( $user_id );
+  echo '<div class="cpt-messages">';
+
+    cpt_message_list( $user_id );
+
+    echo '<h2>' . __( 'New Message' ) . '</h2>';
+    echo '<div id="cpt-new-message-form">';
+      cpt_new_message_form( $user_id );
+    echo '</div>';
+
   echo '</div>';
 
 }
+
+function cpt_messages_page_title( $title, $id ) {
+
+  $client_dashboard_id = get_option( 'cpt_client_dashboard_page_selection' );
+
+  if ( cpt_is_messages() && $id == $client_dashboard_id && in_the_loop() ) {
+    $title = $title . ': Messages';
+  }
+
+  return $title;
+
+}
+
+add_filter( 'the_title', __NAMESPACE__ . '\cpt_messages_page_title', 10, 2 );
 
 
 function cpt_message_list( $user_id ) {
 
   if ( ! $user_id ) { return; }
+
+  /**
+  * Removes the the_title filter so it doesn't execute within the
+  * nested query for client messages.
+  */
+  // remove_filter( 'the_title', __NAMESPACE__ . '\cpt_messages_page_title' );
 
   $paged = isset( $_GET[ 'paged' ] ) ? sanitize_key( intval( $_GET[ 'paged' ] ) ) : get_query_var( 'paged' );
 
@@ -36,76 +73,90 @@ function cpt_message_list( $user_id ) {
 
     ob_start();
 
-      echo '<div class="cpt-messages">';
+      while ( $cpt_messages->have_posts() ) : $cpt_messages->the_post();
 
-        while ( $cpt_messages->have_posts() ) : $cpt_messages->the_post();
+        $message_id       = get_the_ID();
+        $message_classes  = [ 'cpt-message' ];
+        $message_meta     = '<p><small>';
 
-          $message_id       = get_the_ID();
-          $message_classes  = [ 'cpt-message' ];
-          $message_meta     = '<p><small>';
+        switch ( get_the_author_meta( 'ID' ) ) {
 
-          switch ( get_the_author_meta( 'ID' ) ) {
+          case ( get_current_user_id() ):
 
-            case ( get_current_user_id() ):
-              $message_classes[]   = 'my-message';
-              $message_meta       .= __( 'Sent' );
+            $message_classes[]   = 'my-message';
+            $message_meta       .= __( 'Sent', 'client-power-tools' );
 
-              break;
+            break;
 
-            case ( $user_id ):
-              $message_classes[]   = 'client-message not-my-message';
-              $message_meta       .= __( 'Received from' ) . ' ' . get_the_author();
+          case ( $user_id ):
 
-              break;
+            $message_classes[]   = 'client-message not-my-message';
 
-            default:
-              $message_classes[]   = 'not-my-message';
-              $message_meta       .= __( 'Sent by' ) . ' ' . get_the_author();
+                                   /**
+                                    * translators:
+                                    * 1: sender's name
+                                    */
+            $message_meta       .= sprintf( __( 'Received from %1$s', 'client-power-tools' ), get_the_author() );
 
-          }
+            break;
 
-          if ( get_post_meta( $message_id, 'cpt_status_update_request' ) ) {
-            $message_classes[]     = 'status-update-request';
-          }
+          default:
 
-          $message_meta .= ' on ' . get_the_date( 'F jS, Y, \a\t g:i a' ) . '</small></p>';
+            $message_classes[]   = 'not-my-message';
 
-          echo '<div id="cpt-message-' . $message_id . '" class="' . implode( ' ', $message_classes ) . '">';
+                                   /**
+                                    * translators:
+                                    * 1: sender's name
+                                    */
+            $message_meta       .= sprintf( __( 'Sent by %1$s', 'client-power-tools' ), get_the_author() );
 
-            echo '<div class="cpt-message-content">';
+        }
 
-              if ( get_the_title() ) {
-                echo '<h3 class="cpt-message-title">' . get_the_title() . '</h3>';
-              }
+        if ( get_post_meta( $message_id, 'cpt_status_update_request' ) ) {
+          $message_classes[]     = 'status-update-request';
+        }
 
-              if ( ! get_post_meta( $message_id, 'cpt_status_update_request' ) ) {
-                the_content();
-              }
+        $message_meta .= ' on ' . get_the_date( 'F jS, Y, \a\t g:i a' ) . '</small></p>';
 
-            echo '</div>';
+        echo '<div id="cpt-message-' . $message_id . '" class="' . implode( ' ', $message_classes ) . '">';
 
-            echo '<div class="cpt-message-meta">' . $message_meta . '</div>';
+          echo '<div class="cpt-message-content">';
+
+            if ( get_the_title() && get_the_title() !== 'Untitled' ) {
+              echo '<h3 class="cpt-message-title">' . get_the_title() . '</h3>';
+            }
+
+            if ( ! get_post_meta( $message_id, 'cpt_status_update_request' ) ) {
+              the_content();
+            }
 
           echo '</div>';
 
-        endwhile;
+          echo '<div class="cpt-message-meta">' . $message_meta . '</div>';
 
-        $big = 999999;
+        echo '</div>';
 
-        echo paginate_links([
-          'base'    => str_replace( $big, '%#%', get_pagenum_link( $big, false ) ),
-          'format'  => '?paged=%#%',
-          'current' => max( 1, $paged ),
-          'total'   => $cpt_messages->max_num_pages,
-        ]);
+      endwhile;
 
-      echo '</div>';
+      $big = 999999;
+
+      echo paginate_links([
+        'base'    => str_replace( $big, '%#%', get_pagenum_link( $big, false ) ),
+        'format'  => '?paged=%#%',
+        'current' => max( 1, $paged ),
+        'total'   => $cpt_messages->max_num_pages,
+      ]);
 
     echo ob_get_clean();
 
   else :
 
-    echo '<p>' . __( 'No messages found.' ) . '</p>';
+    /**
+     * translators:
+     * 1: html
+     * 2: html
+     */
+    printf( __( '%1$sNo messages found.%2$s' , 'client-power-tools' ), '<p>', '</p>' );
 
   endif;
 
@@ -139,16 +190,22 @@ function cpt_new_message_form( $user_id ) {
             <tbody>
               <tr>
                 <th scope="row">
-                  <label for="subject_line"><?php _e( 'Subject Line' ); ?></label>
+                  <label for="subject_line"><?php _e( 'Subject Line', 'client-power-tools' ); ?></label>
                 </th>
                 <td>
                   <input name="subject_line" id="subject_line" class="large-text" type="text">
-                  <p><?php echo __( 'If you leave this field empty, the subject line will be "New message from' ) . ' ' . get_the_author() . '."'; ?></p>
+                  <p><?php
+                    /*
+                     * translators:
+                     * 1: sender's name
+                     */
+                    printf( __( 'If you leave this field empty, the subject line will be "New message from %1$s".', 'client-power-tools' ), cpt_get_name( get_current_user_id() ) );
+                  ?></p>
                 </td>
               </tr>
               <tr>
                 <th scope="row">
-                  <label for="message"><?php _e( 'Message' ); ?></label>
+                  <label for="message"><?php _e( 'Message', 'client-power-tools' ); ?></label>
                 </th>
                 <td>
                   <?php \wp_editor( '', 'cpt-message-editor', $editor_args ); ?>
@@ -156,7 +213,7 @@ function cpt_new_message_form( $user_id ) {
               </tr>
               <tr>
                 <th scope="row">
-                  Options
+                  <?php _e( 'Options', 'client-power-tools' ); ?>
                 </th>
                 <td>
                   <fieldset>
@@ -165,17 +222,17 @@ function cpt_new_message_form( $user_id ) {
 
                       <label for="send_message_content">
                         <input name="send_message_content" id="send_message_content" type="checkbox" value="1">
-                        <?php _e( 'Send message content.' ); ?>
+                        <?php _e( 'Send message content.', 'client-power-tools' ); ?>
                       </label>
-                      <p class="description"><?php _e( 'If checked, the client will receive the actual message by email instead of a notification with a prompt to log into their client portal. This is less secure.' ); ?></p>
+                      <p class="description"><?php _e( 'If checked, the client will receive the actual message by email instead of a notification with a prompt to log into their client portal. This is less secure.', 'client-power-tools' ); ?></p>
 
                     <?php } else { ?>
 
                       <label for="send_notification_only">
                         <input name="send_notification_only" id="send_notification_only" type="checkbox" value="1">
-                        <?php _e( 'Send notification only.' ); ?>
+                        <?php _e( 'Send notification only.', 'client-power-tools' ); ?>
                       </label>
-                      <p class="description"><?php _e( 'If checked, the client will receive an email letting them know they have a message, but they will have to log into their client dashboard to view the body of the message. This is more secure.' ); ?></p>
+                      <p class="description"><?php _e( 'If checked, the client will receive an email letting them know they have a message, but they will have to log into their client dashboard to view the body of the message. This is more secure.', 'client-power-tools' ); ?></p>
 
                     <?php } ?>
 
@@ -186,7 +243,7 @@ function cpt_new_message_form( $user_id ) {
           </table>
 
           <p class="submit">
-            <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e( 'Send Message' ); ?>">
+            <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e( 'Send Message', 'client-power-tools' ); ?>">
           </p>
 
         </form>
@@ -218,35 +275,34 @@ function cpt_new_message_form( $user_id ) {
           <?php
 
             /**
-            * This is a little hacky, but the output buffer seems to close <p>
-            * tags if there are line breaks within them, but using sprintf seems
-            * prevent that, which allows us to take advantage of the theme's
-            * <p> tag layout without leaving ugly margins between the label and
-            * the text field.
-            */
-            echo sprintf(
-              '<p>%s %s</p>',
-              sprintf( '<label for="subject_line">' . _( 'Subject Line' ) . '<br /><small>' . __( '(optional)' ) . '</small></label>' ),
-              sprintf( '<input name="subject_line" id="subject_line" class="large-text" type="text">' ),
+             * translators:
+             * 1: html
+             * 2: html
+             * 3: html
+             * 4: html & text field
+             */
+            printf( __( '%1$sSubject Line %2$s(optional)%3$s', 'client-power-tools' ),
+              '<label for="subject_line">',
+              '<small>',
+              '</small></label><input name="subject_line" id="subject_line" class="large-text" type="text"><p style="line-height: 0; margin-bottom: 1em;"> </p>'
             );
 
             /**
-            * This is even more hacky, but browsers really want to auto-close the <p> tag between
-            * the label and the wp_editor div, so there's a 0-line-height <p>
-            * tag with nothing in it below the div in order to take advantage of
-            * the theme's layout styles for <p> tags so there's a margin between
-            * the wp_editor field and the submit button.
-            */
-            echo sprintf(
-              '<p style="margin-bottom: 0 !important;">%s</p>%s<p style="line-height: 0 !important;"> </p>',
-              sprintf( '<label for="message">' . __( 'Message' ) . '<br /><small>' . __( '(required)' ) . '</small></label>' ),
-              sprintf( $message_editor ),
+             * translators:
+             * 1: html
+             * 2: html
+             * 3: html & wp_editor textarea field
+             */
+            printf( __( '%1$sMessage %2$s(required)%3$s', 'client-power-tools' ),
+              '<label for="message">',
+              '<small>',
+              '</small></label>' . $message_editor . '<p style="line-height: 0; margin-bottom: 1em;"> </p>'
             );
 
           ?>
 
           <p class="submit">
-            <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e( 'Send Message' ); ?>">
+            <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e( 'Send Message', 'client-power-tools' ); ?>">
           </p>
 
         </form>
@@ -312,13 +368,17 @@ function cpt_process_new_message() {
 
     if ( is_wp_error( $post ) ) {
 
-      $result = __( 'Message could not be sent. Error message:' ) . ' ' . $post->get_error_message();
+      /**
+       * translators:
+       * 1: error message
+       */
+      $result = sprintf( __( 'Message could not be sent. Error message: %1$s', 'client-power-tools' ), $post->get_error_message() );
 
     } else {
 
       cpt_message_notification( $post );
 
-      $result = __( 'Message sent!' );
+      $result = __( 'Message sent!', 'client-power-tools' );
 
     }
 
@@ -355,7 +415,11 @@ function cpt_message_notification( $message_id ) {
   $headers[]        = 'Content-Type: text/html; charset=UTF-8';
   $headers[]        = 'From: ' . $from_name . ' <' . $from_email . '>';
 
-  $subject          = $msg_obj->post_title ? $msg_obj->post_title : __( 'You have a new message from' ) . ' ' . $from_name;
+                      /**
+                       * translators:
+                       * 1: sender's name
+                       */
+  $subject          = $msg_obj->post_title ? $msg_obj->post_title : sprintf( __( 'You have a new message from %1$s', 'client-power-tools' ), $from_name );
 
   if ( $send_this_msg_content ) {
 
@@ -367,19 +431,19 @@ function cpt_message_notification( $message_id ) {
 
       $to           = $client_data[ 'manager_email' ];
 
-      $message      = '<p>' . __( 'To read your message, please visit your client dashboard.' ) . '</p>';
+      $message      = sprintf( __( '%1$sTo read your message, please visit your client dashboard.%2$s', 'client-power-tools' ), '<p>', '</p>' );
       $button_url   = cpt_get_client_profile_url( $clients_user_id ) . '#cpt-message-' . $message_id;
 
     } else {
 
       $to           = $client_data[ 'email' ];
 
-      $message      = '<p>' . __( 'To read this message, please view the client page.' ) . '</p>';
+      $message      = sprintf( __( '%1$sTo read this message, please view the client page.%2$s', 'client-power-tools' ), '<p>', '</p>' );
       $button_url   = cpt_get_client_dashboard_url() . '#cpt-message-' . $message_id;
 
     }
 
-    $button_txt     = __( 'Go to Message' );
+    $button_txt     = __( 'Go to Message', 'client-power-tools' );
     $message        = cpt_get_email_card( $subject, $message, $button_txt, $button_url );
 
   }

@@ -4,7 +4,7 @@
   $( document ).ready( function(){
 
     // When using the expander, every .cpt-click-to-expand should be followed by
-    // a .cpt-expand-this, so that the node list indexes match up.
+    // a .cpt-this-expands, so that the node list indexes match up.
     let expanderButtons = document.querySelectorAll( '.cpt-click-to-expand' );
     let buttonText      = [];
     let expandableDivs  = document.querySelectorAll( '.cpt-this-expands' );
@@ -20,6 +20,7 @@
           event.preventDefault();
 
           $( expandableDivs[i] ).toggle( 'fast' );
+          $( expanderButtons[i] ).toggleClass( 'open' );
           $( expandableDivs[i] ).toggleClass( 'open' );
 
           // This adds/removes the *required* attribute based on form visibility.
@@ -27,9 +28,11 @@
 
           if ( expandableDivs[i].classList.contains( 'open' ) ) {
 
-            expanderButtons[i].innerHTML = 'Cancel';
+            if ( ! expandableDivs[i].classList.contains( 'cpt-nav-tabs-submenu' ) ) {
+              expanderButtons[i].innerHTML = 'Cancel';
+            }
 
-            formElements.forEach( function( element ){
+            formElements.forEach( function( element ) {
 
               if ( element.dataset.required == 'true' ) {
                 element.setAttribute( 'required', '' );

@@ -1,128 +1,136 @@
 ( function( $ ) {
 
-  let postID        = cpt_frontend_js_vars.postID;
-  let dashboardID   = cpt_frontend_js_vars.dashboardID;
+  // Modals
+  $( document ).ready( function(){
 
-  // Modal Classes
-  let cptModal      = $( '.cpt-modal' );
-  let modalScreen   = $( '.cpt-modal-screen' );
-  let modalDismiss  = $( '.cpt-modal-dismiss-button' );
+    let postID        = cpt_frontend_js_vars.postID;
+    let dashboardID   = cpt_frontend_js_vars.dashboardID;
 
-  // Login Modal
-  let loginLink     = $( '.cpt-login-link' );
-  let loginModal    = $( '#cpt-login' );
-  let loginPanel    = $( '#cpt-login-modal-login' );
-  let resetPWPanel  = $( '#cpt-login-modal-resetpw' );
-  let goToResetPW   = $( '#cpt-login-go-to-resetpw' );
-  let goToLogin     = $( '#cpt-login-go-to-login' );
-  let loggedIn      = $( '#cpt-login-modal-already-logged-in' );
+    // Modal Classes
+    let cptModal      = $( '.cpt-modal' );
+    let modalScreen   = $( '.cpt-modal-screen' );
+    let modalDismiss  = $( '.cpt-modal-dismiss-button' );
 
-  // URL
-  let baseURL       = [ location.protocol, '//', location.host, location.pathname ].join( '' );
-  const params      = new URLSearchParams( location.search );
+    // Login Modal
+    let loginLink     = $( '.cpt-login-link' );
+    let loginModal    = $( '#cpt-login' );
+    let loginPanel    = $( '#cpt-login-modal-login' );
+    let resetPWPanel  = $( '#cpt-login-modal-resetpw' );
+    let goToResetPW   = $( '#cpt-login-go-to-resetpw' );
+    let goToLogin     = $( '#cpt-login-go-to-login' );
+    let loggedIn      = $( '#cpt-login-modal-already-logged-in' );
 
-
-  if ( loggedIn.length > 0 ) {
-    loginLink.html( 'Log Out' );
-  }
+    // URL
+    let baseURL       = [ location.protocol, '//', location.host, location.pathname ].join( '' );
+    const params      = new URLSearchParams( location.search );
 
 
-  if ( ! loggedIn.length > 0 && postID == dashboardID ) {
-    showLogin();
-  }
+    if ( loggedIn.length > 0 ) {
+      loginLink.html( 'Log Out' );
+    }
 
 
-  if ( params.has( 'cpt_login' ) ) {
+    if ( ! loggedIn.length > 0 && postID == dashboardID ) {
+      showLogin();
+    }
 
-    switch ( params.get( 'cpt_login' ) ) {
 
-      case 'resetpw':
-        showResetPW();
-        break;
+    if ( params.has( 'cpt_login' ) ) {
 
-      case 'login':
-      default:
-        showLogin();
-        break;
+      switch ( params.get( 'cpt_login' ) ) {
+
+        case 'resetpw':
+          showResetPW();
+          break;
+
+        case 'login':
+        default:
+          showLogin();
+          break;
+
+      }
 
     }
 
-  }
 
+    function showLogin() {
 
-  function showLogin() {
+      resetPWPanel.hide();
+      loginPanel.show();
 
-    resetPWPanel.hide();
-    loginPanel.show();
+      loginModal.show();
+      modalScreen.show();
 
-    loginModal.show();
-    modalScreen.show();
-
-  }
-
-
-  function showResetPW() {
-
-    resetPWPanel.show();
-    loginPanel.hide();
-
-    loginModal.show();
-    modalScreen.show();
-
-  }
-
-
-  modalDismiss.click( function() {
-
-    cptModal.hide( 95 );
-    modalScreen.hide();
-
-    /**
-    * Removes the cpt_login, cpt_notice, and password set/reset query parameters
-    * from the URL just in case the user tries to bookmark it or copy and paste
-    * some reason.
-    */
-    params.delete( 'cpt_login' );
-    params.delete( 'cpt_notice' );
-    params.delete( 'key' );
-    params.delete( 'login' );
-
-    if ( params.toString().length > 0 ) {
-      history.replaceState( {}, '', baseURL + '?' + params );
-    } else {
-      history.replaceState( {}, '', baseURL );
     }
 
+
+    function showResetPW() {
+
+      resetPWPanel.show();
+      loginPanel.hide();
+
+      loginModal.show();
+      modalScreen.show();
+
+    }
+
+
+    modalDismiss.click( function() {
+
+      cptModal.hide( 95 );
+      modalScreen.hide();
+
+      /**
+      * Removes the cpt_login, cpt_notice, and password set/reset query parameters
+      * from the URL just in case the user tries to bookmark it or copy and paste
+      * some reason.
+      */
+      params.delete( 'cpt_login' );
+      params.delete( 'cpt_notice' );
+      params.delete( 'key' );
+      params.delete( 'login' );
+
+      if ( params.toString().length > 0 ) {
+        history.replaceState( {}, '', baseURL + '?' + params );
+      } else {
+        history.replaceState( {}, '', baseURL );
+      }
+
+    });
+
+
+    loginLink.click( function( e ) {
+      e.preventDefault();
+      showLogin();
+    });
+
+
+    goToResetPW.click( function( e ) {
+      e.preventDefault();
+      showResetPW();
+    });
+
+
+    goToLogin.click( function( e ) {
+      e.preventDefault();
+      showLogin();
+    });
+
   });
 
 
-  loginLink.click( function( e ) {
-    e.preventDefault();
-    showLogin();
+  // Notices/Inline Modals
+  // (Not technically modals, but the code overlaps for efficiency.)
+  $( document ).ready( function(){
+
+    let cptInlineModal  = $( '.cpt-inline-modal, .cpt-notice' );
+    let modalDismiss    = $( '.cpt-notice-dismiss-button' );
+
+    modalDismiss.click( function() {
+      cptInlineModal.hide( 95 );
+    });
+
   });
 
-
-  goToResetPW.click( function( e ) {
-    e.preventDefault();
-    showResetPW();
-  });
-
-
-  goToLogin.click( function( e ) {
-    e.preventDefault();
-    showLogin();
-  });
-
-})( jQuery );
-
-
-( function( $ ) {
-
-  let cptInlineModal  = $( '.cpt-inline-modal, .cpt-notice' );
-  let modalDismiss    = $( '.cpt-notice-dismiss-button' );
-
-  modalDismiss.click( function() {
-    cptInlineModal.hide( 95 );
-  });
 
 })( jQuery );
