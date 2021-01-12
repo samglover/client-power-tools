@@ -82,22 +82,22 @@ To add pages to your knowledge base, just go to the page you want to add (or cre
 
 Version 1.4 adds four major features:
 
-1. A new module, the knowledge base!
-2. A navigation menu for the client dashboard.
+1. NEW MODULE: Knowledge Base!
+2. Tabbed Navigation for the client dashboard and breadcrumb navigation within the knowledge base.
 3. Now you can add your own content to the client dashboard.
-4. All modules can now be enabled/disabled.
+4. All non-core modules can now be enabled/disabled.
 
-The **knowledge base** is a clients-only page—or a collection of pages—you can use to share information and resources with your clients. Like the client dashboard, the knowledge base is a regular WordPress page with special features, including breadcrumb navigation to help your clients find their way around.
+The **Knowledge Base** is a clients-only page—or a collection of pages—you can use to share information and resources with your clients. Like the client dashboard, the knowledge base is a regular WordPress page with special features, including a drop-down index and breadcrumb navigation to help your clients find their way around.
 
-The client dashboard now features a tabbed navigation menu, with a separate tab for each enabled module. When developing the new knowledge base module, it became obvious that the client dashboard can't remain on a single page.
+The client dashboard now features a tabbed navigation menu, with a separate tab for each enabled module. When developing the new Knowledge Base module, it became obvious that the client dashboard is too big for a single page. With the tabbed navigation, there's room to grow.
 
 And now that messaging isn't taking up the entire client dashboard, there is plenty of room for you to add your own content to the page. For example, you might want to show a welcome message to your clients and highlight some essential information or resources in your knowledge base.
 
-Finally, by popular demand each of the three existing modules (the status update request button, client messaging, or the knowledge base) can now be enabled or disabled from the settings page.
+Finally, by popular demand each of the three existing non-core modules can now be enabled or disabled from the settings page. Currently the non-core modules are the Status Update Request Button, Messaging, and Knowledge Base.
 
-As usual, there are also lots of smaller updates and tweaks.
+As usual, there are also lots of smaller updates, improvements, and tweaks.
 
-For more information on how to take advantage of the new and updated features, see the [documentation](https://clientpowertools.com/documentation/).
+For more information on how to take advantage of the new and updated features, plus ideas for how to use the Knowledge Base, see the [documentation](https://clientpowertools.com/documentation/).
 
 
 == Changelog ==

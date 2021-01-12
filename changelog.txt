@@ -16,7 +16,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 
 #### Changed
 - The settings page is better organized, with general/core settings, then settings for each module.
-- Each of the non-core modules can be disabled. Currently the non-core modules are Status Update Request Button, Messaging, and Knowledge Base.
+- Each of the non-core modules can be disabled. Currently the non-core modules are the Status Update Request Button, Messaging, and Knowledge Base.
 - You can now add content to the main client dashboard page, which will be shown below the welcome message and status update request button (if it is enabled).
 
 #### Fixed
