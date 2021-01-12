@@ -78,7 +78,7 @@ function cpt_clients() {
         ?>
 
         <div id="cpt-admin-header">
-          <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>common/images/cpt-logo.svg" height="auto" width="100%" />
+          <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>admin/images/cpt-logo.svg" height="auto" width="100%" />
           <?php echo $page_header; ?>
         </div>
         <hr class="wp-header-end">
@@ -127,8 +127,13 @@ function cpt_get_client_profile( $user_id ) {
 
   cpt_edit_client( $user_id );
 
-  echo '<h2>' . __( 'Messages' ) . '</h2>';
-  Common\cpt_messages( $user_id );
+  echo '<h2>' . __( 'Messages', 'client-power-tools' ) . '</h2>';
+
+  if ( get_option( 'cpt_module_messaging' ) ) {
+    Common\cpt_messages( $user_id );
+  } else {
+    echo '<p>' . __( 'The messaging module is disabled.', 'client-power-tools' ) . '</p>';
+  }
 
 }
 

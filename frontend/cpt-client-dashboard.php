@@ -115,7 +115,7 @@ function cpt_nav() {
     ?>
 
       <nav id="cpt-nav">
-        <ul class="tabs">
+        <ul class="cpt-tabs">
 
           <li><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if ( Common\cpt_is_client_dashboard() && ! Common\cpt_is_messages() ) { echo ' current'; } ?>"><?php _e( 'Dashboard', 'client-power-tools' ); ?></a></li>
 
@@ -134,10 +134,18 @@ function cpt_nav() {
               $classes            = 'cpt-nav-menu-item';
 
               Common\cpt_is_knowledge_base()  ? $classes .= ' current' : null;
-              $child_pages                    ? $classes .= ' cpt-click-to-expand' : null;
 
-              echo '<li><a href="' . $knowledge_base_url . '" class="' . $classes . '" title="' . $title . '">' . $title . '</a></li>';
-              $knowledge_base_index = cpt_knowledge_base_index();
+              if ( $child_pages ) {
+
+                $classes .= ' cpt-click-to-expand';
+
+                echo '<li><span class="' . $classes . '">' . $title . '</span></li>';
+
+              } else {
+                echo '<li><a href="' . $knowledge_base_url . '" class="' . $classes . '" title="' . $title . '">' . $title . '</a></li>';
+              }
+
+              $knowledge_base_submenu = cpt_nav_tabs_submenu( $knowledge_base_id );
 
             }
 
@@ -150,11 +158,143 @@ function cpt_nav() {
           /**
            * If adding more drop-down tabs, just keep them in the same order.
            */
-          if ( get_option( 'cpt_module_knowledge_base' ) && $child_pages ) { echo $knowledge_base_index; }
+          if ( get_option( 'cpt_module_knowledge_base' ) && $child_pages ) { echo $knowledge_base_submenu; }
 
         ?>
 
       </nav>
+
+    <?php
+
+  echo ob_get_clean();
+
+}
+
+
+/**
+ * Nav Submenu
+ */
+function cpt_get_child_pages( $page_id ) {
+
+  if ( ! $page_id ) { return; }
+
+  $args = [
+    'fields'          => 'ids',
+    'order'           => 'ASC',
+    'orderby'         => 'menu_order',
+    'post_parent'			=> $page_id,
+    'posts_per_page'  => -1,
+    'post_status'     => 'publish',
+    'post_type'				=> 'page',
+  ];
+
+  $child_pages = get_posts( $args );
+
+  if ( $child_pages ) {
+
+    return $child_pages;
+
+  } else {
+
+    return false;
+
+  }
+
+}
+
+function cpt_list_child_pages( $page_id ) {
+
+  if ( ! $page_id ) { return; }
+
+  $current_page_id  = get_the_ID();
+  $title            = get_the_title( $page_id );
+  $url              = get_the_permalink( $page_id );
+
+  if ( $current_page_id == $page_id ) {
+    echo '<li><strong>' . $title . '</strong></li>';
+  } else {
+    echo '<li><a href="' . $url . '" title="' . $title . '">' . $title . '</a></li>';
+  }
+
+  $child_pages = cpt_get_child_pages( $page_id );
+
+  if ( $child_pages ) {
+
+    ob_start();
+
+      echo '<ul>';
+
+        foreach ( $child_pages as $child_page ) {
+          cpt_list_child_pages( $child_page );
+        }
+
+      echo '</ul>';
+
+    echo ob_get_clean();
+
+  } else {
+
+   return;
+
+  }
+
+}
+
+
+function cpt_nav_tabs_submenu( $parent_id ) {
+
+  if ( ! $parent_id ) { return; }
+
+  $child_pages = cpt_get_child_pages( $parent_id );
+
+  if ( $child_pages ) {
+
+    ob_start();
+
+      ?>
+
+        <div class="cpt-this-expands cpt-nav-tabs-submenu">
+          <ul>
+            <?php cpt_list_child_pages( $parent_id ); ?>
+          </ul>
+        </div>
+
+      <?php
+
+    return ob_get_clean();
+
+  }
+
+}
+
+
+/**
+ * Breadcrumbs
+ */
+function cpt_breadcrumbs() {
+
+  $breadcrumbs[]    = '<span class="breadcrumb last-breadcrumb"><strong>' . get_the_title( get_the_ID() ) . '</strong></span>';
+  $parent_id        = wp_get_post_parent_id( get_the_ID() );
+
+  while ( $parent_id ) {
+
+    $parent_url     = get_the_permalink( $parent_id );
+    $parent_title   = get_the_title( $parent_id );
+
+    $breadcrumbs[]  = '<span class="breadcrumb"><a href="' . $parent_url . '">' . $parent_title . '</a></span>';
+    $parent_id      = wp_get_post_parent_id( $parent_id );
+
+  }
+
+  $breadcrumbs      = array_reverse( $breadcrumbs );
+
+  ob_start();
+
+    ?>
+
+      <div id="cpt-breadcrumbs">
+        <?php echo implode( ' / ', $breadcrumbs ); ?>
+      </div>
 
     <?php
 

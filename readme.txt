@@ -97,8 +97,24 @@ Finally, by popular demand each of the three existing modules (the status update
 
 As usual, there are also lots of smaller updates and tweaks.
 
+For more information on how to take advantage of the new and updated features, see the [documentation](https://clientpowertools.com/documentation/).
+
 
 == Changelog ==
+
+### 1.4 - 2021-01-12
+
+#### Added
+- NEW MODULE: Knowledge Base! The knowledge base is a restricted page you can use to share information and resources with your clients. Add as many sub-pages as you like; they will be nicely organized in an index for your clients.
+- Client dashboard pages now have navigation tabs, including breadcrumbs and a drop-down index to help clients navigate your knowledge base.
+
+#### Changed
+- The settings page is better organized, with general/core settings, then settings for each module.
+- Each of the non-core modules can be disabled. Currently the non-core modules are Status Update Request Button, Messaging, and Knowledge Base.
+- You can now add content to the main client dashboard page, which will be shown below the welcome message and status update request button (if it is enabled).
+
+#### Fixed
+- Untitled messages no longer show "Untitled" as the title.
 
 ### 1.3.1 - 2020-12-18
 

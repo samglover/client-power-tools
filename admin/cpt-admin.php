@@ -79,7 +79,7 @@ function cpt_menu_pages() {
     'cpt-view-clients',
     'cpt',
     __NAMESPACE__ . '\cpt_clients',
-    CLIENT_POWER_TOOLS_DIR_URL . 'common/images/cpt-icon.svg',
+    CLIENT_POWER_TOOLS_DIR_URL . 'admin/images/cpt-icon.svg',
     '3', // Position
   );
 

@@ -27,13 +27,11 @@ function cpt_knowledge_base( $content ) {
 
         if ( Common\cpt_is_client() ) {
 
-          cpt_nav( get_the_ID() );
+          cpt_nav();
 
-          if ( intval( get_option( 'cpt_knowledge_base_page_selection' ) ) !== get_the_ID() ) {
-            cpt_knowledge_base_breadcrumbs();
+          if ( get_option( 'cpt_knowledge_base_page_selection' ) != get_the_ID() ) {
+            cpt_breadcrumbs();
           }
-
-          cpt_knowledge_base_index();
 
           return ob_get_clean() . $content;
 
@@ -75,135 +73,3 @@ function cpt_knowledge_base( $content ) {
 }
 
 add_filter( 'the_content', __NAMESPACE__ . '\cpt_knowledge_base' );
-
-
-/**
- * Knowledge Base Breadcrumbs
- */
-function cpt_knowledge_base_breadcrumbs() {
-
-  $page_id          = get_the_ID();
-  $breadcrumbs[]    = '<span class="breadcrumb last-breadcrumb"><strong>' . get_the_title( $page_id ) . '</strong></span>';
-  $parent_id        = wp_get_post_parent_id( $page_id );
-
-  while ( $parent_id ) {
-
-    $parent_url     = get_the_permalink( $parent_id );
-    $parent_title   = get_the_title( $parent_id );
-
-    $breadcrumbs[]  = '<span class="breadcrumb"><a href="' . $parent_url . '">' . $parent_title . '</a></span>';
-    $parent_id      = wp_get_post_parent_id( $parent_id );
-
-  }
-
-  $breadcrumbs      = array_reverse( $breadcrumbs );
-
-  ob_start();
-
-    ?>
-
-      <div id="cpt-knowledge-base-breadcrumbs">
-        <?php echo implode( ' / ', $breadcrumbs ); ?>
-      </div>
-
-    <?php
-
-  echo ob_get_clean();
-
-}
-
-
-/**
- * Knowledge Base Index
- */
-function cpt_get_child_pages( $page_id ) {
-
-  if ( ! $page_id ) { return; }
-
-  $args = [
-    'fields'          => 'ids',
-    'order'           => 'ASC',
-    'orderby'         => 'menu_order',
-    'post_parent'			=> $page_id,
-    'posts_per_page'  => -1,
-    'post_status'     => 'publish',
-    'post_type'				=> 'page',
-  ];
-
-  $child_pages = get_posts( $args );
-
-  if ( $child_pages ) {
-
-    return $child_pages;
-
-  } else {
-
-    return false;
-
-  }
-
-}
-
-function cpt_list_child_pages( $page_id ) {
-
-  if ( ! $page_id ) { return; }
-
-  $current_page_id  = get_the_ID();
-  $title            = get_the_title( $page_id );
-  $url              = get_the_permalink( $page_id );
-
-  if ( $current_page_id == $page_id ) {
-    echo '<li><strong>' . $title . '</strong></li>';
-  } else {
-    echo '<li><a href="' . $url . '" title="' . $title . '">' . $title . '</a></li>';
-  }
-
-  $child_pages = cpt_get_child_pages( $page_id );
-
-  if ( $child_pages ) {
-
-    ob_start();
-
-      echo '<ul>';
-
-        foreach ( $child_pages as $child_page ) {
-          cpt_list_child_pages( $child_page );
-        }
-
-      echo '</ul>';
-
-    echo ob_get_clean();
-
-  } else {
-
-   return;
-
-  }
-
-}
-
-
-function cpt_knowledge_base_index() {
-
-  $knowledge_base_id    = get_option( 'cpt_knowledge_base_page_selection' );
-  $child_pages          = cpt_get_child_pages( $knowledge_base_id );
-
-  if ( $child_pages ) {
-
-    ob_start();
-
-      ?>
-
-        <div id="cpt-knowledge-base-index" class="cpt-this-expands cpt-nav-tabs-submenu">
-          <ul>
-            <?php cpt_list_child_pages( $knowledge_base_id ); ?>
-          </ul>
-        </div>
-
-      <?php
-
-    return ob_get_clean();
-
-  }
-
-}

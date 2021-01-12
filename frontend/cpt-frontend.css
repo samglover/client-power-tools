@@ -2,7 +2,7 @@
   margin-bottom: 2em;
 }
 
-  #cpt-nav ul.tabs {
+  #cpt-nav ul.cpt-tabs {
     border-bottom: 1px solid Silver;
     display: block;
     list-style: none;
@@ -10,50 +10,52 @@
     padding: 0;
   }
 
-  #cpt-nav ul.tabs li {
+  #cpt-nav ul.cpt-tabs li {
     display: inline-block;
     margin: 0 4px 0 0;
     padding: 0;
   }
 
-  #cpt-nav ul.tabs a {
+  #cpt-nav ul.cpt-tabs .cpt-nav-menu-item {
     border-color: Silver;
     border-style: solid;
     border-width: 1px 1px 0 1px;
     color: DarkSlateGray;
+    cursor: pointer;
     display: block;
     padding: .5em 1em;
     text-decoration: none;
   }
 
-  #cpt-nav ul.tabs a.current {
+  #cpt-nav ul.cpt-tabs .cpt-nav-menu-item.current {
     background-color: LightGray;
   }
 
-  #cpt-nav ul.tabs a:hover,
-  #cpt-nav ul.tabs a:focus {
+  #cpt-nav ul.cpt-tabs .cpt-nav-menu-item:hover,
+  #cpt-nav ul.cpt-tabs .cpt-nav-menu-item:focus {
     background-color: Silver;
   }
 
   #cpt-nav .cpt-click-to-expand::after {
     content: '\025BE';
     display: inline-block;
+    line-height: 1;
     margin-left: 4px;
     opacity: .25;
   }
 
   #cpt-nav .open::after {
-    transform: rotatez( 180deg );
+    transform: rotate( 180deg );
   }
 
-#cpt-knowledge-base-index {
+.cpt-nav-tabs-submenu {
   border-bottom: 1px solid Silver;
   margin: 0 0 2em 0;
   padding: 2em;
   position: relative;
 }
 
-#cpt-knowledge-base-index::before {
+.cpt-nav-tabs-submenu::before {
   background-color: Silver;
   content: ' ';
   opacity: .5;
@@ -65,35 +67,31 @@
   z-index: -1;
 }
 
-  #cpt-knowledge-base-index > *:first-child {
-    margin-top: 0;
-  }
-
-  #cpt-knowledge-base-index > *:last-child {
-    margin-bottom: 0;
-  }
-
-  #cpt-knowledge-base-index ul {
+  .cpt-nav-tabs-submenu ul {
     list-style: none;
   }
 
-  #cpt-knowledge-base-index > ul,
-  #cpt-knowledge-base-index ul > li {
-    margin-left: 0;
-    padding-left: 0;
+  .cpt-nav-tabs-submenu > ul {
+    margin: 0;
+    padding: 0;
   }
 
-  #cpt-knowledge-base-index > ul ul {
-    margin-left: 1em;
-    padding-left: 0;
+  .cpt-nav-tabs-submenu > ul ul {
+    margin: 0 0 0 1em;
+    padding: 0;
   }
 
-  #cpt-knowledge-base-index li.current a {
+  .cpt-nav-tabs-submenu li {
+    margin: .5em 0;
+  }
+
+  .cpt-nav-tabs-submenu li.current a {
     font-weight: bold;
   }
 
-#cpt-knowledge-base-breadcrumbs {
+#cpt-breadcrumbs {
   font-size: 80%;
+  margin-bottom: 2em;
 }
 
 .cpt-modal {

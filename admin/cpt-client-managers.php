@@ -38,7 +38,7 @@ function cpt_client_managers() {
       <div id="cpt-admin" class="wrap">
 
         <div id="cpt-admin-header">
-          <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>common/images/cpt-logo.svg" height="auto" width="100%" />
+          <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>admin/images/cpt-logo.svg" height="auto" width="100%" />
           <div id="cpt-admin-page-title">
             <h1 id="cpt-page-title">Client Managers</h1>
             <p id="cpt-subtitle">Client Power Tools</p>
