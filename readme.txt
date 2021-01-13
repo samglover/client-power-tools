@@ -30,7 +30,7 @@ The dashboard itself is a WordPress page, so you can add it to your menus like a
 
 You can change the name or permalink of the page, or select a different page entirely.
 
-#### Status Update Request Button
+#### Status Update Request Button Module
 
 Your clients want to know how things are going!
 
@@ -38,22 +38,27 @@ The status update request button on the client dashboard makes it easy for clien
 
 You can designate one email address to receive all status update requests so you can respond efficiently.
 
-#### Messaging & Notifications
+#### Messages Module
 
 Using Client Power Tools to communicate with your clients keeps all your messages in one place so nothing gets lost.
 
 When you send a message to your client, they will receive an email notification with a link to their client dashboard so they can read it and reply.
 
+#### Knowledge Base Module (NEW!)
+
+The knowledge base is a clients-only page—or a collection of pages you can use to share information and resources with your clients.
+
+Just like the client dashboard, the knowledge base is a regular WordPress page with some special features. Only clients can access it, for one thing. But it also includes a drop-down index and breadcrumb navigation to help your clients find their way around.
+
 #### Customization
 
 Client Power Tools is built to be customizable where you need it to be. Here are some of the things you can change to suit your needs:
 
+* Enable/disable all non-core modules (as of 1.4, the non-core modules are the Status Update Request Button, Messaging, and Knowledge Base).
 * **New-client email.** You can customize the email sent to newly added clients so that it reflects the name, email address, subject line, and messaging you prefer.
-* **Client IDs.** When adding or updating a client, you can add a custom client ID.
 * **Client statuses.** You can customize the default statuses (potential, active, inactive).
 * **Client managers.** You can assign a client manager to each client.
-* **Status update request frequency.** Change how often the status update request button is available to your clients, or turn it off.
-* **Status update request recipient.** Designate one person to get notified of all status update requests.
+* **Status update request frequency.** Change how often the status update request button is available to your clients.
 * **Design.** The front-end design of Client Power Tools is as minimal as possible so that Client Power Tools blends into your existing theme. But you can override the Client Power Tools styles as long as you know a little CSS. (See the [documentation](https://clientpowertools.com/documentation/) for more details.)
 
 
@@ -67,11 +72,11 @@ For help using Client Power Tools, see the [documentation](https://clientpowerto
 
 You can use Client Power Tools even if your website does not have an SSL certificate, but you should probably get one. For more information, see the [Securing WordPress for Client Power Tools](https://clientpowertools.com/security/) resource.
 
-= Where is my client dashboard? =
+= Where is my client dashboard? Where is my knowledge base? =
 
-You can find your client dashboard by checking your Client Power Tools settings page. In your WordPress dashboard, go to **Client Power Tools** / **Settings** and look for the **Client Dashboard Page** selection. There will be a link to your client dashboard, as well.
+You can find your client dashboard by checking your Client Power Tools settings page. In your WordPress dashboard, go to **Client Power Tools** / **Settings** and look for the **Client Dashboard Page** and "Knowledge Base Page" selection fields. There will be a link to your current pages, as well.
 
-You should probably add your client dashboard to your website navigation menu so it is easy for clients to find.
+You should probably add your client dashboard to your website navigation menu so it is easy for clients to find. You may want to add your knowledge base, as well, if you want clients to be able to find it without going to their dashboard first.
 
 = How do I add pages to my knowledge base? =
 
