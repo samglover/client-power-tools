@@ -441,7 +441,7 @@ function cpt_knowledge_base_settings_init() {
 
     add_settings_field(
       'cpt_knowledge_base_page_selection',
-      '<label for="cpt_knowledge_base_page_selection">' . __( 'Knowledge Base', 'client-power-tools' ) . '</label>',
+      '<label for="cpt_knowledge_base_page_selection">' . __( 'Knowledge Base Page', 'client-power-tools' ) . '</label>',
       __NAMESPACE__ . '\cpt_knowledge_base_page_selection',
       'cpt-settings',
       'cpt-knowledge-base-settings',
