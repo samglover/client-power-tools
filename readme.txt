@@ -107,6 +107,12 @@ For more information on how to take advantage of the new and updated features, p
 
 == Changelog ==
 
+### 1.4.1 - 2021-02-12
+
+#### Added
+- Added a wrapper for the status request update button.
+
+
 ### 1.4 - 2021-01-12
 
 #### Added
@@ -120,6 +126,7 @@ For more information on how to take advantage of the new and updated features, p
 
 #### Fixed
 - Untitled messages no longer show "Untitled" as the title.
+
 
 ### 1.3.1 - 2020-12-18
 

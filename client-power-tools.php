@@ -5,7 +5,7 @@ Plugin Name: Client Power Tools
 Plugin URI: https://clientpowertools.com
 Description: Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
 Author: Sam Glover
-Version: 1.4
+Version: 1.4.1
 Author URI: https://samglover.net
 */
 
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
 * Constants
 */
-define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.4' );
+define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.4.1' );
 define( 'CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 

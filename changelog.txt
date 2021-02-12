@@ -8,6 +8,12 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - As I make updates I am preparing Client Power Tools for internationalization.
 
 
+### 1.4.1 - 2021-02-12
+
+#### Added
+- Added a wrapper for the status request update button.
+
+
 ### 1.4 - 2021-01-12
 
 #### Added

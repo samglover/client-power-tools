@@ -30,16 +30,20 @@ function cpt_status_update_request_button( $user_id ) {
 
     ?>
 
-      <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST">
+      <div id="cpt-status-update-request-button">
 
-        <?php wp_nonce_field( 'cpt_status_update_requested', 'cpt_status_update_request_nonce' ); ?>
-        <input name="action" value="cpt_status_update_requested" type="hidden">
-        <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
-        <p class="submit">
-          <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e( 'Request Status Update', 'client-power-tools' ); ?>">
-        </p>
+        <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST">
 
-      </form>
+          <?php wp_nonce_field( 'cpt_status_update_requested', 'cpt_status_update_request_nonce' ); ?>
+          <input name="action" value="cpt_status_update_requested" type="hidden">
+          <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
+          <p class="submit">
+            <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e( 'Request Status Update', 'client-power-tools' ); ?>">
+          </p>
+
+        </form>
+
+      </div>
 
     <?php
 
