@@ -200,7 +200,7 @@ For more information on how to take advantage of the new and updated features, p
 
 #### Automatic
 
-Automatic installation is the easiest option. To do an automatic install of WooCommerce, log in to your WordPress dashboard and go to **Plugins** / **Add New**. Enter “Client Power Tools" in the search field. To install Client Power Tools, click the **Install Now** button, then activate it by clicking the **Activate** button.
+Automatic installation is the easiest option. To do an automatic install of Client Power Tools, log in to your WordPress dashboard and go to **Plugins** / **Add New**. Enter “Client Power Tools" in the search field. To install Client Power Tools, click the **Install Now** button, then activate it by clicking the **Activate** button.
 
 #### Manual
 
