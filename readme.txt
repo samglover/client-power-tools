@@ -14,21 +14,25 @@ A free, easy-to-use client dashboard and communication portal built for independ
 
 == Description ==
 
-Client Power Tools is built for independent contractors, consultants, and professionals. Give your clients a dashboard where they can check on the status of their project and communicate with you—right on your own website!
+Client Power Tools is built for independent contractors, consultants, and professionals. Give your clients a dashboard where they can check on the status of their project, access information and resources in your clients-only knowledge base, and communicate with you—right on your own website!
 
-#### Front-End Onboarding & Login
+### Front-End Onboarding & Login
 
-All client interactions happen on the front end of your website, with clean modal forms for logging in and setting or changing passwords.
+All client interactions happen on the front end of your website, with clean modal forms for logging in and setting or changing passwords. Client Power Tools will simply blend in with most themes.
 
-Clients are blocked from the WordPress admin and the default login page.
+Clients are redirected away from the WordPress admin backend and the default WordPress login form.
 
-#### The Client Dashboard
+### The Client Dashboard
 
 Clients can log in to their dashboard on your website at any time.
 
-The dashboard itself is a WordPress page, so you can add it to your menus like any other page. Or you can include the link anywhere else, like your email newsletters.
+The dashboard uses regular WordPress pages that you can add to your menus just like any other page. Or you can include the link anywhere you need to, like your blog posts, email newsletters, etc. The only difference is that the client dashboard is only visible to logged-in clients.
 
 You can change the name or permalink of the page, or select a different page entirely.
+
+### Modules
+
+Each module can be enabled or disabled independently of the rest.
 
 #### Status Update Request Button Module
 
@@ -42,19 +46,19 @@ You can designate one email address to receive all status update requests so you
 
 Using Client Power Tools to communicate with your clients keeps all your messages in one place so nothing gets lost.
 
-When you send a message to your client, they will receive an email notification with a link to their client dashboard so they can read it and reply.
+When you send a message to your client, they will receive an email notification with a link to their client dashboard so they can read it and reply. Or you can send them the full message—by default or on a message-by-message basis.
 
 #### Knowledge Base Module (NEW!)
 
 The knowledge base is a clients-only page—or a collection of pages you can use to share information and resources with your clients.
 
-Just like the client dashboard, the knowledge base is a regular WordPress page with some special features. Only clients can access it, for one thing. But it also includes a drop-down index and breadcrumb navigation to help your clients find their way around.
+Just like the client dashboard, the knowledge base is a regular WordPress page with some special features. You can add as many child pages as you like—the knowledge base tab will use a drop-down index and breadcrumb navigation to help your clients find their way around.
 
-#### Customization
+### Customization
 
 Client Power Tools is built to be customizable where you need it to be. Here are some of the things you can change to suit your needs:
 
-* Enable/disable all non-core modules (as of 1.4, the non-core modules are the Status Update Request Button, Messaging, and Knowledge Base).
+* **Enable/disable all non-core modules.** (As of 1.4, the non-core modules are the Status Update Request Button, Messaging, and Knowledge Base.)
 * **New-client email.** You can customize the email sent to newly added clients so that it reflects the name, email address, subject line, and messaging you prefer.
 * **Client statuses.** You can customize the default statuses (potential, active, inactive).
 * **Client managers.** You can assign a client manager to each client.
@@ -70,13 +74,13 @@ For help using Client Power Tools, see the [documentation](https://clientpowerto
 
 = I'm getting a warning that says my website is not using SSL (HTTPS). Should I be worried? =
 
-You can use Client Power Tools even if your website does not have an SSL certificate, but you should probably get one. For more information, see the [Securing WordPress for Client Power Tools](https://clientpowertools.com/security/) resource.
+You can use Client Power Tools even if your website does not have an SSL certificate, but you should probably get one. For more information, see the [Securing WordPress for Client Power Tools](https://clientpowertools.com/security/) resource page.
 
 = Where is my client dashboard? Where is my knowledge base? =
 
 You can find your client dashboard by checking your Client Power Tools settings page. In your WordPress dashboard, go to **Client Power Tools** / **Settings** and look for the **Client Dashboard Page** and "Knowledge Base Page" selection fields. There will be a link to your current pages, as well.
 
-You should probably add your client dashboard to your website navigation menu so it is easy for clients to find. You may want to add your knowledge base, as well, if you want clients to be able to find it without going to their dashboard first.
+You should probably add your client dashboard to your website navigation menu so it is easy for clients to find. You may want to add your knowledge base, as well, if you want clients to be able to find it without going to their dashboard first. If you need help with this, see the [documentation](https://clientpowertools.com/documentation/).
 
 = How do I add pages to my knowledge base? =
 
