@@ -8,6 +8,12 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - As I make updates I am preparing Client Power Tools for internationalization.
 
 
+### 1.4.2 - 2021-06-06
+
+#### Changed
+- Removed jQuery from cpt-admin.js.
+
+
 ### 1.4.1 - 2021-02-12
 
 #### Added

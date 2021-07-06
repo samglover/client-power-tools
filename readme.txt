@@ -111,6 +111,12 @@ For more information on how to take advantage of the new and updated features, p
 
 == Changelog ==
 
+### 1.4.2 - 2021-06-06
+
+#### Changed
+- Removed jQuery from cpt-admin.js.
+
+
 ### 1.4.1 - 2021-02-12
 
 #### Added
