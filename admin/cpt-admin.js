@@ -1,25 +1,16 @@
-( function( $ ) {
+// Admin Delete-Client Warning
+let deleteClientLink    = document.querySelector( '#cpt-delete-client-link' );
 
-  // Admin Delete-Client Warning
-  let deleteClientLink    = $( '#cpt-delete-client-link' );
+let cptAdminModal       = document.querySelector( '.cpt-admin-modal' );
+let adminModalScreen    = document.querySelector( '.cpt-admin-modal-screen' );
+let deleteCancelButton  = document.querySelector( '.cpt-cancel-delete-client' );
 
-  let cptAdminModal       = $( '.cpt-admin-modal' );
-  let adminModalScreen    = $( '.cpt-admin-modal-screen' );
-  let deleteCancelButton  = $( '.cpt-cancel-delete-client' );
+deleteClientLink.addEventListener( 'click', function() {
+  cptAdminModal.style.display = '';
+  adminModalScreen.style.display = '';
+});
 
-  deleteClientLink.click( function() {
-
-    cptAdminModal.show();
-    adminModalScreen.show();
-
-  });
-
-  deleteCancelButton.click( function() {
-
-    cptAdminModal.hide();
-    adminModalScreen.hide();
-
-  });
-
-
-})( jQuery );
+deleteCancelButton.addEventListener( 'click', function() {
+  cptAdminModal.style.display = 'none';
+  adminModalScreen.style.display = 'none';
+});
