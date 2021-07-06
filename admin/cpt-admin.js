@@ -6,8 +6,8 @@ let adminModalScreen    = document.querySelector( '.cpt-admin-modal-screen' );
 let deleteCancelButton  = document.querySelector( '.cpt-cancel-delete-client' );
 
 deleteClientLink.addEventListener( 'click', function() {
-  cptAdminModal.style.display = '';
-  adminModalScreen.style.display = '';
+  cptAdminModal.style.display = 'grid';
+  adminModalScreen.style.display = 'block';
 });
 
 deleteCancelButton.addEventListener( 'click', function() {
