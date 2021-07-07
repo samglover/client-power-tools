@@ -12,6 +12,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 
 #### Changed
 - Removed jQuery from cpt-admin.js.
+- Removed jQuery from cpt-frontend.js.
 
 
 ### 1.4.1 - 2021-02-12

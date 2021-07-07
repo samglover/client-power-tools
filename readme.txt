@@ -115,6 +115,7 @@ For more information on how to take advantage of the new and updated features, p
 
 #### Changed
 - Removed jQuery from cpt-admin.js.
+- Removed jQuery from cpt-frontend.js.
 
 
 ### 1.4.1 - 2021-02-12

@@ -9,7 +9,7 @@
     let buttonText      = [];
     let expandableDivs  = document.querySelectorAll( '.cpt-this-expands' );
 
-    if ( expanderButtons.length > 0 ) {
+    if ( expanderButtons ) {
 
       for ( let i = 0; i < expanderButtons.length; i++ ) {
 

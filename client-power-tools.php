@@ -56,7 +56,7 @@ if ( ! is_admin() ) {
 		wp_register_style( 'cpt-frontend-css', CLIENT_POWER_TOOLS_DIR_URL . 'frontend/cpt-frontend.css' );
 		wp_enqueue_style( 'cpt-frontend-css' );
 
-		wp_register_script( 'cpt-frontend-js', CLIENT_POWER_TOOLS_DIR_URL . 'frontend/cpt-frontend.js', [ 'jquery' ], '', true );
+		wp_register_script( 'cpt-frontend-js', CLIENT_POWER_TOOLS_DIR_URL . 'frontend/cpt-frontend.js', '', '', true );
 		wp_localize_script( 'cpt-frontend-js', 'cpt_frontend_js_vars',
 			[
 				'postID'			=> $post->ID,
@@ -94,7 +94,7 @@ function cpt_register_admin_styles() {
 	wp_register_style( 'cpt-admin-css', CLIENT_POWER_TOOLS_DIR_URL . 'admin/cpt-admin.css' );
 	wp_enqueue_style( 'cpt-admin-css' );
 
-	wp_register_script( 'cpt-admin-js', CLIENT_POWER_TOOLS_DIR_URL . 'admin/cpt-admin.js', [ 'jquery' ], '', true );
+	wp_register_script( 'cpt-admin-js', CLIENT_POWER_TOOLS_DIR_URL . 'admin/cpt-admin.js', '', '', true );
 	wp_enqueue_script( 'cpt-admin-js' );
 
 }
