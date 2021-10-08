@@ -111,6 +111,12 @@ For more information on how to take advantage of the new and updated features, p
 
 == Changelog ==
 
+### 1.4.3 - 2021-10-08
+
+#### Added
+- Message links in the admin message list now go to the page on which the message appears.
+
+
 ### 1.4.2 - 2021-06-06
 
 #### Changed

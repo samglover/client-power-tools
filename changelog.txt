@@ -8,6 +8,12 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - As I make updates I am preparing Client Power Tools for internationalization.
 
 
+### 1.4.3 - 2021-10-08
+
+#### Added
+- Message links in the admin message list now go to the page on which the message appears.
+
+
 ### 1.4.2 - 2021-06-06
 
 #### Changed
