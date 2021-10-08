@@ -80,7 +80,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
   function column_subject( $item ) {
 
     $clients_url  = add_query_arg( 'user_id', $item[ 'clients_user_id' ], esc_url( admin_url( 'admin.php?page=cpt' ) ) );
-    $msg_url      = $clients_url . '#cpt-message-' . $item[ 'ID' ];
+    $msg_url      = $clients_url . '&paged=' . cpt_get_message_pagenum( $item[ 'clients_user_id' ], $item[ 'ID' ] ) .  '#cpt-message-' . $item[ 'ID' ];
 
     // Return the contents.
     return sprintf( '<strong><a href="%1$s">%2$s</a></strong>',
