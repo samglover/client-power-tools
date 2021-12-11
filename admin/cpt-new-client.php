@@ -186,8 +186,7 @@ function cpt_new_client_email( $clients_user_id ) {
 
     ?>
 
-      <p>Your username is your email address:</p>
-      <p><strong><?php echo $user->user_email; ?></strong></p>
+      <p>Your username is your email address: <strong><?php echo $user->user_email; ?></strong></p>
       <p>You will need to activate your account and set a password in order to access your client dashboard.</p>
 
     <?php
