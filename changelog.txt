@@ -11,6 +11,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 #### Changed
 - Clarified the additional status update request notification instructions on the settings page.
 - Clarified the new client account activation email message body instructions on the settings page.
+- Don't know messages on client profiles in the admin if messaging is disabled.
 
 #### Fixed
 
