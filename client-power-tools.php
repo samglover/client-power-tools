@@ -1,12 +1,13 @@
 <?php
 
 /*
-Plugin Name: Client Power Tools
-Plugin URI: https://clientpowertools.com
-Description: Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
-Author: Sam Glover
-Version: 1.4.4
-Author URI: https://samglover.net
+Plugin Name:	Client Power Tools
+Plugin URI:		https://clientpowertools.com
+Description:	Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
+Version:			1.4.3
+Author:				Sam Glover
+Author URI:		https://samglover.net
+Text Domain:	client-power-tools
 */
 
 namespace Client_Power_Tools\Core;
@@ -14,16 +15,16 @@ namespace Client_Power_Tools\Core;
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
-* Constants
-*/
+ * Constants
+ */
 define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.4.4' );
 define( 'CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 
 
 /**
-* Plugin Files
-*/
+ * Plugin Files
+ */
 require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common.php' );
 require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-status-update-request-button.php' );
 require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php' );
