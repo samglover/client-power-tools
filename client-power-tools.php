@@ -1,12 +1,13 @@
 <?php
 
 /*
-Plugin Name: Client Power Tools
-Plugin URI: https://clientpowertools.com
-Description: Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
-Author: Sam Glover
-Version: 1.4.3
-Author URI: https://samglover.net
+Plugin Name:	Client Power Tools
+Plugin URI:		https://clientpowertools.com
+Description:	Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
+Version:			1.4.3
+Author:				Sam Glover
+Author URI:		https://samglover.net
+Text Domain:	client-power-tools
 */
 
 namespace Client_Power_Tools\Core;
