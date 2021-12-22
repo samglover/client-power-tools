@@ -15,16 +15,16 @@ namespace Client_Power_Tools\Core;
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
-* Constants
-*/
+ * Constants
+ */
 define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.4.3' );
 define( 'CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 
 
 /**
-* Plugin Files
-*/
+ * Plugin Files
+ */
 require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common.php' );
 require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-status-update-request-button.php' );
 require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php' );
