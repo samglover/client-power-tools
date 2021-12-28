@@ -111,6 +111,14 @@ For more information on how to take advantage of the new and updated features, p
 
 == Changelog ==
 
+### 1.4.4 - 2021-12-28
+
+#### Changed
+- Clarified the additional status update request notification instructions on the settings page.
+- Clarified the new client account activation email message body instructions on the settings page.
+- Don't know messages on client profiles in the admin if messaging is disabled.
+
+
 ### 1.4.3 - 2021-10-08
 
 #### Added
@@ -144,16 +152,6 @@ For more information on how to take advantage of the new and updated features, p
 #### Fixed
 - Untitled messages no longer show "Untitled" as the title.
 
-
-### 1.3.1 - 2020-12-18
-
-#### Added
-- Welcome message.
-
-#### Changed
-- Only show the SSL warning on CPT admin pages.
-
-
 ### 1.3 - 2020-11-24
 
 #### Added
@@ -171,42 +169,7 @@ For more information on how to take advantage of the new and updated features, p
 #### Fixed
 - The standard login form no longer redirects to a blank page when a redirect is present.
 
-
-### 1.2.1 - 2020-10-24
-
-#### Fixed
-- Adding an existing user as a client now works as it should.
-
-
-### 1.2 - 2020-10-23
-
-#### Added
-- Setting to disable the status request button entirely.
-- Setting to change the default email behavior to include the full message, rather than just a notification.
-- Override the default email behavior on individual messages.
-
-#### Changed
-- Creating a new client with an existing user's email address now adds the Client role to the existing user instead of returning an error.
-
-
-### 1.1 - 2020-10-20
-
-#### Added
-- Delete a client from the client's profile page, under **Edit Client**.
-
-
-### 1.0.5 - 2020-10-07
-
-#### Changed
-- Handle frontend login error on the front end.
-- General tidying up.
-
-#### Removed
-- Remove unused capabilities from Client Manager role (for now).
-- Remove unused functions cpt_get_client_profile_link and cpt_get_client_id.
-
-#### Fixed
-- Email notifications should now deliver with the intended formatting.
+**See changelog.txt for older versions.**
 
 
 == Installation ==

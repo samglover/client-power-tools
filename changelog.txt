@@ -4,8 +4,12 @@ All notable changes to this project will be documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com).
 
 
-### Unreleased
-- As I make updates I am preparing Client Power Tools for internationalization.
+### 1.4.4 - 2021-12-28
+
+#### Changed
+- Clarified the additional status update request notification instructions on the settings page.
+- Clarified the new client account activation email message body instructions on the settings page.
+- Don't know messages on client profiles in the admin if messaging is disabled.
 
 
 ### 1.4.3 - 2021-10-08

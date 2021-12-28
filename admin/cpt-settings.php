@@ -238,6 +238,7 @@ function cpt_new_client_email_subject_line() {
 
 function cpt_new_client_email_message_body() {
   echo '<textarea name="cpt_new_client_email_message_body" class="large-text" rows="5">' . get_option( 'cpt_new_client_email_message_body' ) . '</textarea>';
+  echo '<p class="description">' . __( 'New users will be sent their username and an account activation link along with any additional message you choose to add here.', 'client-power-tools' ) . '</p>';
 }
 
 
@@ -323,7 +324,7 @@ function cpt_status_update_req_freq() {
 
 function cpt_status_update_req_notice_email() {
   echo '<input name="cpt_status_update_req_notice_email" class="regular-text" type="email" value="' . get_option( 'cpt_status_update_req_notice_email' ) . '">';
-  echo '<p class="description">' . __( 'This address will be CC\'d when a client requests a status update.', 'client-power-tools' ) . '</p>';
+  echo '<p class="description">' . __( 'Status update request notifications are sent to the assigned client manager. This address will be CC\'d.', 'client-power-tools' ) . '</p>';
 }
 
 
