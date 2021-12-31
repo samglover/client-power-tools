@@ -60,7 +60,7 @@ if ( ! is_admin() ) {
 		wp_register_script( 'cpt-frontend-js', CLIENT_POWER_TOOLS_DIR_URL . 'frontend/cpt-frontend.js', '', '', true );
 		wp_localize_script( 'cpt-frontend-js', 'cpt_frontend_js_vars',
 			[
-				'postID'			=> $post->ID,
+				'postID'			=> $post ? $post->ID : null,
 				'dashboardID'	=> get_option( 'cpt_client_dashboard_page_selection' ),
 			]
 		);

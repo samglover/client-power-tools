@@ -123,7 +123,7 @@ function cpt_login() {
 
                     ?>
 
-                    <p><small><a id="cpt-login-go-to-resetpw" href="cpt-login-modal-resetpw"><?php _e( 'Forgot Your Password?' ); ?></a></small></p>
+                    <p><small><a id="cpt-login-go-to-resetpw" href="cpt-login-modal-resetpw" rel="nofollow"><?php _e( 'Forgot Your Password?' ); ?></a></small></p>
                   </div>
 
                   <div id="cpt-login-modal-resetpw" class="cpt-modal-inner"<?php echo $resetpw_styles; ?>>
@@ -166,7 +166,7 @@ function cpt_login() {
                         <input type="submit" name="submit" class="lostpassword-button" value="<?php _e( 'Reset Password' ); ?>"/>
                       </p>
                     </form>
-                    <p><small><a id="cpt-login-go-to-login" href="cpt-login-modal-login"><?php _e( 'Back to Login' ); ?></a></small></p>
+                    <p><small><a id="cpt-login-go-to-login" href="cpt-login-modal-login" rel="nofollow"><?php _e( 'Back to Login' ); ?></a></small></p>
                   </div>
 
                 <?php
@@ -180,7 +180,7 @@ function cpt_login() {
 
                 <div id="cpt-login-modal-already-logged-in" class="cpt-modal-inner">
                   <h2><?php _e( 'Log Out?' ); ?></h2>
-                  <p><a id="cpt-logout" class="button" href="<?php echo wp_logout_url( home_url() ); ?>"><?php _e( 'Log Out' ); ?></a></p>
+                  <p><a id="cpt-logout" class="button" href="<?php echo wp_logout_url( home_url() ); ?>" rel="nofollow"><?php _e( 'Log Out' ); ?></a></p>
                 </div>
 
               <?php
