@@ -111,6 +111,15 @@ For more information on how to take advantage of the new and updated features, p
 
 == Changelog ==
 
+### 1.4.5 - 2021-12-31
+
+#### Changed
+- Add nofollow to the login modal links.
+
+#### Fixed
+- Fix a PHP error when the page does not have an ID.
+
+
 ### 1.4.4 - 2021-12-28
 
 #### Changed
