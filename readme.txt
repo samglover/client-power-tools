@@ -111,6 +111,12 @@ For more information on how to take advantage of the new and updated features, p
 
 == Changelog ==
 
+### 1.4.6 - 2022-01-01
+
+#### Fixed
+- Fixed a JS error when the page is not a client page.
+
+
 ### 1.4.5 - 2021-12-31
 
 #### Changed
