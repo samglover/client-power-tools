@@ -51,7 +51,7 @@ function cpt_is_client( $user_id = null ) {
 
   $user = get_userdata( $user_id );
 
-  if ( in_array( 'cpt-client', $user->roles ) ) {
+  if ( $user->roles && in_array( 'cpt-client', $user->roles ) ) {
     return true;
   } else {
     return false;

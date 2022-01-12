@@ -160,10 +160,10 @@ function cpt_login() {
                     <form id="lostpasswordform" action="<?php echo $cpt_lostpassword_url; ?>" method="post">
                       <p>
                         <label for="user_login"><?php _e( 'Email' ); ?></label>
-                        <input type="text" name="user_login" id="user_login">
+                        <input type="text" name="user_login" id="lostpassword_user_login">
                       </p>
                       <p class="submit">
-                        <input type="submit" name="submit" class="lostpassword-button" value="<?php _e( 'Reset Password' ); ?>"/>
+                        <input type="submit" name="submit" class="lostpassword-button button" value="<?php _e( 'Reset Password' ); ?>"/>
                       </p>
                     </form>
                     <p><small><a id="cpt-login-go-to-login" href="cpt-login-modal-login" rel="nofollow"><?php _e( 'Back to Login' ); ?></a></small></p>

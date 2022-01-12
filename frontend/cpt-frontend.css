@@ -150,6 +150,7 @@
   .cpt-inline-modal .cpt-notice-dismiss-button {
     align-items: center;
     background-color: #ccc;
+    border: 1px solid #bbb;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
@@ -178,6 +179,7 @@
   .cpt-modal .cpt-notice-dismiss-button:hover,
   .cpt-inline-modal .cpt-notice-dismiss-button:hover {
     background-color: #ddd;
+    border-color: #ccc;
     box-shadow: 1px 1px 3px rgba( 0, 0, 0, 0.4 );
     text-decoration: none;
   }
@@ -186,6 +188,7 @@
   .cpt-modal .cpt-notice-dismiss-button:active,
   .cpt-inline-modal .cpt-notice-dismiss-button:active {
     background-color: #bbb;
+    border-color: #bbb;
     box-shadow: none;
     text-decoration: none;
   }
