@@ -3,7 +3,7 @@
 Contributors: samglover
 Tags: access control,clients,communication,portal,restrict access,restrict pages
 Requires at least: 5.5
-Tested up to: 5.8.1
+Tested up to: 5.8.3
 Requires PHP: 7.3.5
 Stable tag: trunk
 License: GPLv3
