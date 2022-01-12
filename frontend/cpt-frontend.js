@@ -4,9 +4,8 @@ let postID        = cpt_frontend_js_vars.postID;
 let dashboardID   = cpt_frontend_js_vars.dashboardID;
 
 // Modal Classes
-let cptModal      = document.querySelector( '.cpt-modal' );
+let cptModal      = document.querySelectorAll( '.cpt-modal' );
 let modalScreen   = document.querySelector( '.cpt-modal-screen' );
-let modalDismiss  = document.querySelector( '.cpt-modal-dismiss-button' );
 
 // Login Modal
 let loginLink     = document.querySelectorAll( '.cpt-login-link' );
@@ -73,29 +72,44 @@ function showResetPW() {
 
 }
 
+if ( cptModal ) {
 
-modalDismiss.addEventListener( 'click', function() {
+  let i = 0;
 
-  cptModal.style.display = 'none';
-  modalScreen.style.display = 'none';
+  cptModal.forEach( function( e ) {
 
-  /**
-  * Removes the cpt_login, cpt_notice, and password set/reset query parameters
-  * from the URL just in case the user tries to bookmark it or copy and paste
-  * some reason.
-  */
-  params.delete( 'cpt_login' );
-  params.delete( 'cpt_notice' );
-  params.delete( 'key' );
-  params.delete( 'login' );
+    let modal = cptModal[i];
 
-  if ( params.toString().length > 0 ) {
-    history.replaceState( {}, '', baseURL + '?' + params );
-  } else {
-    history.replaceState( {}, '', baseURL );
-  }
+    cptModal[i].querySelector( '.cpt-modal-dismiss-button' ).addEventListener( 'click', function( e ) {
 
-});
+      e.preventDefault();
+
+      modal.style.display = 'none';
+      modalScreen.style.display = 'none';
+
+      /**
+      * Removes the cpt_login, cpt_notice, and password set/reset query parameters
+      * from the URL just in case the user tries to bookmark it or copy and paste
+      * some reason.
+      */
+      params.delete( 'cpt_login' );
+      params.delete( 'cpt_notice' );
+      params.delete( 'key' );
+      params.delete( 'login' );
+
+      if ( params.toString().length > 0 ) {
+        history.replaceState( {}, '', baseURL + '?' + params );
+      } else {
+        history.replaceState( {}, '', baseURL );
+      }
+
+    });
+
+    i++;
+
+  });
+
+}
 
 
 if ( loginLink ) {

@@ -111,6 +111,17 @@ For more information on how to take advantage of the new and updated features, p
 
 == Changelog ==
 
+### 1.4.7 - 2022-01-12
+
+#### Changed
+-Specify border for modal dismiss button for themes that might try to add a border.
+-Add .button class to the password reset submit button so it's more likely to pick up the button style from the theme.
+
+#### Fixed
+-Fixed the cpt_is_client() function for users with no roles.
+-Fixed the modal dismiss button when there are more than two modals on the page.
+
+
 ### 1.4.6 - 2022-01-01
 
 #### Fixed
