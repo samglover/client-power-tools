@@ -5,7 +5,7 @@ let dashboardID   = cpt_frontend_js_vars.dashboardID;
 
 // Modal Classes
 let cptModal      = document.querySelectorAll( '.cpt-modal' );
-let modalScreen   = document.querySelector( '.cpt-modal-screen' );
+let modalScreen   = document.querySelectorAll( '.cpt-modal-screen' );
 
 // Login Modal
 let loginLink     = document.querySelectorAll( '.cpt-login-link' );
@@ -57,7 +57,7 @@ function showLogin() {
   loginPanel.style.display = 'block';
 
   loginModal.style.display = 'grid';
-  modalScreen.style.display = 'block';
+  modalScreen[0].style.display = 'block';
 
 }
 
@@ -68,7 +68,7 @@ function showResetPW() {
   loginPanel.style.display = 'none';
 
   loginModal.style.display = 'grid';
-  modalScreen.style.display = 'block';
+  modalScreen[0].style.display = 'block';
 
 }
 
@@ -78,14 +78,15 @@ if ( cptModal ) {
 
   cptModal.forEach( function( e ) {
 
-    let modal = cptModal[i];
+    let thisModal   = cptModal[i];
+    let thisScreen  = modalScreen[i];
 
     cptModal[i].querySelector( '.cpt-modal-dismiss-button' ).addEventListener( 'click', function( e ) {
 
       e.preventDefault();
 
-      modal.style.display = 'none';
-      modalScreen.style.display = 'none';
+      thisModal.style.display = 'none';
+      thisScreen.style.display = 'none';
 
       /**
       * Removes the cpt_login, cpt_notice, and password set/reset query parameters
