@@ -1,52 +1,6 @@
-/**
-* Load fonts
-* https://fonts.google.com/specimen/Jost
-*/
+@import 'variables';
+@import 'fonts';
 
-/**
-* Load fonts
-* https://fonts.google.com/specimen/Jost
-*/
-
-@font-face {
-  font-family: 'Jost';
-  src: local( 'Jost' ),
-    url( './fonts/Jost/Jost-Regular.woff2' ) format( 'woff2' ),
-    url( './fonts/Jost/Jost-Regular.woff' ) format( 'woff' ),
-    url( './fonts/Jost/Jost-Regular.ttf' ) format( 'truetype' );
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Jost';
-  src: local( 'Jost' ),
-    url( './fonts/Jost/Jost-Bold.woff2' ) format( 'woff2' ),
-    url( './fonts/Jost/Jost-Bold.woff' ) format( 'woff' ),
-    url( './fonts/Jost/Jost-Bold.ttf' ) format( 'truetype' );
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Jost';
-  src: local( 'Jost' ),
-    url( './fonts/Jost/Jost-Italic.woff2' ) format( 'woff2' ),
-    url( './fonts/Jost/Jost-Italic.woff' ) format( 'woff' ),
-    url( './fonts/Jost/Jost-Italic.ttf' ) format( 'truetype' );
-  font-weight: normal;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Jost';
-  src: local( 'Jost' ),
-    url( './fonts/Jost/Jost-BoldItalic.woff2' ) format( 'woff2' ),
-    url( './fonts/Jost/Jost-BoldItalic.woff' ) format( 'woff' ),
-    url( './fonts/Jost/Jost-BoldItalic.ttf' ) format( 'truetype' );
-  font-weight: bold;
-  font-style: italic;
-}
 
 /**
 * Typography
@@ -63,11 +17,15 @@
   grid-gap: 15px;
   grid-template-columns: 120px 1fr;
   margin-bottom: 15px;
-}
 
-  #cpt-admin-header * {
+  * {
     align-self: center;
   }
+
+  h2 {
+    font-size: 23px;
+  }
+}
 
   #cpt-admin-page-title p#cpt-client-status,
   #cpt-admin-page-title p#cpt-client-manager {
@@ -90,10 +48,6 @@
     line-height: 1.1;
     margin: 0;
   }
-
-#cpt-admin h2 {
-  font-size: 23px;
-}
 
 
 /* Forms */

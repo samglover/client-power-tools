@@ -1,3 +1,27 @@
+@font-face {
+  font-family: "Jost";
+  src: local("Jost"), url("../fonts/Jost/Jost-Regular.woff2") format("woff2"), url("../fonts/Jost/Jost-Regular.woff") format("woff"), url("../fonts/Jost/Jost-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Jost";
+  src: local("Jost"), url("../fonts/Jost/Jost-Bold.woff2") format("woff2"), url("../fonts/Jost/Jost-Bold.woff") format("woff"), url("../fonts/Jost/Jost-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Jost";
+  src: local("Jost"), url("../fonts/Jost/Jost-Italic.woff2") format("woff2"), url("../fonts/Jost/Jost-Italic.woff") format("woff"), url("../fonts/Jost/Jost-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Jost";
+  src: local("Jost"), url("../fonts/Jost/Jost-BoldItalic.woff2") format("woff2"), url("../fonts/Jost/Jost-BoldItalic.woff") format("woff"), url("../fonts/Jost/Jost-BoldItalic.ttf") format("truetype");
+  font-weight: bold;
+  font-style: italic;
+}
 .cpt-this-expands {
   display: none;
 }
@@ -53,43 +77,69 @@
   margin-right: 0;
 }
 
+#cpt-new-message-form form p,
+#cpt-new-message-form form label,
+#cpt-new-message-form form input,
+#cpt-new-message-form form select,
+#cpt-new-message-form form textarea {
+  display: block;
+}
+
+#cpt-new-message-form form .large-text {
+  box-sizing: border-box;
+  width: 100%;
+}
+
 #cpt-nav {
   margin-bottom: 2em;
 }
-#cpt-nav ul.cpt-tabs {
+#cpt-nav .cpt-tabs {
+  align-items: stretch;
   border-bottom: 1px solid Silver;
-  display: block;
+  display: flex;
+  flex-grow: 1;
   list-style: none;
   margin: 0;
   padding: 0;
 }
-#cpt-nav ul.cpt-tabs li {
-  display: inline-block;
-  margin: 0 4px 0 0;
-  padding: 0;
-}
-#cpt-nav ul.cpt-tabs .cpt-nav-menu-item {
+#cpt-nav .cpt-tabs .cpt-tab {
   border-color: Silver;
   border-style: solid;
   border-width: 1px 1px 0 1px;
+  display: block;
+  margin: 0 4px 0 0;
+  padding: 0;
+}
+#cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item {
   color: DarkSlateGray;
   cursor: pointer;
   display: block;
   padding: 0.5em 1em;
   text-decoration: none;
 }
-#cpt-nav ul.cpt-tabs .cpt-nav-menu-item.current {
+#cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item.current {
   background-color: LightGray;
 }
-#cpt-nav ul.cpt-tabs .cpt-nav-menu-item:hover, #cpt-nav ul.cpt-tabs .cpt-nav-menu-item:focus {
-  background-color: Silver;
+#cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item.cpt-click-to-expand {
+  padding-right: calc(2em + 4px);
+  position: relative;
 }
-#cpt-nav .cpt-click-to-expand svg {
+#cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item.cpt-click-to-expand svg {
+  height: 1em;
   margin-left: 4px;
+  opacity: 0.5;
+  position: absolute;
+  top: 50%;
+  right: 1em;
+  transform: translateY(-50%);
   transition: transform 0.2s;
+  width: 1em;
 }
-#cpt-nav .cpt-click-to-expand.open svg {
-  transform: rotate(180deg);
+#cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item.cpt-click-to-expand.open svg {
+  transform: translateY(-50%) rotate(180deg);
+}
+#cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item:hover, #cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item:focus {
+  background-color: Silver;
 }
 
 .cpt-nav-tabs-submenu {
@@ -132,148 +182,6 @@
   margin-bottom: 2em;
 }
 
-.cpt-modal {
-  box-sizing: border-box;
-  display: grid;
-  grid-template-areas: "lbuffer modal rbuffer";
-  grid-template-columns: minmax(10px, 1fr) minmax(300px, 500px) minmax(10px, 1fr);
-  margin: 0;
-  max-height: 80%;
-  overflow: scroll;
-  padding: 0;
-  position: fixed;
-  top: 10%;
-  width: 100%;
-  z-index: 100;
-}
-
-.cpt-modal-card {
-  background-color: #fff;
-  box-shadow: 0 0 0 1px #ddd, 1px 1px 3px rgba(0, 0, 0, 0.2);
-  box-sizing: border-box;
-  grid-area: modal;
-  margin: 3px;
-  padding: 30px;
-  position: relative;
-}
-
-.cpt-modal-card > *:last-child,
-.cpt-modal-inner > *:last-child,
-.cpt-modal-inner form > *:last-child {
-  margin-bottom: 0;
-}
-
-.cpt-modal h2 {
-  border: none;
-  margin-top: 0;
-  padding-right: 50px;
-  padding-top: 0;
-}
-
-.cpt-modal h2::before {
-  content: none;
-}
-
-.cpt-modal a.button,
-.cpt-modal button,
-.cpt-inline-modal button {
-  display: inline-block;
-}
-
-.cpt-modal .cpt-modal-dismiss-button,
-.cpt-modal .cpt-notice-dismiss-button,
-.cpt-inline-modal .cpt-notice-dismiss-button {
-  align-items: center;
-  background-color: #ccc;
-  border: 1px solid #bbb;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  height: 30px;
-  justify-content: center;
-  line-height: 1;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  text-decoration: none;
-  width: 30px;
-}
-
-.cpt-modal .cpt-notice-dismiss-button,
-.cpt-inline-modal .cpt-notice-dismiss-button {
-  height: 20px;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 20px;
-}
-
-.cpt-modal .cpt-modal-dismiss-button:hover,
-.cpt-modal .cpt-notice-dismiss-button:hover,
-.cpt-inline-modal .cpt-notice-dismiss-button:hover {
-  background-color: #ddd;
-  border-color: #ccc;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-  text-decoration: none;
-}
-
-.cpt-modal .cpt-modal-dismiss-button:active,
-.cpt-modal .cpt-notice-dismiss-button:active,
-.cpt-inline-modal .cpt-notice-dismiss-button:active {
-  background-color: #bbb;
-  border-color: #bbb;
-  box-shadow: none;
-  text-decoration: none;
-}
-
-.cpt-modal .cpt-modal-dismiss-button:active img,
-.cpt-modal .cpt-notice-dismiss-button:active img,
-.cpt-inline-modal .cpt-notice-dismiss-button:active img {
-  opacity: 0.75;
-}
-
-.cpt-modal form {
-  margin-bottom: 1em;
-}
-
-.cpt-modal form p,
-.cpt-modal form label,
-.cpt-modal form input,
-.cpt-modal form select,
-.cpt-modal form textarea,
-#cpt-new-message-form form p,
-#cpt-new-message-form form label,
-#cpt-new-message-form form input,
-#cpt-new-message-form form select,
-#cpt-new-message-form form textarea {
-  display: block;
-}
-
-.cpt-modal form .large-text,
-#cpt-login form input[type=password],
-#cpt-login form input[type=text],
-#cpt-new-message-form form .large-text {
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.cpt-modal form .description {
-  font-size: 80%;
-  margin-bottom: 1.25em;
-}
-
-.cpt-modal-screen {
-  background-color: rgba(0, 0, 0, 0.4);
-  height: 100%;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  z-index: 99;
-}
-
 .cpt-error,
 .cpt-success {
   background-color: #eee;
@@ -289,7 +197,122 @@
   border-left-color: green;
 }
 
-.cpt-inline-modal {
+.cpt-modal {
+  height: 100vh;
+  place-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 100;
+}
+.cpt-modal form {
+  margin-bottom: 1em;
+}
+.cpt-modal form p,
+.cpt-modal form label,
+.cpt-modal form input,
+.cpt-modal form select,
+.cpt-modal form textarea {
+  display: block;
+}
+.cpt-modal form .large-text {
+  box-sizing: border-box;
+  width: 100%;
+}
+.cpt-modal form .description {
+  font-size: 80%;
+  margin-bottom: 1.25em;
+}
+
+.cpt-modal-card {
+  background-color: White;
+  box-shadow: 0 0 0 1px #ddd, 1px 1px 3px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  grid-area: modal;
+  margin: 3px;
+  min-width: 330px;
+  max-height: 90vh;
+  max-width: 90vw;
+  overflow: scroll;
+  padding: 2em;
+  position: relative;
+  z-index: 100;
+}
+.cpt-modal-card h2 {
+  border: none;
+  margin-top: 0;
+  padding-right: 50px;
+  padding-top: 0;
+}
+.cpt-modal-card h2::before {
+  content: none;
+}
+.cpt-modal-card a.button,
+.cpt-modal-card button {
+  display: inline-block;
+}
+.cpt-modal-card > *:last-child,
+.cpt-modal-card .cpt-modal-inner > *:last-child,
+.cpt-modal-card .cpt-modal-inner form > *:last-child {
+  margin-bottom: 0;
+}
+
+.cpt-dismiss-button {
+  align-items: center;
+  background-color: #ccc;
+  border: 1px solid #bbb;
+  border-radius: 50%;
+  cursor: pointer;
+  display: grid;
+  height: 30px;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  padding: 3px;
+  place-items: center;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  text-decoration: none;
+  width: 30px;
+}
+.cpt-dismiss-button:hover, .cpt-dismiss-button:focus {
+  background-color: #ddd;
+  border-color: #ccc;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+  text-decoration: none;
+}
+.cpt-dismiss-button:active {
+  background-color: #bbb;
+  border-color: #bbb;
+  box-shadow: none;
+  text-decoration: none;
+}
+.cpt-dismiss-button svg {
+  fill: White;
+}
+
+.cpt-notice-dismiss-button {
+  height: 20px;
+  padding: 1.5px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 20px;
+}
+
+.cpt-modal-screen {
+  background-color: rgba(0, 0, 0, 0.4);
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  z-index: 99;
+}
+
+.cpt-notice {
   background-color: #fff;
   box-shadow: 0 0 0 1px #ddd, 1px 1px 3px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
@@ -297,143 +320,17 @@
   padding: 20px;
   position: relative;
 }
-
-.cpt-inline-modal *:last-child {
+.cpt-notice button:not(.cpt-dismiss-button) {
+  display: inline-block;
+}
+.cpt-notice *:last-child {
   margin-bottom: 0;
 }
 
-/**
-* Load fonts
-* https://fonts.google.com/specimen/Jost
-*/
-/**
-* Load fonts
-* https://fonts.google.com/specimen/Jost
-*/
-@font-face {
-  font-family: "Jost";
-  src: local("Jost"), url("./fonts/Jost/Jost-Regular.woff2") format("woff2"), url("./fonts/Jost/Jost-Regular.woff") format("woff"), url("./fonts/Jost/Jost-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: "Jost";
-  src: local("Jost"), url("./fonts/Jost/Jost-Bold.woff2") format("woff2"), url("./fonts/Jost/Jost-Bold.woff") format("woff"), url("./fonts/Jost/Jost-Bold.ttf") format("truetype");
-  font-weight: bold;
-  font-style: normal;
-}
-@font-face {
-  font-family: "Jost";
-  src: local("Jost"), url("./fonts/Jost/Jost-Italic.woff2") format("woff2"), url("./fonts/Jost/Jost-Italic.woff") format("woff"), url("./fonts/Jost/Jost-Italic.ttf") format("truetype");
-  font-weight: normal;
-  font-style: italic;
-}
-@font-face {
-  font-family: "Jost";
-  src: local("Jost"), url("./fonts/Jost/Jost-BoldItalic.woff2") format("woff2"), url("./fonts/Jost/Jost-BoldItalic.woff") format("woff"), url("./fonts/Jost/Jost-BoldItalic.ttf") format("truetype");
-  font-weight: bold;
-  font-style: italic;
-}
-/**
-* Typography
-*/
-#cpt-admin,
-.cpt-notice {
-  font-family: Jost;
-  font-variant-ligatures: common-ligatures;
-}
-
-#cpt-admin-header {
-  display: grid;
-  grid-gap: 15px;
-  grid-template-columns: 120px 1fr;
-  margin-bottom: 15px;
-}
-
-#cpt-admin-header * {
-  align-self: center;
-}
-
-#cpt-admin-page-title p#cpt-client-status,
-#cpt-admin-page-title p#cpt-client-manager {
-  font-size: 16px;
-  line-height: 1.1;
-  margin: 0;
-}
-
-#cpt-admin-page-title h1#cpt-page-title {
-  font-size: 42px;
-  font-weight: bold;
-  line-height: 1.1;
-  padding-top: 0;
-}
-
-#cpt-admin-page-title p#cpt-subtitle {
-  color: gray;
-  font-size: 26px;
-  font-weight: bold;
-  line-height: 1.1;
-  margin: 0;
-}
-
-#cpt-admin h2 {
-  font-size: 23px;
-}
-
-/* Forms */
-#cpt-admin .form-table th label small {
-  font-weight: normal;
-}
-
-#cpt-delete-client-link {
-  color: gray;
-  cursor: pointer;
-}
-
-.cpt-admin-modal {
+#cpt-login form input[type=password],
+#cpt-login form input[type=text] {
   box-sizing: border-box;
-  display: grid;
-  grid-template-areas: "lbuffer modal rbuffer";
-  grid-template-columns: minmax(10px, 1fr) minmax(300px, 500px) minmax(10px, 1fr);
-  margin: 0;
-  max-height: 80%;
-  overflow: scroll;
-  padding: 0;
-  position: fixed;
-  left: 0;
-  top: 10%;
   width: 100%;
-  z-index: 100;
-}
-
-.cpt-admin-modal-card {
-  background-color: #fff;
-  box-shadow: 0 0 0 1px #ddd, 1px 1px 3px rgba(0, 0, 0, 0.2);
-  box-sizing: border-box;
-  grid-area: modal;
-  margin: 3px;
-  padding: 30px;
-  position: relative;
-}
-
-.cpt-admin-modal h2 {
-  border: none;
-  margin-top: 0;
-  padding: 0;
-}
-
-#cpt_delete_client_button {
-  display: inline-block;
-}
-
-.cpt-admin-modal-screen {
-  background-color: rgba(0, 0, 0, 0.4);
-  height: 100%;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  z-index: 99;
 }
 
 /*# sourceMappingURL=style.css.map */

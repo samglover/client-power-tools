@@ -8,7 +8,7 @@ let cptModal      = document.querySelectorAll( '.cpt-modal' );
 let modalScreen   = document.querySelectorAll( '.cpt-modal-screen' );
 
 // Login Modal
-let loginLink     = document.querySelectorAll( '.cpt-login-link' );
+let loginLink     = document.querySelectorAll( '.cpt-login-link, a[href*="#cpt-login"]' );
 let loginModal    = document.querySelector( '#cpt-login' );
 let loginPanel    = document.querySelector( '#cpt-login-modal-login' );
 let resetPWPanel  = document.querySelector( '#cpt-login-modal-resetpw' );
@@ -34,9 +34,7 @@ if ( ! loggedIn && postID == dashboardID ) {
 
 
 if ( params.has( 'cpt_login' ) ) {
-
   switch ( params.get( 'cpt_login' ) ) {
-
     case 'resetpw':
       showResetPW();
       break;
@@ -45,32 +43,27 @@ if ( params.has( 'cpt_login' ) ) {
     default:
       showLogin();
       break;
-
   }
-
 }
 
 
 function showLogin() {
-
-  resetPWPanel.style.display = 'none';
-  loginPanel.style.display = 'block';
+  if ( resetPWPanel ) { resetPWPanel.style.display = 'none'; }
+  if ( loginPanel ) { loginPanel.style.display = 'block'; }
 
   loginModal.style.display = 'grid';
   modalScreen[0].style.display = 'block';
-
 }
 
 
 function showResetPW() {
-
-  resetPWPanel.style.display = 'block';
-  loginPanel.style.display = 'none';
+  if ( resetPWPanel ) { resetPWPanel.style.display = 'block'; }
+  if ( loginPanel ) { loginPanel.style.display = 'none'; }
 
   loginModal.style.display = 'grid';
   modalScreen[0].style.display = 'block';
-
 }
+
 
 if ( cptModal ) {
 
@@ -150,7 +143,7 @@ if ( goToLogin ) {
 // Notices/Inline Modals
 // (Not technically modals, but the code overlaps for efficiency.)
 
-let cptInlineModal      = document.querySelector( '.cpt-inline-modal, .cpt-notice' );
+let cptInlineModal      = document.querySelector( '.cpt-notice' );
 let inlineModalDismiss  = document.querySelector( '.cpt-notice-dismiss-button' );
 
 if ( cptInlineModal && inlineModalDismiss ) {

@@ -4,7 +4,7 @@
 Plugin Name:	Client Power Tools
 Plugin URI:		https://clientpowertools.com
 Description:	Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
-Version:			1.5
+Version:			1.4.8
 Author:				Sam Glover
 Author URI:		https://samglover.net
 Text Domain:	client-power-tools
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Constants
  */
-define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.5' );
+define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.4.8' );
 define( 'CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 
@@ -31,10 +31,7 @@ require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php' );
 
 
 function cpt_register_common_scripts() {
-	// CSS
-	wp_enqueue_style( 'cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/style.css' );
-	// JS
-	wp_enqueue_script( 'cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-common.js', [ 'jquery' ], '', true );
+	wp_enqueue_script( 'cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-common.js', ['jquery'], '', true );
 }
 
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\cpt_register_common_scripts' );
@@ -48,18 +45,16 @@ if ( ! is_admin() ) {
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-knowledge-base.php' );
 
 	function cpt_register_frontend_scripts() {
-
 		global $post; // For localizing cpt-frontend.js
 
-		wp_register_script( 'cpt-frontend', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-frontend.js', '', '', true );
-		wp_localize_script( 'cpt-frontend', 'cpt_frontend_js_vars',
-			[
-				'postID'			=> $post ? $post->ID : null,
-				'dashboardID'	=> get_option( 'cpt_client_dashboard_page_selection' ),
-			]
-		);
-		wp_enqueue_script( 'cpt-frontend' );
+		wp_enqueue_style( 'cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/style.css' );
 
+		wp_register_script( 'cpt-frontend', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-frontend.js', '', '', true );
+		wp_localize_script( 'cpt-frontend', 'cpt_frontend_js_vars', [
+			'postID'			=> $post ? $post->ID : null,
+			'dashboardID'	=> get_option( 'cpt_client_dashboard_page_selection' ),
+		]);
+		wp_enqueue_script( 'cpt-frontend' );
 	}
 
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\cpt_register_frontend_scripts' );
@@ -85,6 +80,7 @@ if ( is_admin() ) {
 
 
 function cpt_register_admin_styles() {
+	wp_enqueue_style( 'cpt-admin', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/admin.css' );
 	wp_enqueue_script( 'cpt-admin', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-admin.js', '', '', true );
 }
 

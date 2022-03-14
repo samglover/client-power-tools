@@ -1,0 +1,149 @@
+.cpt-modal {
+  height: 100vh;
+  place-content: center;
+  position: absolute;
+    top: 0;
+    left: 0;
+  width: 100vw;
+  z-index: 100;
+
+  form {
+    margin-bottom: 1em;
+
+    p,
+    label,
+    input,
+    select,
+    textarea {
+      display: block;
+    }
+
+    .large-text {
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .description {
+      font-size: 80%;
+      margin-bottom: 1.25em;
+    }
+  }
+}
+
+.cpt-modal-card {
+  background-color: White;
+  box-shadow:
+    0 0 0 1px #ddd,
+    1px 1px 3px rgba( 0, 0, 0, 0.2 )
+  ;
+  box-sizing: border-box;
+  grid-area: modal;
+  margin: 3px;
+  min-width: 330px;
+  max-height: 90vh;
+  max-width: 90vw;
+  overflow: scroll;
+  padding: 2em;
+  position: relative;
+  z-index: 100;
+
+  h2 {
+    border: none;
+    margin-top: 0;
+    padding-right: 50px;
+    padding-top: 0;
+
+    &::before {
+      content: none;
+    }
+  }
+
+  a.button,
+  button {
+    display: inline-block;
+  }
+
+  & > *:last-child,
+  .cpt-modal-inner > *:last-child,
+  .cpt-modal-inner form > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.cpt-dismiss-button {
+  align-items: center;
+  background-color: #ccc;
+  border: 1px solid #bbb;
+  border-radius: 50%;
+  cursor: pointer;
+  display: grid;
+  height: 30px;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  padding: 3px;
+  place-items: center;
+  position: absolute;
+    top: 30px;
+    right: 30px;
+  text-decoration: none;
+  width: 30px;
+
+  &:hover,
+  &:focus {
+    background-color: #ddd;
+    border-color: #ccc;
+    box-shadow: 1px 1px 3px rgba( 0, 0, 0, 0.4 );
+    text-decoration: none;
+  }
+
+  &:active {
+    background-color: #bbb;
+    border-color: #bbb;
+    box-shadow: none;
+    text-decoration: none;
+  }
+
+  svg {
+    fill: White;
+  }
+}
+
+.cpt-notice-dismiss-button {
+  height: 20px;
+  padding: 1.5px;
+  position: absolute;
+    top: 20px;
+    right: 20px;
+  width: 20px;
+}
+
+.cpt-modal-screen {
+  background-color: rgb( 0, 0, 0, .4 );
+  height: 100vh;
+  position: fixed;
+    left: 0;
+    top: 0;
+  width: 100vw;
+  z-index: 99;
+}
+
+.cpt-notice {
+  background-color: #fff;
+  box-shadow:
+    0 0 0 1px #ddd,
+    1px 1px 3px rgba( 0, 0, 0, 0.2 )
+  ;
+  box-sizing: border-box;
+  margin: 3px 3px 2em 3px;
+  padding: 20px;
+  position: relative;
+
+  button:not(.cpt-dismiss-button) {
+    display: inline-block;
+  }
+
+  & *:last-child {
+    margin-bottom: 0;
+  }
+}
