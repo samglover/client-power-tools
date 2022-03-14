@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com).
 
 
+### 1.5 - 2022-03-??
+
+#### Changed
+-Moved CSS and JS files to /assets.
+-Configured for SASS.
+
+
 ### 1.4.7 - 2022-01-12
 
 #### Changed
