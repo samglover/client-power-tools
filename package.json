@@ -1,0 +1,15 @@
+{
+  "name": "sass-minimal",
+  "version": "1.0.0",
+  "description": "A minimal sass compiler configuration.",
+  "main": "index.js",
+  "devDependencies": {
+    "sass": "^1.49.7"
+  },
+  "scripts": {
+    "dev": "sass --watch --update --style=expanded assets/scss:assets/css",
+    "build": "sass --no-source-map --style=compressed assets/scss:assets/css"
+  },
+  "author": "Sam Glover",
+  "license": "UNLICENSED"
+}

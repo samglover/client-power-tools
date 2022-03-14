@@ -60,8 +60,8 @@ function cpt_login() {
       <div id="cpt-login" class="cpt-modal"<?php echo $modal_styles; ?>>
         <div class="cpt-modal-card">
 
-          <button class="cpt-modal-dismiss-button">
-            <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
+          <button class="cpt-dismiss-button cpt-modal-dismiss-button">
+            <?php echo file_get_contents( CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg' ); ?>
           </button>
 
           <?php
@@ -419,8 +419,8 @@ function cpt_notices() {
         <div id="cpt-notice" class="cpt-modal">
           <div class="cpt-modal-card">
 
-            <button class="cpt-modal-dismiss-button">
-              <img src="<?php echo CLIENT_POWER_TOOLS_DIR_URL; ?>frontend/images/cpt-dismiss-button.svg" height="25px" width="25px" />
+            <button class="cpt-dismiss-button cpt-modal-dismiss-button">
+              <?php echo file_get_contents( CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg' ); ?>
             </button>
 
             <div class="cpt-modal-inner">

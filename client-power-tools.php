@@ -4,7 +4,7 @@
 Plugin Name:	Client Power Tools
 Plugin URI:		https://clientpowertools.com
 Description:	Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
-Version:			1.4.7
+Version:			1.4.8
 Author:				Sam Glover
 Author URI:		https://samglover.net
 Text Domain:	client-power-tools
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Constants
  */
-define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.4.7' );
+define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.4.8' );
 define( 'CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 
@@ -31,13 +31,7 @@ require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php' );
 
 
 function cpt_register_common_scripts() {
-
-	wp_register_style( 'cpt-common-css', CLIENT_POWER_TOOLS_DIR_URL . 'common/cpt-common.css' );
-	wp_enqueue_style( 'cpt-common-css' );
-
-	wp_register_script( 'cpt-common-js', CLIENT_POWER_TOOLS_DIR_URL . 'common/cpt-common.js', [ 'jquery' ], '', true );
-	wp_enqueue_script( 'cpt-common-js' );
-
+	wp_enqueue_script( 'cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-common.js', ['jquery'], '', true );
 }
 
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\cpt_register_common_scripts' );
@@ -51,21 +45,16 @@ if ( ! is_admin() ) {
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-knowledge-base.php' );
 
 	function cpt_register_frontend_scripts() {
-
 		global $post; // For localizing cpt-frontend.js
 
-		wp_register_style( 'cpt-frontend-css', CLIENT_POWER_TOOLS_DIR_URL . 'frontend/cpt-frontend.css' );
-		wp_enqueue_style( 'cpt-frontend-css' );
+		wp_enqueue_style( 'cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/style.css' );
 
-		wp_register_script( 'cpt-frontend-js', CLIENT_POWER_TOOLS_DIR_URL . 'frontend/cpt-frontend.js', '', '', true );
-		wp_localize_script( 'cpt-frontend-js', 'cpt_frontend_js_vars',
-			[
-				'postID'			=> $post ? $post->ID : null,
-				'dashboardID'	=> get_option( 'cpt_client_dashboard_page_selection' ),
-			]
-		);
-		wp_enqueue_script( 'cpt-frontend-js' );
-
+		wp_register_script( 'cpt-frontend', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-frontend.js', '', '', true );
+		wp_localize_script( 'cpt-frontend', 'cpt_frontend_js_vars', [
+			'postID'			=> $post ? $post->ID : null,
+			'dashboardID'	=> get_option( 'cpt_client_dashboard_page_selection' ),
+		]);
+		wp_enqueue_script( 'cpt-frontend' );
 	}
 
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\cpt_register_frontend_scripts' );
@@ -91,13 +80,8 @@ if ( is_admin() ) {
 
 
 function cpt_register_admin_styles() {
-
-	wp_register_style( 'cpt-admin-css', CLIENT_POWER_TOOLS_DIR_URL . 'admin/cpt-admin.css' );
-	wp_enqueue_style( 'cpt-admin-css' );
-
-	wp_register_script( 'cpt-admin-js', CLIENT_POWER_TOOLS_DIR_URL . 'admin/cpt-admin.js', '', '', true );
-	wp_enqueue_script( 'cpt-admin-js' );
-
+	wp_enqueue_style( 'cpt-admin', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/admin.css' );
+	wp_enqueue_script( 'cpt-admin', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-admin.js', '', '', true );
 }
 
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\cpt_register_admin_styles' );
@@ -105,22 +89,16 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\cpt_register_admin_styles
 
 // Activation
 function cpt_activate() {
-
 	set_transient( 'cpt_show_welcome_message', true, 86400  );
 
-	/*
-	* Checks for page selections and creates pages if necessary.
-	*/
-
+	// Checks for page selections and creates pages if necessary.
 	$cpt_pages = [
 		'cpt_client_dashboard_page_selection'	=> 'Client Dashboard',
 		'cpt_knowledge_base_page_selection'		=> 'Knowledge Base',
 	];
 
 	foreach ( $cpt_pages as $key => $val ) {
-
 		if ( ! get_option( $key ) ) {
-
 			$new_page = [
 				'post_status'   => 'publish',
 	      'post_title'    => __( $val ),
@@ -130,24 +108,16 @@ function cpt_activate() {
 			$page = wp_insert_post( $new_page, $wp_error );
 
 			if ( is_wp_error( $page ) ) {
-
 				?>
-
 					<div class="cpt-notice notice notice-error is-dismissible">
 						<p><?php _e( 'Something went wrong when creating a page. Please select a page from the <a href="' . admin_url( 'admin.php?page=cpt-settings' ) . '">Settings page</a>.' ); ?></p>
 						<p>Error message: <?php echo $post->get_error_message(); ?></p>
 					</div>
-
 				<?php
-
 			} else {
-
 				update_option( $key, $page );
-
 			}
-
 		}
-
   }
 
 
@@ -157,34 +127,26 @@ function cpt_activate() {
 	$admin = get_user_by_email( get_bloginfo( 'admin_email' ) );
 
 	$default_options = [
-
 		'cpt_client_statuses'									=> 'Active' . "\n" . 'Potential' . "\n" . 'Inactive',
 		'cpt_default_client_manager'					=> $admin->ID,
 		'cpt_default_client_status'						=> 'Active',
-
 		'cpt_new_client_email_subject_line'  	=> 'Your client account has been created! Please set your password.',
     'cpt_new_client_email_message_body'  	=> '',
-
 		'cpt_module_status_update_req_button'	=> true,
 		'cpt_status_update_req_freq'					=> 30,
 		'cpt_status_update_req_notice_email'	=> null,
-
 		'cpt_module_messaging'								=> true,
 		'cpt_send_message_content'						=> false,
-
   ];
 
   foreach ( $default_options as $key => $val ) {
-
     if ( ! get_option( $key ) ) {
       update_option( $key, $val );
     }
-
   }
 
 	// Register CPT Messages Custom Post Type
 	function cpt_message_post_type() {
-
 		$labels = [
 			'name'                  => _x( 'Messages', 'Post Type General Name', 'client-power-tools' ),
 			'singular_name'         => _x( 'Message', 'Post Type Singular Name', 'client-power-tools' ),
@@ -248,15 +210,12 @@ function cpt_activate() {
 		];
 
 		register_post_type( 'cpt_message', $args );
-
 	}
 
 	add_action( 'init', __NAMESPACE__ . '\cpt_message_post_type', 0 );
 
-
 	// Clears the permalinks.
 	flush_rewrite_rules();
-
 }
 
 register_activation_hook( __FILE__, __NAMESPACE__ . '\cpt_activate' );

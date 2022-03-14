@@ -111,6 +111,18 @@ For more information on how to take advantage of the new and updated features, p
 
 == Changelog ==
 
+### 1.4.8 - 2022-03-14
+
+#### Changed
+-Moved CSS, JS, and image files to /assets.
+-Configured for SASS.
+-Replaced all icons with SVG images using file_get_contents() instead of <img> tags.
+-Updated various styles to be more flexible and consistent across themes.
+
+#### Fixed
+-Fixed an error that prevented the login/logout modal from displaying.
+
+
 ### 1.4.7 - 2022-01-12
 
 #### Changed
