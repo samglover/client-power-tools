@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com).
 
 
+### 1.5
+
+#### Fixed
+- Removed overflow: scroll from modal cards.
+
+
 ### 1.4.8 - 2022-03-14
 
 #### Changed
