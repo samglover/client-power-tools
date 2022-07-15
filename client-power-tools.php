@@ -60,7 +60,6 @@ if ( !is_admin() ) {
 
 
 if ( is_admin() ) {
-
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'includes/class-wp-list-table.php' );
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin.php' );
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin-messages.php' );
@@ -72,7 +71,6 @@ if ( is_admin() ) {
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-managers.php' );
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-manager-table.php' );
 	require_once( CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-settings.php' );
-
 }
 
 
