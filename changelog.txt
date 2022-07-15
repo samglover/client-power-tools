@@ -6,6 +6,9 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 
 ### 1.5
 
+#### Changed
+- Misc. code cleanup and reformatting.
+
 #### Fixed
 - Removed overflow: scroll from modal cards.
 
