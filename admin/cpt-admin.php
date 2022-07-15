@@ -5,24 +5,24 @@ use Client_Power_Tools\Core\Common;
 
 function cpt_redirect_clients() {
   /**
-  * The $pagenow !== 'admin-post.php' exception allows us to handle form
-  * submissions by users (i.e., client messages).
-  */
+   * The $pagenow !== 'admin-post.php' exception allows us to handle form
+   * submissions by users (i.e., client messages).
+   */
   global $pagenow;
 
-  if ( Common\cpt_is_client() && ! current_user_can( 'cpt-manage-clients' ) && $pagenow !== 'admin-post.php' ) {
+  if ( Common\cpt_is_client() && !current_user_can('cpt-manage-clients') && $pagenow !== 'admin-post.php' ) {
     wp_safe_redirect( home_url() );
     exit;
   }
 }
 
-add_action( 'admin_init', __NAMESPACE__ . '\cpt_redirect_clients' );
+add_action('admin_init', __NAMESPACE__ . '\cpt_redirect_clients');
 
 
 function cpt_welcome_message() {
   global $pagenow;
 
-  if ( cpt_is_cpt_admin_page() && get_transient( 'cpt_show_welcome_message' ) ) {
+  if ( cpt_is_cpt_admin_page() && get_transient('cpt_show_welcome_message') ) {
     ?>
       <div class="cpt-notice notice notice-info">
         <h2><?php _e( 'Welcome to Client Power Tools!' ); ?></h2>
@@ -44,7 +44,7 @@ add_action('admin_notices', __NAMESPACE__ . '\cpt_welcome_message');
 function cpt_security_warning() {
   global $pagenow;
 
-  if ( ! is_ssl() && cpt_is_cpt_admin_page() ) {
+  if ( !is_ssl() && cpt_is_cpt_admin_page() ) {
     ?>
       <div class="cpt-notice notice notice-warning">
         <p><?php _e('It doesn\'t look like your website is using SSL (HTTPS). Before using Client Power Tools with your clients, it\'s a good idea to get an SSL certificate for your website and consider additional security measures. <a href="https://clientpowertools.com/security/?utm_source=cpt_user&utm_medium=cpt_ssl_warning" target="_blank">Learn more.</a>'); ?></p>
@@ -151,8 +151,8 @@ function cpt_get_client_manager_select($name = null, $selected = null) {
   }
 
   /**
-  * Query Client Managers
-  */
+   * Query Client Managers
+   */
   $client_manager_query = new \WP_USER_QUERY([
     'role__in'  => ['cpt-client-manager'],
     'orderby'   => 'display_name',
