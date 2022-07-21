@@ -3,7 +3,7 @@
 Contributors: samglover
 Tags: access control,clients,communication,portal,restrict access,restrict pages
 Requires at least: 5.5
-Tested up to: 5.9
+Tested up to: 6.0.1
 Requires PHP: 7.3.5
 Stable tag: trunk
 License: GPLv3
@@ -110,6 +110,16 @@ For more information on how to take advantage of the new and updated features, p
 
 
 == Changelog ==
+
+### 1.4.9 - 2022-07-20
+
+#### Changed
+- Misc. code cleanup and reformatting.
+
+#### Fixed
+- Removed overflow: scroll from modal cards.
+- Expanders in the admin now work as expected.
+
 
 ### 1.4.8 - 2022-03-14
 
