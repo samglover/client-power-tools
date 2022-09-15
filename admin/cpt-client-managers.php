@@ -8,7 +8,7 @@ function cpt_client_managers() {
     wp_die(
       '<p>' . __('Sorry, you are not allowed to access this page.') . '</p>',
       403
-   );
+    );
   }
 
   if (isset($_REQUEST['cpt_action']) && isset($_REQUEST['user_id'])) {
@@ -24,78 +24,72 @@ function cpt_client_managers() {
   Common\cpt_get_notices([
     'cpt_add_manager_result',
     'cpt_remove_manager_result',
- ]);
+  ]);
 
-  ob_start();
-    ?>
-      <div id="cpt-admin" class="wrap">
-        <div id="cpt-admin-header">
-          <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/cpt-logo.svg'); ?>
-          <div id="cpt-admin-page-title">
-            <h1 id="cpt-page-title">Client Managers</h1>
-            <p id="cpt-subtitle">Client Power Tools</p>
-          </div>
+  ?>
+    <div id="cpt-admin" class="wrap">
+      <div id="cpt-admin-header">
+        <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/cpt-logo.svg'); ?>
+        <div id="cpt-admin-page-title">
+          <h1 id="cpt-page-title">Client Managers</h1>
+          <p id="cpt-subtitle">Client Power Tools</p>
         </div>
-        <hr class="wp-header-end">
-
-        <?php if (current_user_can('cpt-manage-team')) { ?>
-          <button class="button cpt-click-to-expand"><?php _e('Add a Client Manager'); ?></button>
-          <div class="cpt-this-expands">
-            <?php cpt_add_client_manager_form(); ?>
-          </div>
-        <?php } ?>
-
-        <?php cpt_client_manager_list(); ?>
       </div>
-    <?php
+      <hr class="wp-header-end">
 
-  echo ob_get_clean();
+      <?php if (current_user_can('cpt-manage-team')) { ?>
+        <button class="button cpt-click-to-expand"><?php _e('Add a Client Manager'); ?></button>
+        <div class="cpt-this-expands">
+          <?php cpt_add_client_manager_form(); ?>
+        </div>
+      <?php } ?>
+
+      <?php cpt_client_manager_list(); ?>
+    </div>
+  <?php
 }
 
 
 function cpt_add_client_manager_form() {
-  ob_start();
-    ?>
-      <h3><?php _e('Add a Client Manager'); ?></h3>
-      <p><?php _e('Assign the client manager role to a new or existing user. Add the first and last name as you want clients to see them.'); ?></p>
+  ?>
+    <h3><?php _e('Add a Client Manager'); ?></h3>
+    <p><?php _e('Assign the client manager role to a new or existing user. Add the first and last name as you want clients to see them.'); ?></p>
 
-      <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
-        <?php wp_nonce_field('cpt_new_client_manager_added', 'cpt_new_client_manager_nonce'); ?>
-        <input name="action" value="cpt_new_client_manager_added" type="hidden">
-        <table class="form-table" role="presentation">
-          <tbody>
-            <tr>
-              <th scope="row">
-                <label for="first_name">First Name<br /><small>(required)</small></label>
-              </th>
-              <td>
-                <input name="first_name" id="first_name" class="regular-text" type="text" data-required="true">
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <label for="last_name">Last Name<br /><small>(required)</small></label>
-              </th>
-              <td>
-                <input name="last_name" id="last_name" class="regular-text" type="text" data-required="true">
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <label for="email">Email Address<br /><small>(required)</small></label>
-              </th>
-              <td>
-                <input name="email" id="email" class="regular-text" type="text" data-required="true" autocapitalize="none" autocorrect="off">
-              </td>
-          </tbody>
-        </table>
-        <p class="submit">
-          <input name="submit" id="submit" class="button button-primary" type="submit" value="Add Client Manager">
-        </p>
-      </form>
-    <?php
-
-  echo ob_get_clean();
+    <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+      <?php wp_nonce_field('cpt_new_client_manager_added', 'cpt_new_client_manager_nonce'); ?>
+      <input name="action" value="cpt_new_client_manager_added" type="hidden">
+      <table class="form-table" role="presentation">
+        <tbody>
+          <tr>
+            <th scope="row">
+              <label for="first_name">First Name<br /><small>(required)</small></label>
+            </th>
+            <td>
+              <input name="first_name" id="first_name" class="regular-text" type="text" data-required="true">
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">
+              <label for="last_name">Last Name<br /><small>(required)</small></label>
+            </th>
+            <td>
+              <input name="last_name" id="last_name" class="regular-text" type="text" data-required="true">
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">
+              <label for="email">Email Address<br /><small>(required)</small></label>
+            </th>
+            <td>
+              <input name="email" id="email" class="regular-text" type="text" data-required="true" autocapitalize="none" autocorrect="off">
+            </td>
+        </tbody>
+      </table>
+      <p class="submit">
+        <input name="submit" id="submit" class="button button-primary" type="submit" value="Add Client Manager">
+      </p>
+    </form>
+  <?php
 }
 
 
@@ -114,7 +108,7 @@ function cpt_process_new_client_manager() {
         'user_pass'             => null,
         'role'                  => 'cpt-client-manager',
         'show_admin_bar_front'  => 'false',
-     ];
+      ];
       $new_client_manager = wp_insert_user($userdata);
     } else {
       $userdata = [
@@ -122,7 +116,7 @@ function cpt_process_new_client_manager() {
         'first_name'            => sanitize_text_field($_POST['first_name']),
         'last_name'             => sanitize_text_field($_POST['last_name']),
         'display_name'          => sanitize_text_field($_POST['first_name']) . ' ' . sanitize_text_field($_POST['last_name']),
-     ];
+      ];
 
       $new_client_manager = wp_update_user($userdata);
       $user = new \WP_User($new_client_manager);
@@ -137,7 +131,6 @@ function cpt_process_new_client_manager() {
     }
 
     set_transient('cpt_add_manager_result', $result, 45);
-
     wp_redirect($_POST['_wp_http_referer']);
     exit;
   } else {
@@ -153,16 +146,12 @@ function cpt_new_client_manager_email($user_id) {
 
   $user           = get_userdata($user_id);
   $current_user   = wp_get_current_user();
-
   $from_name      = Common\cpt_get_name($user->ID);
   $from_email     = $user->user_email;
-
   $headers[]      = 'Content-Type: text/html; charset=UTF-8';
   $headers[]      = 'From: ' . Common\cpt_get_name($current_user->ID) . ' <' . $current_user->user_email . '>';
-
   $to             = $user->user_email;
   $subject        = 'Your client manager account has been created. Please set your password.';
-
   $activation_key = get_password_reset_key($user);
   $activation_url = home_url() . '?cpt_login=setpw&key=' . $activation_key . '&login=' . urlencode($user->user_login);
 
@@ -172,12 +161,10 @@ function cpt_new_client_manager_email($user_id) {
       <p><strong><?php echo $user->user_email; ?></strong></p>
       <p>You will need to activate your account and set a password in order to access your clients.</p>
     <?php
-
   $card_content = ob_get_clean();
 
   ob_start();
     echo Common\cpt_get_email_card($subject, $card_content, 'Activate Your Account', $activation_url);
-
   $message = ob_get_clean();
 
   wp_mail($to, $subject, $message, $headers);
@@ -185,16 +172,13 @@ function cpt_new_client_manager_email($user_id) {
 
 
 function cpt_client_manager_list() {
-  ob_start();
-    $client_manager_list = new Client_Manager_List_Table();
-    $client_manager_list->prepare_items();
-    ?>
-      <form id="client-manager-list" method="GET">
-        <?php $client_manager_list->display() ?>
-      </form>
-    <?php
-
-  echo ob_get_clean();
+  $client_manager_list = new Client_Manager_List_Table();
+  $client_manager_list->prepare_items();
+  ?>
+    <form id="client-manager-list" method="GET">
+      <?php $client_manager_list->display() ?>
+    </form>
+  <?php
 }
 
 
@@ -222,7 +206,6 @@ function cpt_get_managers_clients($user_id) {
   } else {
     return;
   }
-
 }
 
 

@@ -10,7 +10,7 @@ function cpt_add_roles() {
   add_role(
     'cpt-client',
     'Client'
- );
+  );
 
   add_role(
     'cpt-client-manager',
@@ -18,8 +18,8 @@ function cpt_add_roles() {
     [
       'cpt-view-clients' => true,
       'read',
-   ]
- );
+    ]
+  );
 
   $role = get_role('administrator');
 
@@ -142,7 +142,7 @@ function cpt_get_client_data($clients_user_id) {
     'manager_id'    => cpt_get_client_manager_id($clients_user_id),
     'manager_email' => cpt_get_client_manager_email($clients_user_id),
     'status'        => get_user_meta($clients_user_id, 'cpt_client_status', true),
- ];
+  ];
 
   return $client_data;
 }
@@ -189,21 +189,21 @@ function cpt_get_email_card($title = null, $content = null, $button_txt = 'Go', 
   $h2_style       = 'margin-top: 0;';
   $button_style   = 'background-color: #eee; border: 1px solid #ddd; box-sizing: border-box; display: block; margin: 0; padding: 1em; width: 100%; text-align: center;';
 
-  ob_start();
-    echo '<div class="cpt-card" align="left" style="' . $card_style . '">';
-      if (!empty($title)) {
-        echo '<h2 style="' . $h2_style . '">' . $title . '</h2>';
-      }
+  ?>
+    <div class="cpt-card" align="left" style="<?php echo $card_style; ?>">
+      <?php if (!empty($title)) { ?>
+        <h2 style="<?php echo $h2_style; ?>"><?php echo $title; ?></h2>
+      <?php } ?>
 
-      if (!empty($content)) {
-        echo $content;
-      }
+      <?php if (!empty($content)) { ?>
+        <?php echo $content; ?>
+      <?php } ?>
 
-      if (!empty($button_url)) {
-        echo '<a class="button" href="' . $button_url . '" style="' . $button_style . '">' . $button_txt . '</a>';
-      }
-    echo '</div>';
-  return ob_get_clean();
+      <?php if (!empty($button_url)) { ?>
+        <a class="button" href="<?php esc_url($button_url); ?>" style="<?php esc_attr($button_style); ?>"><?php echo $button_txt; ?></a>
+      <?php } ?>
+    </div>
+  <?php
 }
 
 
@@ -219,26 +219,23 @@ function cpt_get_notices($transient_key_array) {
     $result = get_transient($notice);
 
     if (!empty($result)) {
+      $wrapper_classes = ['cpt-notice', 'notice', 'is-dismissible'];
       if (is_admin()) {
         if (is_wp_error($result)) {
-          $wrapper = '<div class="cpt-notice notice notice-error is-dismissible">';
+          $wrapper_classes[] = 'notice-error';
         } else {
-          $wrapper = '<div class="cpt-notice notice notice-success is-dismissible">';
+          $wrapper_classes[] = 'notice-success';
         }
       } else {
-        ob_start();
-          ?>
+        ?>
+          <div class="<?php echo implode(' ', $wrapper_classes); ?>">
             <button class="cpt-dismiss-button cpt-notice-dismiss-button">
               <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
             </button>
-          <?php
-        $dismiss_button = ob_get_clean();
-        $wrapper = '<div class="cpt-notice">' . "\n" . $dismiss_button;
+            <p><?php _e($result); ?></p>
+          </div>
+        <?php
       }
-
-      echo $wrapper;
-      echo '<p>' . __($result) . '</p>';
-      echo '</div>';
     }
 
     delete_transient($notice);

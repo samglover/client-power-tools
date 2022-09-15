@@ -142,7 +142,11 @@
     display: inline-block;
   }
 
-  & *:last-child {
+  *:nth-child(2) {
+    margin-top: 0;
+  }
+
+  *:last-child {
     margin-bottom: 0;
   }
 }

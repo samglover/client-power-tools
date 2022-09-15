@@ -3,7 +3,6 @@
 namespace Client_Power_Tools\Core\Common;
 use Client_Power_Tools\Core\Frontend;
 
-
 /*
  * This has to be loaded as a common file in order to use the admin-post action
  * hook. And it would probably be even more confusing to load it as a common
@@ -11,33 +10,28 @@ use Client_Power_Tools\Core\Frontend;
  * confusing.
  */
 
-
 function cpt_messages($user_id) {
+  if (
+    !$user_id ||
+    (!cpt_is_messages() && !is_admin()) ||
+    !get_option('cpt_module_messaging')
+  ) return;
 
-  if (!$user_id) return;
-  if (!cpt_is_messages() && !is_admin()) return;
-
-  // Return if the module is disabled.
-  if (!get_option('cpt_module_messaging')) return;
-
-  echo '<div class="cpt-messages">';
-    cpt_message_list($user_id);
-
-    echo '<h2>' . __('New Message') . '</h2>';
-    echo '<div id="cpt-new-message-form">';
-      cpt_new_message_form($user_id);
-    echo '</div>';
-  echo '</div>';
-
+  ?>
+    <div class="cpt-messages">
+      <p class="cpt-new-message-button"><a class="button" href="#cpt-new-message-form">New Message</a></p>
+      <?php cpt_message_list($user_id); ?>
+      <h2><?php _e('New Message', 'client-power-tools'); ?></h2>
+      <div id="cpt-new-message-form">
+        <?php cpt_new_message_form($user_id); ?>
+      </div>
+    </div>
+  <?php
 }
 
 function cpt_messages_page_title($title, $id) {
   $client_dashboard_id = get_option('cpt_client_dashboard_page_selection');
-
-  if (cpt_is_messages() && $id == $client_dashboard_id && in_the_loop()) {
-    $title = $title . ': Messages';
-  }
-
+  if (cpt_is_messages() && $id == $client_dashboard_id && in_the_loop()) $title = $title . ': Messages';
   return $title;
 }
 
@@ -47,88 +41,55 @@ add_filter('the_title', __NAMESPACE__ . '\cpt_messages_page_title', 10, 2);
 function cpt_message_list($user_id) {
   if (!$user_id) return;
 
-  /**
-   * Removes the the_title filter so it doesn't execute within the
-   * nested query for client messages.
-   */
-  // remove_filter('the_title', __NAMESPACE__ . '\cpt_messages_page_title');
-
   $paged = isset($_GET['paged']) ? sanitize_key(intval($_GET['paged'])) : get_query_var('paged');
 
   $cpt_messages = new \WP_Query([
-    'meta_key'        => 'cpt_clients_user_id',
-    'meta_value'      => $user_id,
-    'paged'           => $paged,
-    'post_type'       => 'cpt_message',
+    'meta_key'    => 'cpt_clients_user_id',
+    'meta_value'  => $user_id,
+    'paged'       => $paged,
+    'post_type'   => 'cpt_message',
  ]);
 
   if ($cpt_messages->have_posts()) :
-    ob_start();
-      while ($cpt_messages->have_posts()) : $cpt_messages->the_post();
-        $message_id       = get_the_ID();
-        $message_classes  = ['cpt-message'];
-        $message_meta     = '<p><small>';
+    while ($cpt_messages->have_posts()) : $cpt_messages->the_post();
+      $message_id       = get_the_ID();
+      $message_classes  = ['cpt-message'];
+      $message_meta     = '<p><small>';
 
-        switch (get_the_author_meta('ID')) {
-          case (get_current_user_id()):
-            $message_classes[]   = 'my-message';
-            $message_meta       .= __('Sent', 'client-power-tools');
-            break;
+      if (get_post_meta($message_id, 'cpt_status_update_request')) $message_classes[] = 'status-update-request';
 
-          case ($user_id):
-            $message_classes[] = 'client-message not-my-message';
+      if (get_the_author_meta('ID') == get_current_user_id()) {
+        $message_classes[]  = 'my-message';
+        $message_meta       .= __('Sent', 'client-power-tools');
+      } else {
+        $message_classes[] = 'not-my-message';
+        $message_meta .= __('Sent by ', 'client-power-tools') . get_the_author();
+      }
 
-                                   /**
-                                    * translators:
-                                    * 1: sender's name
-                                    */
-            $message_meta .= sprintf(__('Received from %1$s', 'client-power-tools'), get_the_author());
-            break;
+      $message_meta .= ' on ' . get_the_date('F jS, Y, \a\t g:i a') . '</small></p>';
 
-          default:
-            $message_classes[] = 'not-my-message';
+      ?>
+        <div id="cpt-message-<?php echo $message_id; ?>" class="<?php echo implode(' ', $message_classes); ?>">
+          <div class="cpt-message-content">
+            <?php if (get_the_title() && get_the_title() !== 'Untitled') { ?>
+              <h3 class="cpt-message-title"><?php the_title(); ?></h3>
+            <?php } ?>
+            <?php if (!get_post_meta($message_id, 'cpt_status_update_request')) the_content(); ?>
+          </div>
+          <div class="cpt-message-meta"><?php echo $message_meta; ?></div>
+        </div>
+      <?php
+    endwhile;
 
-                                   /**
-                                    * translators:
-                                    * 1: sender's name
-                                    */
-            $message_meta .= sprintf(__('Sent by %1$s', 'client-power-tools'), get_the_author());
+    $big = 999999;
 
-        }
-
-        if (get_post_meta($message_id, 'cpt_status_update_request')) {
-          $message_classes[] = 'status-update-request';
-        }
-
-        $message_meta .= ' on ' . get_the_date('F jS, Y, \a\t g:i a') . '</small></p>';
-
-        echo '<div id="cpt-message-' . $message_id . '" class="' . implode(' ', $message_classes) . '">';
-          echo '<div class="cpt-message-content">';
-            if (get_the_title() && get_the_title() !== 'Untitled') {
-              echo '<h3 class="cpt-message-title">' . get_the_title() . '</h3>';
-            }
-
-            if (!get_post_meta($message_id, 'cpt_status_update_request')) {
-              the_content();
-            }
-          echo '</div>';
-
-          echo '<div class="cpt-message-meta">' . $message_meta . '</div>';
-        echo '</div>';
-      endwhile;
-
-      $big = 999999;
-
-      echo paginate_links([
-        'base'    => str_replace($big, '%#%', get_pagenum_link($big, false)),
-        'format'  => '?paged=%#%',
-        'current' => max(1, $paged),
-        'total'   => $cpt_messages->max_num_pages,
-     ]);
-
-    echo ob_get_clean();
+    echo paginate_links([
+      'base'    => str_replace($big, '%#%', get_pagenum_link($big, false)),
+      'format'  => '?paged=%#%',
+      'current' => max(1, $paged),
+      'total'   => $cpt_messages->max_num_pages,
+    ]);
   else :
-
     /**
      * translators:
      * 1: html

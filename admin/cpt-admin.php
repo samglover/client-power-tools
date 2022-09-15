@@ -4,13 +4,13 @@ namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
 function cpt_redirect_clients() {
-  /**
-   * The $pagenow !== 'admin-post.php' exception allows us to handle form
-   * submissions by users (i.e., client messages).
-   */
   global $pagenow;
 
-  if (Common\cpt_is_client() && !current_user_can('cpt-manage-clients') && $pagenow !== 'admin-post.php') {
+  if (
+    Common\cpt_is_client() &&
+    !current_user_can('cpt-manage-clients') &&
+    $pagenow !== 'admin-post.php'
+  ) {
     wp_safe_redirect(home_url());
     exit;
   }
@@ -120,7 +120,6 @@ function cpt_get_admin_notices($transient_key) {
     } else {
       echo '<div class="cpt-notice notice notice-success is-dismissible">';
     }
-
     echo '<p>' . __($result) . '</p>';
     echo '</div>';
   }
@@ -157,50 +156,29 @@ function cpt_get_client_manager_select($name = null, $selected = null) {
     'role__in'  => ['cpt-client-manager'],
     'orderby'   => 'display_name',
     'order'     => 'ASC',
- ]);
+  ]);
+
   $client_managers = $client_manager_query->get_results();
 
-  ob_start();
-    echo '<select name="' . $name . '" id="' . $name . '">';
-      foreach ($client_managers as $client_manager) {
-        echo '<option value="' . $client_manager->ID . '"';
-
-        if ($client_manager->ID == $selected) {
-          echo ' selected';
-        }
-
-        echo '>' . $client_manager->display_name . '</option>';
-      }
-    echo '</select>';
-
-  return ob_get_clean();
+  echo '<select name="' . $name . '" id="' . $name . '">';
+    foreach ($client_managers as $client_manager) {
+      echo '<option value="' . $client_manager->ID . '"' . selected($client_manager->ID, $selected) . '>' . $client_manager->display_name . '</option>';
+    }
+  echo '</select>';
 }
 
 
 function cpt_get_client_statuses_select($name = null, $selected = null) {
-
   $statuses_array = explode("\n", get_option('cpt_client_statuses'));
 
   if (!$name) $name = 'client_status';
+  if (!$selected) $selected = get_option('cpt_default_client_status');
 
-  if (!$selected) {
-    $selected = get_option('cpt_default_client_status');
-  }
-
-  ob_start();
-    echo '<select name="' . $name . '" id="' . $name . '">';
-      foreach ($statuses_array as $status) {
-        echo '<option value="' . $status . '"';
-
-        if (trim($status) == $selected) {
-          echo ' selected';
-        }
-
-        echo '>' . $status . '</option>';
-      }
-    echo '</select>';
-
-  return ob_get_clean();
+  echo '<select name="' . $name . '" id="' . $name . '">';
+    foreach ($statuses_array as $status) {
+      echo '<option value="' . $status . '"' . selected(trim($status), $selected) . '>' . $status . '</option>';
+    }
+  echo '</select>';
 }
 
 

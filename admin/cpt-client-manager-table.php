@@ -17,7 +17,7 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
       'singular'  => 'manager',
       'plural'    => 'managers',
       'ajax'      => false,
-   ]);
+    ]);
   }
 
   /**
@@ -43,7 +43,7 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
       '<input type="checkbox" name="%1$s[]" value="%2$s" />',
       /* $1%s */ $this->_args['singular'],
       /* $2%s */ $item['ID']
-   );
+    );
   }
 
 
@@ -53,13 +53,13 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
   function column_manager_name($item) {
     $actions = [
       'remove' => '<a href="' . add_query_arg(['user_id' => $item['ID'], 'cpt_action' => 'cpt_remove_client_manager']) . '">Remove</a>',
-   ];
+    ];
 
     // Return the contents.
     return sprintf('<strong>%1$s</strong><br />%2$s',
       /* $1%s */ $item['manager_name'],
       /* $2%s */ $this->row_actions($actions)
-   );
+    );
   }
 
 
@@ -101,7 +101,7 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
       // 'cb'              => '<input type="checkbox" />',
       'manager_name'      => 'Manager Name',
       'managers_clients'  => 'Clients',
-   ];
+    ];
 
     return $columns;
   }
@@ -113,7 +113,7 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
   function get_sortable_columns() {
     $sortable_columns = [
       'manager_name' => ['manager_name', true],
-   ];
+    ];
 
     return $sortable_columns;
   }
@@ -129,7 +129,7 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
 
     $actions = [
       'remove'  => 'remove',
-   ];
+    ];
 
     return $actions;
   }
@@ -173,7 +173,7 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
       'role'      => 'cpt-client-manager',
       'orderby'   => 'display_name',
       'order'     => 'ASC',
-   ]);
+    ]);
     $client_managers        = $client_managers_query->get_results();
     $data                   = [];
 
@@ -184,7 +184,7 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
           'ID'            => $client_manager->ID,
           'manager_name'  => $client_manager->display_name,
           'manager_email' => $client_manager->user_email,
-       ];
+        ];
       }
     }
 
@@ -205,7 +205,7 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
       'total_items' => $total_items,
       'per_page'    => $per_page,
       'total_pages' => ceil($total_items / $per_page),
-   ]);
+    ]);
 
     /**
      * $this->items contains the data that will actually be displayed on the

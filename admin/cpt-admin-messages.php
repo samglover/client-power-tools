@@ -4,36 +4,30 @@ namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Includes;
 
 function cpt_admin_messages() {
-  ob_start();
-    ?>
-      <div id="cpt-admin" class="wrap">
-        <div id="cpt-admin-header">
-          <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/cpt-logo.svg'); ?>
-          <div id="cpt-admin-page-title">
-            <h1 id="cpt-page-title">Messages</h1>
-            <p id="cpt-subtitle">Client Power Tools</p>
-          </div>
+  ?>
+    <div id="cpt-admin" class="wrap">
+      <div id="cpt-admin-header">
+        <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/cpt-logo.svg'); ?>
+        <div id="cpt-admin-page-title">
+          <h1 id="cpt-page-title"><?php _e('Messages', 'client-power-tools'); ?></h1>
+          <p id="cpt-subtitle"><?php _e('Client Power Tools', 'client-power-tools'); ?></p>
         </div>
-        <hr class="wp-header-end">
-        <?php cpt_get_message_list(); ?>
       </div>
-    <?php
-
-  echo ob_get_clean();
+      <hr class="wp-header-end">
+      <?php cpt_get_message_list(); ?>
+    </div>
+  <?php
 }
 
 function cpt_get_message_list() {
-  ob_start();
-    $message_list = new Message_List_Table();
-    $message_list->prepare_items();
+  $message_list = new Message_List_Table();
+  $message_list->prepare_items();
 
-    ?>
-      <form id="cpt-message-list" method="get">
-        <?php $message_list->display() ?>
-      </form>
-    <?php
-
-  echo ob_get_clean();
+  ?>
+    <form id="cpt-message-list" method="get">
+      <?php $message_list->display() ?>
+    </form>
+  <?php
 }
 
 function cpt_get_message_pagenum($clients_user_id, $message_id) {
@@ -43,9 +37,9 @@ function cpt_get_message_pagenum($clients_user_id, $message_id) {
     'fields'      => 'ids',
     'meta_key'    => 'cpt_clients_user_id',
     'meta_value'  => $clients_user_id,
-    'numberposts' => -1, // All
+    'numberposts' => -1,
     'post_type'   => 'cpt_message',
- ]);
+  ]);
 
   if (!$cpt_messages) return;
 

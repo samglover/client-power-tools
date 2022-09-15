@@ -17,7 +17,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       'singular'  => 'client',
       'plural'    => 'clients',
       'ajax'      => false,
-   ]);
+    ]);
   }
 
   /**
@@ -43,7 +43,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       '<input type="checkbox" name="%1$s[]" value="%2$s" />',
       /* $1%s */ $this->_args['singular'],
       /* $2%s */ $item['ID']
-   );
+    );
   }
 
   /**
@@ -54,7 +54,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
     return sprintf('<strong><a href="' . add_query_arg('user_id', $item['ID']) . '">%1$s</a></strong>%2$s',
       /* $1%s */ $item['client_name'],
       /* $2%s */ $item['client_id'] ? ' <span style="color:silver">(' . $item['client_id'] . ')</span>' : '',
-   );
+    );
   }
 
   /**
@@ -96,7 +96,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       'client_messages' => 'Messages',
       'client_status'   => 'Status',
       'client_manager'  => 'Manager',
-   ];
+    ];
 
     // Remove columns for disabled modules. (It's easier to remove columns add
     // them in the correct order.)
@@ -116,7 +116,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       'client_messages' => ['msg_count', false],
       'client_status'   => ['client_status', false],
       'client_manager'  => ['client_manager', false],
-   ];
+    ];
 
     return $sortable_columns;
   }
@@ -131,7 +131,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
     $actions = [
       'delete'  => 'Delete',
-   ];
+    ];
 
     return $actions;
   }
@@ -211,7 +211,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       'role'          => 'cpt-client',
       'orderby'       => isset($_REQUEST['orderby'])  ? sanitize_key($_REQUEST['orderby'])  : 'display_name',
       'order'         => isset($_REQUEST['order'])    ? sanitize_key($_REQUEST['order'])    : 'ASC',
-   ];
+    ];
 
     $client_query  = new \WP_USER_QUERY($args);
     $clients       = $client_query->get_results();
@@ -226,7 +226,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
           'meta_value'      => $client->ID,
           'post_type'       => 'cpt_message',
           'posts_per_page'  => -1,
-       ]);
+        ]);
 
         $manager_data = get_userdata(get_user_meta($client->ID, 'cpt_client_manager', true));
 
@@ -249,7 +249,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
           'client_manager'  => $manager_name,
           'client_status'   => get_user_meta($client->ID, 'cpt_client_status', true),
           'msg_count'       => number_format_i18n($cpt_messages->post_count),
-       ];
+        ];
       }
     }
 
@@ -291,7 +291,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       'total_items' => $total_items,
       'per_page'    => $per_page,
       'total_pages' => ceil($total_items / $per_page),
-   ]);
+    ]);
 
     /**
      * $this->items contains the data that will actually be displayed on the
