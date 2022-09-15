@@ -3,7 +3,7 @@
 Contributors: samglover
 Tags: access control,clients,communication,portal,restrict access,restrict pages
 Requires at least: 5.5
-Tested up to: 5.9
+Tested up to: 6.0.2
 Requires PHP: 7.3.5
 Stable tag: trunk
 License: GPLv3
@@ -111,7 +111,7 @@ For more information on how to take advantage of the new and updated features, p
 
 == Changelog ==
 
-### 1.4.9 - 2022-09-15
+### 1.4.10 - 2022-09-15
 
 #### Added
 - Added version numbers to to all enqueued scripts and styles as cachebusters.
@@ -127,7 +127,7 @@ For more information on how to take advantage of the new and updated features, p
 - Expanders in the admin now work as expected.
 
 
-### 1.4.8 - 2022-03-14
+### 1.4.8/9 - 2022-03-14
 
 #### Changed
 -Moved CSS, JS, and image files to /assets.

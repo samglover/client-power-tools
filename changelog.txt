@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com).
 
 
-### 1.4.9 - 2022-09-15
+### 1.4.10 - 2022-09-15
 
 #### Added
 - Added version numbers to to all enqueued scripts and styles as cachebusters.
@@ -20,7 +20,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 - Expanders in the admin now work as expected.
 
 
-### 1.4.8 - 2022-03-14
+### 1.4.8/9 - 2022-03-14
 
 #### Changed
 - Moved CSS, JS, and image files to /assets.
