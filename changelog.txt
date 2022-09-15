@@ -4,14 +4,16 @@ All notable changes to this project will be documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com).
 
 
-### 1.5
+### 1.4.9 - 2022-09-15
 
 #### Added
 - Added version numbers to to all enqueued scripts and styles as cachebusters.
+- Added a New Message button to message lists.
 
 #### Changed
 - Lots of code cleanup and reformatting.
 - Reduced output buffering.
+- Simplified message meta.
 
 #### Fixed
 - Removed overflow: scroll from modal cards.

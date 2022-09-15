@@ -111,6 +111,22 @@ For more information on how to take advantage of the new and updated features, p
 
 == Changelog ==
 
+### 1.4.9 - 2022-09-15
+
+#### Added
+- Added version numbers to to all enqueued scripts and styles as cachebusters.
+- Added a New Message button to message lists.
+
+#### Changed
+- Lots of code cleanup and reformatting.
+- Reduced output buffering.
+- Simplified message meta.
+
+#### Fixed
+- Removed overflow: scroll from modal cards.
+- Expanders in the admin now work as expected.
+
+
 ### 1.4.8 - 2022-03-14
 
 #### Changed
