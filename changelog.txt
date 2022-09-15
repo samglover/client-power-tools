@@ -11,6 +11,7 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 
 #### Changed
 - Lots of code cleanup and reformatting.
+- Reduced output buffering.
 
 #### Fixed
 - Removed overflow: scroll from modal cards.

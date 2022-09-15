@@ -25,20 +25,18 @@ function cpt_status_update_request_button($user_id) {
   if (!is_null($days_since_last_request)&& $days_since_last_request < $request_frequency) return;
 
   // Output the button.
-  ob_start();
-    ?>
-      <div id="cpt-status-update-request-button">
-        <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
-          <?php wp_nonce_field('cpt_status_update_requested', 'cpt_status_update_request_nonce'); ?>
-          <input name="action" value="cpt_status_update_requested" type="hidden">
-          <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
-          <p class="submit">
-            <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Request Status Update', 'client-power-tools'); ?>">
-          </p>
-        </form>
-      </div>
-    <?php
-  echo ob_get_clean();
+  ?>
+    <div id="cpt-status-update-request-button">
+      <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+        <?php wp_nonce_field('cpt_status_update_requested', 'cpt_status_update_request_nonce'); ?>
+        <input name="action" value="cpt_status_update_requested" type="hidden">
+        <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
+        <p class="submit">
+          <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Request Status Update', 'client-power-tools'); ?>">
+        </p>
+      </form>
+    </div>
+  <?php
 }
 
 

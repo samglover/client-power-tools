@@ -48,109 +48,107 @@ function cpt_login() {
     }
   }
 
-  ob_start();
-    ?>
-      <div id="cpt-login" class="cpt-modal"<?php echo $modal_styles; ?>>
-        <div class="cpt-modal-card">
-          <button class="cpt-dismiss-button cpt-modal-dismiss-button">
-            <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
-          </button>
-          <?php
-            // First, checks to make sure the user is not logged in. Because if
-            // they are, the logout button will be output instead.
-            if (!is_user_logged_in()) {
-              // Outputs the password change form if the URL contains
-              // cpt_login=setpw and a key and login.
-              if ($_REQUEST['cpt_login'] == 'setpw' && isset($_REQUEST['key']) && isset($_REQUEST['login'])) {
-                $key    = sanitize_text_field($_REQUEST['key']);
-                $login  = sanitize_user(urldecode($_REQUEST['login']));
-                cpt_password_change_form($key, $login);
-              // Otherwise, outputs the login/password reset form.
-              } else {
-                ?>
-                  <div id="cpt-login-modal-login" class="cpt-modal-inner"<?php echo $login_styles; ?>>
-                    <h2><?php _e('Client Login'); ?></h2>
-                    <?php
-                      // Outputs any error messages.
-                      if (isset($_REQUEST['cpt_error'])) {
-                        echo '<p class="cpt-error">' . __('Sorry, but the email address or password you entered didn\'t work. Please try again.') . '</p>';
-                      }
-
-                      // Outputs any success messages. (Currently just for a
-                      // successful password change.)
-                      if (isset($_REQUEST['cpt_success'])) {
-                        $success_message = sanitize_key($_REQUEST['cpt_success']);
-
-                        switch ($success_message) {
-                          case 'password_changed':
-                            echo '<p class="cpt-success">' . __('Password successfully changed.') . '</p>';
-                            break;
-                        }
-                      }
-
-                      // Outputs the WP login form with some customizations,
-                      // like sending users to the client dashboard after they
-                      // log in.
-                      wp_login_form([
-                        'label_username'  => __('Email Address'),
-                        'redirect'        => Common\cpt_get_client_dashboard_url(),
-                        'remember'        => false,
-                     ]);
-                    ?>
-                    <p><small><a id="cpt-login-go-to-resetpw" href="cpt-login-modal-resetpw" rel="nofollow"><?php _e('Forgot Your Password?'); ?></a></small></p>
-                  </div>
-
-                  <div id="cpt-login-modal-resetpw" class="cpt-modal-inner"<?php echo $resetpw_styles; ?>>
-                    <h2><?php _e('Forgot Your Password?'); ?></h2>
-                    <?php
-                      // Outputs any error messages. (On success, the user will
-                      // be shown a modal notice.)
-                      if (isset($_REQUEST['cpt_error'])) {
-                        $error_val = sanitize_key($_REQUEST['cpt_error']);
-                        switch ($error_val) {
-                          case 'invalid_key':
-                            echo '<p class="cpt-error">' . __('Your password reset key is invalid. Please try again.') . '</p>';
-                            break;
-
-                          default:
-                            echo '<p class="cpt-error">' . __('Error: ') . $error_val . '</p>';
-                        }
-                      }
-
-                      // Outputs a password reset request form.
-                      $cpt_lostpassword_url = remove_query_arg('action', wp_lostpassword_url());
-                      $cpt_lostpassword_url = add_query_arg('action', 'cpt_lostpassword', $cpt_lostpassword_url);
-                    ?>
-
-                    <p><?php _e('Enter your email address and you will receive a link to reset your password.'); ?></p>
-                    <form id="lostpasswordform" action="<?php echo $cpt_lostpassword_url; ?>" method="post">
-                      <p>
-                        <label for="user_login"><?php _e('Email'); ?></label>
-                        <input type="text" name="user_login" id="lostpassword_user_login">
-                      </p>
-                      <p class="submit">
-                        <input type="submit" name="submit" class="lostpassword-button button" value="<?php _e('Reset Password'); ?>"/>
-                      </p>
-                    </form>
-                    <p><small><a id="cpt-login-go-to-login" href="cpt-login-modal-login" rel="nofollow"><?php _e('Back to Login'); ?></a></small></p>
-                  </div>
-                <?php
-              }
+  ?>
+    <div id="cpt-login" class="cpt-modal"<?php echo $modal_styles; ?>>
+      <div class="cpt-modal-card">
+        <button class="cpt-dismiss-button cpt-modal-dismiss-button">
+          <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
+        </button>
+        <?php
+          // First, checks to make sure the user is not logged in. Because if
+          // they are, the logout button will be output instead.
+          if (!is_user_logged_in()) {
+            // Outputs the password change form if the URL contains
+            // cpt_login=setpw and a key and login.
+            if ($_REQUEST['cpt_login'] == 'setpw' && isset($_REQUEST['key']) && isset($_REQUEST['login'])) {
+              $key    = sanitize_text_field($_REQUEST['key']);
+              $login  = sanitize_user(urldecode($_REQUEST['login']));
+              cpt_password_change_form($key, $login);
+            // Otherwise, outputs the login/password reset form.
             } else {
-              // Outputs the logout button if the user is already logged in.
               ?>
-                <div id="cpt-login-modal-already-logged-in" class="cpt-modal-inner">
-                  <h2><?php _e('Log Out?'); ?></h2>
-                  <p><a id="cpt-logout" class="button" href="<?php echo wp_logout_url(home_url()); ?>" rel="nofollow"><?php _e('Log Out'); ?></a></p>
+                <div id="cpt-login-modal-login" class="cpt-modal-inner"<?php echo $login_styles; ?>>
+                  <h2><?php _e('Client Login'); ?></h2>
+                  <?php
+                    // Outputs any error messages.
+                    if (isset($_REQUEST['cpt_error'])) {
+                      echo '<p class="cpt-error">' . __('Sorry, but the email address or password you entered didn\'t work. Please try again.') . '</p>';
+                    }
+
+                    // Outputs any success messages. (Currently just for a
+                    // successful password change.)
+                    if (isset($_REQUEST['cpt_success'])) {
+                      $success_message = sanitize_key($_REQUEST['cpt_success']);
+
+                      switch ($success_message) {
+                        case 'password_changed':
+                          echo '<p class="cpt-success">' . __('Password successfully changed.') . '</p>';
+                          break;
+                      }
+                    }
+
+                    // Outputs the WP login form with some customizations,
+                    // like sending users to the client dashboard after they
+                    // log in.
+                    wp_login_form([
+                      'label_username'  => __('Email Address'),
+                      'redirect'        => Common\cpt_get_client_dashboard_url(),
+                      'remember'        => false,
+                   ]);
+                  ?>
+                  <p><small><a id="cpt-login-go-to-resetpw" href="cpt-login-modal-resetpw" rel="nofollow"><?php _e('Forgot Your Password?'); ?></a></small></p>
+                </div>
+
+                <div id="cpt-login-modal-resetpw" class="cpt-modal-inner"<?php echo $resetpw_styles; ?>>
+                  <h2><?php _e('Forgot Your Password?'); ?></h2>
+                  <?php
+                    // Outputs any error messages. (On success, the user will
+                    // be shown a modal notice.)
+                    if (isset($_REQUEST['cpt_error'])) {
+                      $error_val = sanitize_key($_REQUEST['cpt_error']);
+                      switch ($error_val) {
+                        case 'invalid_key':
+                          echo '<p class="cpt-error">' . __('Your password reset key is invalid. Please try again.') . '</p>';
+                          break;
+
+                        default:
+                          echo '<p class="cpt-error">' . __('Error: ') . $error_val . '</p>';
+                      }
+                    }
+
+                    // Outputs a password reset request form.
+                    $cpt_lostpassword_url = remove_query_arg('action', wp_lostpassword_url());
+                    $cpt_lostpassword_url = add_query_arg('action', 'cpt_lostpassword', $cpt_lostpassword_url);
+                  ?>
+
+                  <p><?php _e('Enter your email address and you will receive a link to reset your password.'); ?></p>
+                  <form id="lostpasswordform" action="<?php echo $cpt_lostpassword_url; ?>" method="post">
+                    <p>
+                      <label for="user_login"><?php _e('Email'); ?></label>
+                      <input type="text" name="user_login" id="lostpassword_user_login">
+                    </p>
+                    <p class="submit">
+                      <input type="submit" name="submit" class="lostpassword-button button" value="<?php _e('Reset Password'); ?>"/>
+                    </p>
+                  </form>
+                  <p><small><a id="cpt-login-go-to-login" href="cpt-login-modal-login" rel="nofollow"><?php _e('Back to Login'); ?></a></small></p>
                 </div>
               <?php
             }
-          ?>
-        </div>
+          } else {
+            // Outputs the logout button if the user is already logged in.
+            ?>
+              <div id="cpt-login-modal-already-logged-in" class="cpt-modal-inner">
+                <h2><?php _e('Log Out?'); ?></h2>
+                <p><a id="cpt-logout" class="button" href="<?php echo wp_logout_url(home_url()); ?>" rel="nofollow"><?php _e('Log Out'); ?></a></p>
+              </div>
+            <?php
+          }
+        ?>
       </div>
-      <div class="cpt-modal-screen"<?php echo $modal_styles; ?>></div>
-    <?php
-  echo ob_get_clean();
+    </div>
+    <div class="cpt-modal-screen"<?php echo $modal_styles; ?>></div>
+  <?php
 }
 
 add_action('wp_footer', __NAMESPACE__ . '\cpt_login');
@@ -198,7 +196,6 @@ add_filter('retrieve_password_message', __NAMESPACE__ . '\cpt_password_reset_mes
 function cpt_password_change_form($key, $login) {
   if (!$key || !$login) return;
 
-  ob_start();
   ?>
     <div id="cpt-login-modal-setpw" class="cpt-modal-inner">
       <h2><?php _e('Set Your Password'); ?></h2>
@@ -239,7 +236,6 @@ function cpt_password_change_form($key, $login) {
       </form>
     </div>
   <?php
-  echo ob_get_clean();
 }
 
 
@@ -314,9 +310,7 @@ add_action('login_form_resetpass', __NAMESPACE__ . '\cpt_process_password_change
 * requests. But it can also handle errors.)
 */
 function cpt_notices() {
-
   if (isset($_REQUEST['cpt_notice'])) {
-
     $notice_val = sanitize_key($_REQUEST['cpt_notice']);
 
     switch ($notice_val) {
@@ -328,25 +322,22 @@ function cpt_notices() {
       default:
         $heading  = '<h2>' . __('Sorry') . '</h2>';
         $notice   = '<p>' . __('Something went wrong. The page you were looking for doesn\'t seem to exist.') . '</p>';
-
     }
 
-    ob_start();
-      ?>
-        <div id="cpt-notice" class="cpt-modal">
-          <div class="cpt-modal-card">
-            <button class="cpt-dismiss-button cpt-modal-dismiss-button">
-              <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
-            </button>
-            <div class="cpt-modal-inner">
-              <?php echo $heading; ?>
-              <?php echo $notice;?>
-            </div>
+    ?>
+      <div id="cpt-notice" class="cpt-modal">
+        <div class="cpt-modal-card">
+          <button class="cpt-dismiss-button cpt-modal-dismiss-button">
+            <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
+          </button>
+          <div class="cpt-modal-inner">
+            <?php echo $heading; ?>
+            <?php echo $notice;?>
           </div>
         </div>
-        <div class="cpt-modal-screen"></div>
-      <?php
-    echo ob_get_clean();
+      </div>
+      <div class="cpt-modal-screen"></div>
+    <?php
   }
 }
 

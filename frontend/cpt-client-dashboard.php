@@ -159,13 +159,11 @@ function cpt_list_child_pages($page_id) {
   $child_pages = cpt_get_child_pages($page_id);
 
   if ($child_pages) {
-    ob_start();
-      echo '<ul>';
-        foreach ($child_pages as $child_page) {
-          cpt_list_child_pages($child_page);
-        }
-      echo '</ul>';
-    echo ob_get_clean();
+    ?>
+      <ul>
+        <?php foreach ($child_pages as $child_page) cpt_list_child_pages($child_page); ?>
+      </ul>
+    <?php
   } else {
    return;
   }
@@ -208,11 +206,9 @@ function cpt_breadcrumbs() {
 
   $breadcrumbs      = array_reverse($breadcrumbs);
 
-  ob_start();
-    ?>
-      <div id="cpt-breadcrumbs">
-        <?php echo implode(' / ', $breadcrumbs); ?>
-      </div>
-    <?php
-  echo ob_get_clean();
+  ?>
+    <div id="cpt-breadcrumbs">
+      <?php echo implode(' / ', $breadcrumbs); ?>
+    </div>
+  <?php
 }
