@@ -69,13 +69,13 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
   function column_managers_clients($item) {
     $managers_client_data = cpt_get_managers_clients($item['ID']);
 
-    if ( $managers_client_data ) {
-      foreach ( $managers_client_data as $client_data ) {
+    if ($managers_client_data) {
+      foreach ($managers_client_data as $client_data) {
         $clients_url  = esc_url(admin_url('admin.php?page=cpt'));
         $client_url   = add_query_arg('user_id', $client_data['user_id'], $clients_url);
         $client       = '<a href="' . $client_url . '">' . Common\cpt_get_name($client_data['user_id']) . '</a>';
 
-        if ( $client_data['client_id'] ) {
+        if ($client_data['client_id']) {
           $client .= ' <span style="color:silver">(' . $client_data['client_id'] . ')</span>';
         }
 
@@ -138,7 +138,7 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
   function process_bulk_action() {
     $action = $this->current_action();
 
-    switch ( $action ) {
+    switch ($action) {
       case 'remove':
         wp_die('Remove client manager permissions.');
         break;
@@ -178,8 +178,8 @@ class Client_Manager_List_Table extends Includes\WP_List_Table  {
     $data                   = [];
 
     // Creates the data set.
-    if ( !empty($client_managers) ) {
-      foreach ( $client_managers as $client_manager ) {
+    if (!empty($client_managers)) {
+      foreach ($client_managers as $client_manager) {
         $data[] = [
           'ID'            => $client_manager->ID,
           'manager_name'  => $client_manager->display_name,

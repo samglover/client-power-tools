@@ -4,79 +4,78 @@ namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
 function cpt_new_client_form() {
-  ob_start();
-    ?>
-      <h3><?php _e('Add a Client'); ?></h3>
-      <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
-        <?php wp_nonce_field('cpt_new_client_added', 'cpt_new_client_nonce'); ?>
-        <input name="action" value="cpt_new_client_added" type="hidden">
-        <table class="form-table" role="presentation">
-          <tbody>
-            <tr>
-              <th scope="row">
-                <label for="first_name">First Name<br /><small>(required)</small></label>
-              </th>
-              <td>
-                <input name="first_name" id="first_name" class="regular-text" type="text" required aria-required="true">
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <label for="last_name">Last Name<br /><small>(required)</small></label>
-              </th>
-              <td>
-                <input name="last_name" id="last_name" class="regular-text" type="text" required aria-required="true">
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <label for="email">Email Address<br /><small>(required)</small></label>
-              </th>
-              <td>
-                <input name="email" id="email" class="regular-text" type="text" required aria-required="true" autocapitalize="none" autocorrect="off">
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <label for="client_id">Client ID<br /><small>(optional)</small></label>
-              </th>
-              <td>
-                <input name="client_id" id="client_id" class="regular-text" type="text" autocapitalize="none" autocorrect="off">
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <label for="client_manager">Client Manager</label>
-              </th>
-              <td>
-                <?php echo cpt_get_client_manager_select() ?>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <label for="client_status">Client Status</label>
-              </th>
-              <td>
-                <?php echo cpt_get_client_statuses_select() ?>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <p class="submit">
-          <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Add Client'); ?>">
-        </p>
-      </form>
-    <?php
-  echo ob_get_clean();
+  ?>
+    <h3><?php _e('Add a Client'); ?></h3>
+    <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+      <?php wp_nonce_field('cpt_new_client_added', 'cpt_new_client_nonce'); ?>
+      <input name="action" value="cpt_new_client_added" type="hidden">
+      <table class="form-table" role="presentation">
+        <tbody>
+          <tr>
+            <th scope="row">
+              <label for="first_name">First Name<br /><small>(required)</small></label>
+            </th>
+            <td>
+              <input name="first_name" id="first_name" class="regular-text" type="text" required aria-required="true">
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">
+              <label for="last_name">Last Name<br /><small>(required)</small></label>
+            </th>
+            <td>
+              <input name="last_name" id="last_name" class="regular-text" type="text" required aria-required="true">
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">
+              <label for="email">Email Address<br /><small>(required)</small></label>
+            </th>
+            <td>
+              <input name="email" id="email" class="regular-text" type="text" required aria-required="true" autocapitalize="none" autocorrect="off">
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">
+              <label for="client_id">Client ID<br /><small>(optional)</small></label>
+            </th>
+            <td>
+              <input name="client_id" id="client_id" class="regular-text" type="text" autocapitalize="none" autocorrect="off">
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">
+              <label for="client_manager">Client Manager</label>
+            </th>
+            <td>
+              <?php echo cpt_get_client_manager_select() ?>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">
+              <label for="client_status">Client Status</label>
+            </th>
+            <td>
+              <?php echo cpt_get_client_statuses_select() ?>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="submit">
+        <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Add Client'); ?>">
+      </p>
+    </form>
+  <?php
 }
 
 
 function cpt_process_new_client() {
-  if ( isset($_POST['cpt_new_client_nonce']) && wp_verify_nonce($_POST['cpt_new_client_nonce'], 'cpt_new_client_added') ) {
+  if (isset($_POST['cpt_new_client_nonce']) && wp_verify_nonce($_POST['cpt_new_client_nonce'], 'cpt_new_client_added')) {
+
     $client_email       = sanitize_email($_POST['email']);
     $existing_client_id = email_exists($client_email);
 
-    if ( !$existing_client_id ) {
+    if (!$existing_client_id) {
       /**
        * Note. For some businesses (e.g., law firms), it could be a problem
        * if it were easy to guess a client's user_nicename. For example, WordPress
@@ -108,14 +107,14 @@ function cpt_process_new_client() {
       $user->add_role('cpt-client');
     }
 
-    if ( is_wp_error($new_client) ) {
+    if (is_wp_error($new_client)) {
       $result = 'Client could not be created. Error message: ' . $new_client->get_error_message();
     } else {
       update_user_meta($new_client, 'cpt_client_id', sanitize_text_field($_POST['client_id']));
       update_user_meta($new_client, 'cpt_client_manager', sanitize_text_field($_POST['client_manager']));
       update_user_meta($new_client, 'cpt_client_status', sanitize_text_field($_POST['client_status']));
 
-      if ( !$existing_client_id ) cpt_new_client_email($new_client);
+      if (!$existing_client_id) cpt_new_client_email($new_client);
 
       $client_profile_url = Common\cpt_get_client_profile_url($new_client);
 
@@ -134,7 +133,7 @@ add_action('admin_post_cpt_new_client_added', __NAMESPACE__ . '\cpt_process_new_
 
 
 function cpt_new_client_email($clients_user_id) {
-  if ( !$clients_user_id ) return;
+  if (!$clients_user_id) return;
 
   $user           = get_userdata($clients_user_id);
   $client_data    = Common\cpt_get_client_data($clients_user_id);

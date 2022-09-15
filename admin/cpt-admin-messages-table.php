@@ -53,9 +53,9 @@ class Message_List_Table extends Includes\WP_List_Table  {
    */
   function column_client($item) {
     // Return the contents.
-    return sprintf('<strong>%1$s</strong>%2$s',
+    return sprintf('<strong>%1$s</strong> %2$s',
       /* $1%s */ $item['client_name'],
-      /* $2%s */ $item['client_id'] ? ' <span style="color:silver">(' . $item['client_id'] . ')</span>' : '',
+      /* $2%s */ $item['client_id'] ? '<span style="color:silver">(' . $item['client_id'] . ')</span>' : '',
     );
   }
 
@@ -78,7 +78,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
     return sprintf('<strong><a href="%1$s">%2$s</a></strong>',
       /* $1%s */ $msg_url,
       /* $2%s */ $item['subject'],
-    );
+   );
   }
 
 
@@ -106,7 +106,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
       'date'    => 'Date',
     ];
 
-    return $columns;
+   return $columns;
   }
 
 
@@ -184,7 +184,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
       'posts_per_page'  => -1,
     ]);
 
-    if ( $cpt_messages->have_posts() ) : while ( $cpt_messages->have_posts() ) : $cpt_messages->the_post();
+    if ($cpt_messages->have_posts()) : while ($cpt_messages->have_posts()) : $cpt_messages->the_post();
       $post_id          = get_the_ID();
       $clients_user_id  = get_post_meta($post_id, 'cpt_clients_user_id', true);
 

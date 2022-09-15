@@ -39,8 +39,8 @@ add_action('init', __NAMESPACE__ . '\cpt_add_roles');
  * If no user ID is provided, checks to see whether a user is logged-in with the
  * cpt-client role.
  */
-function cpt_is_client( $user_id = null ) {
-  if ( is_null($user_id) && !is_user_logged_in() ) {
+function cpt_is_client($user_id = null) {
+  if (is_null($user_id) && !is_user_logged_in()) {
     return;
   } else {
     $user_id = get_current_user_id();
@@ -48,7 +48,7 @@ function cpt_is_client( $user_id = null ) {
 
   $user = get_userdata($user_id);
 
-  if ( $user->roles && in_array('cpt-client', $user->roles) ) {
+  if ($user->roles && in_array('cpt-client', $user->roles)) {
     return true;
   } else {
     return false;
@@ -56,8 +56,8 @@ function cpt_is_client( $user_id = null ) {
 }
 
 
-function cpt_get_client_profile_url( $clients_user_id ) {
-  if ( !$clients_user_id ) return;
+function cpt_get_client_profile_url($clients_user_id) {
+  if (!$clients_user_id) return;
   return add_query_arg('user_id', $clients_user_id, admin_url('admin.php?page=cpt'));
 }
 
@@ -68,7 +68,7 @@ function cpt_is_client_dashboard() {
   $client_dashboard_id  = get_option('cpt_client_dashboard_page_selection');
   $this_page_id         = isset($wp_query->post->ID) ? $wp_query->post->ID : false;
 
-  if ( $this_page_id && $client_dashboard_id == $this_page_id ) {
+  if ($this_page_id && $client_dashboard_id == $this_page_id) {
     return true;
   } else {
     return false;
@@ -83,7 +83,7 @@ function cpt_get_client_dashboard_url() {
 
 
 function cpt_is_messages() {
-  if ( cpt_is_client_dashboard() && isset($_REQUEST['tab']) && $_REQUEST['tab'] == 'messages' ) {
+  if (cpt_is_client_dashboard() && isset($_REQUEST['tab']) && $_REQUEST['tab'] == 'messages') {
     return true;
   } else {
     return false;
@@ -98,7 +98,7 @@ function cpt_is_knowledge_base() {
   $this_page_id         = isset($wp_query->post->ID) ? $wp_query->post->ID : false;
   $this_page_ancestors  = get_post_ancestors($this_page_id);
 
-  if ( $this_page_id && ($knowledge_base_id == $this_page_id || in_array($knowledge_base_id, $this_page_ancestors)) ) {
+  if ($this_page_id && ($knowledge_base_id == $this_page_id || in_array($knowledge_base_id, $this_page_ancestors))) {
     return true;
   } else {
     return false;
@@ -113,11 +113,11 @@ function cpt_get_knowledge_base_url() {
 
 
 function cpt_get_name($user_id) {
-  if ( !$user_id ) return;
+  if (!$user_id) return;
 
   $userdata = get_userdata($user_id);
 
-  if ( isset($userdata->first_name) && isset($userdata->last_name) ) {
+  if (isset($userdata->first_name) && isset($userdata->last_name)) {
     $name = $userdata->first_name . ' ' . $userdata->last_name;
   } else {
     $name = $userdata->display_name;
@@ -129,7 +129,7 @@ function cpt_get_name($user_id) {
 
 // Returns an array with the user's details.
 function cpt_get_client_data($clients_user_id) {
-  if ( !$clients_user_id ) return;
+  if (!$clients_user_id) return;
 
   $userdata = get_userdata($clients_user_id);
 
@@ -149,13 +149,13 @@ function cpt_get_client_data($clients_user_id) {
 
 
 function cpt_get_client_manager_id($clients_user_id) {
-  if ( !$clients_user_id ) return;
+  if (!$clients_user_id) return;
 
   $userdata = get_userdata(get_user_meta($clients_user_id, 'cpt_client_manager', true));
 
-  if ( $userdata && isset($userdata->ID) ) {
+  if ($userdata && isset($userdata->ID)) {
     $manager_id = $userdata->ID;
-  } else if ( get_option('cpt_default_client_manager') ) {
+  } else if (get_option('cpt_default_client_manager')) {
     $manager_id = get_option('cpt_default_client_manager');
   } else {
     $userdata   = get_user_by_email(get_bloginfo('admin_email'));
@@ -167,13 +167,13 @@ function cpt_get_client_manager_id($clients_user_id) {
 
 
 function cpt_get_client_manager_email($clients_user_id) {
-  if ( !$clients_user_id ) return;
+  if (!$clients_user_id) return;
 
   $userdata = get_userdata(get_user_meta($clients_user_id, 'cpt_client_manager', true));
 
-  if ( $userdata && isset($userdata->user_email) ) {
+  if ($userdata && isset($userdata->user_email)) {
     $manager_email = $userdata->user_email;
-  } else if ( get_option('cpt_default_client_manager') ) {
+  } else if (get_option('cpt_default_client_manager')) {
     $userdata       = get_userdata(get_option('cpt_default_client_manager'));
     $manager_email  = $userdata->user_email;
   } else {
@@ -189,21 +189,21 @@ function cpt_get_email_card($title = null, $content = null, $button_txt = 'Go', 
   $h2_style       = 'margin-top: 0;';
   $button_style   = 'background-color: #eee; border: 1px solid #ddd; box-sizing: border-box; display: block; margin: 0; padding: 1em; width: 100%; text-align: center;';
 
-  ob_start();
-    echo '<div class="cpt-card" align="left" style="' . $card_style . '">';
-      if ( !empty($title) ) {
-        echo '<h2 style="' . $h2_style . '">' . $title . '</h2>';
-      }
+  ?>
+    <div class="cpt-card" align="left" style="<?php echo $card_style; ?>">
+      <?php if (!empty($title)) { ?>
+        <h2 style="<?php echo $h2_style; ?>"><?php echo $title; ?></h2>
+      <?php } ?>
 
-      if ( !empty($content) ) {
-        echo $content;
-      }
+      <?php if (!empty($content)) { ?>
+        <?php echo $content; ?>
+      <?php } ?>
 
-      if ( !empty($button_url) ) {
-        echo '<a class="button" href="' . $button_url . '" style="' . $button_style . '">' . $button_txt . '</a>';
-      }
-    echo '</div>';
-  return ob_get_clean();
+      <?php if (!empty($button_url)) { ?>
+        <a class="button" href="<?php esc_url($button_url); ?>" style="<?php esc_attr($button_style); ?>"><?php echo $button_txt; ?></a>
+      <?php } ?>
+    </div>
+  <?php
 }
 
 
@@ -213,32 +213,29 @@ function cpt_get_email_card($title = null, $content = null, $button_txt = 'Go', 
  * the front end, this is a modal.
  */
 function cpt_get_notices($transient_key_array) {
-  if ( !$transient_key_array ) return;
+  if (!$transient_key_array) return;
 
-  foreach ( $transient_key_array as $notice ) {
+  foreach ($transient_key_array as $notice) {
     $result = get_transient($notice);
 
-    if ( !empty($result) ) {
-      if ( is_admin() ) {
-        if ( is_wp_error($result) ) {
-          $wrapper = '<div class="cpt-notice notice notice-error is-dismissible">';
+    if (!empty($result)) {
+      $wrapper_classes = ['cpt-notice', 'notice', 'is-dismissible'];
+      if (is_admin()) {
+        if (is_wp_error($result)) {
+          $wrapper_classes[] = 'notice-error';
         } else {
-          $wrapper = '<div class="cpt-notice notice notice-success is-dismissible">';
+          $wrapper_classes[] = 'notice-success';
         }
       } else {
-        ob_start();
-          ?>
+        ?>
+          <div class="<?php echo implode(' ', $wrapper_classes); ?>">
             <button class="cpt-dismiss-button cpt-notice-dismiss-button">
               <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
             </button>
-          <?php
-        $dismiss_button = ob_get_clean();
-        $wrapper = '<div class="cpt-notice">' . "\n" . $dismiss_button;
+            <p><?php _e($result); ?></p>
+          </div>
+        <?php
       }
-
-      echo $wrapper;
-      echo '<p>' . __($result) . '</p>';
-      echo '</div>';
     }
 
     delete_transient($notice);
@@ -258,7 +255,7 @@ add_action('admin_notices', __NAMESPACE__ . '\cpt_get_notices');
  * The error message itself is handled in cpt-frontend.php.
  */
 function cpt_login_missing($redirect_to, $requested_redirect_to, $user) {
-  if ( $redirect_to == cpt_get_client_dashboard_url() ) {
+  if ($redirect_to == cpt_get_client_dashboard_url()) {
     wp_redirect(cpt_get_client_dashboard_url() . "?cpt_error=login_failed");
     exit;
   } else {
@@ -272,7 +269,7 @@ add_filter('login_redirect', __NAMESPACE__ . '\cpt_login_missing', 10, 3);
  * Same as above, but works when the login is entered but fails.
  */
 function cpt_login_failure($user_login) {
-  if ( $_REQUEST['redirect_to'] == cpt_get_client_dashboard_url() ) {
+  if ($_REQUEST['redirect_to'] == cpt_get_client_dashboard_url()) {
     wp_redirect(cpt_get_client_dashboard_url() . "?cpt_error=login_failed");
     exit;
   }

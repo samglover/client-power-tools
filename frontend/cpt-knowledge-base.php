@@ -7,7 +7,7 @@ use Client_Power_Tools\Core\Common;
  * Noindexes the knowledge base because it's none of Google's business.
  */
 function cpt_noindex_knowledge_base() {
-  if ( Common\cpt_is_knowledge_base() ) {
+  if (Common\cpt_is_knowledge_base()) {
     echo '<meta name="robots" content="noindex" />';
   }
 }
@@ -16,13 +16,13 @@ add_action('wp_head',  __NAMESPACE__ . '\cpt_noindex_knowledge_base');
 
 
 function cpt_knowledge_base($content) {
-  if ( Common\cpt_is_knowledge_base() && in_the_loop() ) {
+  if (Common\cpt_is_knowledge_base() && in_the_loop()) {
     ob_start();
-      if ( is_user_logged_in() ) {
-        if ( Common\cpt_is_client() ) {
+      if (is_user_logged_in()) {
+        if (Common\cpt_is_client()) {
           cpt_nav();
 
-          if ( get_option('cpt_knowledge_base_page_selection') != get_the_ID() ) {
+          if (get_option('cpt_knowledge_base_page_selection') != get_the_ID()) {
             cpt_breadcrumbs();
           }
 
@@ -46,7 +46,7 @@ function cpt_knowledge_base($content) {
           '<a class="cpt-login-link" href="#">',
           '</a>',
           '</p>'
-        );
+       );
 
         return ob_get_clean();
       }

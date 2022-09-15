@@ -2,56 +2,68 @@
   display: none;
 }
 
+.cpt-new-message-button {
+  margin-bottom: 1em;
+}
+
 .cpt-message {
   background-color: White;
   box-shadow:
     0 0 0 1px #ddd,
-    1px 1px 3px rgba( 0, 0, 0, 0.2 )
+    1px 1px 3px rgba(0, 0, 0, 0.2)
   ;
   box-sizing: border-box;
   margin-bottom: 20px;
   position: relative;
-}
 
-  .cpt-message:target .cpt-message-content {
+  &:target .cpt-message-content {
     background-color: LightYellow;
   }
 
-  .cpt-message .cpt-message-content {
-    padding: 20px;
+  &.my-message {
+    margin-left: 10%;
+
+    .cpt-message-content {
+      background-color: LightBlue;
+    }
   }
 
-    .cpt-message .cpt-message-content *:first-child {
+  &.not-my-message {
+    margin-right: 10%;
+
+    .cpt-message-content {
+      background-color: rgba(0, 0, 0, .025);
+    }
+  }
+
+  &.status-update-request {
+    margin-left: 0;
+    margin-right: 0;
+
+    .cpt-message-content {
+      background-color: unset;
+    }
+  }
+
+  .cpt-message-content {
+    padding: 20px;
+
+    & > *:first-child {
       margin-top: 0;
     }
 
-    .cpt-message .cpt-message-content *:last-child {
+    & > *:last-child {
       margin-bottom: 0;
     }
-
-  .cpt-message .cpt-message-meta {
-    border-top: 1px dashed LightGray;
-    padding: 10px 20px;
   }
 
-    .cpt-message .cpt-message-meta p {
+  .cpt-message-meta {
+    border-top: 1px dashed LightGray;
+    padding: 10px 20px;
+
+    p {
       margin: 0;
       padding: 0;
     }
-
-.cpt-message.my-message {
-  margin-left: 10%;
-}
-
-.client-message .cpt-message-content {
-  background-color: LightBlue;
-}
-
-.cpt-message.not-my-message {
-  margin-right: 10%;
-}
-
-.cpt-message.status-update-request {
-  margin-left: 0;
-  margin-right: 0;
+  }
 }

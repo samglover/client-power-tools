@@ -61,7 +61,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
    * Client Messages Method
    */
   function column_client_messages($item) {
-    if ( $item['msg_count'] ) {
+    if ($item['msg_count']) {
       return sprintf($item['msg_count']);
     }
   }
@@ -77,7 +77,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
    * Client Manager Method
    */
   function column_client_manager($item) {
-    if ( $item['client_manager'] ) {
+    if ($item['client_manager']) {
       return sprintf($item['client_manager']);
     }
   }
@@ -100,7 +100,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
     // Remove columns for disabled modules. (It's easier to remove columns add
     // them in the correct order.)
-    if ( !get_option('cpt_module_messaging') ) {
+    if (!get_option('cpt_module_messaging')) {
       unset($columns['client_messages']);
     }
 
@@ -140,7 +140,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
   function process_bulk_action() {
     $action = $this->current_action();
 
-    switch ( $action ) {
+    switch ($action) {
       case 'delete':
         wp_die('Delete something.');
         break;
@@ -163,24 +163,24 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
     array_unshift($params, 'All', 'Mine');
 
-    foreach( $params as $key => $val ) {
+    foreach($params as $key => $val) {
       $class          = '';
       $val            = trim($val);
       $curr_param     = urlencode($val);
 
-      if ( $current_status == $curr_param || ($key == 1 && $curr_mgr_param == $curr_mgr) ) {
+      if ($current_status == $curr_param || ($key == 1 && $curr_mgr_param == $curr_mgr)) {
         $class = ' class="current"';
-      } elseif ( !isset($_REQUEST['client_status']) && !isset($_REQUEST['client_manager']) && $key == 0 && $current_status == 'all' ) {
+      } elseif (!isset($_REQUEST['client_status']) && !isset($_REQUEST['client_manager']) && $key == 0 && $current_status == 'all') {
         $class = ' class="current"';
       }
 
-      if ( $curr_param == 'All' ) {
+      if ($curr_param == 'All') {
         $link = '<a href="' . remove_query_arg(['client_status', 'client_manager']) . '"' . $class . '>' . $val . '</a>';
       } else {
         $link = '<a href="' . add_query_arg('client_status', $curr_param) . '"' . $class . '>' . $val . '</a>';
       }
 
-      if ( $curr_param == 'Mine' ) {
+      if ($curr_param == 'Mine') {
         $link = '<a href="' . add_query_arg('client_manager', $curr_mgr) . '"' . $class . '>' . $val . '</a>';
       }
 
@@ -218,8 +218,8 @@ class Client_List_Table extends Includes\WP_List_Table  {
     $data          = [];
 
     // Creates the data set.
-    if ( !empty($clients) ) {
-      foreach ( $clients as $client ) {
+    if (!empty($clients)) {
+      foreach ($clients as $client) {
         $cpt_messages = new \WP_Query([
           'fields'          => 'ids',
           'meta_key'        => 'cpt_clients_user_id',
@@ -230,9 +230,9 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
         $manager_data = get_userdata(get_user_meta($client->ID, 'cpt_client_manager', true));
 
-        if ( $manager_data ) {
+        if ($manager_data) {
           // Checks for clients whose manager is no longer assigned that role.
-          if ( !in_array('cpt-client-manager', $manager_data->roles) ) {
+          if (!in_array('cpt-client-manager', $manager_data->roles)) {
             $manager_name = '<span style="color: silver;">Unassigned</span>';
           } else {
             $manager_name = trim(Common\cpt_get_name($manager_data->ID));
@@ -254,21 +254,21 @@ class Client_List_Table extends Includes\WP_List_Table  {
     }
 
     // Filters the data set.
-    if ( isset($_REQUEST['client_status']) ) {
+    if (isset($_REQUEST['client_status'])) {
       $client_status_filter = sanitize_text_field(urldecode($_REQUEST['client_status']));
 
-      foreach( $data as $i => $client ) {
-        if ( $client['client_status'] !== $client_status_filter ) {
+      foreach($data as $i => $client) {
+        if ($client['client_status'] !== $client_status_filter) {
           unset($data[$i]);
         }
       }
     }
 
-    if ( isset($_REQUEST['client_manager']) ) {
-      $client_status_filter = sanitize_text_field(urldecode($_REQUEST['client_manager']) );
+    if (isset($_REQUEST['client_manager'])) {
+      $client_status_filter = sanitize_text_field(urldecode($_REQUEST['client_manager']));
 
-      foreach( $data as $i => $client ) {
-        if ( $client['client_manager'] !== $client_status_filter ) {
+      foreach($data as $i => $client) {
+        if ($client['client_manager'] !== $client_status_filter) {
           unset($data[$i]);
         }
       }
