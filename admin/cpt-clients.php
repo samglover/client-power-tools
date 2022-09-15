@@ -4,11 +4,11 @@ namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
 function cpt_clients() {
-  if ( !current_user_can('cpt-view-clients') ) {
+  if (!current_user_can('cpt-view-clients')) {
     wp_die(
       '<p>' . __('Sorry, you are not allowed to access this page.') . '</p>',
       403
-    );
+   );
   }
 
   Common\cpt_get_notices([
@@ -17,29 +17,29 @@ function cpt_clients() {
     'cpt_update_client_result',
     'cpt_delete_client_result',
     'cpt_new_message_result'
-  ]);
+ ]);
 
   ob_start();
     $page_header = '<div id="cpt-admin-page-title">';
-      if ( isset($_REQUEST['user_id']) ) {
+      if (isset($_REQUEST['user_id'])) {
         $user_id        = sanitize_key(intval($_REQUEST['user_id']));
         $client_data    = Common\cpt_get_client_data($user_id);
         $client_id      = $client_data['client_id'];
 
-        if ( isset($client_data['status']) ) {
+        if (isset($client_data['status'])) {
           $page_header .= '<p id="cpt-client-status">' . $client_data['status'] . '</p>';
         }
 
         $page_header .= '<h1 id="cpt-page-title">' . Common\cpt_get_name($user_id);
-          if ( $client_id ) {
+          if ($client_id) {
             $page_header .= ' <span style="color:silver">(' . $client_id . ')</span>';
           }
         $page_header .= '</h1>';
 
-        if ( isset($client_data['manager_id']) ) {
+        if (isset($client_data['manager_id'])) {
           $page_header .= '<p id="cpt-client-manager">';
 
-          if ( get_current_user_id() == $client_data['manager_id'] ) {
+          if (get_current_user_id() == $client_data['manager_id']) {
             $page_header .= 'Your Client';
           } else {
             $page_header .= Common\cpt_get_name($client_data['manager_id']) . '\'s Client';
@@ -56,7 +56,7 @@ function cpt_clients() {
     ?>
       <div id="cpt-admin" class="wrap">
         <?php
-          if ( isset($_REQUEST['user_id']) ) {
+          if (isset($_REQUEST['user_id'])) {
             echo '<p><a href="' . remove_query_arg('user_id') . '">&larr; Back to Clients</a></p>';
           }
         ?>
@@ -67,11 +67,11 @@ function cpt_clients() {
         <hr class="wp-header-end">
 
         <?php
-          if ( isset($_REQUEST['user_id']) ) {
+          if (isset($_REQUEST['user_id'])) {
             $user_id = sanitize_key(intval($_REQUEST['user_id']));
             cpt_get_client_profile($user_id);
           } else {
-            if ( current_user_can('cpt-manage-clients') ) {
+            if (current_user_can('cpt-manage-clients')) {
               ?>
                 <button class="button cpt-click-to-expand"><?php _e('Add a Client'); ?></button>
                 <div class="cpt-this-expands">
@@ -90,11 +90,11 @@ function cpt_clients() {
 
 
 function cpt_get_client_profile($user_id) {
-  if ( !$user_id ) return;
+  if (!$user_id) return;
 
   cpt_edit_client($user_id);
 
-  if ( get_option('cpt_module_messaging') ) {
+  if (get_option('cpt_module_messaging')) {
     echo '<h2>' . __('Messages', 'client-power-tools') . '</h2>';
     Common\cpt_messages($user_id);
   }

@@ -4,17 +4,17 @@ namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
 function cpt_client_managers() {
-  if ( !current_user_can('cpt-manage-team') ) {
+  if (!current_user_can('cpt-manage-team')) {
     wp_die(
       '<p>' . __('Sorry, you are not allowed to access this page.') . '</p>',
       403
-    );
+   );
   }
 
-  if ( isset($_REQUEST['cpt_action']) && isset($_REQUEST['user_id']) ) {
-    $action_user_id = sanitize_key(intval($_REQUEST['user_id']) );
+  if (isset($_REQUEST['cpt_action']) && isset($_REQUEST['user_id'])) {
+    $action_user_id = sanitize_key(intval($_REQUEST['user_id']));
 
-    switch ( sanitize_key($_REQUEST['cpt_action']) ) {
+    switch (sanitize_key($_REQUEST['cpt_action'])) {
       case 'cpt_remove_client_manager':
         cpt_remove_client_manager($action_user_id);
         break;
@@ -24,7 +24,7 @@ function cpt_client_managers() {
   Common\cpt_get_notices([
     'cpt_add_manager_result',
     'cpt_remove_manager_result',
-  ]);
+ ]);
 
   ob_start();
     ?>
@@ -38,7 +38,7 @@ function cpt_client_managers() {
         </div>
         <hr class="wp-header-end">
 
-        <?php if ( current_user_can('cpt-manage-team') ) { ?>
+        <?php if (current_user_can('cpt-manage-team')) { ?>
           <button class="button cpt-click-to-expand"><?php _e('Add a Client Manager'); ?></button>
           <div class="cpt-this-expands">
             <?php cpt_add_client_manager_form(); ?>
@@ -100,11 +100,11 @@ function cpt_add_client_manager_form() {
 
 
 function cpt_process_new_client_manager() {
-  if ( isset($_POST['cpt_new_client_manager_nonce']) && wp_verify_nonce($_POST['cpt_new_client_manager_nonce'], 'cpt_new_client_manager_added') ) {
+  if (isset($_POST['cpt_new_client_manager_nonce']) && wp_verify_nonce($_POST['cpt_new_client_manager_nonce'], 'cpt_new_client_manager_added')) {
     $client_manager_email       = sanitize_email($_POST['email']);
     $existing_client_manager_id = email_exists($client_manager_email);
 
-    if ( !$existing_client_manager_id ) {
+    if (!$existing_client_manager_id) {
       $userdata = [
         'first_name'            => sanitize_text_field($_POST['first_name']),
         'last_name'             => sanitize_text_field($_POST['last_name']),
@@ -114,7 +114,7 @@ function cpt_process_new_client_manager() {
         'user_pass'             => null,
         'role'                  => 'cpt-client-manager',
         'show_admin_bar_front'  => 'false',
-      ];
+     ];
       $new_client_manager = wp_insert_user($userdata);
     } else {
       $userdata = [
@@ -122,17 +122,17 @@ function cpt_process_new_client_manager() {
         'first_name'            => sanitize_text_field($_POST['first_name']),
         'last_name'             => sanitize_text_field($_POST['last_name']),
         'display_name'          => sanitize_text_field($_POST['first_name']) . ' ' . sanitize_text_field($_POST['last_name']),
-      ];
+     ];
 
       $new_client_manager = wp_update_user($userdata);
       $user = new \WP_User($new_client_manager);
       $user->add_role('cpt-client-manager');
     }
 
-    if ( is_wp_error($new_client_manager) ) {
+    if (is_wp_error($new_client_manager)) {
       $result = 'Client manager ' . $existing_client_manager_id . ' could not be added. Error message: ' . $new_client_manager->get_error_message();
     } else {
-      if ( !$existing_client_manager_id ) cpt_new_client_manager_email($new_client_manager);
+      if (!$existing_client_manager_id) cpt_new_client_manager_email($new_client_manager);
       $result = 'Client manager added.';
     }
 
@@ -149,7 +149,7 @@ add_action('admin_post_cpt_new_client_manager_added', __NAMESPACE__ . '\cpt_proc
 
 
 function cpt_new_client_manager_email($user_id) {
-  if ( !$user_id ) return;
+  if (!$user_id) return;
 
   $user           = get_userdata($user_id);
   $current_user   = wp_get_current_user();
@@ -200,7 +200,7 @@ function cpt_client_manager_list() {
 
 // Returns an array of client user objects.
 function cpt_get_managers_clients($user_id) {
-  if ( ! $user_id ) { return; }
+  if (! $user_id) { return; }
 
   $args = [
     'meta_key'      => 'cpt_client_manager',
@@ -208,13 +208,13 @@ function cpt_get_managers_clients($user_id) {
     'role'          => 'cpt-client',
     'orderby'       => 'display_name',
     'order'         => 'ASC',
-  ];
+ ];
 
   $client_query  = new \WP_USER_QUERY($args);
   $clients       = $client_query->get_results();
 
-  if ( $clients ) {
-    foreach ( $clients as $client ) {
+  if ($clients) {
+    foreach ($clients as $client) {
       $client_data[] = Common\cpt_get_client_data($client->ID);
     }
 
@@ -227,7 +227,7 @@ function cpt_get_managers_clients($user_id) {
 
 
 function cpt_remove_client_manager($user_id) {
-  if ( !$user_id ) return;
+  if (!$user_id) return;
 
   $user = new \WP_User($user_id);
   $user->remove_role('cpt-client-manager');

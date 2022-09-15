@@ -17,7 +17,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
       'singular'  => 'message',
       'plural'    => 'messages',
       'ajax'      => false,
-    ]);
+   ]);
   }
 
   /**
@@ -44,7 +44,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
       '<input type="checkbox" name="%1$s[]" value="%2$s" />',
       /* $1%s */ $this->_args['singular'],
       /* $2%s */ $item['ID']
-    );
+   );
   }
 
 
@@ -56,7 +56,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
     return sprintf('<strong>%1$s</strong>%2$s',
       /* $1%s */ $item['client_name'],
       /* $2%s */ $item['client_id'] ? ' <span style="color:silver">(' . $item['client_id'] . ')</span>' : '',
-    );
+   );
   }
 
   /**
@@ -78,7 +78,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
     return sprintf('<strong><a href="%1$s">%2$s</a></strong>',
       /* $1%s */ $msg_url,
       /* $2%s */ $item['subject'],
-    );
+   );
   }
 
 
@@ -104,7 +104,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
       'sender'  => 'Sender',
       'subject' => 'Subject',
       'date'    => 'Date',
-    ];
+   ];
 
     return $columns;
   }
@@ -118,7 +118,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
 
     $sortable_columns = [
       'date' => ['msg_count', true],
-    ];
+   ];
 
     return $sortable_columns;
   }
@@ -134,7 +134,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
 
     $actions = [
       'delete'  => 'Delete',
-    ];
+   ];
 
     return $actions;
   }
@@ -182,9 +182,9 @@ class Message_List_Table extends Includes\WP_List_Table  {
       'fields'          => 'ids',
       'post_type'       => 'cpt_message',
       'posts_per_page'  => -1,
-    ]);
+   ]);
 
-    if ( $cpt_messages->have_posts() ) : while ( $cpt_messages->have_posts() ) : $cpt_messages->the_post();
+    if ($cpt_messages->have_posts()) : while ($cpt_messages->have_posts()) : $cpt_messages->the_post();
       $post_id          = get_the_ID();
       $clients_user_id  = get_post_meta($post_id, 'cpt_clients_user_id', true);
 
@@ -196,7 +196,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
         'sender'          => get_the_author(),
         'subject'         => get_the_title() ? get_the_title() : '[Message from ' . get_the_author() . ']',
         'date'            => get_the_date(),
-      ];
+     ];
     endwhile; endif;
 
     /**
@@ -211,7 +211,7 @@ class Message_List_Table extends Includes\WP_List_Table  {
       'total_items' => $total_items,
       'per_page'    => $per_page,
       'total_pages' => ceil($total_items / $per_page),
-    ]);
+   ]);
 
     /**
      * $this->items contains the data that will actually be displayed on the

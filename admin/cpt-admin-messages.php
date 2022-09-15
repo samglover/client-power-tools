@@ -37,7 +37,7 @@ function cpt_get_message_list() {
 }
 
 function cpt_get_message_pagenum($clients_user_id, $message_id) {
-  if ( !$clients_user_id || !$message_id ) return;
+  if (!$clients_user_id || !$message_id) return;
 
   $cpt_messages = get_posts([
     'fields'      => 'ids',
@@ -45,15 +45,15 @@ function cpt_get_message_pagenum($clients_user_id, $message_id) {
     'meta_value'  => $clients_user_id,
     'numberposts' => -1, // All
     'post_type'   => 'cpt_message',
-  ]);
+ ]);
 
-  if ( !$cpt_messages ) return;
+  if (!$cpt_messages) return;
 
   $posts_per_page = get_option('posts_per_page');
   $pages          = array_chunk($cpt_messages, $posts_per_page);
 
-  foreach ( $pages as $pagenum => $page ) {
-    if ( in_array($message_id, $page) ) {
+  foreach ($pages as $pagenum => $page) {
+    if (in_array($message_id, $page)) {
       $page_number = $pagenum + 1;
       continue;
     }

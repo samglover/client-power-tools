@@ -30,7 +30,7 @@
         }
 
         &.cpt-click-to-expand {
-          padding-right: calc( 2em + 4px );
+          padding-right: calc(2em + 4px);
           position: relative;
 
           svg {
@@ -47,7 +47,7 @@
 
           &.open {
             svg {
-              transform: translateY(-50%) rotate( 180deg );
+              transform: translateY(-50%) rotate(180deg);
             }
           }
         }

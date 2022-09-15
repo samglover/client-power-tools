@@ -4,12 +4,12 @@ namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
 function cpt_edit_client($user_id) {
-  if ( !$user_id || !is_user_logged_in() ) return;
+  if (!$user_id || !is_user_logged_in()) return;
 
   $client_data  = Common\cpt_get_client_data($user_id);
   $client_name  = Common\cpt_get_name($user_id);
 
-  if ( is_admin() && current_user_can('cpt-manage-clients') ) {
+  if (is_admin() && current_user_can('cpt-manage-clients')) {
     echo '<button class="button cpt-click-to-expand">' . __('Edit Client') . '</button>';
     echo '<div class="cpt-this-expands">';
       cpt_edit_client_form($client_data);
@@ -21,7 +21,7 @@ function cpt_edit_client($user_id) {
 
 
 function cpt_edit_client_form($client_data) {
-  if ( !$client_data ) return;
+  if (!$client_data) return;
 
   ob_start();
     ?>
@@ -91,7 +91,7 @@ function cpt_edit_client_form($client_data) {
 
 
 function cpt_process_client_update() {
-  if ( isset($_POST['cpt_client_updated_nonce']) && wp_verify_nonce($_POST['cpt_client_updated_nonce'], 'cpt_client_updated') ) {
+  if (isset($_POST['cpt_client_updated_nonce']) && wp_verify_nonce($_POST['cpt_client_updated_nonce'], 'cpt_client_updated')) {
     $user_id = sanitize_key(intval($_POST['clients_user_id']));
 
     $userdata = [
@@ -100,11 +100,11 @@ function cpt_process_client_update() {
       'last_name'     => sanitize_text_field($_POST['last_name']),
       'display_name'  => sanitize_text_field($_POST['first_name']) . ' ' . sanitize_text_field($_POST['last_name']),
       'user_email'    => sanitize_email($_POST['email']),
-    ];
+   ];
 
     $user_id = wp_update_user($userdata);
 
-    if ( is_wp_error($user_id) ) {
+    if (is_wp_error($user_id)) {
       $result = 'Client could not be updated. Error message: ' . $user_id->get_error_message();
     } else {
       $client_id      = sanitize_text_field($_POST['client_id']);
@@ -130,7 +130,7 @@ add_action('admin_post_cpt_client_updated', __NAMESPACE__ . '\cpt_process_client
 
 
 function cpt_delete_client_modal($user_id) {
-  if ( !$user_id ) return;
+  if (!$user_id) return;
 
   ob_start();
     ?>
@@ -149,8 +149,8 @@ function cpt_delete_client_modal($user_id) {
 }
 
 
-function cpt_delete_client_button( $user_id ) {
-  if ( !$user_id ) return;
+function cpt_delete_client_button($user_id) {
+  if (!$user_id) return;
 
   $client_name  = Common\cpt_get_name($user_id);
   $button_txt   = __('Delete') . ' ' . $client_name;
@@ -169,7 +169,7 @@ function cpt_delete_client_button( $user_id ) {
 
 
 function cpt_process_delete_client() {
-  if ( isset($_POST['cpt_client_deleted_nonce']) && wp_verify_nonce($_POST['cpt_client_deleted_nonce'], 'cpt_client_deleted') ) {
+  if (isset($_POST['cpt_client_deleted_nonce']) && wp_verify_nonce($_POST['cpt_client_deleted_nonce'], 'cpt_client_deleted')) {
     $user_id      = sanitize_key(intval($_POST['clients_user_id']));
     $client_name  = Common\cpt_get_name($user_id);
 
@@ -179,28 +179,28 @@ function cpt_process_delete_client() {
       'meta_value'      => $user_id,
       'post_type'       => 'cpt_message',
       'posts_per_page'  => -1,
-    ];
+   ];
 
     $cpt_messages   = get_posts($args);
     $message_count  = $cpt_messages ? count($cpt_messages) : 0;
     $delete_count   = 0;
 
-    foreach( $cpt_messages as $post_id ) {
+    foreach($cpt_messages as $post_id) {
       $post_deleted = wp_delete_post($post_id, true);
-      if ( $post_deleted ) $delete_count++;
+      if ($post_deleted) $delete_count++;
     }
 
     $client_deleted = wp_delete_user($user_id);
 
-    if ( $client_deleted == true ) {
+    if ($client_deleted == true) {
       $result = $client_name . __(' deleted.');
     } else {
       $result = __('Client could not be deleted.');
     }
 
-    if ( $message_count > 0 ) {
+    if ($message_count > 0) {
       $result .= ' ' . $delete_count . '/' . $message_count . __(' messages deleted.');
-      if ( $delete_count < $messager_count ) {
+      if ($delete_count < $messager_count) {
         $result .= __(' <em>Not all messages could be deleted.</em>');
       }
     }

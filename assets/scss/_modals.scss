@@ -34,7 +34,7 @@
   background-color: White;
   box-shadow:
     0 0 0 1px #ddd,
-    1px 1px 3px rgba( 0, 0, 0, 0.2 )
+    1px 1px 3px rgba(0, 0, 0, 0.2)
   ;
   box-sizing: border-box;
   grid-area: modal;
@@ -92,7 +92,7 @@
   &:focus {
     background-color: #ddd;
     border-color: #ccc;
-    box-shadow: 1px 1px 3px rgba( 0, 0, 0, 0.4 );
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
     text-decoration: none;
   }
 
@@ -118,7 +118,7 @@
 }
 
 .cpt-modal-screen {
-  background-color: rgb( 0, 0, 0, .4 );
+  background-color: rgb(0, 0, 0, .4);
   height: 100vh;
   position: fixed;
     left: 0;
@@ -131,7 +131,7 @@
   background-color: #fff;
   box-shadow:
     0 0 0 1px #ddd,
-    1px 1px 3px rgba( 0, 0, 0, 0.2 )
+    1px 1px 3px rgba(0, 0, 0, 0.2)
   ;
   box-sizing: border-box;
   margin: 3px 3px 2em 3px;

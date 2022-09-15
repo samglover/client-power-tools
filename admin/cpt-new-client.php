@@ -72,11 +72,11 @@ function cpt_new_client_form() {
 
 
 function cpt_process_new_client() {
-  if ( isset($_POST['cpt_new_client_nonce']) && wp_verify_nonce($_POST['cpt_new_client_nonce'], 'cpt_new_client_added') ) {
+  if (isset($_POST['cpt_new_client_nonce']) && wp_verify_nonce($_POST['cpt_new_client_nonce'], 'cpt_new_client_added')) {
     $client_email       = sanitize_email($_POST['email']);
     $existing_client_id = email_exists($client_email);
 
-    if ( !$existing_client_id ) {
+    if (!$existing_client_id) {
       /**
        * Note. For some businesses (e.g., law firms), it could be a problem
        * if it were easy to guess a client's user_nicename. For example, WordPress
@@ -96,26 +96,26 @@ function cpt_process_new_client() {
         'user_pass'             => null,
         'role'                  => 'cpt-client',
         'show_admin_bar_front'  => 'false',
-      ]);
+     ]);
     } else {
       $new_client = wp_update_user([
         'ID'                    => $existing_client_id,
         'first_name'            => sanitize_text_field($_POST['first_name']),
         'last_name'             => sanitize_text_field($_POST['last_name']),
-      ]);
+     ]);
 
       $user = new \WP_User($new_client);
       $user->add_role('cpt-client');
     }
 
-    if ( is_wp_error($new_client) ) {
+    if (is_wp_error($new_client)) {
       $result = 'Client could not be created. Error message: ' . $new_client->get_error_message();
     } else {
       update_user_meta($new_client, 'cpt_client_id', sanitize_text_field($_POST['client_id']));
       update_user_meta($new_client, 'cpt_client_manager', sanitize_text_field($_POST['client_manager']));
       update_user_meta($new_client, 'cpt_client_status', sanitize_text_field($_POST['client_status']));
 
-      if ( !$existing_client_id ) cpt_new_client_email($new_client);
+      if (!$existing_client_id) cpt_new_client_email($new_client);
 
       $client_profile_url = Common\cpt_get_client_profile_url($new_client);
 
@@ -134,7 +134,7 @@ add_action('admin_post_cpt_new_client_added', __NAMESPACE__ . '\cpt_process_new_
 
 
 function cpt_new_client_email($clients_user_id) {
-  if ( !$clients_user_id ) return;
+  if (!$clients_user_id) return;
 
   $user           = get_userdata($clients_user_id);
   $client_data    = Common\cpt_get_client_data($clients_user_id);

@@ -4,37 +4,37 @@ let postID        = cpt_frontend_js_vars.postID;
 let dashboardID   = cpt_frontend_js_vars.dashboardID;
 
 // Modal Classes
-let cptModal      = document.querySelectorAll( '.cpt-modal' );
-let modalScreen   = document.querySelectorAll( '.cpt-modal-screen' );
+let cptModal      = document.querySelectorAll('.cpt-modal');
+let modalScreen   = document.querySelectorAll('.cpt-modal-screen');
 
 // Login Modal
-let loginLink     = document.querySelectorAll( '.cpt-login-link, a[href*="#cpt-login"]' );
-let loginModal    = document.querySelector( '#cpt-login' );
-let loginPanel    = document.querySelector( '#cpt-login-modal-login' );
-let resetPWPanel  = document.querySelector( '#cpt-login-modal-resetpw' );
-let goToResetPW   = document.querySelector( '#cpt-login-go-to-resetpw' );
-let goToLogin     = document.querySelector( '#cpt-login-go-to-login' );
-let loggedIn      = document.querySelector( '#cpt-login-modal-already-logged-in' );
+let loginLink     = document.querySelectorAll('.cpt-login-link, a[href*="#cpt-login"]');
+let loginModal    = document.querySelector('#cpt-login');
+let loginPanel    = document.querySelector('#cpt-login-modal-login');
+let resetPWPanel  = document.querySelector('#cpt-login-modal-resetpw');
+let goToResetPW   = document.querySelector('#cpt-login-go-to-resetpw');
+let goToLogin     = document.querySelector('#cpt-login-go-to-login');
+let loggedIn      = document.querySelector('#cpt-login-modal-already-logged-in');
 
 // URL
-let baseURL       = [ location.protocol, '//', location.host, location.pathname ].join( '' );
-const params      = new URLSearchParams( location.search );
+let baseURL       = [location.protocol, '//', location.host, location.pathname].join('');
+const params      = new URLSearchParams(location.search);
 
 
-if ( loggedIn && loginLink ) {
-  loginLink.forEach( function( e ) {
+if (loggedIn && loginLink) {
+  loginLink.forEach(function(e) {
     e.innerHTML = 'Log Out';
   });
 }
 
 
-if ( ! loggedIn && postID == dashboardID ) {
+if (! loggedIn && postID == dashboardID) {
   showLogin();
 }
 
 
-if ( params.has( 'cpt_login' ) ) {
-  switch ( params.get( 'cpt_login' ) ) {
+if (params.has('cpt_login')) {
+  switch (params.get('cpt_login')) {
     case 'resetpw':
       showResetPW();
       break;
@@ -48,8 +48,8 @@ if ( params.has( 'cpt_login' ) ) {
 
 
 function showLogin() {
-  if ( resetPWPanel ) { resetPWPanel.style.display = 'none'; }
-  if ( loginPanel ) { loginPanel.style.display = 'block'; }
+  if (resetPWPanel) { resetPWPanel.style.display = 'none'; }
+  if (loginPanel) { loginPanel.style.display = 'block'; }
 
   loginModal.style.display = 'grid';
   modalScreen[0].style.display = 'block';
@@ -57,24 +57,24 @@ function showLogin() {
 
 
 function showResetPW() {
-  if ( resetPWPanel ) { resetPWPanel.style.display = 'block'; }
-  if ( loginPanel ) { loginPanel.style.display = 'none'; }
+  if (resetPWPanel) { resetPWPanel.style.display = 'block'; }
+  if (loginPanel) { loginPanel.style.display = 'none'; }
 
   loginModal.style.display = 'grid';
   modalScreen[0].style.display = 'block';
 }
 
 
-if ( cptModal ) {
+if (cptModal) {
 
   let i = 0;
 
-  cptModal.forEach( function( e ) {
+  cptModal.forEach(function(e) {
 
     let thisModal   = cptModal[i];
     let thisScreen  = modalScreen[i];
 
-    cptModal[i].querySelector( '.cpt-modal-dismiss-button' ).addEventListener( 'click', function( e ) {
+    cptModal[i].querySelector('.cpt-modal-dismiss-button').addEventListener('click', function(e) {
 
       e.preventDefault();
 
@@ -86,15 +86,15 @@ if ( cptModal ) {
       * from the URL just in case the user tries to bookmark it or copy and paste
       * some reason.
       */
-      params.delete( 'cpt_login' );
-      params.delete( 'cpt_notice' );
-      params.delete( 'key' );
-      params.delete( 'login' );
+      params.delete('cpt_login');
+      params.delete('cpt_notice');
+      params.delete('key');
+      params.delete('login');
 
-      if ( params.toString().length > 0 ) {
-        history.replaceState( {}, '', baseURL + '?' + params );
+      if (params.toString().length > 0) {
+        history.replaceState({}, '', baseURL + '?' + params);
       } else {
-        history.replaceState( {}, '', baseURL );
+        history.replaceState({}, '', baseURL);
       }
 
     });
@@ -106,11 +106,11 @@ if ( cptModal ) {
 }
 
 
-if ( loginLink ) {
+if (loginLink) {
 
-  loginLink.forEach( function( e ) {
+  loginLink.forEach(function(e) {
 
-    e.addEventListener( 'click', function( e ) {
+    e.addEventListener('click', function(e) {
       e.preventDefault();
       showLogin();
     });
@@ -120,9 +120,9 @@ if ( loginLink ) {
 }
 
 
-if ( goToResetPW ) {
+if (goToResetPW) {
 
-  goToResetPW.addEventListener( 'click', function( e ) {
+  goToResetPW.addEventListener('click', function(e) {
     e.preventDefault();
     showResetPW();
   });
@@ -130,9 +130,9 @@ if ( goToResetPW ) {
 }
 
 
-if ( goToLogin ) {
+if (goToLogin) {
 
-  goToLogin.addEventListener( 'click', function( e ) {
+  goToLogin.addEventListener('click', function(e) {
     e.preventDefault();
     showLogin();
   });
@@ -143,12 +143,12 @@ if ( goToLogin ) {
 // Notices/Inline Modals
 // (Not technically modals, but the code overlaps for efficiency.)
 
-let cptInlineModal      = document.querySelector( '.cpt-notice' );
-let inlineModalDismiss  = document.querySelector( '.cpt-notice-dismiss-button' );
+let cptInlineModal      = document.querySelector('.cpt-notice');
+let inlineModalDismiss  = document.querySelector('.cpt-notice-dismiss-button');
 
-if ( cptInlineModal && inlineModalDismiss ) {
+if (cptInlineModal && inlineModalDismiss) {
 
-  inlineModalDismiss.addEventListener( 'click', function() {
+  inlineModalDismiss.addEventListener('click', function() {
     cptInlineModal.style.display = 'none';
   });
 

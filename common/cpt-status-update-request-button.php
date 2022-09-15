@@ -12,24 +12,24 @@ namespace Client_Power_Tools\Core\Common;
 
 
 function cpt_status_update_request_button($user_id) {
-  if ( !$user_id ) return;
+  if (!$user_id) return;
 
   // Return if the module is disabled.
-  if ( !get_option('cpt_module_status_update_req_button') ) return;
+  if (!get_option('cpt_module_status_update_req_button')) return;
 
   // Return (i.e. don't output the button) if the client has clicked the button
   // more recently than the request frequency option allows.
   $request_frequency       = get_option('cpt_status_update_req_freq');
   $days_since_last_request = cpt_days_since_last_request($user_id);
 
-  if ( !is_null($days_since_last_request )&& $days_since_last_request < $request_frequency ) return;
+  if (!is_null($days_since_last_request)&& $days_since_last_request < $request_frequency) return;
 
   // Output the button.
   ob_start();
     ?>
       <div id="cpt-status-update-request-button">
         <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
-          <?php wp_nonce_field( 'cpt_status_update_requested', 'cpt_status_update_request_nonce'); ?>
+          <?php wp_nonce_field('cpt_status_update_requested', 'cpt_status_update_request_nonce'); ?>
           <input name="action" value="cpt_status_update_requested" type="hidden">
           <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
           <p class="submit">
@@ -49,7 +49,7 @@ function cpt_status_update_request_button($user_id) {
  */
 function cpt_days_since_last_request($user_id) {
 
-  if ( !$user_id ) return;
+  if (!$user_id) return;
 
   $last_request_date = null;
 
@@ -59,19 +59,19 @@ function cpt_days_since_last_request($user_id) {
       [
         'key'         => 'cpt_clients_user_id',
         'value'       => $user_id,
-      ],
+     ],
       [
         'key'         => 'cpt_status_update_request',
         'value'       => true,
-      ],
-    ],
+     ],
+   ],
     'order'           => 'DESC',
     'orderby'         => 'post_date',
     'post_type'       => 'cpt_message',
     'posts_per_page'  => 1,
-  ]);
+ ]);
 
-  if ( $status_update_requests->have_posts() ) : while ( $status_update_requests->have_posts() ) : $status_update_requests->the_post();
+  if ($status_update_requests->have_posts()) : while ($status_update_requests->have_posts()) : $status_update_requests->the_post();
     $last_request_date = new \DateTime(get_the_date('Y-m-d'));
   endwhile; endif;
 
@@ -83,7 +83,7 @@ function cpt_days_since_last_request($user_id) {
 
 
 function cpt_process_status_update_request() {
-  if ( isset($_POST['cpt_status_update_request_nonce']) && wp_verify_nonce($_POST['cpt_status_update_request_nonce'], 'cpt_status_update_requested') ) {
+  if (isset($_POST['cpt_status_update_request_nonce']) && wp_verify_nonce($_POST['cpt_status_update_request_nonce'], 'cpt_status_update_requested')) {
     $clients_user_id = sanitize_key(intval($_POST['clients_user_id']));
 
     $status_update_request = [
@@ -95,19 +95,19 @@ function cpt_process_status_update_request() {
       'meta_input'    => [
         'cpt_clients_user_id'         => $clients_user_id,
         'cpt_status_update_request'   => true,
-      ],
-    ];
+     ],
+   ];
 
     $post = wp_insert_post($status_update_request, $wp_error);
 
-    if ( is_wp_error($post) ) {
+    if (is_wp_error($post)) {
       /**
        * translators:
        * 1: error message
        */
       $result = sprintf(__('Your status update request could not be sent. Error message: %1$s', 'client-power-tools'),
         $post->get_error_message()
-      );
+     );
     } else {
       cpt_status_update_request_notification($post);
       $result = __('Status update requested!', 'client-power-tools');
@@ -126,7 +126,7 @@ add_action('admin_post_cpt_status_update_requested', __NAMESPACE__ . '\cpt_proce
 
 
 function cpt_status_update_request_notification($message_id) {
-  if ( !$message_id ) return;
+  if (!$message_id) return;
 
   $msg_obj          = get_post($message_id);
   $sender_id        = $msg_obj->post_author;
@@ -141,7 +141,7 @@ function cpt_status_update_request_notification($message_id) {
 
   $to               = $client_data['manager_email'];
 
-  if ( get_option('cpt_status_update_req_notice_email') ) {
+  if (get_option('cpt_status_update_req_notice_email')) {
     $cc             = get_option('cpt_status_update_req_notice_email');
     $headers[]      = 'Cc: ' . $cc;
   }
@@ -150,7 +150,7 @@ function cpt_status_update_request_notification($message_id) {
                        * 1: message subject (already translated, above)
                        * 2: sender's name
                        */
-  $subject          = sprintf(__('%1$s by %2$s', 'client-power-tools' ), $msg_obj->post_title, $from_name);
+  $subject          = sprintf(__('%1$s by %2$s', 'client-power-tools'), $msg_obj->post_title, $from_name);
 
                       /**
                        * translators:
