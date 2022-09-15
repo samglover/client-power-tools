@@ -84,41 +84,39 @@ add_filter('the_content', __NAMESPACE__ . '\cpt_client_dashboard');
 
 
 function cpt_nav() {
-  ob_start();
-    ?>
-      <nav id="cpt-nav">
-        <ul class="cpt-tabs">
-          <li class="cpt-tab"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard() && ! Common\cpt_is_messages()) { echo ' current'; } ?>"><?php _e('Dashboard', 'client-power-tools'); ?></a></li>
-          <?php if (get_option('cpt_module_messaging')) { ?>
-            <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_messages()) { echo ' current'; } ?>"><?php _e('Messages', 'client-power-tools'); ?></a></li>
-          <?php } ?>
-          <?php
-            if (get_option('cpt_module_knowledge_base')) {
-              $knowledge_base_id  = get_option('cpt_knowledge_base_page_selection');
-              $knowledge_base_url = Common\cpt_get_knowledge_base_url();
-              $title              = get_the_title($knowledge_base_id);
-              $child_pages        = cpt_get_child_pages($knowledge_base_id);
-              $classes            = 'cpt-nav-menu-item';
-              Common\cpt_is_knowledge_base()  ? $classes .= ' current' : null;
-              if ($child_pages) {
-                $classes .= ' cpt-click-to-expand';
-                echo '<li class="cpt-tab"><span class="' . $classes . '">' . $title . file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/expand.svg') . '</span></li>';
-              } else {
-                echo '<li class="cpt-tab"><a href="' . $knowledge_base_url . '" class="' . $classes . '" title="' . $title . '">' . $title . '</a></li>';
-              }
-              $knowledge_base_submenu = cpt_nav_tabs_submenu($knowledge_base_id);
-            }
-          ?>
-        </ul>
+  ?>
+    <nav id="cpt-nav">
+      <ul class="cpt-tabs">
+        <li class="cpt-tab"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard() && ! Common\cpt_is_messages()) { echo ' current'; } ?>"><?php _e('Dashboard', 'client-power-tools'); ?></a></li>
+        <?php if (get_option('cpt_module_messaging')) { ?>
+          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_messages()) { echo ' current'; } ?>"><?php _e('Messages', 'client-power-tools'); ?></a></li>
+        <?php } ?>
         <?php
-          /**
-           * If adding more drop-down tabs, just keep them in the same order.
-           */
-          if (get_option('cpt_module_knowledge_base') && $child_pages) { echo $knowledge_base_submenu; }
+          if (get_option('cpt_module_knowledge_base')) {
+            $knowledge_base_id  = get_option('cpt_knowledge_base_page_selection');
+            $knowledge_base_url = Common\cpt_get_knowledge_base_url();
+            $title              = get_the_title($knowledge_base_id);
+            $child_pages        = cpt_get_child_pages($knowledge_base_id);
+            $classes            = 'cpt-nav-menu-item';
+            Common\cpt_is_knowledge_base()  ? $classes .= ' current' : null;
+            if ($child_pages) {
+              $classes .= ' cpt-click-to-expand';
+              echo '<li class="cpt-tab"><span class="' . $classes . '">' . $title . file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/expand.svg') . '</span></li>';
+            } else {
+              echo '<li class="cpt-tab"><a href="' . $knowledge_base_url . '" class="' . $classes . '" title="' . $title . '">' . $title . '</a></li>';
+            }
+            $knowledge_base_submenu = cpt_nav_tabs_submenu($knowledge_base_id);
+          }
         ?>
-      </nav>
-    <?php
-  echo ob_get_clean();
+      </ul>
+      <?php
+        /**
+         * If adding more drop-down tabs, just keep them in the same order.
+         */
+        if (get_option('cpt_module_knowledge_base') && $child_pages) { echo $knowledge_base_submenu; }
+      ?>
+    </nav>
+  <?php
 }
 
 
