@@ -9,6 +9,7 @@ function cpt_redirect_clients() {
   if (
     Common\cpt_is_client() &&
     !current_user_can('cpt-manage-clients') &&
+    !(defined('DOING_AJAX') && DOING_AJAX) &&
     $pagenow !== 'admin-post.php'
   ) {
     wp_safe_redirect(home_url());
