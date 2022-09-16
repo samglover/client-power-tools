@@ -111,6 +111,12 @@ For more information on how to take advantage of the new and updated features, p
 
 == Changelog ==
 
+### 1.4.11 - 2022-09-16
+
+#### Fixed
+- Restored client manager access to WP admin.
+
+
 ### 1.4.10 - 2022-09-15
 
 #### Added
