@@ -16,8 +16,8 @@ function cpt_add_roles() {
     'cpt-client-manager',
     'Client Manager',
     [
-      'cpt-view-clients' => true,
-      'read',
+      'cpt-view-clients'  => true,
+      'read'              => true,
     ]
   );
 
