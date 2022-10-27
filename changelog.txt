@@ -9,6 +9,9 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 #### Added
 -
 
+#### Changed
+- Reorganized /assets/js/cpt-frontend.js.
+
 #### Fixed
 - Fix the modal dismiss button display.
 

@@ -1,5 +1,11 @@
-#cpt-login form input[type="password"],
-#cpt-login form input[type="text"] {
-  box-sizing: border-box;
-  width: 100%;
+#cpt-login {
+  #cpt-login-modal-username,
+  #cpt-login-modal-password {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  #cpt-password-link {
+    display: none;
+  }
 }

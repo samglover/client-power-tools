@@ -11,6 +11,15 @@ add_filter('body_class', function($classes) {
   return array_merge($classes, ['customize-cpt']);
 });
 
+function add_magic_link_to_login_form() {
+  ob_start();
+    echo '<a id="cpt-magic-link-link" href="#">Or, get a magic link by email.</a>';
+    echo '<a id="cpt-password-link" href="#">Use your password.</a>';
+  return ob_get_clean();
+}
+
+add_filter('login_form_middle', __NAMESPACE__ . '\add_magic_link_to_login_form');
+
 
 /**
  * Loads the login modal in the footer. There are four possible results:
@@ -32,8 +41,8 @@ add_filter('body_class', function($classes) {
 function cpt_login() {
   // Hides the modal by default, sets the login form to show, and sets the
   // resetpw form to hide.
-  $modal_styles   = ' style="display: none;"';
-  $login_styles   = '';
+  $modal_styles = ' style="display: none;"';
+  $login_styles = '';
   $resetpw_styles = ' style="display: none;"';
 
   // Shows the login modal if there is a cpt_login parameter in the URL.
@@ -43,7 +52,7 @@ function cpt_login() {
     // Shows the password reset form instead of the login form if the URL
     // contains cpt_login=resetpw.
     if ($_REQUEST['cpt_login'] == 'resetpw') {
-      $login_styles   = ' style="display: none;"';
+      $login_styles = ' style="display: none;"';
       $resetpw_styles = '';
     }
   }
@@ -61,18 +70,18 @@ function cpt_login() {
             // Outputs the password change form if the URL contains
             // cpt_login=setpw and a key and login.
             if ($_REQUEST['cpt_login'] == 'setpw' && isset($_REQUEST['key']) && isset($_REQUEST['login'])) {
-              $key    = sanitize_text_field($_REQUEST['key']);
-              $login  = sanitize_user(urldecode($_REQUEST['login']));
+              $key = sanitize_text_field($_REQUEST['key']);
+              $login = sanitize_user(urldecode($_REQUEST['login']));
               cpt_password_change_form($key, $login);
             // Otherwise, outputs the login/password reset form.
             } else {
               ?>
                 <div id="cpt-login-modal-login" class="cpt-modal-inner"<?php echo $login_styles; ?>>
-                  <h2><?php _e('Client Login'); ?></h2>
+                  <h2><?php _e('Client Login', 'client-power-tools'); ?></h2>
                   <?php
                     // Outputs any error messages.
                     if (isset($_REQUEST['cpt_error'])) {
-                      echo '<p class="cpt-error">' . __('Sorry, but the email address or password you entered didn\'t work. Please try again.') . '</p>';
+                      echo '<p class="cpt-error">' . __('Sorry, but the email address or password you entered didn\'t work. Please try again.', 'client-power-tools') . '</p>';
                     }
 
                     // Outputs any success messages. (Currently just for a
@@ -82,7 +91,7 @@ function cpt_login() {
 
                       switch ($success_message) {
                         case 'password_changed':
-                          echo '<p class="cpt-success">' . __('Password successfully changed.') . '</p>';
+                          echo '<p class="cpt-success">' . __('Password successfully changed.', 'client-power-tools') . '</p>';
                           break;
                       }
                     }
@@ -91,16 +100,19 @@ function cpt_login() {
                     // like sending users to the client dashboard after they
                     // log in.
                     wp_login_form([
-                      'label_username'  => __('Email Address'),
+                      'id_username'     => 'cpt-login-modal-username',
+                      'id_password'     => 'cpt-login-modal-password',
+                      'id_submit'       => 'cpt-login-modal-submit',
+                      'label_username'  => __('Email Address', 'client-power-tools'),
                       'redirect'        => Common\cpt_get_client_dashboard_url(),
                       'remember'        => false,
                    ]);
                   ?>
-                  <p><small><a id="cpt-login-go-to-resetpw" href="cpt-login-modal-resetpw" rel="nofollow"><?php _e('Forgot Your Password?'); ?></a></small></p>
+                  <p><small><a id="cpt-login-go-to-resetpw" href="cpt-login-modal-resetpw" rel="nofollow"><?php _e('Forgot Your Password?', 'client-power-tools'); ?></a></small></p>
                 </div>
 
                 <div id="cpt-login-modal-resetpw" class="cpt-modal-inner"<?php echo $resetpw_styles; ?>>
-                  <h2><?php _e('Forgot Your Password?'); ?></h2>
+                  <h2><?php _e('Forgot Your Password?', 'client-power-tools'); ?></h2>
                   <?php
                     // Outputs any error messages. (On success, the user will
                     // be shown a modal notice.)
@@ -108,11 +120,11 @@ function cpt_login() {
                       $error_val = sanitize_key($_REQUEST['cpt_error']);
                       switch ($error_val) {
                         case 'invalid_key':
-                          echo '<p class="cpt-error">' . __('Your password reset key is invalid. Please try again.') . '</p>';
+                          echo '<p class="cpt-error">' . __('Your password reset key is invalid. Please try again.', 'client-power-tools') . '</p>';
                           break;
 
                         default:
-                          echo '<p class="cpt-error">' . __('Error: ') . $error_val . '</p>';
+                          echo '<p class="cpt-error">' . __('Error: ', 'client-power-tools') . $error_val . '</p>';
                       }
                     }
 
@@ -154,14 +166,34 @@ function cpt_login() {
 add_action('wp_footer', __NAMESPACE__ . '\cpt_login');
 
 
-function cpt_process_password_reset_request() {
-  if ('POST' == $_SERVER['REQUEST_METHOD']) {
-    retrieve_password();
-  }
+function send_magic_link() {
+  if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'cpt-magic-link-nonce')) exit('Invalid nonce.');
+  if (!get_user_by('user_email', $_POST['email'])) return;
 
+  $password = wp_generate_password(32, true);
+  set_transient('cpt_magic_link_' . $_POST['email'], wp_hash_password($password) , 900);
+
+  $magic_link = add_query_arg('cpt_login', 'magic_link', Common\cpt_get_client_dashboard_url());
+  $magic_link = add_query_arg('key', $password, $magic_link);
+  $magic_link = add_query_arg('login', $_POST['email'], $magic_link);
+
+  wp_send_json(['magic_link' => $magic_link]);
+}
+
+add_action('wp_ajax_send_magic_link', __NAMESPACE__ . '\send_magic_link'); // Logged-in users.
+add_action('wp_ajax_nopriv_send_magic_link', __NAMESPACE__ . '\send_magic_link'); // Not-logged-in users.
+
+
+function check_magic_link($email) {
+  wp_check_password($password, get_transient('cpt_magic_link_' . $email));
+  delete_transient('cpt_magic_link_' . $email);
+}
+
+
+function cpt_process_password_reset_request() {
+  if ('POST' == $_SERVER['REQUEST_METHOD']) retrieve_password();
   $redirect_url = home_url();
   $redirect_url = add_query_arg('cpt_notice', 'rp_checkemail', $redirect_url);
-
   wp_safe_redirect($redirect_url);
   exit;
 }
@@ -175,10 +207,10 @@ add_action('login_form_cpt_lostpassword', __NAMESPACE__ . '\cpt_process_password
  */
 function cpt_password_reset_message($message, $key, $user_login, $user_data) {
   if (Common\cpt_is_client($user_data->ID)) {
-    $site_name  = get_bloginfo('name');
-    $url        = Common\cpt_get_client_dashboard_url() . '?cpt_login=setpw&key=' . $key . '&login=' . urlencode($user_login);
+    $site_name = get_bloginfo('name');
+    $url = Common\cpt_get_client_dashboard_url() . '?cpt_login=setpw&key=' . $key . '&login=' . urlencode($user_login);
 
-    $message  = __('Someone has requested a password reset for the following account:') . "\r\n\r\n";
+    $message = __('Someone has requested a password reset for the following account:') . "\r\n\r\n";
     $message .= 'User ID: ' . $user_data->ID . "\r\n\r\n";
     $message .= sprintf(__('Site Name: %s'), $site_name) . "\r\n\r\n";
     $message .= sprintf(__('Username: %s'), $user_login) . "\r\n\r\n";
@@ -186,7 +218,6 @@ function cpt_password_reset_message($message, $key, $user_login, $user_data) {
     $message .= __('To set a new password, visit the following address:') . "\r\n\r\n";
     $message .= $url . "\r\n";
   }
-
   return $message;
 }
 
@@ -195,7 +226,6 @@ add_filter('retrieve_password_message', __NAMESPACE__ . '\cpt_password_reset_mes
 
 function cpt_password_change_form($key, $login) {
   if (!$key || !$login) return;
-
   ?>
     <div id="cpt-login-modal-setpw" class="cpt-modal-inner">
       <h2><?php _e('Set Your Password'); ?></h2>
@@ -207,11 +237,9 @@ function cpt_password_change_form($key, $login) {
             case 'password_reset_empty':
               echo '<p class="cpt-error">' . __('You did not enter a new password. Please try again.') . '</p>';
               break;
-
             case 'password_mismatch':
               echo '<p class="cpt-error">' . __('Your passwords did not match. Please try again.') . '</p>';
               break;
-
             default:
               echo '<p class="cpt-error">' . __('Error: ') . $error_val . '</p>';
           }
@@ -241,11 +269,11 @@ function cpt_password_change_form($key, $login) {
 
 function cpt_process_password_change() {
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $key        = sanitize_text_field($_REQUEST['key']);
-    $login      = sanitize_user($_REQUEST['login']);
-    $user       = check_password_reset_key($key, $login);
+    $key = sanitize_text_field($_REQUEST['key']);
+    $login = sanitize_user($_REQUEST['login']);
+    $user = check_password_reset_key($key, $login);
 
-    $dashboard  = Common\cpt_get_client_dashboard_url();
+    $dashboard = Common\cpt_get_client_dashboard_url();
 
     if (!$user || is_wp_error($user)) {
       $redirect_url = add_query_arg('cpt_login', 'resetpw', $dashboard);
@@ -265,7 +293,6 @@ function cpt_process_password_change() {
         $redirect_url = add_query_arg('key', $key, $redirect_url);
         $redirect_url = add_query_arg('login', urlencode($login), $redirect_url);
         $redirect_url = add_query_arg('cpt_error', 'password_reset_empty', $redirect_url);
-
         wp_redirect($redirect_url);
         exit;
       }
@@ -277,7 +304,6 @@ function cpt_process_password_change() {
         $redirect_url = add_query_arg('key', $key, $redirect_url);
         $redirect_url = add_query_arg('login', urlencode($login), $redirect_url);
         $redirect_url = add_query_arg('cpt_error', 'password_mismatch', $redirect_url);
-
         wp_redirect($redirect_url);
         exit;
       }
@@ -315,13 +341,12 @@ function cpt_notices() {
 
     switch ($notice_val) {
       case 'rp_checkemail':
-        $heading  = '<h2>' . __('Please Check Your Email') . '</h2>';
-        $notice   = '<p>' . __('If you submitted a valid email address you will receive a link to reset your password. If you do not receive an email shortly, please check your spam folder or contact us for help.') . '</p>';
+        $heading = '<h2>' . __('Please Check Your Email') . '</h2>';
+        $notice = '<p>' . __('If you submitted a valid email address you will receive a link to reset your password. If you do not receive an email shortly, please check your spam folder or contact us for help.') . '</p>';
         break;
-
       default:
-        $heading  = '<h2>' . __('Sorry') . '</h2>';
-        $notice   = '<p>' . __('Something went wrong. The page you were looking for doesn\'t seem to exist.') . '</p>';
+        $heading = '<h2>' . __('Sorry') . '</h2>';
+        $notice = '<p>' . __('Something went wrong. The page you were looking for doesn\'t seem to exist.') . '</p>';
     }
 
     ?>
