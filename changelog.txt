@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com).
 
 
+### 1.5 - ????-??-??
+
+#### Added
+-
+
+#### Fixed
+- Fix the modal dismiss button display.
+
+
 ### 1.4.11 - 2022-09-16
 
 #### Fixed
