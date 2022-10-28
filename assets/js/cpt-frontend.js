@@ -129,47 +129,94 @@ if (goToLogin) {
 
 
 // Handles the Magic Link
-const magicLink = document.getElementById('cpt-magic-link-link');
+const codeLink = document.getElementById('cpt-login-code-link');
 const pwLink = document.getElementById('cpt-password-link');
-const pwField = document.querySelector('#cpt-login .login-password');
+const forgotpwLink = document.getElementById('cpt-password-link');
+const pwField = document.querySelector('#cpt-loginform .login-password');
+
 const submitBtn = document.getElementById('cpt-login-modal-submit');
 const submitBtnVal = submitBtn.value;
 
-magicLink.addEventListener('click', function(event) {
+codeLink.addEventListener('click', function(event) {
   event.preventDefault();
+
   this.style.display = 'none';
   pwField.style.display = 'none';
+
   pwLink.style.display = 'block';
-  submitBtn.value = 'Send Link';
-  submitBtn.addEventListener('click', sendMagicLink, {once: true});
+
+  submitBtn.value = 'Send Code';
+  submitBtn.addEventListener('click', handleSubmitClick);
 });
 
 pwLink.addEventListener('click', function(event) {
   event.preventDefault();
+
   this.style.display = 'none';
+
   pwField.style.display = 'block';
-  magicLink.style.display = 'block';
+  codeLink.style.display = 'block';
+
   submitBtn.value = submitBtnVal;
+  submitBtn.removeEventListener('click', handleSubmitClick);
 });
 
-
-function sendMagicLink(event) {
-  let email = document.getElementById('cpt-login-modal-username').value;
+function handleSubmitClick(event) {
   event.preventDefault();
+  let email = document.getElementById('cpt-login-modal-username').value;
+  if (email) sendLoginCode(email);
+}
 
+
+// Sends the Login Code
+const loginCodePanel = document.getElementById('cpt-login-code');
+const loginCodeField = document.getElementById('cpt-check-login-code');
+
+function sendLoginCode(email) {
   jQuery.ajax({
     type: 'POST',
     url: cpt_frontend_js_vars.ajaxurl,
     data: {
       _ajax_nonce: cpt_frontend_js_vars.nonce,
-      action: 'send_magic_link',
+      action: 'send_login_code',
       email: email
+    },
+    beforeSend: function() {
+      console.log('Sending …');
+    },
+    success: function(response) {
+      // console.debug(response);
+      loginPanel.style.display = 'none';
+      resetPasswordPanel.style.display = 'none';
+
+      loginCodePanel.style.display = 'grid';
+      loginCodeField.addEventListener('change', handleSubmitLoginCode);
+    },
+    failure: function(error) {
+      console.debug(error);
+    }
+  });
+}
+
+function handleSubmitLoginCode(event) {
+  event.preventDefault();
+  if (event.target.value.length == 8) checkLoginCode(event.target.value);
+}
+
+function checkLoginCode(code) {
+  jQuery.ajax({
+    type: 'POST',
+    url: cpt_frontend_js_vars.ajaxurl,
+    data: {
+      _ajax_nonce: cpt_frontend_js_vars.nonce,
+      action: 'check_login_code',
+      email: email,
+      code: code
     },
     beforeSend: function() {
     },
     success: function(response) {
       console.debug(response);
-      // Message: If we have an account with that email address, we sent a magic login link to it.
     },
     failure: function(error) {
       console.debug(error);

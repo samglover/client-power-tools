@@ -200,7 +200,7 @@ function cpt_get_email_card($title = null, $content = null, $button_txt = 'Go', 
       <?php } ?>
 
       <?php if (!empty($button_url)) { ?>
-        <a class="button" href="<?php esc_url($button_url); ?>" style="<?php esc_attr($button_style); ?>"><?php echo $button_txt; ?></a>
+        <a class="button" href="<?php esc_url($button_url); ?>" style="<?php echo esc_attr($button_style); ?>"><?php echo $button_txt; ?></a>
       <?php } ?>
     </div>
   <?php

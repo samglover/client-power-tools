@@ -11,14 +11,16 @@ add_filter('body_class', function($classes) {
   return array_merge($classes, ['customize-cpt']);
 });
 
-function add_magic_link_to_login_form() {
+function add_login_code_to_login_form() {
   ob_start();
-    echo '<a id="cpt-magic-link-link" href="#">Or, get a magic link by email.</a>';
-    echo '<a id="cpt-password-link" href="#">Use your password.</a>';
+    ?>
+      <a id="cpt-login-code-link" href="#">Or, get a login code by email.</a>
+      <a id="cpt-password-link" href="#">Use your password.</a>
+    <?php
   return ob_get_clean();
 }
 
-add_filter('login_form_middle', __NAMESPACE__ . '\add_magic_link_to_login_form');
+add_filter('login_form_middle', __NAMESPACE__ . '\add_login_code_to_login_form');
 
 
 /**
@@ -73,33 +75,21 @@ function cpt_login() {
               $key = sanitize_text_field($_REQUEST['key']);
               $login = sanitize_user(urldecode($_REQUEST['login']));
               cpt_password_change_form($key, $login);
+
             // Otherwise, outputs the login/password reset form.
             } else {
               ?>
                 <div id="cpt-login-modal-login" class="cpt-modal-inner"<?php echo $login_styles; ?>>
                   <h2><?php _e('Client Login', 'client-power-tools'); ?></h2>
                   <?php
-                    // Outputs any error messages.
-                    if (isset($_REQUEST['cpt_error'])) {
-                      echo '<p class="cpt-error">' . __('Sorry, but the email address or password you entered didn\'t work. Please try again.', 'client-power-tools') . '</p>';
-                    }
-
-                    // Outputs any success messages. (Currently just for a
-                    // successful password change.)
-                    if (isset($_REQUEST['cpt_success'])) {
-                      $success_message = sanitize_key($_REQUEST['cpt_success']);
-
-                      switch ($success_message) {
-                        case 'password_changed':
-                          echo '<p class="cpt-success">' . __('Password successfully changed.', 'client-power-tools') . '</p>';
-                          break;
-                      }
-                    }
+                    cpt_error_messages();
+                    cpt_success_messages();
 
                     // Outputs the WP login form with some customizations,
                     // like sending users to the client dashboard after they
                     // log in.
                     wp_login_form([
+                      'form_id'         => 'cpt-loginform',
                       'id_username'     => 'cpt-login-modal-username',
                       'id_password'     => 'cpt-login-modal-password',
                       'id_submit'       => 'cpt-login-modal-submit',
@@ -110,7 +100,6 @@ function cpt_login() {
                   ?>
                   <p><small><a id="cpt-login-go-to-resetpw" href="cpt-login-modal-resetpw" rel="nofollow"><?php _e('Forgot Your Password?', 'client-power-tools'); ?></a></small></p>
                 </div>
-
                 <div id="cpt-login-modal-resetpw" class="cpt-modal-inner"<?php echo $resetpw_styles; ?>>
                   <h2><?php _e('Forgot Your Password?', 'client-power-tools'); ?></h2>
                   <?php
@@ -134,16 +123,25 @@ function cpt_login() {
                   ?>
 
                   <p><?php _e('Enter your email address and you will receive a link to reset your password.'); ?></p>
-                  <form id="lostpasswordform" action="<?php echo $cpt_lostpassword_url; ?>" method="post">
+                  <form id="cpt-lostpasswordform" action="<?php echo $cpt_lostpassword_url; ?>" method="post">
                     <p>
-                      <label for="user_login"><?php _e('Email'); ?></label>
-                      <input type="text" name="user_login" id="lostpassword_user_login">
+                      <label for="lostpassword_user_login"><?php _e('Email'); ?></label>
+                      <input id="lostpassword_user_login" class="input" type="text" name="user_login">
                     </p>
                     <p class="submit">
                       <input type="submit" name="submit" class="lostpassword-button button" value="<?php _e('Reset Password'); ?>"/>
                     </p>
                   </form>
                   <p><small><a id="cpt-login-go-to-login" href="cpt-login-modal-login" rel="nofollow"><?php _e('Back to Login'); ?></a></small></p>
+                </div>
+                <div id="cpt-login-code">
+                  <h2><?php _e('Client Login', 'client-power-tools'); ?></h2>
+                  <form id="cpt-check-login-code-form">
+                    <p>
+                      <label for="cpt-check-login-code">Enter Login Code</label>
+                      <input id="cpt-check-login-code" class="input" type="text" maxlength="8">
+                    </p>
+                  </form>
                 </div>
               <?php
             }
@@ -166,27 +164,28 @@ function cpt_login() {
 add_action('wp_footer', __NAMESPACE__ . '\cpt_login');
 
 
-function send_magic_link() {
-  if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'cpt-magic-link-nonce')) exit('Invalid nonce.');
-  if (!get_user_by('user_email', $_POST['email'])) return;
-
-  $password = wp_generate_password(32, true);
-  set_transient('cpt_magic_link_' . $_POST['email'], wp_hash_password($password) , 900);
-
-  $magic_link = add_query_arg('cpt_login', 'magic_link', Common\cpt_get_client_dashboard_url());
-  $magic_link = add_query_arg('key', $password, $magic_link);
-  $magic_link = add_query_arg('login', $_POST['email'], $magic_link);
-
-  wp_send_json(['magic_link' => $magic_link]);
+function cpt_error_messages() {
+  if (!isset($_REQUEST['cpt_error'])) return;
+  switch($_REQUEST['cpt_error']) {
+    case 'login_failed':
+      $message = __('Sorry, but the email address or password you entered didn\'t work. Please try again.', 'client-power-tools') . '</p>';
+      break;
+    default:
+      $message = __('Something went wrong; that didn\'t work.', 'client-power-tools');
+  }
+  echo '<p class="cpt-error">' . $message . '</p>';
 }
 
-add_action('wp_ajax_send_magic_link', __NAMESPACE__ . '\send_magic_link'); // Logged-in users.
-add_action('wp_ajax_nopriv_send_magic_link', __NAMESPACE__ . '\send_magic_link'); // Not-logged-in users.
-
-
-function check_magic_link($email) {
-  wp_check_password($password, get_transient('cpt_magic_link_' . $email));
-  delete_transient('cpt_magic_link_' . $email);
+function cpt_success_messages() {
+  if (!isset($_REQUEST['cpt_success'])) return;
+  switch ($_REQUEST['cpt_success']) {
+    case 'password_changed':
+      $message = __('Password successfully changed.', 'client-power-tools') . '</p>';
+      break;
+    default:
+      $message = __('Success!', 'client-power-tools');
+  }
+  echo '<p class="cpt-success">' . $message . '</p>';
 }
 
 

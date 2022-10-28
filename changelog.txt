@@ -10,10 +10,11 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 -
 
 #### Changed
-- Reorganized /assets/js/cpt-frontend.js.
+- The frontend login process now includes the option to use a login code.
 
 #### Fixed
 - Fix the modal dismiss button display.
+- Restore button code style to email cards.
 
 
 ### 1.4.11 - 2022-09-16

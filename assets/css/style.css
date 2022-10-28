@@ -330,12 +330,12 @@
   margin-bottom: 0;
 }
 
-#cpt-login #cpt-login-modal-username,
-#cpt-login #cpt-login-modal-password {
+#cpt-login .input {
   box-sizing: border-box;
   width: 100%;
 }
-#cpt-login #cpt-password-link {
+#cpt-login #cpt-password-link,
+#cpt-login #cpt-login-code {
   display: none;
 }
 

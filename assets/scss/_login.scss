@@ -1,11 +1,11 @@
 #cpt-login {
-  #cpt-login-modal-username,
-  #cpt-login-modal-password {
+  .input {
     box-sizing: border-box;
     width: 100%;
   }
 
-  #cpt-password-link {
+  #cpt-password-link,
+  #cpt-login-code {
     display: none;
   }
 }

@@ -26,12 +26,12 @@ define('CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url(__FILE__));
  * Plugin Files
  */
 require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common.php');
+require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-login.php');
 require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-status-update-request-button.php');
 require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php');
 
 function cpt_register_common_scripts() {
 	wp_enqueue_script('cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-common.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
-	wp_enqueue_script('cpt-messages', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-messages.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
 }
 
 add_action('wp_enqueue_scripts', __NAMESPACE__ . '\cpt_register_common_scripts');
@@ -53,7 +53,7 @@ if (!is_admin()) {
 			'postID' => $post ? $post->ID : null,
 			'dashboardID'	=> get_option('cpt_client_dashboard_page_selection'),
 			'ajaxurl' => admin_url('admin-ajax.php'),
-			'nonce' => wp_create_nonce('cpt-magic-link-nonce'),
+			'nonce' => wp_create_nonce('cpt-login-code-nonce'),
 		]);
 		wp_enqueue_script('cpt-frontend');
 	}
