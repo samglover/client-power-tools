@@ -200,6 +200,7 @@ function sendLoginCode(email) {
 
 function handleSubmitLoginCode(event) {
   event.preventDefault();
+  let email = document.getElementById('cpt-login-modal-username').value;
   if (event.target.value.length == 8) checkLoginCode(event.target.value);
 }
 

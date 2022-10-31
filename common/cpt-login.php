@@ -9,11 +9,11 @@ function send_login_code() {
     return;
   }
 
-  $code = wp_generate_password(8, false);
-  set_transient('cpt_login_code_' . $_POST['email'], wp_hash_password($code) , 900);
-
   $to = $_POST['email'];
   $subject = '[' . get_bloginfo('title') . '] Login Code';
+
+  $code = wp_generate_password(8, false);
+  set_transient('cpt_login_code_' . $_POST['email'], wp_hash_password($code) , 900);
 
   ob_start();
     ?>
@@ -21,6 +21,7 @@ function send_login_code() {
       <p><strong style="font-size: 125%"><?php echo $code; ?></strong></p>
     <?php
   $card_content = ob_get_clean();
+
   $dashboard_url = cpt_get_client_dashboard_url();
 
   ob_start();
@@ -41,7 +42,10 @@ add_action('wp_ajax_nopriv_send_login_code', __NAMESPACE__ . '\send_login_code')
 
 
 function check_login_code($email, $code) {
-  if (!wp_check_password($code, get_transient('cpt_login_code_' . $email))) return;
+  if (!wp_check_password($code, get_transient('cpt_login_code_' . $email))) {
+    wp_send_json(['success' => false]);
+    return;
+  }
 
   delete_transient('cpt_login_code_' . $email);
 }
