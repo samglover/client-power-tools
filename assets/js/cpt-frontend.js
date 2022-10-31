@@ -182,7 +182,7 @@ function sendLoginCode(email) {
       email: email
     },
     beforeSend: function() {
-      console.log('Sending …');
+      // console.log('Sending …');
     },
     success: function(response) {
       // console.debug(response);

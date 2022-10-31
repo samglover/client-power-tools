@@ -189,21 +189,23 @@ function cpt_get_email_card($title = null, $content = null, $button_txt = 'Go', 
   $h2_style       = 'margin-top: 0;';
   $button_style   = 'background-color: #eee; border: 1px solid #ddd; box-sizing: border-box; display: block; margin: 0; padding: 1em; width: 100%; text-align: center;';
 
-  ?>
-    <div class="cpt-card" align="left" style="<?php echo $card_style; ?>">
-      <?php if (!empty($title)) { ?>
-        <h2 style="<?php echo $h2_style; ?>"><?php echo $title; ?></h2>
-      <?php } ?>
+  ob_start();
+    ?>
+      <div class="cpt-card" align="left" style="<?php echo $card_style; ?>">
+        <?php if (!empty($title)) { ?>
+          <h2 style="<?php echo $h2_style; ?>"><?php echo $title; ?></h2>
+        <?php } ?>
 
-      <?php if (!empty($content)) { ?>
-        <?php echo $content; ?>
-      <?php } ?>
+        <?php if (!empty($content)) { ?>
+          <?php echo $content; ?>
+        <?php } ?>
 
-      <?php if (!empty($button_url)) { ?>
-        <a class="button" href="<?php esc_url($button_url); ?>" style="<?php echo esc_attr($button_style); ?>"><?php echo $button_txt; ?></a>
-      <?php } ?>
-    </div>
-  <?php
+        <?php if (!empty($button_url)) { ?>
+          <a class="button" href="<?php esc_url($button_url); ?>" style="<?php echo esc_attr($button_style); ?>"><?php echo $button_txt; ?></a>
+        <?php } ?>
+      </div>
+    <?php
+  return ob_get_clean();
 }
 
 

@@ -23,11 +23,9 @@ function send_login_code() {
   $card_content = ob_get_clean();
 
   $dashboard_url = cpt_get_client_dashboard_url();
+  // TODO: Include query parameters cpt_login=code and login=[email address].
 
-  ob_start();
-    echo cpt_get_email_card('Login Code', $card_content, 'Go to Login', $dashboard_url);
-  $message = ob_get_clean();
-
+  $message = cpt_get_email_card('Login Code', $card_content, 'Go to Login', cpt_get_client_dashboard_url());
   $headers[] = 'Content-Type: text/html; charset=UTF-8';
 
   $result = wp_mail($to, $subject, $message, $headers);
@@ -46,6 +44,8 @@ function check_login_code($email, $code) {
     wp_send_json(['success' => false]);
     return;
   }
+
+  // TODO: Check referrer?
 
   delete_transient('cpt_login_code_' . $email);
 }
