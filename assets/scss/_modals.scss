@@ -1,4 +1,5 @@
 .cpt-modal {
+  display: grid;
   height: 100vh;
   place-content: center;
   position: absolute;
@@ -41,10 +42,15 @@
   margin: 3px;
   min-width: 330px;
   max-height: 90vh;
-  max-width: 90vw;
+  max-width: 40vw;
+  overflow: scroll;
   padding: 2em;
   position: relative;
   z-index: 100;
+
+  @media (max-width: $breakpoint-md) {
+    max-width: 90vw;
+  }
 
   h2 {
     border: none;

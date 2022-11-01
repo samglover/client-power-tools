@@ -5,13 +5,14 @@ use Client_Power_Tools\Core\Common;
 
 
 /**
- * Adds a body class to make it easy to override CPT styles.
+ * Adds a body class for overriding CPT styles.
  */
 add_filter('body_class', function($classes) {
   return array_merge($classes, ['customize-cpt']);
 });
 
-function add_login_code_to_login_form() {
+
+function add_login_code_links_to_login_form() {
   ob_start();
     ?>
       <a id="cpt-login-code-link" href="#">Or, get a login code by email.</a>
@@ -20,7 +21,7 @@ function add_login_code_to_login_form() {
   return ob_get_clean();
 }
 
-add_filter('login_form_middle', __NAMESPACE__ . '\add_login_code_to_login_form');
+add_filter('login_form_middle', __NAMESPACE__ . '\add_login_code_links_to_login_form');
 
 
 /**
@@ -47,12 +48,11 @@ function cpt_login() {
   $login_styles = '';
   $resetpw_styles = ' style="display: none;"';
 
-  // Shows the login modal if there is a cpt_login parameter in the URL.
+  // Shows the login modal if there is a cpt_login parameter in the URL. Shows
+  // the password reset panel of the login panel if the URL contains
+  // cpt_login=resetpw.
   if (isset($_REQUEST['cpt_login'])) {
     $modal_styles = '';
-
-    // Shows the password reset form instead of the login form if the URL
-    // contains cpt_login=resetpw.
     if ($_REQUEST['cpt_login'] == 'resetpw') {
       $login_styles = ' style="display: none;"';
       $resetpw_styles = '';
@@ -68,9 +68,10 @@ function cpt_login() {
         <?php
           // First, checks to make sure the user is not logged in. Because if
           // they are, the logout button will be output instead.
-          if (!is_user_logged_in()) {
+          if (!is_user_logged_in()):
+
             // Outputs the password change form if the URL contains
-            // cpt_login=setpw and a key and login.
+            // cpt_login=setpw and a key and login email.
             if ($_REQUEST['cpt_login'] == 'setpw' && isset($_REQUEST['key']) && isset($_REQUEST['login'])) {
               $key = sanitize_text_field($_REQUEST['key']);
               $login = sanitize_user(urldecode($_REQUEST['login']));
@@ -84,10 +85,6 @@ function cpt_login() {
                   <?php
                     cpt_error_messages();
                     cpt_success_messages();
-
-                    // Outputs the WP login form with some customizations,
-                    // like sending users to the client dashboard after they
-                    // log in.
                     wp_login_form([
                       'form_id'         => 'cpt-loginform',
                       'id_username'     => 'cpt-login-modal-username',
@@ -103,25 +100,12 @@ function cpt_login() {
                 <div id="cpt-login-modal-resetpw" class="cpt-modal-inner"<?php echo $resetpw_styles; ?>>
                   <h2><?php _e('Forgot Your Password?', 'client-power-tools'); ?></h2>
                   <?php
-                    // Outputs any error messages. (On success, the user will
-                    // be shown a modal notice.)
-                    if (isset($_REQUEST['cpt_error'])) {
-                      $error_val = sanitize_key($_REQUEST['cpt_error']);
-                      switch ($error_val) {
-                        case 'invalid_key':
-                          echo '<p class="cpt-error">' . __('Your password reset key is invalid. Please try again.', 'client-power-tools') . '</p>';
-                          break;
-
-                        default:
-                          echo '<p class="cpt-error">' . __('Error: ', 'client-power-tools') . $error_val . '</p>';
-                      }
-                    }
-
+                    cpt_error_messages();
+                    cpt_success_messages();
                     // Outputs a password reset request form.
                     $cpt_lostpassword_url = remove_query_arg('action', wp_lostpassword_url());
                     $cpt_lostpassword_url = add_query_arg('action', 'cpt_lostpassword', $cpt_lostpassword_url);
                   ?>
-
                   <p><?php _e('Enter your email address and you will receive a link to reset your password.'); ?></p>
                   <form id="cpt-lostpasswordform" action="<?php echo $cpt_lostpassword_url; ?>" method="post">
                     <p>
@@ -145,7 +129,7 @@ function cpt_login() {
                 </div>
               <?php
             }
-          } else {
+          else:
             // Outputs the logout button if the user is already logged in.
             ?>
               <div id="cpt-login-modal-already-logged-in" class="cpt-modal-inner">
@@ -153,7 +137,7 @@ function cpt_login() {
                 <p><a id="cpt-logout" class="button" href="<?php echo wp_logout_url(home_url()); ?>" rel="nofollow"><?php _e('Log Out'); ?></a></p>
               </div>
             <?php
-          }
+          endif;
         ?>
       </div>
     </div>
@@ -168,7 +152,10 @@ function cpt_error_messages() {
   if (!isset($_REQUEST['cpt_error'])) return;
   switch($_REQUEST['cpt_error']) {
     case 'login_failed':
-      $message = __('Sorry, but the email address or password you entered didn\'t work. Please try again.', 'client-power-tools') . '</p>';
+      $message = __('Sorry, but the email address or password you entered didn\'t work. Please try again.', 'client-power-tools');
+      break;
+    case 'invalid_key':
+      $message = __('Your password reset key is invalid. Please try again.', 'client-power-tools');
       break;
     default:
       $message = __('Something went wrong; that didn\'t work.', 'client-power-tools');

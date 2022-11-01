@@ -11,10 +11,12 @@ is based on [Keep a Changelog](https://keepachangelog.com).
 
 #### Changed
 - The frontend login process now includes the option to use a login code.
+- Adjusted modal max width.
 
 #### Fixed
 - Fix the modal dismiss button display.
 - Restore button code style to email cards.
+- Added overflow scrolling for modals.
 
 
 ### 1.4.11 - 2022-09-16
