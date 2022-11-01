@@ -12,137 +12,49 @@ add_filter('body_class', function($classes) {
 });
 
 
-function add_login_code_links_to_login_form() {
-  ob_start();
-    ?>
-      <a id="cpt-login-code-link" href="#">Or, get a login code by email.</a>
-      <a id="cpt-password-link" href="#">Use your password.</a>
-    <?php
-  return ob_get_clean();
-}
-
-add_filter('login_form_middle', __NAMESPACE__ . '\add_login_code_links_to_login_form');
-
-
 /**
- * Loads the login modal in the footer. There are four possible results:
- *
- * 1. The login form.
- * 2. The password reset request form.
- * 3. The password change form. (Either after a password reset request, or for
- *    newly added clients.)
- * 4. The logout button.
- *
- * 1 & 2 are shown together, with a link to navigate between them. If 2 is called
- * for with cpt_login=resetpw in the URL, then it will be shown "on top" instead
- * of 1.
- *
- * If 3 or 4 are called for, either cpt_login=setpw in the URL for 3 or because
- * the user is logged in and clicks a login/logout link for 4, then they are
- * shown the password change form instead of the 1/2 modal.
+ * Loads the login modal in the footer.
  */
 function cpt_login() {
-  // Hides the modal by default, sets the login form to show, and sets the
-  // resetpw form to hide.
-  $modal_styles = ' style="display: none;"';
-  $login_styles = '';
-  $resetpw_styles = ' style="display: none;"';
-
-  // Shows the login modal if there is a cpt_login parameter in the URL. Shows
-  // the password reset panel of the login panel if the URL contains
-  // cpt_login=resetpw.
-  if (isset($_REQUEST['cpt_login'])) {
-    $modal_styles = '';
-    if ($_REQUEST['cpt_login'] == 'resetpw') {
-      $login_styles = ' style="display: none;"';
-      $resetpw_styles = '';
-    }
-  }
-
-  ?>
-    <div id="cpt-login" class="cpt-modal"<?php echo $modal_styles; ?>>
-      <div class="cpt-modal-card">
-        <button class="cpt-dismiss-button cpt-modal-dismiss-button">
-          <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
-        </button>
-        <?php
-          // First, checks to make sure the user is not logged in. Because if
-          // they are, the logout button will be output instead.
-          if (!is_user_logged_in()):
-
-            // Outputs the password change form if the URL contains
-            // cpt_login=setpw and a key and login email.
-            if ($_REQUEST['cpt_login'] == 'setpw' && isset($_REQUEST['key']) && isset($_REQUEST['login'])) {
-              $key = sanitize_text_field($_REQUEST['key']);
-              $login = sanitize_user(urldecode($_REQUEST['login']));
-              cpt_password_change_form($key, $login);
-
-            // Otherwise, outputs the login/password reset form.
-            } else {
-              ?>
-                <div id="cpt-login-modal-login" class="cpt-modal-inner"<?php echo $login_styles; ?>>
-                  <h2><?php _e('Client Login', 'client-power-tools'); ?></h2>
-                  <?php
-                    cpt_error_messages();
-                    cpt_success_messages();
-                    wp_login_form([
-                      'form_id'         => 'cpt-loginform',
-                      'id_username'     => 'cpt-login-modal-username',
-                      'id_password'     => 'cpt-login-modal-password',
-                      'id_submit'       => 'cpt-login-modal-submit',
-                      'label_username'  => __('Email Address', 'client-power-tools'),
-                      'redirect'        => Common\cpt_get_client_dashboard_url(),
-                      'remember'        => false,
-                   ]);
-                  ?>
-                  <p><small><a id="cpt-login-go-to-resetpw" href="cpt-login-modal-resetpw" rel="nofollow"><?php _e('Forgot Your Password?', 'client-power-tools'); ?></a></small></p>
-                </div>
-                <div id="cpt-login-modal-resetpw" class="cpt-modal-inner"<?php echo $resetpw_styles; ?>>
-                  <h2><?php _e('Forgot Your Password?', 'client-power-tools'); ?></h2>
-                  <?php
-                    cpt_error_messages();
-                    cpt_success_messages();
-                    // Outputs a password reset request form.
-                    $cpt_lostpassword_url = remove_query_arg('action', wp_lostpassword_url());
-                    $cpt_lostpassword_url = add_query_arg('action', 'cpt_lostpassword', $cpt_lostpassword_url);
-                  ?>
-                  <p><?php _e('Enter your email address and you will receive a link to reset your password.'); ?></p>
-                  <form id="cpt-lostpasswordform" action="<?php echo $cpt_lostpassword_url; ?>" method="post">
-                    <p>
-                      <label for="lostpassword_user_login"><?php _e('Email'); ?></label>
-                      <input id="lostpassword_user_login" class="input" type="text" name="user_login">
-                    </p>
-                    <p class="submit">
-                      <input type="submit" name="submit" class="lostpassword-button button" value="<?php _e('Reset Password'); ?>"/>
-                    </p>
-                  </form>
-                  <p><small><a id="cpt-login-go-to-login" href="cpt-login-modal-login" rel="nofollow"><?php _e('Back to Login'); ?></a></small></p>
-                </div>
-                <div id="cpt-login-code">
-                  <h2><?php _e('Client Login', 'client-power-tools'); ?></h2>
-                  <form id="cpt-check-login-code-form">
-                    <p>
-                      <label for="cpt-check-login-code">Enter Login Code</label>
-                      <input id="cpt-check-login-code" class="input" type="text" maxlength="8">
-                    </p>
-                  </form>
-                </div>
-              <?php
-            }
-          else:
-            // Outputs the logout button if the user is already logged in.
-            ?>
-              <div id="cpt-login-modal-already-logged-in" class="cpt-modal-inner">
-                <h2><?php _e('Log Out?'); ?></h2>
-                <p><a id="cpt-logout" class="button" href="<?php echo wp_logout_url(home_url()); ?>" rel="nofollow"><?php _e('Log Out'); ?></a></p>
-              </div>
-            <?php
-          endif;
-        ?>
+  if (!is_user_logged_in()) {
+    ?>
+      <div id="cpt-login" class="cpt-modal">
+        <div class="cpt-modal-card">
+          <header class="cpt-modal-card-header">
+            <button class="cpt-dismiss-button cpt-modal-dismiss-button">
+              <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
+            </button>
+            <h2><?php _e('Client Login', 'client-power-tools'); ?></h2>
+          </header>
+          <form id="cpt-login-form" name="cpt-login-form" action="<?php echo get_permalink(); ?>" method="post">
+            <p id="cpt-login-username">
+              <label for="cpt-login-username-field">Email Address</label>
+              <input id="cpt-login-username-field" class="input" name="cpt-login-username-field" type="text" autocomplete="username" value="" size="20">
+            </p>
+            <p id="cpt-login-password">
+              <label for="cpt-login-password-field">Password</label>
+              <input id="cpt-login-password-field" class="input" name="cpt-login-password-field" type="password" autocomplete="current-password" value="" size="20">
+            </p>
+            <p id="cpt-login-code-links">
+              <a id="cpt-login-code-link" href="#"><?php _e('Get a login code by email instead.', 'client-power-tools'); ?></a>
+              <a id="cpt-password-link" href="#"><?php _e('Use your password.', 'client-power-tools'); ?></a>
+            </p>
+            <p id="cpt-login-submit">
+              <input id="cpt-login-submit-button" class="button button-primary" name="cpt-login-submit-button" type="submit" value="<?php _e('Log In', 'client-power-tools'); ?>">
+            </p>
+          </form>
+        </div>
       </div>
-    </div>
-    <div class="cpt-modal-screen"<?php echo $modal_styles; ?>></div>
-  <?php
+      <div class="cpt-modal-screen"></div>
+    <?php
+  } else {
+    ?>
+      <div id="cpt-login-already-logged-in" class="cpt-modal-inner">
+        <h2><?php _e('Log Out?', 'client-power-tools'); ?></h2>
+        <p><a id="cpt-logout" class="button" href="<?php echo wp_logout_url(home_url()); ?>" rel="nofollow"><?php _e('Log Out', 'client-power-tools'); ?></a></p>
+      </div>
+    <?php
+  }
 }
 
 add_action('wp_footer', __NAMESPACE__ . '\cpt_login');

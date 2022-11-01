@@ -1,26 +1,14 @@
 // Shows/Hides the Login Modal
 const loginModal = document.getElementById('cpt-login');
-const loginPanel = document.getElementById('cpt-login-modal-login');
-const resetPasswordPanel = document.getElementById('cpt-login-modal-resetpw');
 const modalScreen = document.querySelectorAll('.cpt-modal-screen');
 
 function showLogin() {
-  if (resetPasswordPanel) resetPasswordPanel.style.display = 'none';
-  if (loginPanel) loginPanel.style.display = 'block';
   loginModal.style.display = 'grid';
   modalScreen[0].style.display = 'block';
 }
-
-function showResetPW() {
-  if (resetPasswordPanel) resetPasswordPanel.style.display = 'block';
-  if (loginPanel) loginPanel.style.display = 'none';
-  loginModal.style.display = 'grid';
-  modalScreen[0].style.display = 'block';
-}
-
 
 // Handles Login Link Clicks
-const loggedIn = document.getElementById('cpt-login-modal-already-logged-in');
+const loggedIn = document.getElementById('cpt-login-already-logged-in');
 const loginLinks = document.querySelectorAll('.cpt-login-link, a[href*="#cpt-login"]');
 
 if (loggedIn && loginLinks) {
@@ -38,52 +26,37 @@ if (loginLinks) {
   });
 }
 
-
 // Displays the Login Modal on the Dashboard Page
-if (!loggedIn && cpt_frontend_js_vars.postID == cpt_frontend_js_vars.dashboardID) showLogin();
-
+if (!loggedIn && cpt_vars.postID == cpt_vars.dashboardID) showLogin();
 
 // Displays the Login Modal Based on URL Query Parameters
 const baseURL = [location.protocol, '//', location.host, location.pathname].join('');
 const params = new URLSearchParams(location.search);
-
-if (params.has('cpt_login')) {
-  switch (params.get('cpt_login')) {
-    case 'resetpw':
-      showResetPW();
-      break;
-    case 'login':
-    default:
-      showLogin();
-      break;
-  }
-}
-
+if (params.has('cpt_login')) showLogin();
 
 // Handles Dismiss Button Clicks and Clears Query Parameters
 const cptModal = document.querySelectorAll('.cpt-modal');
 
 if (cptModal) {
   let i = 0;
-
   cptModal.forEach(function() {
     let thisModal   = cptModal[i];
     let thisScreen  = modalScreen[i];
 
     cptModal[i].querySelector('.cpt-modal-dismiss-button').addEventListener('click', function(event) {
       event.preventDefault();
-
       thisModal.style.display = 'none';
       thisScreen.style.display = 'none';
 
-      // Removes the cpt_login, cpt_notice, and password set/reset query
-      // parameters from the URL just in case the user tries to bookmark it or
-      // copy and paste some reason.
+      // Removes query parameters from the URL just in case the user tries to
+      // bookmark it or copy and paste some reason.
+      // TODO: Figure out how to clear these only for the current modal.
       params.delete('cpt_login');
       params.delete('cpt_notice');
       params.delete('cpt_error');
-      params.delete('key');
-      params.delete('login');
+      params.delete('cpt_success');
+      params.delete('user');
+      params.delete('code');
 
       if (params.toString().length > 0) {
         history.replaceState({}, '', baseURL + '?' + params);
@@ -109,21 +82,38 @@ if (cptInlineModal && inlineModalDismiss) {
 }
 
 
-// Handles Switching Login Panels
-const goToResetPassword = document.getElementById('cpt-login-go-to-resetpw');
-const goToLogin = document.getElementById('cpt-login-go-to-login');
+// Handles Login
+const usernameField = document.getElementById('cpt-login-username-field');
+const passwordField = document.getElementById('cpt-login-password-field');
+const submitButton = document.getElementById('cpt-login-submit-button');
 
-if (goToResetPassword) {
-  goToResetPassword.addEventListener('click', function(event) {
-    event.preventDefault();
-    showResetPW();
-  });
-}
+submitButton.addEventListener('click', function(event) {
+  event.preventDefault();
+  checkPassword();
+});
 
-if (goToLogin) {
-  goToLogin.addEventListener('click', function(event) {
-    event.preventDefault();
-    showLogin();
+function checkPassword() {
+  jQuery.ajax({
+    type: 'POST',
+    url: cpt_vars.ajaxURL,
+    data: {
+      _ajax_nonce: cpt_vars.nonce,
+      action: 'check_password',
+      dashboardURL: cpt_vars.dashboardURL,
+      username: usernameField.value,
+      password: passwordField.value
+    },
+    beforeSend: function() {
+      // TODO: Spinner.
+    },
+    success: function(response) {
+      console.debug(response);
+      // TODO: "Logging you in …" message.
+    },
+    failure: function(error) {
+      console.debug(error);
+      // TODO: Error icon (!) and message.
+    }
   });
 }
 
@@ -131,11 +121,8 @@ if (goToLogin) {
 // Handles the Magic Link
 const codeLink = document.getElementById('cpt-login-code-link');
 const pwLink = document.getElementById('cpt-password-link');
-const forgotpwLink = document.getElementById('cpt-password-link');
-const pwField = document.querySelector('#cpt-loginform .login-password');
+const submitBtnVal = submitButton.value;
 
-const submitBtn = document.getElementById('cpt-login-modal-submit');
-const submitBtnVal = submitBtn.value;
 
 codeLink.addEventListener('click', function(event) {
   event.preventDefault();
@@ -175,9 +162,9 @@ const loginCodeField = document.getElementById('cpt-check-login-code');
 function sendLoginCode(email) {
   jQuery.ajax({
     type: 'POST',
-    url: cpt_frontend_js_vars.ajaxurl,
+    url: cpt_vars.ajaxURL,
     data: {
-      _ajax_nonce: cpt_frontend_js_vars.nonce,
+      _ajax_nonce: cpt_vars.nonce,
       action: 'send_login_code',
       email: email
     },
@@ -208,9 +195,9 @@ function handleSubmitLoginCode(event) {
 function checkLoginCode(code) {
   jQuery.ajax({
     type: 'POST',
-    url: cpt_frontend_js_vars.ajaxurl,
+    url: cpt_vars.ajaxurl,
     data: {
-      _ajax_nonce: cpt_frontend_js_vars.nonce,
+      _ajax_nonce: cpt_vars.nonce,
       action: 'check_login_code',
       email: email,
       code: code

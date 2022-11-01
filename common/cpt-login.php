@@ -2,6 +2,24 @@
 
 namespace Client_Power_Tools\Core\Common;
 
+function check_password() {
+  if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'cpt-login-nonce')) exit('Invalid nonce.');
+  if (!isset($_POST['username']) || strlen($_POST['username']) < 1) exit('Username is missing.');
+  if (!isset($_POST['password']) || strlen($_POST['password']) < 1) exit('Password is missing.');
+
+  $user = get_user_by('email', sanitize_user($_POST['username']));
+  $password = wp_check_password($_POST['password'], $user->data->user_pass, $user->ID);
+  if (!$user || !$password) wp_send_json(['error' => 'Login failed.']);
+
+  wp_set_current_user($user->ID);
+	wp_set_auth_cookie($user->ID, true);
+  wp_send_json(['success' => true]);
+}
+
+add_action('wp_ajax_nopriv_check_password', __NAMESPACE__ . '\check_password'); // Not-logged-in users.
+
+
+
 function send_login_code() {
   if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'cpt-login-code-nonce')) exit('Invalid nonce.');
   if (!isset($_POST['email']) || !get_user_by('email', $_POST['email'])) {

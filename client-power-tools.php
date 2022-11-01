@@ -11,6 +11,7 @@
  */
 
 namespace Client_Power_Tools\Core;
+use Client_Power_Tools\Core\Common;
 
 if (!defined('ABSPATH')) exit;
 
@@ -49,11 +50,12 @@ if (!is_admin()) {
 		wp_enqueue_style('cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/style.css', [], CLIENT_POWER_TOOLS_PLUGIN_VERSION);
 
 		wp_register_script('cpt-frontend', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-frontend.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
-		wp_localize_script('cpt-frontend', 'cpt_frontend_js_vars', [
+		wp_localize_script('cpt-frontend', 'cpt_vars', [
 			'postID' => $post ? $post->ID : null,
 			'dashboardID'	=> get_option('cpt_client_dashboard_page_selection'),
-			'ajaxurl' => admin_url('admin-ajax.php'),
-			'nonce' => wp_create_nonce('cpt-login-code-nonce'),
+			'dashboardURL' => Common\cpt_get_client_dashboard_url(),
+			'ajaxURL' => admin_url('admin-ajax.php'),
+			'nonce' => wp_create_nonce('cpt-login-nonce'),
 		]);
 		wp_enqueue_script('cpt-frontend');
 	}
