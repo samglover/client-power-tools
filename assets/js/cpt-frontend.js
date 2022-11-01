@@ -190,6 +190,7 @@ function sendLoginCode(email) {
       resetPasswordPanel.style.display = 'none';
 
       loginCodePanel.style.display = 'grid';
+      // TODO: Confirmation message.
       loginCodeField.addEventListener('change', handleSubmitLoginCode);
     },
     failure: function(error) {
@@ -215,12 +216,15 @@ function checkLoginCode(code) {
       code: code
     },
     beforeSend: function() {
+      // TODO: Spinner.
     },
     success: function(response) {
       console.debug(response);
+      // TODO: Check mark.
     },
     failure: function(error) {
       console.debug(error);
+      // TODO: Error icon (!) and message.
     }
   });
 }
