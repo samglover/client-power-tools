@@ -11,6 +11,10 @@
   form {
     margin-bottom: 1em;
 
+    & > *:last-child {
+      margin-bottom: 0;
+    }
+
     p,
     label,
     input,

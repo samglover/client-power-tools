@@ -209,6 +209,9 @@
 .cpt-modal form {
   margin-bottom: 1em;
 }
+.cpt-modal form > *:last-child {
+  margin-bottom: 0;
+}
 .cpt-modal form p,
 .cpt-modal form label,
 .cpt-modal form input,
