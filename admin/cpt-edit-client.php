@@ -5,88 +5,20 @@ use Client_Power_Tools\Core\Common;
 
 function cpt_edit_client($user_id) {
   if (!$user_id || !is_user_logged_in()) return;
-
-  $client_data  = Common\cpt_get_client_data($user_id);
-  $client_name  = Common\cpt_get_name($user_id);
-
+  
+  $client_data = Common\cpt_get_client_data($user_id);
+  $client_name = Common\cpt_get_name($user_id);
   if (is_admin() && current_user_can('cpt-manage-clients')) {
-    echo '<button class="button cpt-click-to-expand">' . __('Edit Client') . '</button>';
-    echo '<div class="cpt-this-expands">';
-      cpt_edit_client_form($client_data);
-      echo '<p style="margin-bottom: 2em; margin-top: 0;"><span id="cpt-delete-client-link">' . __('Delete') . ' ' . $client_name . '</span></p>';
-      cpt_delete_client_modal($user_id);
-    echo '</div>';
+    ?>
+      <button class="button cpt-click-to-expand"><?php _e('Edit Client', 'client-power-tools'); ?></button>
+      <div class="cpt-this-expands">
+        <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-client-form.php'); ?>
+        <p style="margin-bottom: 2em; margin-top: 0;"><span id="cpt-delete-client-link"><?php echo __('Delete', 'client-power-tools') . ' ' . $client_name; ?></span></p>
+        <?php cpt_delete_client_modal($user_id); ?>
+      </div>
+    <?php
   }
 }
-
-
-function cpt_edit_client_form($client_data) {
-  if (!$client_data) return;
-
-  ?>
-    <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
-      <?php wp_nonce_field('cpt_client_updated', 'cpt_client_updated_nonce'); ?>
-      <input name="action" value="cpt_client_updated" type="hidden">
-      <input name="clients_user_id" value="<?php echo $client_data['user_id']; ?>" type="hidden">
-      <table class="form-table" role="presentation">
-        <tbody>
-          <tr>
-            <th scope="row">
-              <label for="first_name">First Name<br /><small>(required)</small></label>
-            </th>
-            <td>
-              <input name="first_name" id="first_name" class="regular-text" type="text" data-required="true" value="<?php echo $client_data['first_name']; ?>">
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label for="last_name">Last Name<br /><small>(required)</small></label>
-            </th>
-            <td>
-              <input name="last_name" id="last_name" class="regular-text" type="text" data-required="true" value="<?php echo $client_data['last_name']; ?>">
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label for="email">Email Address<br /><small>(required)</small></label>
-            </th>
-            <td>
-              <input name="email" id="email" class="regular-text" type="text" data-required="true" autocapitalize="none" autocorrect="off" value="<?php echo $client_data['email']; ?>">
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label for="client_id">Client ID<br /><small>(optional)</small></label>
-            </th>
-            <td>
-              <input name="client_id" id="client_id" class="regular-text" type="text" autocapitalize="none" autocorrect="off" value="<?php echo $client_data['client_id']; ?>">
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label for="client_manager">Client Manager</label>
-            </th>
-            <td>
-              <?php echo cpt_get_client_manager_select('', $client_data['manager_id']); ?>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label for="client_status">Client Status</label>
-            </th>
-            <td>
-              <?php echo cpt_get_client_statuses_select('', $client_data['status']); ?>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="submit">
-        <input name="submit" id="submit" class="button button-primary" type="submit" value="Update Client">
-      </p>
-    </form>
-  <?php
-}
-
 
 function cpt_process_client_update() {
   if (isset($_POST['cpt_client_updated_nonce']) && wp_verify_nonce($_POST['cpt_client_updated_nonce'], 'cpt_client_updated')) {

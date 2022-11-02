@@ -111,24 +111,24 @@ function cpt_menu_pages() {
 add_action('admin_menu', __NAMESPACE__ . '\cpt_menu_pages');
 
 
-function cpt_get_admin_notices($transient_key) {
-  if (!$transient_key) return;
-  $result = get_transient($transient_key);
-
-  if (!empty($result)) {
-    if (is_wp_error($result)) {
-      echo '<div class="cpt-notice notice notice-error is-dismissible">';
-    } else {
-      echo '<div class="cpt-notice notice notice-success is-dismissible">';
-    }
-    echo '<p>' . __($result) . '</p>';
-    echo '</div>';
-  }
-
-  delete_transient($transient_key);
-}
-
-add_action('admin_notices', __NAMESPACE__ . '\cpt_get_admin_notices');
+// function cpt_get_admin_notices($transient_key) {
+//   if (!$transient_key) return;
+//   $result = get_transient($transient_key);
+//
+//   if (!empty($result)) {
+//     if (is_wp_error($result)) {
+//       echo '<div class="cpt-notice notice notice-error is-dismissible">';
+//     } else {
+//       echo '<div class="cpt-notice notice notice-success is-dismissible">';
+//     }
+//     echo '<p>' . __($result) . '</p>';
+//     echo '</div>';
+//   }
+//
+//   delete_transient($transient_key);
+// }
+//
+// add_action('admin_notices', __NAMESPACE__ . '\cpt_get_admin_notices');
 
 
 function cpt_is_cpt_admin_page() {

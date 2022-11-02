@@ -22,7 +22,6 @@ function cpt_add_roles() {
   );
 
   $role = get_role('administrator');
-
   $role->add_cap('cpt-view-clients');
   $role->add_cap('cpt-manage-clients');
   $role->add_cap('cpt-manage-team');
@@ -130,9 +129,7 @@ function cpt_get_name($user_id) {
 // Returns an array with the user's details.
 function cpt_get_client_data($clients_user_id) {
   if (!$clients_user_id) return;
-
   $userdata = get_userdata($clients_user_id);
-
   $client_data = [
     'user_id'       => $clients_user_id,
     'first_name'    => get_user_meta($clients_user_id, 'first_name', true),
@@ -143,16 +140,13 @@ function cpt_get_client_data($clients_user_id) {
     'manager_email' => cpt_get_client_manager_email($clients_user_id),
     'status'        => get_user_meta($clients_user_id, 'cpt_client_status', true),
   ];
-
   return $client_data;
 }
 
 
 function cpt_get_client_manager_id($clients_user_id) {
   if (!$clients_user_id) return;
-
   $userdata = get_userdata(get_user_meta($clients_user_id, 'cpt_client_manager', true));
-
   if ($userdata && isset($userdata->ID)) {
     $manager_id = $userdata->ID;
   } else if (get_option('cpt_default_client_manager')) {
@@ -161,16 +155,13 @@ function cpt_get_client_manager_id($clients_user_id) {
     $userdata   = get_user_by_email(get_bloginfo('admin_email'));
     $manager_id = $userdata->ID;
   }
-
   return $manager_id;
 }
 
 
 function cpt_get_client_manager_email($clients_user_id) {
   if (!$clients_user_id) return;
-
   $userdata = get_userdata(get_user_meta($clients_user_id, 'cpt_client_manager', true));
-
   if ($userdata && isset($userdata->user_email)) {
     $manager_email = $userdata->user_email;
   } else if (get_option('cpt_default_client_manager')) {
@@ -179,7 +170,6 @@ function cpt_get_client_manager_email($clients_user_id) {
   } else {
     $manager_email = get_bloginfo('admin_email');
   }
-
   return $manager_email;
 }
 
@@ -250,36 +240,3 @@ function cpt_get_notices($transient_key_array) {
 }
 
 add_action('admin_notices', __NAMESPACE__ . '\cpt_get_notices');
-
-
-/**
- * Redirects the user to the Client Dashboard page with an error query parameter
- * if the login form contained a redirect to the Client Dashboard. (In other
- * words, if the user started on the frontend login form.)
- *
- * Works when the username or password fields are empty.
- *
- * The error message itself is handled in cpt-frontend.php.
- */
-function cpt_login_missing($redirect_to, $requested_redirect_to, $user) {
-  if ($redirect_to == cpt_get_client_dashboard_url()) {
-    wp_redirect(cpt_get_client_dashboard_url() . "?cpt_error=login_failed");
-    exit;
-  } else {
-    return $redirect_to;
-  }
-}
-
-add_filter('login_redirect', __NAMESPACE__ . '\cpt_login_missing', 10, 3);
-
-/**
- * Same as above, but works when the login is entered but fails.
- */
-function cpt_login_failure($user_login) {
-  if ($_REQUEST['redirect_to'] == cpt_get_client_dashboard_url()) {
-    wp_redirect(cpt_get_client_dashboard_url() . "?cpt_error=login_failed");
-    exit;
-  }
-}
-
-add_action('wp_login_failed', __NAMESPACE__ . '\cpt_login_failure');

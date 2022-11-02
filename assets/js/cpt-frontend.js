@@ -52,7 +52,6 @@ if (cptModals) {
       // Removes query parameters from the URL just in case the user tries to
       // bookmark it or copy and paste some reason.
       params.delete('cpt_login');
-      params.delete('cpt_notice');;
       params.delete('user');
 
       if (params.toString().length > 0) {

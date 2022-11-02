@@ -110,7 +110,7 @@ function cpt_activate() {
 			if (is_wp_error($page)) {
 				?>
 					<div class="cpt-notice notice notice-error is-dismissible">
-						<p><?php _e('Something went wrong when creating a page. Please select a page from the <a href="' . admin_url('admin.php?page=cpt-settings') . '">Settings page</a>.'); ?></p>
+						<p><?php _e('Something went wrong when creating pages. Please select a page from the <a href="' . admin_url('admin.php?page=cpt-settings') . '">Settings page</a>.'); ?></p>
 						<p>Error message: <?php echo $post->get_error_message(); ?></p>
 					</div>
 				<?php
@@ -130,7 +130,7 @@ function cpt_activate() {
 		'cpt_client_statuses'									=> 'Active' . "\n" . 'Potential' . "\n" . 'Inactive',
 		'cpt_default_client_manager'					=> $admin->ID,
 		'cpt_default_client_status'						=> 'Active',
-		'cpt_new_client_email_subject_line'  	=> 'Your client account has been created! Please set your password.',
+		'cpt_new_client_email_subject_line'  	=> '[' . get_bloginfo('title') . '] ' . __('Your client account has been created!', 'client-power-tools'),
     'cpt_new_client_email_message_body'  	=> '',
 		'cpt_module_status_update_req_button'	=> true,
 		'cpt_status_update_req_freq'					=> 30,

@@ -1,17 +1,17 @@
 # Changelog for Client Power Tools
 
-All notable changes to this project will be documented in this file. The format
-is based on [Keep a Changelog](https://keepachangelog.com).
+All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
 
 
 ### 1.5 - ????-??-??
 
 #### Added
--
+- Passwordless login.
 
 #### Changed
 - The frontend login process now includes the option to use a login code.
 - Adjusted modal max width.
+- Move the new and edit client forms to their own files, /admin/cpt-new-client-form.php and /admin/cpt-edit-client-form.php.
 
 #### Fixed
 - Fix the modal dismiss button display.
