@@ -5,7 +5,7 @@ use Client_Power_Tools\Core\Common;
 
 function cpt_new_client_form() {
   ?>
-    <h3><?php _e('Add a Client'); ?></h3>
+    <h3><?php _e('Add a Client', 'client-power-tools'); ?></h3>
     <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
       <?php wp_nonce_field('cpt_new_client_added', 'cpt_new_client_nonce'); ?>
       <input name="action" value="cpt_new_client_added" type="hidden">
@@ -62,7 +62,7 @@ function cpt_new_client_form() {
         </tbody>
       </table>
       <p class="submit">
-        <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Add Client'); ?>">
+        <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Add Client', 'client-power-tools'); ?>">
       </p>
     </form>
   <?php
@@ -71,7 +71,6 @@ function cpt_new_client_form() {
 
 function cpt_process_new_client() {
   if (isset($_POST['cpt_new_client_nonce']) && wp_verify_nonce($_POST['cpt_new_client_nonce'], 'cpt_new_client_added')) {
-
     $client_email       = sanitize_email($_POST['email']);
     $existing_client_id = email_exists($client_email);
 
@@ -92,7 +91,7 @@ function cpt_process_new_client() {
         'user_nicename'         => md5(sanitize_text_field($_POST['first_name']) . sanitize_text_field($_POST['last_name']) . random_int(0, PHP_INT_MAX)),
         'user_email'            => $client_email,
         'user_login'            => sanitize_user($_POST['email']),
-        'user_pass'             => null,
+        'user_pass'             => wp_hash_password(wp_generate_password(32, true)),
         'role'                  => 'cpt-client',
         'show_admin_bar_front'  => 'false',
       ]);

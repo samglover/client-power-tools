@@ -16,76 +16,49 @@ add_filter('body_class', function($classes) {
  * Loads the login modal in the footer.
  */
 function cpt_login() {
-  if (!is_user_logged_in()) {
-    ?>
-      <div id="cpt-login" class="cpt-modal">
-        <div class="cpt-modal-card">
-          <header class="cpt-modal-card-header">
-            <button class="cpt-dismiss-button cpt-modal-dismiss-button">
-              <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
-            </button>
-            <h2><?php _e('Client Login', 'client-power-tools'); ?></h2>
-          </header>
+  ?>
+    <div id="cpt-login" class="cpt-modal">
+      <div class="cpt-modal-card">
+        <button class="cpt-dismiss-button cpt-modal-dismiss-button">
+          <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
+        </button>
+        <?php if (!is_user_logged_in()): ?>
+          <h2><?php _e('Client Login', 'client-power-tools'); ?></h2>
+          <div id="cpt-login-messages"></div>
           <form id="cpt-login-form" name="cpt-login-form" action="<?php echo get_permalink(); ?>" method="post">
-            <p id="cpt-login-username">
-              <label for="cpt-login-username-field">Email Address</label>
-              <input id="cpt-login-username-field" class="input" name="cpt-login-username-field" type="text" autocomplete="username" value="" size="20">
+            <p id="cpt-login-email">
+              <label for="cpt-login-email-field">Email Address</label>
+              <input id="cpt-login-email-field" class="input" name="cpt-login-email-field" type="text" autocomplete="username" value="" size="20">
             </p>
             <p id="cpt-login-password">
               <label for="cpt-login-password-field">Password</label>
               <input id="cpt-login-password-field" class="input" name="cpt-login-password-field" type="password" autocomplete="current-password" value="" size="20">
             </p>
-            <p id="cpt-login-code-links">
-              <a id="cpt-login-code-link" href="#"><?php _e('Get a login code by email instead.', 'client-power-tools'); ?></a>
-              <a id="cpt-password-link" href="#"><?php _e('Use your password.', 'client-power-tools'); ?></a>
-            </p>
+            <?php if (get_option('cpt_passwordless_login')) { ?>
+              <p id="cpt-login-code">
+                <label for="cpt-login-code-field">Login Code</label>
+                <input id="cpt-login-code-field" class="input" name="cpt-login-code-field" type="password" autocomplete="one-time-code" value="" size="20">
+              </p>
+              <p id="cpt-login-type-links">
+                <a id="cpt-login-code-link" href="#"><?php _e('Get a login code by email instead.', 'client-power-tools'); ?></a>
+                <a id="cpt-password-link" href="#"><?php _e('Use your password.', 'client-power-tools'); ?></a>
+              </p>
+            <?php } ?>
             <p id="cpt-login-submit">
               <input id="cpt-login-submit-button" class="button button-primary" name="cpt-login-submit-button" type="submit" value="<?php _e('Log In', 'client-power-tools'); ?>">
             </p>
           </form>
-        </div>
+        <?php else: ?>
+          <h2><?php _e('Log Out?', 'client-power-tools'); ?></h2>
+          <p><a id="cpt-logout" class="button" href="<?php echo wp_logout_url(home_url()); ?>" rel="nofollow"><?php _e('Log Out', 'client-power-tools'); ?></a></p>
+        <?php endif; ?>
       </div>
-      <div class="cpt-modal-screen"></div>
-    <?php
-  } else {
-    ?>
-      <div id="cpt-login-already-logged-in" class="cpt-modal-inner">
-        <h2><?php _e('Log Out?', 'client-power-tools'); ?></h2>
-        <p><a id="cpt-logout" class="button" href="<?php echo wp_logout_url(home_url()); ?>" rel="nofollow"><?php _e('Log Out', 'client-power-tools'); ?></a></p>
-      </div>
-    <?php
-  }
+    </div>
+    <div class="cpt-modal-screen"></div>
+  <?php
 }
 
 add_action('wp_footer', __NAMESPACE__ . '\cpt_login');
-
-
-function cpt_error_messages() {
-  if (!isset($_REQUEST['cpt_error'])) return;
-  switch($_REQUEST['cpt_error']) {
-    case 'login_failed':
-      $message = __('Sorry, but the email address or password you entered didn\'t work. Please try again.', 'client-power-tools');
-      break;
-    case 'invalid_key':
-      $message = __('Your password reset key is invalid. Please try again.', 'client-power-tools');
-      break;
-    default:
-      $message = __('Something went wrong; that didn\'t work.', 'client-power-tools');
-  }
-  echo '<p class="cpt-error">' . $message . '</p>';
-}
-
-function cpt_success_messages() {
-  if (!isset($_REQUEST['cpt_success'])) return;
-  switch ($_REQUEST['cpt_success']) {
-    case 'password_changed':
-      $message = __('Password successfully changed.', 'client-power-tools') . '</p>';
-      break;
-    default:
-      $message = __('Success!', 'client-power-tools');
-  }
-  echo '<p class="cpt-success">' . $message . '</p>';
-}
 
 
 function cpt_process_password_reset_request() {

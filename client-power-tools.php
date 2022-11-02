@@ -53,7 +53,7 @@ if (!is_admin()) {
 		wp_localize_script('cpt-frontend', 'cpt_vars', [
 			'postID' => $post ? $post->ID : null,
 			'dashboardID'	=> get_option('cpt_client_dashboard_page_selection'),
-			'dashboardURL' => Common\cpt_get_client_dashboard_url(),
+			// 'dashboardURL' => Common\cpt_get_client_dashboard_url(),
 			'ajaxURL' => admin_url('admin-ajax.php'),
 			'nonce' => wp_create_nonce('cpt-login-nonce'),
 		]);

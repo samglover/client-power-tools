@@ -80,13 +80,23 @@ function cpt_general_settings_init() {
 
   add_settings_field(
     'cpt_default_client_status',
-    '<label for="cpt_default_client_status">' . __('Default New-Client Status', 'client-power-tools') . '</label>',
+    '<label for="cpt_default_client_status">' . __('Default New Client Status', 'client-power-tools') . '</label>',
     __NAMESPACE__ . '\cpt_default_client_status',
     'cpt-settings',
     'cpt-general-settings',
   );
 
   register_setting('cpt-settings', 'cpt_default_client_status');
+
+  add_settings_field(
+    'cpt_passwordless_login',
+    '<label for="cpt_passwordless_login">' . __('Passwordless Login', 'client-power-tools') . '</label>',
+    __NAMESPACE__ . '\cpt_passwordless_login',
+    'cpt-settings',
+    'cpt-general-settings',
+  );
+
+  register_setting('cpt-settings', 'cpt_passwordless_login');
 }
 
 add_action('admin_init', __NAMESPACE__ . '\cpt_general_settings_init');
@@ -148,6 +158,18 @@ function cpt_client_statuses() {
 
 function cpt_default_client_status() {
   echo cpt_get_client_statuses_select('cpt_default_client_status');
+}
+
+function cpt_passwordless_login() {
+  ?>
+    <fieldset>
+      <label for="cpt_passwordless_login">
+        <input name="cpt_passwordless_login" id="cpt_passwordless_login" type="checkbox" value="1" <?php checked(get_option('cpt_passwordless_login')); ?>>
+        <?php _e('Enable passwordless login.', 'client-power-tools'); ?>
+        <p class="description"><?php _e('If checked, your clients will be able to log in by sending a code to their email address. A password will <em>not</em> be required. This is less secure than requiring a username and password because anyone with access to your client\'s email can log in to their account.', 'client-power-tools'); ?></p>
+      </label>
+    </fieldset>
+  <?php
 }
 
 

@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: "Jost";
   src: local("Jost"), url("../fonts/Jost/Jost-Regular.woff2") format("woff2"), url("../fonts/Jost/Jost-Regular.woff") format("woff"), url("../fonts/Jost/Jost-Regular.ttf") format("truetype");
@@ -206,26 +207,49 @@
   width: 100vw;
   z-index: 100;
 }
-.cpt-modal form {
-  margin-bottom: 1em;
+.cpt-modal #cpt-login-messages {
+  display: none;
 }
-.cpt-modal form > *:last-child {
+.cpt-modal #cpt-login-messages.error {
+  color: #c00;
+}
+.cpt-modal #cpt-login-messages.success {
+  color: SeaGreen;
+}
+.cpt-modal #cpt-login-messages.error::before, .cpt-modal #cpt-login-messages.success::before {
+  border-radius: 9999px;
+  color: White;
+  display: inline-grid;
+  font-weight: bold;
+  height: 1em;
+  margin-right: 0.25em;
+  place-content: center;
+  width: 1em;
+}
+.cpt-modal #cpt-login-messages.error::before {
+  background-color: #c00;
+  content: "!";
+}
+.cpt-modal #cpt-login-messages.success::before {
+  background-color: SeaGreen;
+  content: "✓";
+}
+.cpt-modal #cpt-login-form > *:last-child {
   margin-bottom: 0;
 }
-.cpt-modal form p,
-.cpt-modal form label,
-.cpt-modal form input,
-.cpt-modal form select,
-.cpt-modal form textarea {
+.cpt-modal #cpt-login-form p,
+.cpt-modal #cpt-login-form label,
+.cpt-modal #cpt-login-form input,
+.cpt-modal #cpt-login-form select,
+.cpt-modal #cpt-login-form textarea {
   display: block;
 }
-.cpt-modal form .large-text {
-  box-sizing: border-box;
-  width: 100%;
-}
-.cpt-modal form .description {
+.cpt-modal #cpt-login-form .description {
   font-size: 80%;
   margin-bottom: 1.25em;
+}
+.cpt-modal #cpt-login-form #cpt-login-code {
+  display: none;
 }
 
 .cpt-modal-card {

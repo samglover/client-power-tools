@@ -8,9 +8,41 @@
   width: 100vw;
   z-index: 100;
 
-  form {
-    margin-bottom: 1em;
+  #cpt-login-messages {
+    display: none;
 
+    &.error {
+      color: #c00;
+    }
+
+    &.success {
+      color: SeaGreen;
+    }
+
+    &.error::before,
+    &.success::before {;
+      border-radius: 9999px;
+      color: White;
+      display: inline-grid;
+      font-weight: bold;
+      height: 1em;
+      margin-right: .25em;
+      place-content: center;
+      width: 1em;
+    }
+
+    &.error::before {
+      background-color: #c00;
+      content: '!';
+    }
+
+    &.success::before {
+      background-color: SeaGreen;
+      content: '\02713';
+    }
+  }
+
+  #cpt-login-form {
     & > *:last-child {
       margin-bottom: 0;
     }
@@ -23,14 +55,13 @@
       display: block;
     }
 
-    .large-text {
-      box-sizing: border-box;
-      width: 100%;
-    }
-
     .description {
       font-size: 80%;
       margin-bottom: 1.25em;
+    }
+
+    #cpt-login-code {
+      display: none;
     }
   }
 }

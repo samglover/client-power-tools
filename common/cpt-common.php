@@ -184,7 +184,12 @@ function cpt_get_client_manager_email($clients_user_id) {
 }
 
 
-function cpt_get_email_card($title = null, $content = null, $button_txt = 'Go', $button_url = null) {
+function cpt_get_email_card(
+  $title = null,
+  $content = null,
+  $button_txt = 'Go',
+  $button_url = null
+) {
   $card_style     = 'border: 1px solid #ddd; box-sizing: border-box; font-family: Jost, Helvetica, Arial, sans-serif; margin: 30px 3px 30px 0; padding: 30px; max-width: 500px;';
   $h2_style       = 'margin-top: 0;';
   $button_style   = 'background-color: #eee; border: 1px solid #ddd; box-sizing: border-box; display: block; margin: 0; padding: 1em; width: 100%; text-align: center;';
@@ -201,7 +206,7 @@ function cpt_get_email_card($title = null, $content = null, $button_txt = 'Go', 
         <?php } ?>
 
         <?php if (!empty($button_url)) { ?>
-          <a class="button" href="<?php esc_url($button_url); ?>" style="<?php echo esc_attr($button_style); ?>"><?php echo $button_txt; ?></a>
+          <a class="button" href="<?php echo esc_url($button_url); ?>" style="<?php echo esc_attr($button_style); ?>"><?php echo $button_txt; ?></a>
         <?php } ?>
       </div>
     <?php
