@@ -312,23 +312,26 @@ function cpt_message_notification($message_id) {
   $subject          = $msg_obj->post_title ? $msg_obj->post_title : sprintf(__('You have a new message from %1$s', 'client-power-tools'), $from_name);
 
   if ($send_this_msg_content) {
-    $message = get_the_content(null, false, $msg_obj);
+    $message = apply_filters('the_content', get_the_content(null, false, $msg_obj));
   } else {
     if ($sender_id == $clients_user_id) {
-      $to           = $client_data['manager_email'];
-
-      $message      = sprintf(__('%1$sTo read your message, please visit your client dashboard.%2$s', 'client-power-tools'), '<p>', '</p>');
-      $button_url   = cpt_get_client_profile_url($clients_user_id) . '#cpt-message-' . $message_id;
+      $message = sprintf(__('%1$sTo read your message, please visit your client dashboard.%2$s', 'client-power-tools'), '<p>', '</p>');
     } else {
-      $to           = $client_data['email'];
-
-      $message      = sprintf(__('%1$sTo read this message, please view the client page.%2$s', 'client-power-tools'), '<p>', '</p>');
-      $button_url   = cpt_get_client_dashboard_url() . '#cpt-message-' . $message_id;
+      $message = sprintf(__('%1$sTo read this message, please view the client page.%2$s', 'client-power-tools'), '<p>', '</p>');
     }
-
-    $button_txt     = __('Go to Message', 'client-power-tools');
-    $message        = cpt_get_email_card($subject, $message, $button_txt, $button_url);
   }
+
+  if ($sender_id == $clients_user_id) {
+    $to = $client_data['manager_email'];
+    $button_url = cpt_get_client_profile_url($clients_user_id) . '#cpt-message-' . $message_id;
+  } else {
+    $to = $client_data['email'];
+    $button_url = cpt_get_client_dashboard_url() . '#cpt-message-' . $message_id;
+  }
+
+  $button_txt     = __('Go to Message', 'client-power-tools');
+  $message        = cpt_get_email_card($subject, $message, $button_txt, $button_url);
+
 
   wp_mail($to, $subject, $message, $headers);
 }
