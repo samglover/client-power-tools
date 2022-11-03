@@ -80,7 +80,7 @@ function cpt_general_settings_init() {
 
   add_settings_field(
     'cpt_default_client_status',
-    '<label for="cpt_default_client_status">' . __('Default New-Client Status', 'client-power-tools') . '</label>',
+    '<label for="cpt_default_client_status">' . __('Default New Client Status', 'client-power-tools') . '</label>',
     __NAMESPACE__ . '\cpt_default_client_status',
     'cpt-settings',
     'cpt-general-settings',

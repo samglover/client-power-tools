@@ -278,7 +278,7 @@ function cpt_process_new_message() {
       $result = __('Message sent!', 'client-power-tools');
     }
 
-    set_transient('cpt_new_message_result', $result, 45);
+    set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
     wp_redirect($_POST['_wp_http_referer']);
     exit;
   } else {

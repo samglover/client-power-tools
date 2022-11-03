@@ -1,7 +1,25 @@
 # Changelog for Client Power Tools
 
-All notable changes to this project will be documented in this file. The format
-is based on [Keep a Changelog](https://keepachangelog.com).
+All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
+
+
+### 1.5 - 2022-11-03
+
+#### Added
+- IMPORTANT: Passwordless login. The default frontend login process is now passwordless. Instead of entering a username and password, clients request a login code by email. (Username and password is still available.)
+
+#### Changed
+- Updated the new-client welcome message for passwordless login.
+- The frontend login form now uses AJAX rather than reloading the page with each submission.
+- Adjusted login modal max width.
+- Move the new and edit client forms to their own files, /admin/cpt-new-client-form.php and /admin/cpt-edit-client-form.php.
+- Simplified notices in the admin and on the front end.
+- Numerous minor formatting changes, tweaks, cleanup, and reorganizing, as usual.
+
+#### Fixed
+- Fix the modal dismiss button display.
+- Restore button code style to email cards.
+- Added overflow scrolling for modals.
 
 
 ### 1.4.11 - 2022-09-16

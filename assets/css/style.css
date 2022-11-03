@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: "Jost";
   src: local("Jost"), url("../fonts/Jost/Jost-Regular.woff2") format("woff2"), url("../fonts/Jost/Jost-Regular.woff") format("woff"), url("../fonts/Jost/Jost-Regular.ttf") format("truetype");
@@ -26,7 +27,8 @@
   display: none;
 }
 
-.cpt-new-message-button {
+.cpt-new-message-button .button {
+  display: inline-block;
   margin-bottom: 1em;
 }
 
@@ -197,6 +199,7 @@
 }
 
 .cpt-modal {
+  display: none;
   height: 100vh;
   place-content: center;
   position: absolute;
@@ -204,24 +207,6 @@
   left: 0;
   width: 100vw;
   z-index: 100;
-}
-.cpt-modal form {
-  margin-bottom: 1em;
-}
-.cpt-modal form p,
-.cpt-modal form label,
-.cpt-modal form input,
-.cpt-modal form select,
-.cpt-modal form textarea {
-  display: block;
-}
-.cpt-modal form .large-text {
-  box-sizing: border-box;
-  width: 100%;
-}
-.cpt-modal form .description {
-  font-size: 80%;
-  margin-bottom: 1.25em;
 }
 
 .cpt-modal-card {
@@ -232,10 +217,16 @@
   margin: 3px;
   min-width: 330px;
   max-height: 90vh;
-  max-width: 90vw;
+  max-width: 40vw;
+  overflow: scroll;
   padding: 2em;
   position: relative;
   z-index: 100;
+}
+@media (max-width: 768px) {
+  .cpt-modal-card {
+    max-width: 90vw;
+  }
 }
 .cpt-modal-card h2 {
   border: none;
@@ -289,19 +280,18 @@
 }
 .cpt-dismiss-button svg {
   fill: White;
+  height: 100%;
+  width: auto;
 }
 
 .cpt-notice-dismiss-button {
-  height: 20px;
-  padding: 1.5px;
-  position: absolute;
   top: 20px;
   right: 20px;
-  width: 20px;
 }
 
 .cpt-modal-screen {
   background-color: rgba(0, 0, 0, 0.4);
+  display: none;
   height: 100vh;
   position: fixed;
   left: 0;
@@ -328,10 +318,57 @@
   margin-bottom: 0;
 }
 
-#cpt-login form input[type=password],
-#cpt-login form input[type=text] {
+#cpt-login #cpt-login-messages {
+  display: none;
+  line-height: 1.25;
+  padding-left: 1.5em;
+  position: relative;
+}
+#cpt-login #cpt-login-messages.error {
+  color: #c00;
+}
+#cpt-login #cpt-login-messages.success {
+  color: SeaGreen;
+}
+#cpt-login #cpt-login-messages.error::before, #cpt-login #cpt-login-messages.success::before {
+  border-radius: 9999px;
+  color: White;
+  display: inline-grid;
+  font-weight: bold;
+  height: 1em;
+  place-content: center;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1em;
+}
+#cpt-login #cpt-login-messages.error::before {
+  background-color: #c00;
+  content: "!";
+}
+#cpt-login #cpt-login-messages.success::before {
+  background-color: SeaGreen;
+  content: "✓";
+}
+#cpt-login #cpt-login-form > *:last-child {
+  margin-bottom: 0;
+}
+#cpt-login #cpt-login-form .input {
   box-sizing: border-box;
   width: 100%;
+}
+#cpt-login #cpt-login-form .description {
+  font-size: 80%;
+  margin-bottom: 1.25em;
+}
+#cpt-login #cpt-login-type-links {
+  font-size: 80%;
+}
+#cpt-login #cpt-login-code-link,
+#cpt-login #cpt-login-code,
+#cpt-login #cpt-login-password {
+  display: none;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -4,20 +4,22 @@
  * Plugin Name:	Client Power Tools
  * Plugin URI:	https://clientpowertools.com
  * Description:	Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
- * Version:			1.4.11
+ * Version:			1.5
  * Author:			Sam Glover
  * Author URI:	https://samglover.net
  * Text Domain:	client-power-tools
  */
 
 namespace Client_Power_Tools\Core;
+use Client_Power_Tools\Core\Common;
+use Client_Power_Tools\Core\Frontend;
 
 if (!defined('ABSPATH')) exit;
 
 /**
  * Constants
  */
-define('CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.4.11');
+define('CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.5');
 define('CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path(__FILE__));
 define('CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url(__FILE__));
 
@@ -26,12 +28,12 @@ define('CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url(__FILE__));
  * Plugin Files
  */
 require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common.php');
+require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-login.php');
 require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-status-update-request-button.php');
 require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php');
 
 function cpt_register_common_scripts() {
 	wp_enqueue_script('cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-common.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
-	wp_enqueue_script('cpt-messages', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-messages.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
 }
 
 add_action('wp_enqueue_scripts', __NAMESPACE__ . '\cpt_register_common_scripts');
@@ -48,10 +50,12 @@ if (!is_admin()) {
 
 		wp_enqueue_style('cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/style.css', [], CLIENT_POWER_TOOLS_PLUGIN_VERSION);
 
-		wp_register_script('cpt-frontend', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-frontend.js', [], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
-		wp_localize_script('cpt-frontend', 'cpt_frontend_js_vars', [
-			'postID'			=> $post ? $post->ID : null,
-			'dashboardID'	=> get_option('cpt_client_dashboard_page_selection'),
+		wp_register_script('cpt-frontend', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-frontend.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
+		wp_localize_script('cpt-frontend', 'cpt_vars', [
+			'postID' => $post ? $post->ID : null,
+			'isCPT'	=> Frontend\cpt_is_cpt(),
+			'ajaxURL' => admin_url('admin-ajax.php'),
+			'nonce' => wp_create_nonce('cpt-login-nonce'),
 		]);
 		wp_enqueue_script('cpt-frontend');
 	}
@@ -106,7 +110,7 @@ function cpt_activate() {
 			if (is_wp_error($page)) {
 				?>
 					<div class="cpt-notice notice notice-error is-dismissible">
-						<p><?php _e('Something went wrong when creating a page. Please select a page from the <a href="' . admin_url('admin.php?page=cpt-settings') . '">Settings page</a>.'); ?></p>
+						<p><?php _e('Something went wrong when creating pages. Please select a page from the <a href="' . admin_url('admin.php?page=cpt-settings') . '">Settings page</a>.'); ?></p>
 						<p>Error message: <?php echo $post->get_error_message(); ?></p>
 					</div>
 				<?php
@@ -126,7 +130,7 @@ function cpt_activate() {
 		'cpt_client_statuses'									=> 'Active' . "\n" . 'Potential' . "\n" . 'Inactive',
 		'cpt_default_client_manager'					=> $admin->ID,
 		'cpt_default_client_status'						=> 'Active',
-		'cpt_new_client_email_subject_line'  	=> 'Your client account has been created! Please set your password.',
+		'cpt_new_client_email_subject_line'  	=> '[' . get_bloginfo('title') . '] ' . __('Your client account has been created!', 'client-power-tools'),
     'cpt_new_client_email_message_body'  	=> '',
 		'cpt_module_status_update_req_button'	=> true,
 		'cpt_status_update_req_freq'					=> 30,
