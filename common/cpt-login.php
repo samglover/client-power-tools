@@ -51,7 +51,7 @@ function send_login_code() {
   $headers[] = 'Content-Type: text/html; charset=UTF-8';
 
   $result = wp_mail($to, $subject, $message, $headers);
-  wp_send_json_success(['message' => 'Login code sent. It will remain valid for 10 minutes.']);
+  wp_send_json_success(['message' => 'Login code sent to ' . $email . '. It will remain valid for 10 minutes.']);
 }
 
 add_action('wp_ajax_nopriv_send_login_code', __NAMESPACE__ . '\send_login_code'); // Not-logged-in users.

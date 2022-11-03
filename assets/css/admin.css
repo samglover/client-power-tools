@@ -26,7 +26,8 @@
   display: none;
 }
 
-.cpt-new-message-button {
+.cpt-new-message-button .button {
+  display: inline-block;
   margin-bottom: 1em;
 }
 

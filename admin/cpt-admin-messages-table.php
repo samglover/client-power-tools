@@ -12,7 +12,6 @@ use Client_Power_Tools\Core\Includes;
 class Message_List_Table extends Includes\WP_List_Table  {
   function __construct() {
     global $status, $page;
-
     parent::__construct([
       'singular'  => 'message',
       'plural'    => 'messages',
@@ -105,7 +104,6 @@ class Message_List_Table extends Includes\WP_List_Table  {
       'subject' => 'Subject',
       'date'    => 'Date',
     ];
-
    return $columns;
   }
 
@@ -115,11 +113,9 @@ class Message_List_Table extends Includes\WP_List_Table  {
    */
   function get_sortable_columns() {
     return; // Remove this line to enable sortable columns.
-
     $sortable_columns = [
       'date' => ['msg_count', true],
     ];
-
     return $sortable_columns;
   }
 
@@ -131,28 +127,23 @@ class Message_List_Table extends Includes\WP_List_Table  {
    */
   function get_bulk_actions() {
     return; // Remove this line to enable bulk actions.
-
     $actions = [
       'delete'  => 'Delete',
     ];
-
     return $actions;
   }
 
 
   function process_bulk_action() {
     $action = $this->current_action();
-
     switch ($action) {
       case 'delete':
         wp_die('Delete something.');
         break;
-
       default:
         return;
         break;
     }
-
     return;
   }
 
@@ -164,12 +155,11 @@ class Message_List_Table extends Includes\WP_List_Table  {
     /**
      * Column Headers
      */
-    $columns  = $this->get_columns();
-    $hidden   = [];
+    $columns = $this->get_columns();
+    $hidden = [];
     $sortable = $this->get_sortable_columns();
 
     $this->_column_headers = [$columns, $hidden, $sortable];
-
     $this->process_bulk_action();
 
     /**
@@ -179,37 +169,36 @@ class Message_List_Table extends Includes\WP_List_Table  {
 
     // Creates the data set.
     $cpt_messages = new \WP_Query([
-      'fields'          => 'ids',
-      'post_type'       => 'cpt_message',
-      'posts_per_page'  => -1,
+      'post_type' => 'cpt_message',
+      'posts_per_page' => -1,
     ]);
 
     if ($cpt_messages->have_posts()) : while ($cpt_messages->have_posts()) : $cpt_messages->the_post();
-      $post_id          = get_the_ID();
-      $clients_user_id  = get_post_meta($post_id, 'cpt_clients_user_id', true);
+      $post_id = get_the_ID();
+      $clients_user_id = get_post_meta($post_id, 'cpt_clients_user_id', true);
 
       $data[] = [
-        'ID'              => $post_id,
-        'client_name'     => Common\cpt_get_name($clients_user_id),
+        'ID' => $post_id,
+        'client_name' => Common\cpt_get_name($clients_user_id),
         'clients_user_id' => $clients_user_id,
-        'client_id'       => get_user_meta($clients_user_id, 'cpt_client_id', true),
-        'sender'          => get_the_author(),
-        'subject'         => get_the_title() ? get_the_title() : '[Message from ' . get_the_author() . ']',
-        'date'            => get_the_date(),
+        'client_id' => get_user_meta($clients_user_id, 'cpt_client_id', true),
+        'sender' => get_the_author(),
+        'subject' => get_the_title() ? get_the_title() : '[Message from ' . get_the_author() . ']',
+        'date' => get_the_date(),
       ];
     endwhile; endif;
 
     /**
      * Pagination
      */
-    $total_items  = count($data);
-    $per_page     = 25;
+    $total_items = count($data);
+    $per_page = 25;
     $current_page = $this->get_pagenum();
-    $data         = array_slice($data, (($current_page - 1) * $per_page), $per_page);
+    $data = array_slice($data, (($current_page - 1) * $per_page), $per_page);
 
     $this->set_pagination_args([
       'total_items' => $total_items,
-      'per_page'    => $per_page,
+      'per_page' => $per_page,
       'total_pages' => ceil($total_items / $per_page),
     ]);
 

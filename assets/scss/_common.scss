@@ -3,7 +3,10 @@
 }
 
 .cpt-new-message-button {
-  margin-bottom: 1em;
+  .button {
+    display: inline-block;
+    margin-bottom: 1em;
+  }
 }
 
 .cpt-message {

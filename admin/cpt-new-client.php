@@ -45,7 +45,7 @@ function cpt_process_new_client() {
     $result = 'Client created. <a href="' . $client_profile_url . '">View ' . Common\cpt_get_name($new_client) . '\'s profile</a>.';
   }
 
-  set_transient('cpt_new_client_result', $result, 45);
+  set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
   wp_redirect($_POST['_wp_http_referer']);
   exit;
 }
@@ -54,33 +54,26 @@ add_action('admin_post_cpt_new_client_added', __NAMESPACE__ . '\cpt_process_new_
 
 
 function cpt_new_client_email($clients_user_id) {
-  if (!$clients_user_id) exit('Missing user ID.');
+  if (!$clients_user_id) exit('Missing client\'s user ID.');
 
-  $user           = get_userdata($clients_user_id);
-  $client_data    = Common\cpt_get_client_data($clients_user_id);
+  $user = get_userdata($clients_user_id);
+  $client_data = Common\cpt_get_client_data($clients_user_id);
+  $from_name = Common\cpt_get_name($client_data['manager_id']);
+  $from_email = $client_data['manager_email'];
+  $headers[] = 'Content-Type: text/html; charset=UTF-8';
+  $headers[] = $from_name ? 'From: ' . $from_name . ' <' . $from_email . '>' : 'From: ' . $from_email;
+  $to = $user->user_email;
+  $subject = get_option('cpt_new_client_email_subject_line');
 
-  $from_name      = Common\cpt_get_name($client_data['manager_id']);
-  $from_email     = $client_data['manager_email'];
-
-  $headers[]      = 'Content-Type: text/html; charset=UTF-8';
-  $headers[]      = $from_name ? 'From: ' . $from_name . ' <' . $from_email . '>' : 'From: ' . $from_email;
-
-  $to             = $user->user_email;
-  $subject        = get_option('cpt_new_client_email_subject_line');
-
-  $activation_key = get_password_reset_key($user);
-  $activation_url = Common\cpt_get_client_dashboard_url() . '?cpt_login=setpw&key=' . $activation_key . '&login=' . urlencode($user->user_login);
-
-  ob_start();
-    ?>
-      <p>Your username is your email address: <strong><?php echo $user->user_email; ?></strong></p>
-      <p>You will need to activate your account and set a password in order to access your client dashboard.</p>
-    <?php
-  $card_content = ob_get_clean();
+  // Email Card
+  $title = __('Your Client Account Has Been Created', 'client-power-tools');
+  $card_content = '<p>' . __('Use your email address to access your client dashboard:', 'client-power-tools') . ' <strong>' . $user->user_email . '</strong></p>';
+  $button_txt = __('Visit Your Client Dashboard', 'client-power-tools');
+  $button_url = Common\cpt_get_client_dashboard_url();
 
   ob_start();
     echo get_option('cpt_new_client_email_message_body');
-    echo Common\cpt_get_email_card($subject, $card_content, 'Activate Your Account', $activation_url);
+    echo Common\cpt_get_email_card($title, $card_content, $button_txt, $button_url);
   $message = ob_get_clean();
 
   wp_mail($to, $subject, $message, $headers);

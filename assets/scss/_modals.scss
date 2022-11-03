@@ -1,5 +1,5 @@
 .cpt-modal {
-  display: grid;
+  display: none;
   height: 100vh;
   place-content: center;
   position: absolute;
@@ -7,63 +7,6 @@
     left: 0;
   width: 100vw;
   z-index: 100;
-
-  #cpt-login-messages {
-    display: none;
-
-    &.error {
-      color: #c00;
-    }
-
-    &.success {
-      color: SeaGreen;
-    }
-
-    &.error::before,
-    &.success::before {;
-      border-radius: 9999px;
-      color: White;
-      display: inline-grid;
-      font-weight: bold;
-      height: 1em;
-      margin-right: .25em;
-      place-content: center;
-      width: 1em;
-    }
-
-    &.error::before {
-      background-color: #c00;
-      content: '!';
-    }
-
-    &.success::before {
-      background-color: SeaGreen;
-      content: '\02713';
-    }
-  }
-
-  #cpt-login-form {
-    & > *:last-child {
-      margin-bottom: 0;
-    }
-
-    p,
-    label,
-    input,
-    select,
-    textarea {
-      display: block;
-    }
-
-    .description {
-      font-size: 80%;
-      margin-bottom: 1.25em;
-    }
-
-    #cpt-login-code {
-      display: none;
-    }
-  }
 }
 
 .cpt-modal-card {
@@ -152,16 +95,13 @@
 }
 
 .cpt-notice-dismiss-button {
-  height: 20px;
-  padding: 1.5px;
-  position: absolute;
-    top: 20px;
-    right: 20px;
-  width: 20px;
+  top: 20px;
+  right: 20px;
 }
 
 .cpt-modal-screen {
   background-color: rgb(0, 0, 0, .4);
+  display: none;
   height: 100vh;
   position: fixed;
     left: 0;

@@ -130,7 +130,7 @@ function cpt_process_new_client_manager() {
       $result = 'Client manager added.';
     }
 
-    set_transient('cpt_add_manager_result', $result, 45);
+    set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
     wp_redirect($_POST['_wp_http_referer']);
     exit;
   } else {
@@ -217,5 +217,5 @@ function cpt_remove_client_manager($user_id) {
 
   $result = 'Client manager removed.';
 
-  set_transient('cpt_remove_manager_result', $result, 45);
+  set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
 }

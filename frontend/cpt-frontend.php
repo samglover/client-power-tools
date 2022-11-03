@@ -30,22 +30,20 @@ function cpt_login() {
               <label for="cpt-login-email-field">Email Address</label>
               <input id="cpt-login-email-field" class="input" name="cpt-login-email-field" type="text" autocomplete="username" value="" size="20">
             </p>
-            <p id="cpt-login-password">
+            <p id="cpt-login-code" data-button-text="<?php _e('Send Code', 'client-power-tools'); ?>">
+              <label for="cpt-login-code-field">Login Code</label>
+              <input id="cpt-login-code-field" class="input" name="cpt-login-code-field" type="password" autocomplete="one-time-code" value="" size="20">
+            </p>
+            <p id="cpt-login-password" data-button-text="<?php _e('Log In', 'client-power-tools'); ?>">
               <label for="cpt-login-password-field">Password</label>
               <input id="cpt-login-password-field" class="input" name="cpt-login-password-field" type="password" autocomplete="current-password" value="" size="20">
             </p>
-            <?php if (get_option('cpt_passwordless_login')) { ?>
-              <p id="cpt-login-code">
-                <label for="cpt-login-code-field">Login Code</label>
-                <input id="cpt-login-code-field" class="input" name="cpt-login-code-field" type="password" autocomplete="one-time-code" value="" size="20">
-              </p>
-              <p id="cpt-login-type-links">
-                <a id="cpt-login-code-link" href="#"><?php _e('Get a login code by email instead.', 'client-power-tools'); ?></a>
-                <a id="cpt-password-link" href="#"><?php _e('Use your password.', 'client-power-tools'); ?></a>
-              </p>
-            <?php } ?>
+            <p id="cpt-login-type-links">
+              <a id="cpt-login-code-link" href="#"><?php _e('Get a login code by email.', 'client-power-tools'); ?></a>
+              <a id="cpt-password-link" href="#"><?php _e('Use a password instead.', 'client-power-tools'); ?></a>
+            </p>
             <p id="cpt-login-submit">
-              <input id="cpt-login-submit-button" class="button button-primary" name="cpt-login-submit-button" type="submit" value="<?php _e('Log In', 'client-power-tools'); ?>">
+              <input id="cpt-login-submit-button" class="button button-primary" name="cpt-login-submit-button" type="submit" value="<?php _e('Send Code', 'client-power-tools'); ?>">
             </p>
           </form>
         <?php else: ?>
@@ -59,3 +57,12 @@ function cpt_login() {
 }
 
 add_action('wp_footer', __NAMESPACE__ . '\cpt_login');
+
+
+function cpt_is_cpt() {
+  if (Common\cpt_is_client_dashboard() || Common\cpt_is_messages() || Common\cpt_is_knowledge_base()) {
+    return true;
+  } else {
+    return false;
+  }
+}

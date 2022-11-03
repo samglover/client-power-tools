@@ -1,7 +1,3 @@
-// Handles login link clicks.
-const loggedIn = document.getElementById('cpt-login-already-logged-in');
-const loginLinks = document.querySelectorAll('.cpt-login-link, a[href*="#cpt-login"]');
-
 // Shows/Hides the Login Modal
 const loginModal = document.getElementById('cpt-login');
 const cptModals = document.querySelectorAll('.cpt-modal');
@@ -12,6 +8,9 @@ function showLogin() {
   modalScreens[0].style.display = 'block';
 }
 
+// Handles login link clicks.
+const loggedIn = document.querySelector('body.logged-in');
+const loginLinks = document.querySelectorAll('.cpt-login-link, a[href*="#cpt-login"]');
 if (loginLinks) {
   loginLinks.forEach(function(element) {
     element.addEventListener('click', function(event) {
@@ -29,7 +28,7 @@ if (loggedIn && loginLinks) {
 }
 
 // Displays the Login Modal on the Dashboard Page
-if (!!loggedIn && cpt_vars.postID == cpt_vars.dashboardID) showLogin();
+if (!loggedIn && cpt_vars.isCPT) showLogin();
 
 // Displays the Login Modal Based on URL Query Parameters
 const baseURL = [location.protocol, '//', location.host, location.pathname].join('');
@@ -76,7 +75,8 @@ const loginTypeLinks = document.getElementById('cpt-login-type-links');
 const codeLink = document.getElementById('cpt-login-code-link');
 const passwordLink = document.getElementById('cpt-password-link');
 const submitButton = document.getElementById('cpt-login-submit-button');
-const submitButtonValue = submitButton ? submitButton.value : 'Log In';
+
+if (submitButton) submitButton.addEventListener('click', sendLoginCode);
 
 if (codeLink) codeLink.addEventListener('click', function(event) {
   event.preventDefault();
@@ -84,7 +84,7 @@ if (codeLink) codeLink.addEventListener('click', function(event) {
   passwordRow.style.display = 'none';
   passwordLink.style.display = 'block';
 
-  submitButton.value = 'Send Code';
+  submitButton.value = codeRow.dataset.buttonText;
   submitButton.removeEventListener('click', checkPassword);
   submitButton.addEventListener('click', sendLoginCode);
 });
@@ -95,12 +95,10 @@ if (passwordLink) passwordLink.addEventListener('click', function(event) {
   passwordRow.style.display = 'block';
   codeLink.style.display = 'block';
 
-  submitButton.value = submitButtonValue;
+  submitButton.value = passwordRow.dataset.buttonText;
   submitButton.removeEventListener('click', sendLoginCode);
   submitButton.addEventListener('click', checkPassword);
 });
-
-if (submitButton) submitButton.addEventListener('click', checkPassword);
 
 function displayMessages(response) {
   messages.style.display = 'block';
@@ -108,30 +106,6 @@ function displayMessages(response) {
   messages.innerText = response.data.message;
 }
 
-function checkPassword(event) {
-  event.preventDefault();
-  jQuery.ajax({
-    type: 'POST',
-    url: cpt_vars.ajaxURL,
-    data: {
-      _ajax_nonce: cpt_vars.nonce,
-      action: 'check_password',
-      email: emailField.value,
-      password: passwordField.value
-    },
-    // beforeSend: function() {},
-    success: function(response) {
-      // console.debug(response);
-      displayMessages(response);
-      if (response.success) location.reload();
-    },
-    failure: function(error) {
-      console.debug(error);
-    }
-  });
-}
-
-// Sends the Login Code
 function sendLoginCode(event) {
   event.preventDefault();
   jQuery.ajax({
@@ -182,6 +156,29 @@ function checkLoginCode(event) {
       console.debug(response);
       displayMessages(response);
       if (response.success || response.data.tries >= 3) location.reload();
+    },
+    failure: function(error) {
+      console.debug(error);
+    }
+  });
+}
+
+function checkPassword(event) {
+  event.preventDefault();
+  jQuery.ajax({
+    type: 'POST',
+    url: cpt_vars.ajaxURL,
+    data: {
+      _ajax_nonce: cpt_vars.nonce,
+      action: 'check_password',
+      email: emailField.value,
+      password: passwordField.value
+    },
+    // beforeSend: function() {},
+    success: function(response) {
+      // console.debug(response);
+      displayMessages(response);
+      if (response.success) location.reload();
     },
     failure: function(error) {
       console.debug(error);

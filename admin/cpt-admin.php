@@ -20,9 +20,22 @@ function cpt_redirect_clients() {
 add_action('admin_init', __NAMESPACE__ . '\cpt_redirect_clients');
 
 
+function cpt_security_warning() {
+  global $pagenow;
+  if (!is_ssl() && cpt_is_cpt_admin_page()) {
+    ?>
+      <div class="cpt-notice notice notice-warning">
+        <p><?php _e('It doesn\'t look like your website is using SSL (HTTPS). Before using Client Power Tools with your clients, it\'s a good idea to get an SSL certificate for your website and consider additional security measures. <a href="https://clientpowertools.com/security/?utm_source=cpt_user&utm_medium=cpt_ssl_warning" target="_blank">Learn more.</a>'); ?></p>
+      </div>
+    <?php
+  }
+}
+
+add_action('admin_notices', __NAMESPACE__ . '\cpt_security_warning', 1);
+
+
 function cpt_welcome_message() {
   global $pagenow;
-
   if (cpt_is_cpt_admin_page() && get_transient('cpt_show_welcome_message')) {
     ?>
       <div class="cpt-notice notice notice-info">
@@ -34,27 +47,11 @@ function cpt_welcome_message() {
         <p style="font-size: 125%;"><?php _e('—Sam'); ?></p>
       </div>
     <?php
-
     delete_transient('cpt_show_welcome_message');
   }
 }
 
 add_action('admin_notices', __NAMESPACE__ . '\cpt_welcome_message');
-
-
-function cpt_security_warning() {
-  global $pagenow;
-
-  if (!is_ssl() && cpt_is_cpt_admin_page()) {
-    ?>
-      <div class="cpt-notice notice notice-warning">
-        <p><?php _e('It doesn\'t look like your website is using SSL (HTTPS). Before using Client Power Tools with your clients, it\'s a good idea to get an SSL certificate for your website and consider additional security measures. <a href="https://clientpowertools.com/security/?utm_source=cpt_user&utm_medium=cpt_ssl_warning" target="_blank">Learn more.</a>'); ?></p>
-      </div>
-    <?php
-  }
-}
-
-add_action('admin_notices', __NAMESPACE__ . '\cpt_security_warning');
 
 
 function cpt_menu_pages() {
@@ -111,29 +108,8 @@ function cpt_menu_pages() {
 add_action('admin_menu', __NAMESPACE__ . '\cpt_menu_pages');
 
 
-// function cpt_get_admin_notices($transient_key) {
-//   if (!$transient_key) return;
-//   $result = get_transient($transient_key);
-//
-//   if (!empty($result)) {
-//     if (is_wp_error($result)) {
-//       echo '<div class="cpt-notice notice notice-error is-dismissible">';
-//     } else {
-//       echo '<div class="cpt-notice notice notice-success is-dismissible">';
-//     }
-//     echo '<p>' . __($result) . '</p>';
-//     echo '</div>';
-//   }
-//
-//   delete_transient($transient_key);
-// }
-//
-// add_action('admin_notices', __NAMESPACE__ . '\cpt_get_admin_notices');
-
-
 function cpt_is_cpt_admin_page() {
   global $pagenow;
-
   if ($pagenow == 'admin.php' && preg_match('/cpt-?\S*/', $_GET['page'])) {
     return true;
   } else {
@@ -144,15 +120,12 @@ function cpt_is_cpt_admin_page() {
 
 function cpt_get_client_manager_select($name = null, $selected = null) {
   if (!$name) $name = 'client_manager';
-
   if (!$selected) {
     $admin    = get_user_by_email(get_bloginfo('admin_email'));
     $selected = get_option('cpt_default_client_manager') ? get_option('cpt_default_client_manager') : $admin->ID;
   }
 
-  /**
-   * Query Client Managers
-   */
+  // Query Client Managers
   $client_manager_query = new \WP_USER_QUERY([
     'role__in'  => ['cpt-client-manager'],
     'orderby'   => 'display_name',
@@ -185,7 +158,7 @@ function cpt_get_client_statuses_select($name = null, $selected = null) {
 
 function cpt_show_wp_mail_errors($wp_error) {
   echo '<pre>';
-  print_r($wp_error);
+    print_r($wp_error);
   echo '</pre>';
 }
 
