@@ -18,7 +18,7 @@ Client Power Tools is built for independent contractors, consultants, and profes
 
 ### Front-End Onboarding & Login
 
-All client interactions happen on the front end of your website, with clean modal forms for logging in and setting or changing passwords. Client Power Tools will simply blend in with most themes.
+All client interactions happen on the front end of your website, with clean modal forms for logging in—without a password! Client Power Tools will simply blend in with most themes.
 
 Clients are redirected away from the WordPress admin backend and the default WordPress login form.
 
@@ -101,6 +101,12 @@ For more information on how to take advantage of the new and updated features, s
 
 
 == Changelog ==
+
+### 1.5.1 - 2022-11-04
+
+#### Fixed
+- The navigation tabs now fold up nicely at narrow widths.
+
 
 ### 1.5 - 2022-11-03
 

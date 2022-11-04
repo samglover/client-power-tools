@@ -99,6 +99,7 @@
   border-bottom: 1px solid Silver;
   display: flex;
   flex-grow: 1;
+  flex-wrap: wrap;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -110,6 +111,12 @@
   display: block;
   margin: 0 4px 0 0;
   padding: 0;
+}
+@media (max-width: 576px) {
+  #cpt-nav .cpt-tabs .cpt-tab {
+    margin: 0;
+    width: 100%;
+  }
 }
 #cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item {
   color: DarkSlateGray;
