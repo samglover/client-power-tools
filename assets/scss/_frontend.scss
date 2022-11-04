@@ -6,6 +6,7 @@
     border-bottom: 1px solid Silver;
     display: flex;
     flex-grow: 1;
+    flex-wrap: wrap;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -17,6 +18,11 @@
       display: block;
       margin: 0 4px 0 0;
       padding: 0;
+
+      @media (max-width: $breakpoint-sm) {
+        margin: 0;
+        width: 100%;
+      }
 
       .cpt-nav-menu-item {
         color: DarkSlateGray;
