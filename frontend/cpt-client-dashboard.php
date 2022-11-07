@@ -3,58 +3,55 @@
 namespace Client_Power_Tools\Core\Frontend;
 use Client_Power_Tools\Core\Common;
 
-/**
- * Noindexes the client dashboard because it's none of Google's business.
- */
+// Noindexes the client dashboard because it's none of Google's business.
 function cpt_noindex_client_dashboard() {
-  if (Common\cpt_is_client_dashboard()) {
-    echo '<meta name="robots" content="noindex" />';
-  }
+  if (cpt_is_cpt()) echo '<meta name="robots" content="noindex" /><!-- Added by the Client Power Tools plugin. -->';
 }
 
 add_action('wp_head',  __NAMESPACE__ . '\cpt_noindex_client_dashboard');
 
 
 function cpt_client_dashboard($content) {
-  if (!Common\cpt_is_client_dashboard() || !in_the_loop()) return $content;
-
+  if (
+    !cpt_is_cpt() ||
+    !in_the_loop()
+  ) return $content;
   if (!is_user_logged_in()) {
-    echo '<p>';
-      /**
-       * translators:
-       * 1: html (<a> tag with link to launch login modal)
-       * 2: html (closes <a> tag)
-       */
-      printf(__('Please %1$slog in%2$s to view your client dashboard.', 'client-power-tools'),
-        '<a class="cpt-login-link" href="#">',
-        '</a>',
-      );
-    echo '</p>';
+    return sprintf(__('%1$sPlease %2$slog in$3%s to view your client dashboard.%4$s', 'client-power-tools'),
+      /* $1%s */ '<p>',
+      /* $2%s */ '<a class="cpt-login-link" href="#">',
+      /* $3%s */ '</a>',
+      /* $4%s */ '</p>'
+    );
   }
+  if (!Common\cpt_is_client()) return '<p>' . __('Sorry, you don\'t have permission to view this page because your user account is missing the "Client" role.', 'client-power-tools') . '</p>';
 
-  if (Common\cpt_is_client()) {
-    $user_id = get_current_user_id();
-    Common\cpt_get_notices();
+  ob_start();
     cpt_nav();
-    if (!Common\cpt_is_messages()) {
-      ob_start();
-        $client_data = Common\cpt_get_client_data($user_id);
-        echo '<p><strong>' . __('Welcome back', 'client-power-tools') . ', ' . $client_data['first_name'] . '</p></strong>';
-        Common\cpt_status_update_request_button($user_id);
-      return ob_get_clean() . $content;
+    Common\cpt_get_notices();
+    if (
+      Common\cpt_is_knowledge_base() &&
+      get_option('cpt_knowledge_base_page_selection') !== get_the_ID() &&
+      get_option('cpt_show_knowledge_base_breadcrumbs')
+    ) cpt_breadcrumbs();
+
+    $user_id = get_current_user_id();
+
+    if (Common\cpt_is_client_dashboard() && !Common\cpt_is_messages()) {
+      $client_data = Common\cpt_get_client_data($user_id);
+      ?>
+        <p><strong><?php printf(__('Welcome back, %s!', 'client-power-tools'), $client_data['first_name']); ?></p></strong>
+      <?php
+      if (!has_shortcode($content, 'status-update-request-button')) Common\cpt_status_update_request_button($user_id);
+      $content = ob_get_clean() . $content;
     } elseif (Common\cpt_is_messages()) {
-      ob_start();
-        // Removes the current the_content filter so it doesn't execute within the
-        // nested query for client messages.
-        remove_filter(current_filter(), __FUNCTION__);
-        Common\cpt_messages($user_id);
-      return ob_get_clean();
+      // Removes the current the_content filter so it doesn't execute within the
+      // nested query for client messages.
+      remove_filter(current_filter(), __FUNCTION__);
+      Common\cpt_messages($user_id);
+      $content = ob_get_clean();
     }
-  } elseif (is_user_logged_in() && !Common\cpt_is_client()) {
-    ob_start();
-      echo '<p>' . __('Sorry, you don\'t have permission to view this page. (You are logged in, but your user account is missing the "Client" role.)', 'client-power-tools') . '</p>';
-    return ob_get_clean();
-  }
+  return $content;
 }
 
 add_filter('the_content', __NAMESPACE__ . '\cpt_client_dashboard');
@@ -172,7 +169,6 @@ function cpt_breadcrumbs() {
   while ($parent_id) {
     $parent_url     = get_the_permalink($parent_id);
     $parent_title   = get_the_title($parent_id);
-
     $breadcrumbs[]  = '<span class="breadcrumb"><a href="' . $parent_url . '">' . $parent_title . '</a></span>';
     $parent_id      = wp_get_post_parent_id($parent_id);
   }
