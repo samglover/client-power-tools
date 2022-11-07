@@ -82,6 +82,13 @@ class Client_List_Table extends Includes\WP_List_Table  {
     }
   }
 
+  function column_last_activity($item) {
+    if ($item['last_activity']) {
+      $current_timestamp = current_time('U', true);
+      return sprintf(human_time_diff($item['last_activity'], $current_timestamp) . ' ' . __('ago', 'client-power-tools'));
+    }
+  }
+
   /**
    * Get Columns
    *
@@ -96,6 +103,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       'client_messages' => 'Messages',
       'client_status'   => 'Status',
       'client_manager'  => 'Manager',
+      'last_activity'   => 'Last Activity',
     ];
 
     // Remove columns for disabled modules. (It's easier to remove columns add
@@ -116,6 +124,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       'client_messages' => ['msg_count', false],
       'client_status'   => ['client_status', false],
       'client_manager'  => ['client_manager', false],
+      'last_activity'      => ['last_activity', false],
     ];
 
     return $sortable_columns;
@@ -139,12 +148,10 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
   function process_bulk_action() {
     $action = $this->current_action();
-
     switch ($action) {
       case 'delete':
         wp_die('Delete something.');
         break;
-
       default:
         return;
         break;
@@ -248,6 +255,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
           'client_id'       => get_user_meta($client->ID, 'cpt_client_id', true),
           'client_manager'  => $manager_name,
           'client_status'   => get_user_meta($client->ID, 'cpt_client_status', true),
+          'last_activity'   => get_user_meta($client->ID, 'cpt_last_activity', true),
           'msg_count'       => number_format_i18n($cpt_messages->post_count),
         ];
       }
@@ -256,7 +264,6 @@ class Client_List_Table extends Includes\WP_List_Table  {
     // Filters the data set.
     if (isset($_REQUEST['client_status'])) {
       $client_status_filter = sanitize_text_field(urldecode($_REQUEST['client_status']));
-
       foreach($data as $i => $client) {
         if ($client['client_status'] !== $client_status_filter) {
           unset($data[$i]);
@@ -266,7 +273,6 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
     if (isset($_REQUEST['client_manager'])) {
       $client_status_filter = sanitize_text_field(urldecode($_REQUEST['client_manager']));
-
       foreach($data as $i => $client) {
         if ($client['client_manager'] !== $client_status_filter) {
           unset($data[$i]);
@@ -286,7 +292,6 @@ class Client_List_Table extends Includes\WP_List_Table  {
     $per_page     = 25;
     $current_page = $this->get_pagenum();
     $data         = array_slice($data, (($current_page - 1) * $per_page), $per_page);
-
     $this->set_pagination_args([
       'total_items' => $total_items,
       'per_page'    => $per_page,

@@ -36,6 +36,7 @@ function cpt_client_dashboard($content) {
     ) cpt_breadcrumbs();
 
     $user_id = get_current_user_id();
+    update_user_meta($user_id, 'cpt_last_activity', current_time('U', true));
 
     if (Common\cpt_is_client_dashboard() && !Common\cpt_is_messages()) {
       $client_data = Common\cpt_get_client_data($user_id);

@@ -108,6 +108,7 @@ For more information on how to take advantage of the new and updated features, s
 - Knowledge base breadcrumbs are now optional.
 - Reminder to clients to check their spam folder for the login code.
 - [status-update-request-button] shortcode.
+- Show last activity in the admin client list.
 
 #### Changed
 - Status update request message now makes sense when messaging is disabled.

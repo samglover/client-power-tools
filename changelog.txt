@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. The format 
 - Knowledge base breadcrumbs are now optional.
 - Reminder to clients to check their spam folder for the login code.
 - [status-update-request-button] shortcode.
+- Show last activity in the admin client list.
 
 #### Changed
 - Status update request message now makes sense when messaging is disabled.
