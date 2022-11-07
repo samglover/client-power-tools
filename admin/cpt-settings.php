@@ -364,7 +364,7 @@ function cpt_knowledge_base_settings_init() {
     'cpt-settings',
   );
 
-  // Enable Messaging
+  // Enable Knowledge Base
   add_settings_field(
     'cpt_module_knowledge_base',
     __('Enable', 'client-power-tools'),
@@ -374,6 +374,16 @@ function cpt_knowledge_base_settings_init() {
   );
 
   register_setting('cpt-settings', 'cpt_module_knowledge_base', 'absint');
+
+  add_settings_field(
+    'cpt_show_knowledge_base_breadcrumbs',
+    __('Breadcrumbs', 'client-power-tools'),
+    __NAMESPACE__ . '\cpt_show_knowledge_base_breadcrumbs',
+    'cpt-settings',
+    'cpt-knowledge-base-settings',
+  );
+
+  register_setting('cpt-settings', 'cpt_show_knowledge_base_breadcrumbs', 'absint');
 
   if (get_option('cpt_module_knowledge_base')) {
     add_settings_field(
@@ -402,6 +412,17 @@ function cpt_module_knowledge_base() {
       <label for="cpt_module_knowledge_base">
         <input name="cpt_module_knowledge_base" id="cpt_module_knowledge_base" type="checkbox" value="1" <?php checked(get_option('cpt_module_knowledge_base')); ?>>
         <?php _e('Enable knowledge base.', 'client-power-tools'); ?>
+      </label>
+    </fieldset>
+  <?php
+}
+
+function cpt_show_knowledge_base_breadcrumbs() {
+  ?>
+    <fieldset>
+      <label for="cpt_show_knowledge_base_breadcrumbs">
+        <input name="cpt_show_knowledge_base_breadcrumbs" id="cpt_show_knowledge_base_breadcrumbs" type="checkbox" value="1" <?php checked(get_option('cpt_show_knowledge_base_breadcrumbs')); ?>>
+        <?php _e('Show breadcrumb navigation within the knowledge base.', 'client-power-tools'); ?>
       </label>
     </fieldset>
   <?php

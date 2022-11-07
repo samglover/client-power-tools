@@ -4,7 +4,7 @@
  * Plugin Name: Client Power Tools
  * Plugin URI: https://clientpowertools.com
  * Description: Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
- * Version: 1.5.1
+ * Version: 1.5.2
  * Author: Sam Glover
  * Author URI: https://samglover.net
  * Text Domain: client-power-tools
@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) exit;
 /**
  * Constants
  */
-define('CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.5.1');
+define('CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.5.2');
 define('CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path(__FILE__));
 define('CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url(__FILE__));
 
@@ -41,9 +41,9 @@ add_action('admin_enqueue_scripts', __NAMESPACE__ . '\cpt_register_common_script
 
 
 if (!is_admin()) {
+	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'shortcodes.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-frontend.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-client-dashboard.php');
-	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-knowledge-base.php');
 
 	function cpt_register_frontend_scripts() {
 		global $post; // For localizing cpt-frontend.js

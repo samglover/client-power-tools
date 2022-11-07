@@ -127,3 +127,12 @@
 .cpt-success {
   border-left-color: green;
 }
+
+#cpt-status-update-request-button[disabled="true"] {
+  cursor: default;
+  opacity: .5;
+
+  &:hover {
+    box-shadow: none;
+  }
+}

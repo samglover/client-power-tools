@@ -22,8 +22,24 @@
   font-weight: bold;
   font-style: italic;
 }
+@keyframes growDown {
+  0% {
+    transform: scaleY(0);
+  }
+  80% {
+    transform: scaleY(1.1);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
 .cpt-this-expands {
+  animation: growDown 150ms ease-in-out forwards;
   display: none;
+  transform-origin: top;
+}
+.cpt-this-expands.open {
+  display: block;
 }
 
 .cpt-new-message-button .button {

@@ -3,7 +3,6 @@
 namespace Client_Power_Tools\Core\Frontend;
 use Client_Power_Tools\Core\Common;
 
-
 /**
  * Adds a body class for overriding CPT styles.
  */

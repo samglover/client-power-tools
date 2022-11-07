@@ -1,7 +1,6 @@
 <?php
 
 namespace Client_Power_Tools\Core\Common;
-use Client_Power_Tools\Core\Frontend;
 
 /*
  * This has to be loaded as a common file in order to use the admin-post action

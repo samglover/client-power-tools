@@ -12,27 +12,25 @@ namespace Client_Power_Tools\Core\Common;
 
 
 function cpt_status_update_request_button($user_id) {
-  if (!$user_id) return;
-
-  // Return if the module is disabled.
-  if (!get_option('cpt_module_status_update_req_button')) return;
+  if (!get_option('cpt_module_status_update_req_button') || !$user_id) return;
 
   // Return (i.e. don't output the button) if the client has clicked the button
   // more recently than the request frequency option allows.
-  $request_frequency       = get_option('cpt_status_update_req_freq');
+  $request_frequency = get_option('cpt_status_update_req_freq');
   $days_since_last_request = cpt_days_since_last_request($user_id);
-
-  if (!is_null($days_since_last_request)&& $days_since_last_request < $request_frequency) return;
+  $disabled = false;
+  if (!is_null($days_since_last_request) && $days_since_last_request < $request_frequency) $disabled = true;
+  $button_value = $disabled ? __('Status Update Requested', 'client-power-tools') : __('Request Status Update', 'client-power-tools');
 
   // Output the button.
   ?>
-    <div id="cpt-status-update-request-button">
+    <div class="cpt-status-update-request">
       <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
         <?php wp_nonce_field('cpt_status_update_requested', 'cpt_status_update_request_nonce'); ?>
         <input name="action" value="cpt_status_update_requested" type="hidden">
         <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
         <p class="submit">
-          <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Request Status Update', 'client-power-tools'); ?>">
+          <input name="cpt-status-update-request-button" id="cpt-status-update-request-button" class="button button-primary" type="submit" value="<?php echo $button_value; ?>"<?php if ($disabled) echo ' disabled="true"'; ?>>
         </p>
       </form>
     </div>
@@ -46,11 +44,8 @@ function cpt_status_update_request_button($user_id) {
  * field, this is based on a custom query.)
  */
 function cpt_days_since_last_request($user_id) {
-
   if (!$user_id) return;
-
   $last_request_date = null;
-
   $status_update_requests = new \WP_Query([
     'meta_query'      => [
       'relation'      => 'AND',
@@ -129,13 +124,10 @@ function cpt_status_update_request_notification($message_id) {
   $sender_id        = $msg_obj->post_author;
   $clients_user_id  = get_post_meta($message_id, 'cpt_clients_user_id', true);
   $client_data      = cpt_get_client_data($clients_user_id);
-
   $from_name        = get_the_author_meta('display_name', $msg_obj->post_author);
   $from_email       = get_the_author_meta('user_email', $msg_obj->post_author);
-
   $headers[]        = 'Content-Type: text/html; charset=UTF-8';
   $headers[]        = 'From: ' . $from_name . ' <' . $from_email . '>';
-
   $to               = $client_data['manager_email'];
 
   if (get_option('cpt_status_update_req_notice_email')) {
@@ -157,16 +149,15 @@ function cpt_status_update_request_notification($message_id) {
                        */
   $subject_html     = sprintf(__('%1$s%2$s by %3$s', 'client-power-tools'), $msg_obj->post_title, '&nbsp;<br />', $from_name);
 
-  $message          = '<p>' . __('Please post an update.' , 'client-power-tools') . '</p>';
+  $message          = '<p>' . __('Please give them an update.' , 'client-power-tools') . '</p>';
 
                       /**
                        * translators:
                        * 1: sender's name
                        */
-  $button_txt       = sprintf(__('Go to %1$s', 'client-power-tools'), $from_name);
+  $button_txt       = get_option('cpt_module_messaging') ? sprintf(__('Go to %1$s', 'client-power-tools'), $from_name) : null;
 
-  $profile_url      = cpt_get_client_profile_url($sender_id);
-
+  $profile_url      = get_option('cpt_module_messaging') ? cpt_get_client_profile_url($sender_id) : null;
   $message          = cpt_get_email_card($subject_html, $message, $button_txt, $profile_url);
 
   wp_mail($to, $subject, $message, $headers);

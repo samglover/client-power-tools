@@ -13,8 +13,6 @@
 
         $(expanderButtons[i]).click(function(event) {
           event.preventDefault();
-
-          $(expandableDivs[i]).toggle('fast');
           $(expanderButtons[i]).toggleClass('open');
           $(expandableDivs[i]).toggleClass('open');
 
@@ -25,7 +23,6 @@
             if (!expandableDivs[i].classList.contains('cpt-nav-tabs-submenu')) {
               expanderButtons[i].innerHTML = 'Cancel';
             }
-
             formElements.forEach(function(element) {
               if (element.dataset.required == 'true') {
                 element.setAttribute('required', '');
@@ -34,7 +31,6 @@
             });
           } else {
             expanderButtons[i].innerHTML = buttonText[i];
-
             formElements.forEach(function(element){
               if (element.dataset.required == 'true') {
                 element.removeAttribute('required', '');

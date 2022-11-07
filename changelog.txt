@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
 
 
+### 1.5.2 - 2022-11-07
+
+#### Added
+- Knowledge base breadcrumbs are now optional.
+- Reminder to clients to check their spam folder for the login code.
+- [status-update-request-button] shortcode.
+
+#### Changed
+- Status update request message now makes sense when messaging is disabled.
+- Status update request button is now disabled with "Status Update Requested" instead of invisible when an update has been requested.
+- Change knowledge base submenu drop-down animation.
+
+#### Removed
+- Somehow a number of files had gotten duplicated in the wrong directories. They're gone now.
+- Consolidated /frontend/cpt-knowledge-base.php with /frontend/cpt-client-dashboard.php since it was basically just a duplicate anyway.
+
+
 ### 1.5.1 - 2022-11-04
 
 #### Fixed
