@@ -128,11 +128,15 @@
   border-left-color: green;
 }
 
-#cpt-status-update-request-button[disabled="true"] {
-  cursor: default;
-  opacity: .5;
-
-  &:hover {
-    box-shadow: none;
+#cpt-status-update-request-button {
+  background-color: inherit;
+  
+  &[disabled="true"] {
+    cursor: default;
+    opacity: .5;
+  
+    &:hover {
+      box-shadow: none;
+    }
   }
 }
