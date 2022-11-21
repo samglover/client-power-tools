@@ -40,6 +40,13 @@ function cpt_process_new_client() {
     update_user_meta($new_client, 'cpt_client_manager', sanitize_text_field($_POST['client_manager']));
     update_user_meta($new_client, 'cpt_client_status', sanitize_text_field($_POST['client_status']));
 
+    $custom_fields = Common\cpt_custom_client_fields();
+      if ($custom_fields) {
+        foreach ($custom_fields as $field) {
+          update_user_meta($new_client, $field['id'], sanitize_text_field($_POST[$field['id']]));
+        }
+      }
+
     if (!$existing_client_id) cpt_new_client_email($new_client);
     $client_profile_url = Common\cpt_get_client_profile_url($new_client);
     $result = 'Client created. <a href="' . $client_profile_url . '">View ' . Common\cpt_get_name($new_client) . '\'s profile</a>.';

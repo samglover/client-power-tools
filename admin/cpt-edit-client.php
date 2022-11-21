@@ -45,6 +45,13 @@ function cpt_process_client_update() {
       update_user_meta($clients_user_id, 'cpt_client_manager', $client_manager);
       update_user_meta($clients_user_id, 'cpt_client_status', $client_status);
 
+      $custom_fields = Common\cpt_custom_client_fields();
+      if ($custom_fields) {
+        foreach ($custom_fields as $field) {
+          update_user_meta($clients_user_id, $field['id'], sanitize_text_field($_POST[$field['id']]));
+        }
+      }
+
       $result = 'Client updated.';
     }
 

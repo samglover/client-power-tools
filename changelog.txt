@@ -2,11 +2,10 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
 
-
-### 1.5.4 - 2022-11-21
+### 1.5.5 - 2022-11-21
 
 ### Added
-- New filter: It is now possible to add fields to the Edit Clients dialog using the client_fields filter.
+- New filter: It is now possible to add fields to the Edit Clients dialog using the cpt_custom_fields filter.
 
 
 ### 1.5.3 - 2022-11-20

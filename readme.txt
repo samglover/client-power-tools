@@ -102,6 +102,18 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.5.5 - 2022-11-21
+
+### Added
+- New filter: It is now possible to add fields to the Edit Clients dialog using the cpt_custom_fields filter.
+
+
+### 1.5.3 - 2022-11-20
+
+### Fixed
+- Status update request button now inherits its background color.
+
+
 ### 1.5.2 - 2022-11-07
 
 #### Added

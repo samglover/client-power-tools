@@ -1,4 +1,7 @@
-<?php namespace Client_Power_Tools\Core\Admin; ?>
+<?php
+  namespace Client_Power_Tools\Core\Admin;
+  use Client_Power_Tools\Core\Common;
+?>
 
 <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
   <?php wp_nonce_field('cpt_client_updated', 'cpt_client_updated_nonce'); ?>
@@ -54,6 +57,19 @@
           <?php echo cpt_get_client_statuses_select('', $client_data['status']); ?>
         </td>
       </tr>
+      <?php $custom_fields = Common\cpt_custom_client_fields(); ?>
+      <?php if ($custom_fields) { ?>
+        <?php foreach($custom_fields as $field) { ?>
+          <tr>
+            <th scope="row">
+              <label for="<?php echo $field['id']; ?>"><?php echo $field['label']; ?><br /><small>(<?php echo $field['required'] ? 'required' : 'optional'; ?>)</small></label>
+            </th>
+            <td>
+              <input name="<?php echo $field['id']; ?>" id="<?php echo $field['id']; ?>" class="regular-text" type="<?php echo $field['type']; ?>" data-required="<?php echo $field['required'] ? 'true' : 'false'; ?>" value="<?php echo $client_data[$field['id']]; ?>">
+            </td>
+          </tr>
+        <?php } ?>
+      <?php } ?>
     </tbody>
   </table>
   <p class="submit">

@@ -111,6 +111,10 @@ function cpt_get_name($user_id) {
   return $name;
 }
 
+function cpt_custom_client_fields() {
+  return apply_filters('cpt_custom_fields', []);
+}
+
 // Returns an array with the user's details.
 function cpt_get_client_data($clients_user_id) {
   if (!$clients_user_id) return;
@@ -125,6 +129,13 @@ function cpt_get_client_data($clients_user_id) {
     'manager_email' => cpt_get_client_manager_email($clients_user_id),
     'status'        => get_user_meta($clients_user_id, 'cpt_client_status', true),
   ];
+  
+  $custom_fields = cpt_custom_client_fields();
+  if ($custom_fields) {
+    foreach ($custom_fields as $field) {
+      $client_data[$field['id']] = get_user_meta($clients_user_id, $field['id'], true);
+    }
+  }
   return $client_data;
 }
 
