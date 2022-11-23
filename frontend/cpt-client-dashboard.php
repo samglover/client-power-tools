@@ -17,11 +17,11 @@ function cpt_client_dashboard($content) {
     !in_the_loop()
   ) return $content;
   if (!is_user_logged_in()) {
-    return sprintf(__('%1$sPlease %2$slog in$3%s to view your client dashboard.%4$s', 'client-power-tools'),
-      /* $1%s */ '<p>',
-      /* $2%s */ '<a class="cpt-login-link" href="#">',
-      /* $3%s */ '</a>',
-      /* $4%s */ '</p>'
+    return sprintf(__('%1$sPlease %2$slog in%3$s to view your client dashboard.%4$s', 'client-power-tools'),
+      /* %1$s */ '<p>',
+      /* %2$s */ '<a class="cpt-login-link" href="#">',
+      /* %3$s */ '</a>',
+      /* %4$s */ '</p>'
     );
   }
   if (!Common\cpt_is_client()) return '<p>' . __('Sorry, you don\'t have permission to view this page because your user account is missing the "Client" role.', 'client-power-tools') . '</p>';

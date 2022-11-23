@@ -102,6 +102,12 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.5.6 - 2022-11-23
+
+### Fixed
+- Fixed login link on client dashboard.
+
+
 ### 1.5.5 - 2022-11-21
 
 ### Added
