@@ -252,7 +252,7 @@
   min-width: 330px;
   max-height: 90vh;
   max-width: 40vw;
-  overflow: scroll;
+  overflow: auto;
   padding: 2em;
   position: relative;
   z-index: 100;
