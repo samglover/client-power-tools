@@ -59,6 +59,16 @@ function cpt_general_settings_init() {
   register_setting('cpt-settings', 'cpt_client_dashboard_page_selection');
 
   add_settings_field(
+    'cpt_client_dashboard_addl_pages',
+    '<label for="cpt_client_dashboard_addl_pages">' . __('Additional Pages', 'client-power-tools') . '</label>',
+    __NAMESPACE__ . '\cpt_client_dashboard_addl_pages',
+    'cpt-settings',
+    'cpt-general-settings',
+  );
+
+  register_setting('cpt-settings', 'cpt_client_dashboard_addl_pages');
+
+  add_settings_field(
     'cpt_default_client_manager',
     '<label for="cpt_default_client_manager">' . __('Default Client Manager', 'client-power-tools') . '</label>',
     __NAMESPACE__ . '\cpt_default_client_manager',
@@ -123,6 +133,12 @@ function cpt_client_dashboard_page_selection() {
   endif;
 }
 
+function cpt_client_dashboard_addl_pages() {
+  ?>
+    <input name="cpt_client_dashboard_addl_pages" class="regular-text" type="text" required aria-required="true" value="<?php echo get_option('cpt_client_dashboard_addl_pages'); ?>">
+    <p class="description"><?php _e('Add page IDs separated by commas. Note: adding a page will restrict that page to logged-in clients.', 'client-power-tools'); ?></p>
+  <?php
+}
 
 function cpt_default_client_manager() {
   echo cpt_get_client_manager_select('cpt_default_client_manager', get_option('cpt_default_client_manager'));
@@ -131,7 +147,6 @@ function cpt_default_client_manager() {
 
 function cpt_client_statuses() {
   $statuses_array = explode("\n", get_option('cpt_client_statuses'));
-
   ob_start();
     foreach ($statuses_array as $i => $status) {
       echo sanitize_text_field($status);

@@ -3,21 +3,27 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
 
 
+### 1.6 - 2022-12-09
+
+#### Added
+- It's now possible to add pages to the client dashboard. Pages added will be restricted to logged-in clients.
+
+
 ### 1.5.6 - 2022-11-23
 
-### Fixed
+#### Fixed
 - Fixed login link on client dashboard.
 
 
 ### 1.5.5 - 2022-11-21
 
-### Added
+#### Added
 - New filter: It is now possible to add fields to the Edit Clients dialog using the cpt_custom_fields filter.
 
 
 ### 1.5.3 - 2022-11-20
 
-### Fixed
+#### Fixed
 - Status update request button now inherits its background color.
 
 

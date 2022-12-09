@@ -17,7 +17,7 @@ function cpt_client_dashboard($content) {
     !in_the_loop()
   ) return $content;
   if (!is_user_logged_in()) {
-    return sprintf(__('%1$sPlease %2$slog in%3$s to view your client dashboard.%4$s', 'client-power-tools'),
+    return sprintf(__('%1$sPlease %2$slog in%3$s to view the client dashboard.%4$s', 'client-power-tools'),
       /* %1$s */ '<p>',
       /* %2$s */ '<a class="cpt-login-link" href="#">',
       /* %3$s */ '</a>',
@@ -62,19 +62,19 @@ function cpt_nav() {
   ?>
     <nav id="cpt-nav">
       <ul class="cpt-tabs">
-        <li class="cpt-tab"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard() && ! Common\cpt_is_messages()) { echo ' current'; } ?>"><?php _e('Dashboard', 'client-power-tools'); ?></a></li>
+        <li class="cpt-tab"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard() && ! Common\cpt_is_messages()) echo ' current'; ?>"><?php _e('Dashboard', 'client-power-tools'); ?></a></li>
         <?php if (get_option('cpt_module_messaging')) { ?>
-          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_messages()) { echo ' current'; } ?>"><?php _e('Messages', 'client-power-tools'); ?></a></li>
+          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_messages()) echo ' current'; ?>"><?php _e('Messages', 'client-power-tools'); ?></a></li>
         <?php } ?>
         <?php
           if (get_option('cpt_module_knowledge_base')) {
             $knowledge_base_id  = get_option('cpt_knowledge_base_page_selection');
             $knowledge_base_url = Common\cpt_get_knowledge_base_url();
             $title              = get_the_title($knowledge_base_id);
-            $child_pages        = cpt_get_child_pages($knowledge_base_id);
+            $kb_child_pages     = cpt_get_child_pages($knowledge_base_id);
             $classes            = 'cpt-nav-menu-item';
             Common\cpt_is_knowledge_base()  ? $classes .= ' current' : null;
-            if ($child_pages) {
+            if ($kb_child_pages) {
               $classes .= ' cpt-click-to-expand';
               echo '<li class="cpt-tab"><span class="' . $classes . '">' . $title . file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/expand.svg') . '</span></li>';
             } else {
@@ -82,11 +82,20 @@ function cpt_nav() {
             }
             $knowledge_base_submenu = cpt_nav_tabs_submenu($knowledge_base_id);
           }
+          $addl_pages_array = explode(',', get_option('cpt_client_dashboard_additional_pages'));
+          if ($addl_pages_array) {
+            foreach($addl_pages_array as $page_id) {
+              $page_id = trim($page_id);
+              ?>
+                <li class="cpt-tab"><a href="<?php the_permalink($page_id); ?>" class="cpt-nav-menu-item<?php if ($page_id == get_the_ID()) echo ' current'; ?>"><?php echo get_the_title($page_id) ?></a></li>
+              <?php
+            }
+          }
         ?>
       </ul>
       <?php
         // If adding more drop-down tabs, just keep them in the same order.
-        if (get_option('cpt_module_knowledge_base') && $child_pages) echo $knowledge_base_submenu;
+        if (get_option('cpt_module_knowledge_base') && $kb_child_pages) echo $knowledge_base_submenu;
       ?>
     </nav>
   <?php
@@ -99,7 +108,7 @@ function cpt_nav() {
 function cpt_get_child_pages($page_id) {
   if (!$page_id) return;
 
-  $child_pages = get_posts([
+  $kb_child_pages = get_posts([
     'fields'          => 'ids',
     'order'           => 'ASC',
     'orderby'         => 'menu_order',
@@ -109,8 +118,8 @@ function cpt_get_child_pages($page_id) {
     'post_type'				=> 'page',
  ]);
 
-  if ($child_pages) {
-    return $child_pages;
+  if ($kb_child_pages) {
+    return $kb_child_pages;
   } else {
     return false;
   }
@@ -129,12 +138,12 @@ function cpt_list_child_pages($page_id) {
     echo '<li><a href="' . $url . '" title="' . $title . '">' . $title . '</a></li>';
   }
 
-  $child_pages = cpt_get_child_pages($page_id);
+  $kb_child_pages = cpt_get_child_pages($page_id);
 
-  if ($child_pages) {
+  if ($kb_child_pages) {
     ?>
       <ul>
-        <?php foreach ($child_pages as $child_page) cpt_list_child_pages($child_page); ?>
+        <?php foreach ($kb_child_pages as $child_page) cpt_list_child_pages($child_page); ?>
       </ul>
     <?php
   } else {
@@ -145,8 +154,8 @@ function cpt_list_child_pages($page_id) {
 
 function cpt_nav_tabs_submenu($parent_id) {
   if (!$parent_id) return;
-  $child_pages = cpt_get_child_pages($parent_id);
-  if ($child_pages) {
+  $kb_child_pages = cpt_get_child_pages($parent_id);
+  if ($kb_child_pages) {
     ob_start();
       ?>
         <div class="cpt-this-expands cpt-nav-tabs-submenu">
