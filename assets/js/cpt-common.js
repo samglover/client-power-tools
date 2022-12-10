@@ -13,8 +13,19 @@
 
         $(expanderButtons[i]).click(function(event) {
           event.preventDefault();
-          $(expanderButtons[i]).toggleClass('open');
-          $(expandableDivs[i]).toggleClass('open');
+          if ($(expanderButtons[i]).hasClass('open')){
+            $(expanderButtons[i]).removeClass('open');
+            $(expandableDivs[i]).removeClass('open');
+          } else {
+            $(expanderButtons).each(function() {
+              $(this).removeClass('open');
+            });
+            $(expandableDivs).each(function() {
+              $(this).removeClass('open');
+            });
+            $(expanderButtons[i]).addClass('open');
+            $(expandableDivs[i]).addClass('open');
+          }
 
           // This adds/removes the *required* attribute based on form visibility.
           let formElements = expandableDivs[i].querySelectorAll('form input, form select, form textarea');

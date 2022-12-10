@@ -1,7 +1,7 @@
 === Client Power Tools ===
 
 Contributors: samglover
-Tags: access control,clients,communication,portal,restrict access,restrict pages
+Tags: access control,communication,portal,restrict content,frontend login
 Requires at least: 5.5
 Tested up to: 6.1
 Requires PHP: 7.3.5
@@ -89,6 +89,8 @@ To add pages to your knowledge base, just go to the page you want to add (or cre
 
 == Upgrade Notice ==
 
+With version 1.6 it is now possible to add pages to the client dashboard. Pages added will be restricted to logged-in clients.
+
 Version 1.5 makes a major change: passwordless login. By default, clients now request a login code by email—no password necessary. (Logging in with a username and password is still supported.)
 
 Passwordless login saves your clients from having to remember their username and password. Instead, they enter their email address to request a one-time-use login code that expires after 10 minutes. On entering the correct code, they will be logged in.
@@ -101,6 +103,13 @@ For more information on how to take advantage of the new and updated features, s
 
 
 == Changelog ==
+
+### 1.6 - 2022-12-09
+
+#### Added
+- It's now possible to add pages to the client dashboard navigation. Additional added will be restricted to logged-in clients.
+- Optionally, include child pages of additional pages in the client dashboard navigation.
+
 
 ### 1.5.6 - 2022-11-23
 
