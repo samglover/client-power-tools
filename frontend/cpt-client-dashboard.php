@@ -59,6 +59,7 @@ add_filter('the_content', __NAMESPACE__ . '\cpt_client_dashboard');
 
 
 function cpt_nav() {
+  $child_pages_array = [];
   ?>
     <nav id="cpt-nav">
       <ul class="cpt-tabs">
@@ -71,31 +72,40 @@ function cpt_nav() {
             $knowledge_base_id  = get_option('cpt_knowledge_base_page_selection');
             $knowledge_base_url = Common\cpt_get_knowledge_base_url();
             $title              = get_the_title($knowledge_base_id);
-            $kb_child_pages     = cpt_get_child_pages($knowledge_base_id);
             $classes            = 'cpt-nav-menu-item';
-            Common\cpt_is_knowledge_base()  ? $classes .= ' current' : null;
-            if ($kb_child_pages) {
+            if (Common\cpt_is_knowledge_base()) $classes .= ' current';
+            if (cpt_get_child_pages($knowledge_base_id)) $child_pages_array[$knowledge_base_id] = cpt_get_child_pages($knowledge_base_id);
+            if ($child_pages_array[$knowledge_base_id]) {
               $classes .= ' cpt-click-to-expand';
               echo '<li class="cpt-tab"><span class="' . $classes . '">' . $title . file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/expand.svg') . '</span></li>';
             } else {
               echo '<li class="cpt-tab"><a href="' . $knowledge_base_url . '" class="' . $classes . '" title="' . $title . '">' . $title . '</a></li>';
             }
-            $knowledge_base_submenu = cpt_nav_tabs_submenu($knowledge_base_id);
           }
-          $addl_pages_array = explode(',', get_option('cpt_client_dashboard_additional_pages'));
+          $addl_pages_array = explode(',', get_option('cpt_client_dashboard_addl_pages'));
           if ($addl_pages_array) {
             foreach($addl_pages_array as $page_id) {
               $page_id = trim($page_id);
-              ?>
-                <li class="cpt-tab"><a href="<?php the_permalink($page_id); ?>" class="cpt-nav-menu-item<?php if ($page_id == get_the_ID()) echo ' current'; ?>"><?php echo get_the_title($page_id) ?></a></li>
-              <?php
+              $classes = 'cpt-nav-menu-item';
+              if ($page_id == get_the_ID() || in_array($page_id, get_post_ancestors(get_the_ID()))) $classes .= ' current';
+              if (get_option('cpt_client_dashboard_addl_pages_children') && cpt_get_child_pages($page_id)) $child_pages_array[$page_id] = cpt_get_child_pages($page_id);
+              if (isset($child_pages_array[$page_id])) {
+                $classes .= ' cpt-click-to-expand';
+                echo '<li class="cpt-tab"><span class="' . $classes . '">' . get_the_title($page_id) . file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/expand.svg') . '</span></li>';
+              } else {
+                echo '<li class="cpt-tab"><a href="' . get_the_permalink($page_id) . '" class="' . $classes . '" title="' . get_the_title($page_id) . '">' . get_the_title($page_id) . '</a></li>';
+              }
             }
           }
         ?>
       </ul>
       <?php
         // If adding more drop-down tabs, just keep them in the same order.
-        if (get_option('cpt_module_knowledge_base') && $kb_child_pages) echo $knowledge_base_submenu;
+        if ($child_pages_array) {
+          foreach ($child_pages_array as $parent => $child_pages) {
+            echo cpt_nav_tabs_submenu($parent);
+          }
+        }
       ?>
     </nav>
   <?php

@@ -107,7 +107,8 @@ For more information on how to take advantage of the new and updated features, s
 ### 1.6 - 2022-12-09
 
 #### Added
-- It's now possible to add pages to the client dashboard. Pages added will be restricted to logged-in clients.
+- It's now possible to add pages to the client dashboard navigation. Additional added will be restricted to logged-in clients.
+- Optionally, include child pages of additional pages in the client dashboard navigation.
 
 
 ### 1.5.6 - 2022-11-23

@@ -12,8 +12,8 @@ add_filter('body_class', function($classes) {
 
 
 function cpt_add_nav_to_addl_pages($content) {
-  $addl_pages_array = explode(',', get_option('cpt_client_dashboard_additional_pages'));
-  if (!is_main_query() || !$addl_pages_array) return;
+  $addl_pages_array = explode(',', get_option('cpt_client_dashboard_addl_pages'));
+  if (!is_main_query() || !$addl_pages_array) return $content;
 
   $protected = false;
   $ancestors = get_post_ancestors(get_the_ID());
@@ -26,7 +26,7 @@ function cpt_add_nav_to_addl_pages($content) {
       if (in_array($ancestor, $addl_pages_array)) $protected = true;
     }
   }
-  if (!$protected) return;
+  if (!$protected) return $content;
 
   if (!is_user_logged_in()) {
     return sprintf(__('%1$sPlease %2$slog in%3$s to view this page.%4$s', 'client-power-tools'),
