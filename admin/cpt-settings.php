@@ -145,7 +145,7 @@ function cpt_client_dashboard_page_selection() {
 
 function cpt_client_dashboard_addl_pages() {
   ?>
-    <input name="cpt_client_dashboard_addl_pages" class="regular-text" type="text" required aria-required="true" value="<?php echo get_option('cpt_client_dashboard_addl_pages'); ?>">
+    <input name="cpt_client_dashboard_addl_pages" class="regular-text" type="text" value="<?php echo get_option('cpt_client_dashboard_addl_pages'); ?>">
     <p class="description"><?php _e('Add page IDs separated by commas. Note: adding a page will restrict that page to logged-in clients.', 'client-power-tools'); ?></p>
   <?php
 }

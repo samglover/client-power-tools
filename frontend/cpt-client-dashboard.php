@@ -82,7 +82,8 @@ function cpt_nav() {
               echo '<li class="cpt-tab"><a href="' . $knowledge_base_url . '" class="' . $classes . '" title="' . $title . '">' . $title . '</a></li>';
             }
           }
-          $addl_pages_array = explode(',', get_option('cpt_client_dashboard_addl_pages'));
+          $addl_pages_array = get_option('cpt_client_dashboard_addl_pages') ? get_option('cpt_client_dashboard_addl_pages') : false;
+          if ($addl_pages_array) $addl_pages_array = explode(',', $addl_pages_array);
           if ($addl_pages_array) {
             foreach($addl_pages_array as $page_id) {
               $page_id = trim($page_id);

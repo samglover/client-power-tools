@@ -104,7 +104,13 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
-### 1.6 - 2022-12-09
+### 1.6.1 - 2022-12-10
+
+#### Fixed
+- Fixed bug that would display the Client Dashboard twice in the CPT nav menu, and would not tolerate an empty additional pages field.
+
+
+### 1.6 - 2022-12-10
 
 #### Added
 - It's now possible to add pages to the client dashboard navigation. Additional added will be restricted to logged-in clients.
