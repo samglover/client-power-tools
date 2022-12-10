@@ -13,7 +13,7 @@ add_filter('body_class', function($classes) {
 
 function cpt_add_nav_to_addl_pages($content) {
   $addl_pages_array = explode(',', get_option('cpt_client_dashboard_addl_pages'));
-  if (!is_main_query() || !$addl_pages_array) return $content;
+  if (!is_main_query() || !in_the_loop() || !$addl_pages_array) return $content;
 
   $protected = false;
   $ancestors = get_post_ancestors(get_the_ID());

@@ -108,6 +108,7 @@ For more information on how to take advantage of the new and updated features, s
 
 #### Fixed
 - Fixed bug that would display the Client Dashboard twice in the CPT nav menu, and would not tolerate an empty additional pages field.
+- Fixed a bug that displayed the CPT nav menu twice on additional pages on some sites.
 
 
 ### 1.6 - 2022-12-10
