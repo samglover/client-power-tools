@@ -1,7 +1,7 @@
 === Client Power Tools ===
 
 Contributors: samglover
-Tags: access control,clients,communication,portal,restrict access,restrict pages
+Tags: access control,communication,portal,restrict content,frontend login
 Requires at least: 5.5
 Tested up to: 6.1
 Requires PHP: 7.3.5
