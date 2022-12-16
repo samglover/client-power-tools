@@ -1,1 +1,196 @@
-@font-face{font-family:"Jost";src:local("Jost"),url("../fonts/Jost/Jost-Regular.woff2") format("woff2"),url("../fonts/Jost/Jost-Regular.woff") format("woff"),url("../fonts/Jost/Jost-Regular.ttf") format("truetype");font-weight:normal;font-style:normal}@font-face{font-family:"Jost";src:local("Jost"),url("../fonts/Jost/Jost-Bold.woff2") format("woff2"),url("../fonts/Jost/Jost-Bold.woff") format("woff"),url("../fonts/Jost/Jost-Bold.ttf") format("truetype");font-weight:bold;font-style:normal}@font-face{font-family:"Jost";src:local("Jost"),url("../fonts/Jost/Jost-Italic.woff2") format("woff2"),url("../fonts/Jost/Jost-Italic.woff") format("woff"),url("../fonts/Jost/Jost-Italic.ttf") format("truetype");font-weight:normal;font-style:italic}@font-face{font-family:"Jost";src:local("Jost"),url("../fonts/Jost/Jost-BoldItalic.woff2") format("woff2"),url("../fonts/Jost/Jost-BoldItalic.woff") format("woff"),url("../fonts/Jost/Jost-BoldItalic.ttf") format("truetype");font-weight:bold;font-style:italic}@keyframes growDown{0%{transform:scaleY(0)}80%{transform:scaleY(1.1)}100%{transform:scaleY(1)}}.cpt-this-expands{animation:growDown 150ms ease-in-out forwards;display:none;transform-origin:top}.cpt-this-expands.open{display:block}.cpt-new-message-button .button{display:inline-block;margin-bottom:1em}.cpt-message{background-color:#fff;box-shadow:0 0 0 1px #ddd,1px 1px 3px rgba(0,0,0,.2);box-sizing:border-box;margin-bottom:20px;position:relative}.cpt-message:target .cpt-message-content{background-color:#ffffe0}.cpt-message.my-message{margin-left:10%}.cpt-message.my-message .cpt-message-content{background-color:#add8e6}.cpt-message.not-my-message{margin-right:10%}.cpt-message.not-my-message .cpt-message-content{background-color:rgba(0,0,0,.025)}.cpt-message.status-update-request{margin-left:0;margin-right:0}.cpt-message.status-update-request .cpt-message-content{background-color:unset}.cpt-message .cpt-message-content{padding:20px}.cpt-message .cpt-message-content>*:first-child{margin-top:0}.cpt-message .cpt-message-content>*:last-child{margin-bottom:0}.cpt-message .cpt-message-meta{border-top:1px dashed #d3d3d3;padding:10px 20px}.cpt-message .cpt-message-meta p{margin:0;padding:0}#cpt-admin,.cpt-notice{font-family:Jost;font-variant-ligatures:common-ligatures}#cpt-admin-header{display:grid;grid-gap:15px;grid-template-columns:120px 1fr;margin-bottom:15px}#cpt-admin-header *{align-self:center}#cpt-admin-header h2{font-size:23px}#cpt-admin-page-title p#cpt-client-status,#cpt-admin-page-title p#cpt-client-manager{font-size:16px;line-height:1.1;margin:0}#cpt-admin-page-title h1#cpt-page-title{font-size:42px;font-weight:bold;line-height:1.1;padding-top:0}#cpt-admin-page-title p#cpt-subtitle{color:gray;font-size:26px;font-weight:bold;line-height:1.1;margin:0}#cpt-admin .form-table th label small{font-weight:normal}#cpt-delete-client-link{color:gray;cursor:pointer}.cpt-admin-modal{box-sizing:border-box;display:grid;grid-template-areas:"lbuffer modal rbuffer";grid-template-columns:minmax(10px, 1fr) minmax(300px, 500px) minmax(10px, 1fr);margin:0;max-height:80%;overflow:scroll;padding:0;position:fixed;left:0;top:10%;width:100%;z-index:100}.cpt-admin-modal-card{background-color:#fff;box-shadow:0 0 0 1px #ddd,1px 1px 3px rgba(0,0,0,.2);box-sizing:border-box;grid-area:modal;margin:3px;padding:30px;position:relative}.cpt-admin-modal h2{border:none;margin-top:0;padding:0}#cpt_delete_client_button{display:inline-block}.cpt-admin-modal-screen{background-color:rgba(0,0,0,.4);height:100%;position:fixed;left:0;top:0;width:100%;z-index:99}
+@font-face {
+  font-family: "Jost";
+  src: local("Jost"), url("../fonts/Jost/Jost-Regular.woff2") format("woff2"), url("../fonts/Jost/Jost-Regular.woff") format("woff"), url("../fonts/Jost/Jost-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Jost";
+  src: local("Jost"), url("../fonts/Jost/Jost-Bold.woff2") format("woff2"), url("../fonts/Jost/Jost-Bold.woff") format("woff"), url("../fonts/Jost/Jost-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Jost";
+  src: local("Jost"), url("../fonts/Jost/Jost-Italic.woff2") format("woff2"), url("../fonts/Jost/Jost-Italic.woff") format("woff"), url("../fonts/Jost/Jost-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Jost";
+  src: local("Jost"), url("../fonts/Jost/Jost-BoldItalic.woff2") format("woff2"), url("../fonts/Jost/Jost-BoldItalic.woff") format("woff"), url("../fonts/Jost/Jost-BoldItalic.ttf") format("truetype");
+  font-weight: bold;
+  font-style: italic;
+}
+@keyframes growDown {
+  0% {
+    transform: scaleY(0);
+  }
+  80% {
+    transform: scaleY(1.1);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+.cpt-this-expands {
+  animation: growDown 150ms ease-in-out forwards;
+  display: none;
+  transform-origin: top;
+}
+.cpt-this-expands.open {
+  display: block;
+}
+
+.cpt-new-message-button .button {
+  display: inline-block;
+  margin-bottom: 1em;
+}
+
+.cpt-message {
+  background-color: White;
+  box-shadow: 0 0 0 1px #ddd, 1px 1px 3px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  position: relative;
+}
+.cpt-message:target .cpt-message-content {
+  background-color: LightYellow;
+}
+.cpt-message.my-message {
+  margin-left: 10%;
+}
+.cpt-message.my-message .cpt-message-content {
+  background-color: LightBlue;
+}
+.cpt-message.not-my-message {
+  margin-right: 10%;
+}
+.cpt-message.not-my-message .cpt-message-content {
+  background-color: rgba(0, 0, 0, 0.025);
+}
+.cpt-message.status-update-request {
+  margin-left: 0;
+  margin-right: 0;
+}
+.cpt-message.status-update-request .cpt-message-content {
+  background-color: unset;
+}
+.cpt-message .cpt-message-content {
+  padding: 20px;
+}
+.cpt-message .cpt-message-content > *:first-child {
+  margin-top: 0;
+}
+.cpt-message .cpt-message-content > *:last-child {
+  margin-bottom: 0;
+}
+.cpt-message .cpt-message-meta {
+  padding: 10px 20px;
+}
+.cpt-message .cpt-message-meta p {
+  margin: 0;
+  padding: 0;
+}
+
+/**
+* Typography
+*/
+#cpt-admin,
+.cpt-notice {
+  font-family: Jost;
+  font-variant-ligatures: common-ligatures;
+}
+
+#cpt-admin-header {
+  display: grid;
+  grid-gap: 15px;
+  grid-template-columns: 120px 1fr;
+  margin-bottom: 15px;
+}
+#cpt-admin-header * {
+  align-self: center;
+}
+#cpt-admin-header h2 {
+  font-size: 23px;
+}
+
+#cpt-admin-page-title p#cpt-client-status,
+#cpt-admin-page-title p#cpt-client-manager {
+  font-size: 16px;
+  line-height: 1.1;
+  margin: 0;
+}
+
+#cpt-admin-page-title h1#cpt-page-title {
+  font-size: 42px;
+  font-weight: bold;
+  line-height: 1.1;
+  padding-top: 0;
+}
+
+#cpt-admin-page-title p#cpt-subtitle {
+  color: gray;
+  font-size: 26px;
+  font-weight: bold;
+  line-height: 1.1;
+  margin: 0;
+}
+
+/* Forms */
+#cpt-admin .form-table th label small {
+  font-weight: normal;
+}
+
+#cpt-delete-client-link {
+  color: gray;
+  cursor: pointer;
+}
+
+.cpt-admin-modal {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-areas: "lbuffer modal rbuffer";
+  grid-template-columns: minmax(10px, 1fr) minmax(300px, 500px) minmax(10px, 1fr);
+  margin: 0;
+  max-height: 80%;
+  overflow: scroll;
+  padding: 0;
+  position: fixed;
+  left: 0;
+  top: 10%;
+  width: 100%;
+  z-index: 100;
+}
+
+.cpt-admin-modal-card {
+  background-color: #fff;
+  box-shadow: 0 0 0 1px #ddd, 1px 1px 3px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  grid-area: modal;
+  margin: 3px;
+  padding: 30px;
+  position: relative;
+}
+
+.cpt-admin-modal h2 {
+  border: none;
+  margin-top: 0;
+  padding: 0;
+}
+
+#cpt_delete_client_button {
+  display: inline-block;
+}
+
+.cpt-admin-modal-screen {
+  background-color: rgba(0, 0, 0, 0.4);
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+}
+
+/*# sourceMappingURL=admin.css.map */
