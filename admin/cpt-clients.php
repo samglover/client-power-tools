@@ -29,7 +29,8 @@ function cpt_clients() {
                 <span style="color:silver">(<?php echo $client_id; ?>)</span>
               <?php } ?>
             </h1>
-            <p id="cpt-client-manager">
+            <?php if ($client_data['manager_id']) { ?>
+              <p id="cpt-client-manager">
               <?php
                 if (get_current_user_id() == $client_data['manager_id']) {
                   _e('Your Client', 'client-power-tools');
@@ -38,6 +39,7 @@ function cpt_clients() {
                 }
               ?>
             </p>
+            <?php } ?>
           <?php } ?>
         </div>
       </header>

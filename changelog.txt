@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file. The format 
 
 ### 1.6.2 - 2022-12-21
 
+#### Changed
+- Don't try to show a client manager when one hasn't been set, yet.
+
 #### Fixed
 - Fixed an activation error thrown when there is no default client manager.
 

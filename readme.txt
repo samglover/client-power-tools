@@ -106,6 +106,9 @@ For more information on how to take advantage of the new and updated features, s
 
 ### 1.6.2 - 2022-12-21
 
+#### Changed
+- Don't try to show a client manager when one hasn't been set, yet.
+
 #### Fixed
 - Fixed an activation error thrown when there is no default client manager.
 

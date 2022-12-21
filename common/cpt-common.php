@@ -148,7 +148,7 @@ function cpt_get_client_manager_id($clients_user_id) {
     $manager_id = get_option('cpt_default_client_manager');
   } else {
     $userdata = get_user_by_email(get_bloginfo('admin_email'));
-    $manager_id = $userdata->ID;
+    $manager_id = $userdata ? $userdata->ID : false;
   }
   return $manager_id;
 }
