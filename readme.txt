@@ -104,6 +104,12 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.6.2 - 2022-12-21
+
+#### Fixed
+- Fixed an activation error thrown when there is no default client manager.
+
+
 ### 1.6.1 - 2022-12-10
 
 #### Fixed

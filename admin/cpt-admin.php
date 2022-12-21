@@ -121,8 +121,9 @@ function cpt_is_cpt_admin_page() {
 function cpt_get_client_manager_select($name = null, $selected = null) {
   if (!$name) $name = 'client_manager';
   if (!$selected) {
-    $admin    = get_user_by_email(get_bloginfo('admin_email'));
-    $selected = get_option('cpt_default_client_manager') ? get_option('cpt_default_client_manager') : $admin->ID;
+    $selected = get_option('cpt_default_client_manager');
+    if (!$selected) $admin = get_user_by_email(get_bloginfo('admin_email'));
+    $selected = $admin ? $admin->ID : false;
   }
 
   // Query Client Managers
@@ -134,11 +135,15 @@ function cpt_get_client_manager_select($name = null, $selected = null) {
 
   $client_managers = $client_manager_query->get_results();
 
-  echo '<select name="' . $name . '" id="' . $name . '">';
-    foreach ($client_managers as $client_manager) {
-      echo '<option value="' . $client_manager->ID . '"' . selected($client_manager->ID, $selected) . '>' . $client_manager->display_name . '</option>';
-    }
-  echo '</select>';
+  if ($client_managers) {
+    echo '<select name="' . $name . '" id="' . $name . '">';
+      foreach ($client_managers as $client_manager) {
+        echo '<option value="' . $client_manager->ID . '"' . selected($client_manager->ID, $selected) . '>' . $client_manager->display_name . '</option>';
+      }
+    echo '</select>';
+  } else {
+    echo '<p class="description"><a href="' . get_admin_url() . 'admin.php?page=cpt-managers">' . __('Add a client manager.', 'client-power-tools') . '</a></p>';
+  }
 }
 
 
