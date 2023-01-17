@@ -121,9 +121,8 @@ function cpt_is_cpt_admin_page() {
 function cpt_get_client_manager_select($name = null, $selected = null) {
   if (!$name) $name = 'client_manager';
   if (!$selected) {
-    $selected = get_option('cpt_default_client_manager');
-    if (!$selected) $admin = get_user_by_email(get_bloginfo('admin_email'));
-    $selected = $admin ? $admin->ID : false;
+    $admin = get_user_by_email(get_bloginfo('admin_email'));
+    $selected = get_option('cpt_default_client_manager', $admin->ID);
   }
 
   // Query Client Managers
