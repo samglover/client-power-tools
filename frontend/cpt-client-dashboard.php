@@ -68,20 +68,21 @@ function cpt_nav() {
           <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_messages()) echo ' current'; ?>"><?php _e('Messages', 'client-power-tools'); ?></a></li>
         <?php } ?>
         <?php
+          $knowledge_base_id = get_option('cpt_knowledge_base_page_selection');
+          $kb_pages_array = cpt_get_child_pages($knowledge_base_id);
           if (get_option('cpt_module_knowledge_base')) {
-            $knowledge_base_id  = get_option('cpt_knowledge_base_page_selection');
-            $knowledge_base_url = Common\cpt_get_knowledge_base_url();
-            $title              = get_the_title($knowledge_base_id);
-            $classes            = 'cpt-nav-menu-item';
+            $title = get_the_title($knowledge_base_id);
+            $classes = 'cpt-nav-menu-item';
             if (Common\cpt_is_knowledge_base()) $classes .= ' current';
-            if (cpt_get_child_pages($knowledge_base_id)) $child_pages_array[$knowledge_base_id] = cpt_get_child_pages($knowledge_base_id);
-            if ($child_pages_array[$knowledge_base_id]) {
+            if ($kb_pages_array) $child_pages_array[$knowledge_base_id] = $kb_pages_array;
+            if ($kb_pages_array) {
               $classes .= ' cpt-click-to-expand';
               echo '<li class="cpt-tab"><span class="' . $classes . '">' . $title . file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/expand.svg') . '</span></li>';
             } else {
-              echo '<li class="cpt-tab"><a href="' . $knowledge_base_url . '" class="' . $classes . '" title="' . $title . '">' . $title . '</a></li>';
+              echo '<li class="cpt-tab"><a href="' . Common\cpt_get_knowledge_base_url() . '" class="' . $classes . '" title="' . $title . '">' . $title . '</a></li>';
             }
           }
+
           $addl_pages_array = get_option('cpt_client_dashboard_addl_pages') ? get_option('cpt_client_dashboard_addl_pages') : false;
           if ($addl_pages_array) $addl_pages_array = explode(',', $addl_pages_array);
           if ($addl_pages_array) {
@@ -110,6 +111,9 @@ function cpt_nav() {
       ?>
     </nav>
   <?php
+  // echo '<pre>';
+  // var_dump($child_pages_array);
+  // echo '</pre>';
 }
 
 
@@ -119,7 +123,7 @@ function cpt_nav() {
 function cpt_get_child_pages($page_id) {
   if (!$page_id) return;
 
-  $kb_child_pages = get_posts([
+  $child_pages = get_posts([
     'fields'          => 'ids',
     'order'           => 'ASC',
     'orderby'         => 'menu_order',
@@ -129,8 +133,8 @@ function cpt_get_child_pages($page_id) {
     'post_type'				=> 'page',
  ]);
 
-  if ($kb_child_pages) {
-    return $kb_child_pages;
+  if ($child_pages) {
+    return $child_pages;
   } else {
     return false;
   }

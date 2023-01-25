@@ -104,6 +104,12 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.6.4 - 2023-01-25
+
+#### Fixed
+- Fixed a variable type bug in the CPT nav menu that apparently could prevent the login code from sending.
+
+
 ### 1.6.3 - 2023-01-17
 
 #### Fixed
