@@ -34,7 +34,7 @@ All notable changes to this project will be documented in this file. The format 
 ### 1.6 - 2022-12-10
 
 #### Added
-- It's now possible to add pages to the client dashboard navigation. Additional added will be restricted to logged-in clients.
+- It's now possible to add pages to the client dashboard navigation. Additional pages will be restricted to logged-in clients.
 - Optionally, include child pages of additional pages in the client dashboard navigation.
 
 
