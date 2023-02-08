@@ -135,50 +135,8 @@ For more information on how to take advantage of the new and updated features, s
 ### 1.6 - 2022-12-10
 
 #### Added
-- It's now possible to add pages to the client dashboard navigation. Additional added will be restricted to logged-in clients.
+- It's now possible to add pages to the client dashboard navigation. Additional pages will be restricted to logged-in clients.
 - Optionally, include child pages of additional pages in the client dashboard navigation.
-
-
-### 1.5.6 - 2022-11-23
-
-### Fixed
-- Fixed login link on client dashboard.
-
-
-### 1.5.5 - 2022-11-21
-
-### Added
-- New filter: It is now possible to add fields to the Edit Clients dialog using the cpt_custom_fields filter.
-
-
-### 1.5.3 - 2022-11-20
-
-### Fixed
-- Status update request button now inherits its background color.
-
-
-### 1.5.2 - 2022-11-07
-
-#### Added
-- Knowledge base breadcrumbs are now optional.
-- Reminder to clients to check their spam folder for the login code.
-- [status-update-request-button] shortcode.
-- Show last activity in the admin client list.
-
-#### Changed
-- Status update request message now makes sense when messaging is disabled.
-- Status update request button is now disabled with "Status Update Requested" instead of invisible when an update has been requested.
-- Change knowledge base submenu drop-down animation.
-
-#### Removed
-- Somehow a number of files had gotten duplicated in the wrong directories. They're gone now.
-- Consolidated /frontend/cpt-knowledge-base.php with /frontend/cpt-client-dashboard.php since it was basically just a duplicate anyway.
-
-
-### 1.5.1 - 2022-11-04
-
-#### Fixed
-- The navigation tabs now fold up nicely at narrow widths.
 
 
 ### 1.5 - 2022-11-03
