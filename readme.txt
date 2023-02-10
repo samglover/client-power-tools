@@ -14,21 +14,19 @@ A free, easy-to-use client dashboard and communication portal built for independ
 
 == Description ==
 
-Client Power Tools is built for independent contractors, consultants, and professionals. Give your clients a dashboard where they can check on the status of their project, access information and resources in your clients-only knowledge base, and communicate with you—right on your own website!
+Client Power Tools is built for independent contractors, consultants, and professionals. Give your clients a dashboard where they can check on the status of their project, access information and resources in your clients-only knowledge base, view other clients-only pages, and communicate with you—right on your own website!
 
 ### Front-End Onboarding & Login
 
 All client interactions happen on the front end of your website, with clean modal forms for logging in—without a password! Client Power Tools will simply blend in with most themes.
 
-Clients are redirected away from the WordPress admin backend and the default WordPress login form.
-
 ### The Client Dashboard
 
 Clients can log in to their dashboard on your website at any time.
 
-The dashboard uses regular WordPress pages that you can add to your menus just like any other page. Or you can include the link anywhere you need to, like your blog posts, email newsletters, etc. The only difference is that the client dashboard is only visible to logged-in clients.
+The dashboard uses regular WordPress pages, so you can add your client dashboard to your menus just like any other page. Or you can include a link to it anywhere you need to, like your blog posts, email newsletters, etc. The only difference is that the client dashboard is only visible to logged-in clients.
 
-You can change the name or permalink of the page, or select a different page entirely.
+You can change the name or permalink of the default dashboard page, or select a different page entirely.
 
 ### Modules
 
@@ -40,7 +38,7 @@ Your clients want to know how things are going!
 
 The status update request button on the client dashboard makes it easy for clients to prompt you for a status update. Once a client clicks the button, they won’t see it again for 30 days—or you can change that number to an interval that works for you.
 
-You can designate one email address to receive all status update requests so you can respond efficiently.
+You can designate an additional email address to receive all status update requests so you can respond efficiently.
 
 #### Messages Module
 
@@ -59,10 +57,15 @@ Just like the client dashboard, the knowledge base is a regular WordPress page w
 Client Power Tools is built to be customizable where you need it to be. Here are some of the things you can change to suit your needs:
 
 * **Enable/disable all non-core modules.** (As of 1.4, the non-core modules are the Status Update Request Button, Messaging, and Knowledge Base.)
+* **Additional pages.** Restrict any page on your website to logged-in clients.
 * **New-client email.** You can customize the email sent to newly added clients so that it reflects the name, email address, subject line, and messaging you prefer.
+* **Client IDs.** When adding or updating a client, you can add a custom client ID.
 * **Client statuses.** You can customize the default statuses (potential, active, inactive).
-* **Client managers.** You can assign a client manager to each client.
+* **Client managers.** You can set a default client manager and assign a different client manager to each client.
+* **Show/hide the status update request button.** The status update request button is a great way to empower your clients, but if you don't want to use it you can turn it off.
 * **Status update request frequency.** Change how often the status update request button is available to your clients.
+* **Status update request recipient.** Designate one person to get notified of all status update requests.
+* **Email notifications.** By default, Client Power Tools sends a notification, not the content of your message. But you can change the default behavior or override it for individual messages.
 * **Design.** The front-end design of Client Power Tools is as minimal as possible so that Client Power Tools blends into your existing theme. But you can override the Client Power Tools styles as long as you know a little CSS. (See the [documentation](https://clientpowertools.com/documentation/) for more details.)
 
 
@@ -103,6 +106,13 @@ For more information on how to take advantage of the new and updated features, s
 
 
 == Changelog ==
+
+### 1.6.5 - 2023-02-10
+
+#### Changed
+- Status update request button background color no longer set to inherit.
+- Updated readme.txt.
+
 
 ### 1.6.4 - 2023-01-25
 
