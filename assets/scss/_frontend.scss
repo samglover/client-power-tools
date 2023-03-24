@@ -128,9 +128,7 @@
   border-left-color: green;
 }
 
-#cpt-status-update-request-button {
-  background-color: inherit;
-  
+#cpt-status-update-request-button {  
   &[disabled="true"] {
     cursor: default;
     opacity: .5;
