@@ -93,16 +93,16 @@ function cpt_activate() {
 
 	// Checks for page selections and creates pages if necessary.
 	$cpt_pages = [
-		'cpt_client_dashboard_page_selection'	=> 'Client Dashboard',
-		'cpt_knowledge_base_page_selection'		=> 'Knowledge Base',
+		'cpt_client_dashboard_page_selection' => 'Client Dashboard',
+		'cpt_knowledge_base_page_selection' => 'Knowledge Base',
 	];
 
 	foreach ($cpt_pages as $key => $val) {
 		if (! get_option($key)) {
 			$new_page = [
-				'post_status'   => 'publish',
-	      'post_title'    => __($val),
-				'post_type'     => 'page',
+				'post_status' => 'publish',
+	      'post_title' => __($val),
+				'post_type' => 'page',
 			];
 
 			$page = wp_insert_post($new_page, $wp_error);
