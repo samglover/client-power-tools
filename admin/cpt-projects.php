@@ -29,7 +29,7 @@ function cpt_projects() {
 }
 
 function cpt_project_list() {
-  $project_list = new Client_List_Table();
+  $project_list = new Project_List_Table();
   $project_list->prepare_items();
   ?>
     <form id="project-list" method="GET">

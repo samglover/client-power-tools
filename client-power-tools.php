@@ -74,7 +74,7 @@ if (is_admin()) {
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-table.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-client.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-projects.php');
-	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-projects.php');
+	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-projects-table.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-managers.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-manager-table.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-settings.php');

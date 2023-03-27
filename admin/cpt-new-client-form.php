@@ -53,7 +53,7 @@
           <label for="client_status">Client Status</label>
         </th>
         <td>
-          <?php echo cpt_get_client_statuses_select() ?>
+          <?php echo cpt_get_status_select('cpt_client_statuses', 'client_status', 'cpt_default_client_status') ?>
         </td>
       </tr>
       <?php $custom_fields = Common\cpt_custom_client_fields(); ?>

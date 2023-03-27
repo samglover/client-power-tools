@@ -94,10 +94,11 @@ class Project_List_Table extends Includes\WP_List_Table  {
   function get_columns() {
     $columns = [
       // 'cb'      => '<input type="checkbox" />',
-      'client'  => 'Client',
-      'sender'  => 'Sender',
-      'subject' => 'Subject',
-      'date'    => 'Date',
+      'project'           => 'Project',
+      'client_name'       => 'Client',
+      'project_messages'  => 'Messages',
+      'project_status'    => 'Status',
+      'last_activity'     => 'Last Activity',
     ];
    return $columns;
   }
@@ -107,10 +108,14 @@ class Project_List_Table extends Includes\WP_List_Table  {
    * Sortable Columns
    */
   function get_sortable_columns() {
-    return; // Remove this line to enable sortable columns.
     $sortable_columns = [
-      'date' => ['msg_count', true],
+      'project'           => ['project', false],
+      'client_name'       => ['client_name', false],
+      'project_messages'  => ['msg_count', false],
+      'project_status'    => ['client_status', false],
+      'last_activity'     => ['last_activity', true],
     ];
+
     return $sortable_columns;
   }
 
