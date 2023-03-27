@@ -95,6 +95,23 @@ function cpt_get_client_dashboard_url() {
   return get_permalink($page_id);
 }
 
+function cpt_get_projects_label($n = null) {
+  $projects_label = get_option('cpt_projects_label');
+
+  switch ($n) {
+    case ('singular'):
+      return $projects_label[0];
+      break;
+    
+    case ('plural'):
+      return $projects_label[1];
+      break;
+
+    default:
+      return  $projects_label;
+  }
+}
+
 function cpt_get_knowledge_base_url() {
   $page_id = get_option('cpt_knowledge_base_page_selection');
   return get_permalink($page_id);

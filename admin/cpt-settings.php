@@ -183,7 +183,7 @@ function cpt_client_statuses() {
 
 
 function cpt_default_client_status() {
-  echo cpt_get_client_statuses_select('cpt_default_client_status');
+  echo cpt_get_status_select('cpt_client_statuses', 'cpt_default_client_status');
 }
 
 
@@ -388,6 +388,95 @@ function cpt_send_message_content() {
       </label>
     </fieldset>
   <?php
+}
+
+
+// Projects/Matters
+function cpt_projects_settings_init() {
+  add_settings_section(
+    'cpt-projects-settings',
+    __('Projects', 'client-power-tools'),
+    __NAMESPACE__ . '\cpt_projects_section',
+    'cpt-settings',
+  );
+
+  add_settings_field(
+    'cpt_projects_label',
+    __('Projects Label', 'client-power-tools'),
+    __NAMESPACE__ . '\cpt_projects_label',
+    'cpt-settings',
+    'cpt-projects-settings',
+  );
+
+  register_setting('cpt-settings', 'cpt_projects_label');
+
+  add_settings_field(
+    'cpt_project_statuses',
+    '<label for="cpt_project_statuses">' . __('Project Statuses', 'client-power-tools') . '</label>',
+    __NAMESPACE__ . '\cpt_project_statuses',
+    'cpt-settings',
+    'cpt-projects-settings',
+  );
+
+  register_setting('cpt-settings', 'cpt_project_statuses');
+
+  add_settings_field(
+    'cpt_default_project_status',
+    '<label for="cpt_default_project_status">' . __('Default Project Status', 'client-power-tools') . '</label>',
+    __NAMESPACE__ . '\cpt_default_project_status',
+    'cpt-settings',
+    'cpt-projects-settings',
+  );
+
+  register_setting('cpt-settings', 'cpt_default_client_status');
+}
+
+add_action('admin_init', __NAMESPACE__ . '\cpt_projects_settings_init');
+
+
+function cpt_projects_section() {
+}
+
+
+function cpt_projects_label() {
+  ?>
+    <p class="description"><?php _e('What do you want to call your projects?', 'client-power-tools'); ?></p>
+    <ul>
+      <li>
+        <fieldset>
+          <input name="cpt_projects_label[0]" type="text" value="<?php echo Common\cpt_get_projects_label('singular'); ?>">
+          <label for="cpt_projects_label[0]">Singular</label>
+        </fieldset>
+      </li>
+      <li>
+        <fieldset>
+          <input name="cpt_projects_label[1]" type="text" value="<?php echo Common\cpt_get_projects_label('plural'); ?>">
+          <label for="cpt_projects_label[1]">Plural</label>
+        </fieldset>
+      </li>
+    </ul>
+  <?php
+}
+
+
+function cpt_project_statuses() {
+  $statuses_array = explode("\n", get_option('cpt_project_statuses'));
+  ob_start();
+    foreach ($statuses_array as $i => $status) {
+      echo sanitize_text_field($status);
+      if ($i + 1 < count($statuses_array)) echo "\n";
+    }
+  $statuses = ob_get_clean();
+
+  ?>
+    <textarea name="cpt_project_statuses" class="small-text" rows="5"><?php echo $statuses; ?></textarea>
+    <p class="description"><?php _e('Enter one status per line.', 'client-power-tools'); ?></p>
+  <?php
+}
+
+
+function cpt_default_project_status() {
+  echo cpt_get_status_select('cpt_project_statuses', 'cpt_default_project_status');
 }
 
 

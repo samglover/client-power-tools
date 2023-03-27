@@ -63,7 +63,7 @@ function cpt_menu_pages() {
     __NAMESPACE__ . '\cpt_clients',
     CLIENT_POWER_TOOLS_DIR_URL . 'assets/images/cpt-icon.svg',
     '3', // Position
- );
+  );
 
   add_submenu_page(
     'cpt',
@@ -72,7 +72,17 @@ function cpt_menu_pages() {
     'cpt-view-clients',
     'cpt',
     __NAMESPACE__ . '\cpt_clients',
- );
+  );
+
+  $projects_label = Common\cpt_get_projects_label('plural');
+  add_submenu_page(
+    'cpt',
+    'Client Power Tools: ' . $projects_label,
+    $projects_label,
+    'cpt-view-clients',
+    'cpt-projects',
+    __NAMESPACE__ . '\cpt_projects',
+  );
 
   if (get_option('cpt_module_messaging')) {
     add_submenu_page(
@@ -82,7 +92,7 @@ function cpt_menu_pages() {
       'cpt-view-clients',
       'cpt-messages',
       __NAMESPACE__ . '\cpt_admin_messages',
-   );
+    );
   }
 
   add_submenu_page(
@@ -92,7 +102,7 @@ function cpt_menu_pages() {
     'cpt-manage-team',
     'cpt-managers',
     __NAMESPACE__ . '\cpt_client_managers',
- );
+  );
 
   add_submenu_page(
     'cpt',
@@ -101,8 +111,7 @@ function cpt_menu_pages() {
     'cpt-manage-settings',
     'cpt-settings',
     __NAMESPACE__ . '\cpt_settings',
- );
-
+  );
 }
 
 add_action('admin_menu', __NAMESPACE__ . '\cpt_menu_pages');
@@ -146,11 +155,11 @@ function cpt_get_client_manager_select($name = null, $selected = null) {
 }
 
 
-function cpt_get_client_statuses_select($name = null, $selected = null) {
-  $statuses_array = explode("\n", get_option('cpt_client_statuses'));
+function cpt_get_status_select($option = null, $name = null, $selected = null) {
+  if (!$option || !$name) return;
+  $statuses_array = explode("\n", get_option($option));
 
-  if (!$name) $name = 'client_status';
-  if (!$selected) $selected = get_option('cpt_default_client_status');
+  if (!$selected) $selected = get_option($name);
 
   echo '<select name="' . $name . '" id="' . $name . '">';
     foreach ($statuses_array as $status) {

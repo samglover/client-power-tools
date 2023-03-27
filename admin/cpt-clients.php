@@ -74,7 +74,7 @@ function cpt_get_client_profile($clients_user_id) {
 }
 
 function cpt_client_list() {
-  $client_list = new Client_List_Table();
+  $client_list = new Project_List_Table();
   $client_list->prepare_items();
   ?>
     <form id="client-list" method="GET">
