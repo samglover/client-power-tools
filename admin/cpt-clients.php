@@ -18,18 +18,27 @@ function cpt_clients() {
             <p id="cpt-subtitle">Client Power Tools</p>
           <?php } else { ?>
             <?php
-              $clients_user_id = sanitize_key(intval($_REQUEST['user_id']));
-              $client_data = Common\cpt_get_client_data($clients_user_id);
-              $client_id = $client_data['client_id'];
+              $user_id = isset($_REQUEST['user_id']) ? sanitize_key(intval($_REQUEST['user_id'])) : false;
+              $clients_user_id = Common\cpt_is_client($user_id) ? $user_id : false;
+              $client_data = $clients_user_id ? Common\cpt_get_client_data($clients_user_id) : false;
+              $client_id = $clients_user_id ? $client_data['client_id'] : false;
             ?>
-            <p id="cpt-client-status"><?php echo $client_data['status']; ?></p>
+            <?php if ($clients_user_id) { ?>
+              <p id="cpt-client-status"><?php echo $client_data['status']; ?></p>
+            <?php } ?>
             <h1 id="cpt-page-title">
-              <?php echo Common\cpt_get_name($clients_user_id); ?>
+              <?php 
+                if ($clients_user_id) {
+                  echo Common\cpt_get_name($clients_user_id); 
+                } else {
+                  echo 'Error: No such client.';
+                }
+              ?>
               <?php if ($client_id) { ?>
                 <span style="color:silver">(<?php echo $client_id; ?>)</span>
               <?php } ?>
             </h1>
-            <?php if ($client_data['manager_id']) { ?>
+            <?php if (isset($client_data['manager_id'])) { ?>
               <p id="cpt-client-manager">
               <?php
                 if (get_current_user_id() == $client_data['manager_id']) {
@@ -56,8 +65,10 @@ function cpt_clients() {
           }
           cpt_client_list();
         } else {
-          $clients_user_id = sanitize_key(intval($_REQUEST['user_id']));
-          cpt_get_client_profile($clients_user_id);
+          if (Common\cpt_is_client($clients_user_id)) {
+            $clients_user_id = sanitize_key(intval($_REQUEST['user_id']));
+            cpt_get_client_profile($clients_user_id);
+          }
         }
       ?>
     </div>

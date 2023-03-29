@@ -77,11 +77,15 @@ function cpt_is_knowledge_base() {
  * cpt-client role.
  */
 function cpt_is_client($user_id = null) {
-  if (is_null($user_id) && !is_user_logged_in()) return false;
-  $user_id = get_current_user_id();
+  if (!$user_id && !is_user_logged_in()) return false;
+  if (!$user_id) $user_id = get_current_user_id();
   $user = get_userdata($user_id);
 
-  if ($user->roles && in_array('cpt-client', $user->roles)) {
+  if (
+    $user && 
+    $user->roles && 
+    in_array('cpt-client', $user->roles)
+  ) {
     return true;
   } else {
     return false;

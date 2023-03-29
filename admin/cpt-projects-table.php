@@ -56,7 +56,7 @@ class Project_List_Table extends Includes\WP_List_Table  {
    */
   function column_client_name($item) {
     // Return the contents.
-    return sprintf('<strong><a href="' . Common\cpt_get_client_profile_url($item['ID']) . '">%1$s</a></strong>%2$s',
+    return sprintf('<strong><a href="' . Common\cpt_get_client_profile_url($item['clients_user_id']) . '">%1$s</a></strong>%2$s',
       /* $1%s */ $item['client_name'],
       /* $2%s */ $item['client_id'] ? ' <span style="color:silver">(' . $item['client_id'] . ')</span>' : '',
     );
