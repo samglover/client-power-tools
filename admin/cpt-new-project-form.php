@@ -69,6 +69,6 @@
     </tbody>
   </table>
   <p class="submit">
-    <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Add Project', 'client-power-tools'); ?>">
+    <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php echo __('Add', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?>">
   </p>
 </form>

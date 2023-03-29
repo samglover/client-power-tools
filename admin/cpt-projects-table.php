@@ -73,7 +73,7 @@ class Project_List_Table extends Includes\WP_List_Table  {
   function get_columns() {
     $columns = [
       // 'cb'      => '<input type="checkbox" />',
-      'project'           => 'Project',
+      'project'           => Common\cpt_get_projects_label('plural'),
       'client_name'       => 'Client',
       'project_status'    => 'Status',
     ];

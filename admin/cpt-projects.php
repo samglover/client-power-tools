@@ -34,7 +34,7 @@ function cpt_projects() {
           if (current_user_can('cpt_manage_projects')) {
             if ($clients) {
               ?>
-                <button class="button cpt-click-to-expand"><?php _e('New Project'); ?></button>
+                <button class="button cpt-click-to-expand"><?php echo __('New', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?></button>
                 <div class="cpt-this-expands">
                   <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'); ?>
                 </div>
