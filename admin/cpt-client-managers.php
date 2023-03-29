@@ -4,7 +4,7 @@ namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
 function cpt_client_managers() {
-  if (!current_user_can('cpt-manage-team')) {
+  if (!current_user_can('cpt_manage_team')) {
     wp_die(
       '<p>' . __('Sorry, you are not allowed to access this page.') . '</p>',
       403
@@ -37,7 +37,7 @@ function cpt_client_managers() {
       </div>
       <hr class="wp-header-end">
 
-      <?php if (current_user_can('cpt-manage-team')) { ?>
+      <?php if (current_user_can('cpt_manage_team')) { ?>
         <button class="button cpt-click-to-expand"><?php _e('Add a Client Manager'); ?></button>
         <div class="cpt-this-expands">
           <?php cpt_add_client_manager_form(); ?>
@@ -184,7 +184,7 @@ function cpt_client_manager_list() {
 
 // Returns an array of client user objects.
 function cpt_get_managers_clients($user_id) {
-  if (! $user_id) { return; }
+  if (!$user_id) { return; }
 
   $args = [
     'meta_key'      => 'cpt_client_manager',

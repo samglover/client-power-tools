@@ -4,7 +4,7 @@ namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
 function cpt_projects() {
-  if (!current_user_can('cpt-view-clients')) {
+  if (!current_user_can('cpt_view_projects')) {
     wp_die(
       '<p>' . __('Sorry, you are not allowed to access this page.') . '</p>',
       403
@@ -23,9 +23,40 @@ function cpt_projects() {
         </div>
       </div>
       <hr class="wp-header-end">
-      <?php cpt_project_list(); ?>
+      <?php
+        $clients = get_users([
+          'fields' => 'ID',
+          'role' => 'cpt-client',
+          'orderby' => isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'display_name',
+          'order' => isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC',
+        ]);
+        if ($clients && !isset($_REQUEST['project_id'])) {
+          if (current_user_can('cpt_manage_projects')) {
+            if ($clients) {
+              ?>
+                <button class="button cpt-click-to-expand"><?php _e('New Project'); ?></button>
+                <div class="cpt-this-expands">
+                  <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'); ?>
+                </div>
+              <?php
+            } else {
+              ?>
+                <p>In order to create a project you must add a client.</p>
+              <?php
+            }
+          }
+          cpt_project_list();
+        } else {
+          $project_id = sanitize_key(intval($_REQUEST['project_id']));
+          cpt_get_project($project_id);
+        }
+      ?>
     </div>
   <?php
+}
+
+function cpt_get_project($project_id) {
+  return '<p>PROJECT PLACEHOLDER</p>';
 }
 
 function cpt_project_list() {

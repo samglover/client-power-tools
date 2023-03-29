@@ -67,16 +67,27 @@ if (!is_admin()) {
 if (is_admin()) {
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'includes/class-wp-list-table.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin.php');
+
+	// Messages
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin-messages.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin-messages-table.php');
-	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-client.php');
+
+	// Clients
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-clients.php');
-	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-table.php');
+	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-clients-table.php');
+	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-client.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-client.php');
-	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-projects.php');
-	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-projects-table.php');
+
+	// Client Managers
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-managers.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-manager-table.php');
+
+	// Projects
+	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-projects.php');
+	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-projects-table.php');
+	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project.php');
+	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-project.php');
+
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-settings.php');
 }
 
@@ -130,7 +141,6 @@ function cpt_activate() {
 
 	$default_options = [
 		'cpt_client_statuses'									=> 'Active' . "\n" . 'Potential' . "\n" . 'Inactive',
-		'cpt_default_client_manager'					=> $admin->ID,
 		'cpt_default_client_status'						=> 'Active',
 		'cpt_new_client_email_subject_line'  	=> '[' . get_bloginfo('title') . '] ' . __('Your client account has been created!', 'client-power-tools'),
     'cpt_new_client_email_message_body'  	=> '',
@@ -228,6 +238,7 @@ register_activation_hook(__FILE__, __NAMESPACE__ . '\cpt_activate');
 
 
 // Register CPT Messages Custom Post Type
+// Uses user-defined labels so can't be in the activation hook, above.
 function cpt_project_post_type() {
 	$projects_label = Common\cpt_get_projects_label();
 
@@ -262,20 +273,20 @@ function cpt_project_post_type() {
 	];
 
 	$capabilities = [
-		'edit_post'             => 'cpt_edit_message',
-		'read_post'             => 'cpt_read_message',
-		'delete_post'           => 'cpt_delete_message',
-		'edit_posts'            => 'cpt_edit_messages',
-		'edit_others_posts'     => 'cpt_edit_others_messages',
-		'publish_posts'         => 'cpt_publish_message',
-		'read_private_posts'    => 'cpt_read_private_messages',
+		'edit_post'             => 'cpt_edit_project',
+		'read_post'             => 'cpt_read_project',
+		'delete_post'           => 'cpt_delete_project',
+		'edit_posts'            => 'cpt_edit_projects',
+		'edit_others_posts'     => 'cpt_edit_others_projects',
+		'publish_posts'         => 'cpt_publish_project',
+		'read_private_posts'    => 'cpt_read_private_projects',
 	];
 
 	$args = [
 		'label'                 => __($projects_label[0], 'client-power-tools'),
 		'description'           => __('Client Power Tools ' . strtolower($projects_label[1]), 'client-power-tools'),
 		'labels'                => $labels,
-		'supports'              => ['title', 'editor'],
+		'supports'              => ['title'],
 		'hierarchical'          => false,
 		'public'                => false,
 		'show_ui'               => false,

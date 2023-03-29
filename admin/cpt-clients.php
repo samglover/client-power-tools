@@ -4,7 +4,7 @@ namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
 function cpt_clients() {
-  if (!current_user_can('cpt-view-clients')) wp_die('<p>' . __('Sorry, you are not allowed to access this page.') . '</p>', 403);
+  if (!current_user_can('cpt_view_clients')) wp_die('<p>' . __('Sorry, you are not allowed to access this page.') . '</p>', 403);
   ?>
     <div id="cpt-admin" class="wrap">
       <?php if (isset($_REQUEST['user_id'])) { ?>
@@ -46,7 +46,7 @@ function cpt_clients() {
       <hr class="wp-header-end">
       <?php
         if (!isset($_REQUEST['user_id'])) {
-          if (current_user_can('cpt-manage-clients')) {
+          if (current_user_can('cpt_manage_clients')) {
             ?>
               <button class="button cpt-click-to-expand"><?php _e('Add a Client'); ?></button>
               <div class="cpt-this-expands">

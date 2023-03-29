@@ -16,16 +16,19 @@ function cpt_add_roles() {
     'cpt-client-manager',
     'Client Manager',
     [
-      'cpt-view-clients'  => true,
+      'cpt_view_clients'  => true,
+      'cpt_view_projects' => true,
       'read'              => true,
     ]
   );
 
-  $role = get_role('administrator');
-  $role->add_cap('cpt-view-clients');
-  $role->add_cap('cpt-manage-clients');
-  $role->add_cap('cpt-manage-team');
-  $role->add_cap('cpt-manage-settings');
+  $admin = get_role('administrator');
+  $admin->add_cap('cpt_view_clients');
+  $admin->add_cap('cpt_manage_clients');
+  $admin->add_cap('cpt_manage_team');
+  $admin->add_cap('cpt_view_projects');
+  $admin->add_cap('cpt_manage_projects');
+  $admin->add_cap('cpt_manage_settings');
 }
 
 add_action('init', __NAMESPACE__ . '\cpt_add_roles');
@@ -158,30 +161,14 @@ function cpt_get_client_data($clients_user_id) {
 
 function cpt_get_client_manager_id($clients_user_id) {
   if (!$clients_user_id) return;
-  $userdata = get_userdata(get_user_meta($clients_user_id, 'cpt_client_manager', true));
-  if ($userdata && isset($userdata->ID)) {
-    $manager_id = $userdata->ID;
-  } else if (get_option('cpt_default_client_manager')) {
-    $manager_id = get_option('cpt_default_client_manager');
-  } else {
-    $userdata = get_user_by_email(get_bloginfo('admin_email'));
-    $manager_id = $userdata ? $userdata->ID : false;
-  }
-  return $manager_id;
+  $client_manager = get_user_meta($clients_user_id, 'cpt_client_manager', true);
+  return $client_manager ? $client_manager : false;
 }
 
 function cpt_get_client_manager_email($clients_user_id) {
   if (!$clients_user_id) return;
   $userdata = get_userdata(get_user_meta($clients_user_id, 'cpt_client_manager', true));
-  if ($userdata && isset($userdata->user_email)) {
-    $manager_email = $userdata->user_email;
-  } else if (get_option('cpt_default_client_manager')) {
-    $userdata = get_userdata(get_option('cpt_default_client_manager'));
-    $manager_email = $userdata->user_email;
-  } else {
-    $manager_email = get_bloginfo('admin_email');
-  }
-  return $manager_email;
+  return isset($userdata->user_email) ? $userdata->user_email : false;
 }
 
 

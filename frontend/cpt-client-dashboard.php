@@ -111,9 +111,6 @@ function cpt_nav() {
       ?>
     </nav>
   <?php
-  // echo '<pre>';
-  // var_dump($child_pages_array);
-  // echo '</pre>';
 }
 
 

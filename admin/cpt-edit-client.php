@@ -8,7 +8,7 @@ function cpt_edit_client($clients_user_id) {
 
   $client_data = Common\cpt_get_client_data($clients_user_id);
   $client_name = Common\cpt_get_name($clients_user_id);
-  if (is_admin() && current_user_can('cpt-manage-clients')) {
+  if (is_admin() && current_user_can('cpt_manage_clients')) {
     ?>
       <button class="button cpt-click-to-expand"><?php _e('Edit Client', 'client-power-tools'); ?></button>
       <div class="cpt-this-expands">

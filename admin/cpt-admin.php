@@ -8,7 +8,7 @@ function cpt_redirect_clients() {
 
   if (
     Common\cpt_is_client() &&
-    !current_user_can('cpt-manage-clients') &&
+    !current_user_can('cpt_manage_clients') &&
     !(defined('DOING_AJAX') && DOING_AJAX) &&
     $pagenow !== 'admin-post.php'
   ) {
@@ -58,7 +58,7 @@ function cpt_menu_pages() {
   add_menu_page(
     'Client Power Tools',
     'Clients',
-    'cpt-view-clients',
+    'cpt_view_clients',
     'cpt',
     __NAMESPACE__ . '\cpt_clients',
     CLIENT_POWER_TOOLS_DIR_URL . 'assets/images/cpt-icon.svg',
@@ -69,7 +69,7 @@ function cpt_menu_pages() {
     'cpt',
     'Client Power Tools: Clients',
     'Clients',
-    'cpt-view-clients',
+    'cpt_view_clients',
     'cpt',
     __NAMESPACE__ . '\cpt_clients',
   );
@@ -79,7 +79,7 @@ function cpt_menu_pages() {
     'cpt',
     'Client Power Tools: ' . $projects_label,
     $projects_label,
-    'cpt-view-clients',
+    'cpt_view_clients',
     'cpt-projects',
     __NAMESPACE__ . '\cpt_projects',
   );
@@ -89,7 +89,7 @@ function cpt_menu_pages() {
       'cpt',
       'Client Power Tools: Messages',
       'Messages',
-      'cpt-view-clients',
+      'cpt_view_clients',
       'cpt-messages',
       __NAMESPACE__ . '\cpt_admin_messages',
     );
@@ -99,7 +99,7 @@ function cpt_menu_pages() {
     'cpt',
     'Client Power Tools: Client Managers',
     'Managers',
-    'cpt-manage-team',
+    'cpt_manage_team',
     'cpt-managers',
     __NAMESPACE__ . '\cpt_client_managers',
   );
@@ -108,7 +108,7 @@ function cpt_menu_pages() {
     'cpt',
     'Client Power Tools: Settings',
     'Settings',
-    'cpt-manage-settings',
+    'cpt_manage_settings',
     'cpt-settings',
     __NAMESPACE__ . '\cpt_settings',
   );
@@ -129,10 +129,7 @@ function cpt_is_cpt_admin_page() {
 
 function cpt_get_client_manager_select($name = null, $selected = null) {
   if (!$name) $name = 'client_manager';
-  if (!$selected) {
-    $admin = get_user_by_email(get_bloginfo('admin_email'));
-    $selected = get_option('cpt_default_client_manager', $admin->ID);
-  }
+  if (!$selected) $selected = get_option('cpt_default_client_manager');
 
   // Query Client Managers
   $client_manager_query = new \WP_USER_QUERY([
@@ -145,6 +142,7 @@ function cpt_get_client_manager_select($name = null, $selected = null) {
 
   if ($client_managers) {
     echo '<select name="' . $name . '" id="' . $name . '">';
+      echo '<option value>'. __('Unassigned', 'client-power-tools') . '</option>';
       foreach ($client_managers as $client_manager) {
         echo '<option value="' . $client_manager->ID . '"' . selected($client_manager->ID, $selected) . '>' . $client_manager->display_name . '</option>';
       }

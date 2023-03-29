@@ -5,7 +5,7 @@ use Client_Power_Tools\Core\Common;
 use Client_Power_Tools\Core\Frontend;
 
 function cpt_settings() {
-  if (!current_user_can('cpt-manage-settings')) {
+  if (!current_user_can('cpt_manage_settings')) {
     wp_die(
       '<p>' . __('Sorry, you are not allowed to access this page.', 'client-power-tools') . '</p>',
       403
