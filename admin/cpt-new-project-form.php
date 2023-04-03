@@ -2,7 +2,7 @@
   namespace Client_Power_Tools\Core\Admin;
   use Client_Power_Tools\Core\Common;
 
-  $client_ids = Common\cpt_get_client_ids();
+  $client_ids = Common\cpt_get_clients(['fields' => 'ID']);
 ?>
 
 <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">

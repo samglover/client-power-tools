@@ -53,7 +53,7 @@ function cpt_projects() {
       </div>
       <hr class="wp-header-end">
       <?php
-        $clients = Common\cpt_get_client_ids();
+        $clients = Common\cpt_get_clients(['fields' => 'ID']);
         if ($clients && !isset($_REQUEST['project_id'])) {
           if (current_user_can('cpt_manage_projects')) {
             if ($clients) {

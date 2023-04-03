@@ -92,22 +92,14 @@ function cpt_is_client($user_id = null) {
   }
 }
 
-function cpt_get_client_ids() {
-  $client_ids = get_users([
-    'fields' => 'ID',
+function cpt_get_clients($args = []) {
+  $client_query_args = [
     'role' => 'cpt-client',
     'orderby' => isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'display_name',
     'order' => isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC',
-  ]);
-  return $client_ids;
-}
-
-function cpt_get_clients() {
-  $clients = get_users([
-    'role' => 'cpt-client',
-    'orderby' => isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'display_name',
-    'order' => isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC',
-  ]);
+  ];
+  $client_query_args = array_merge($client_query_args, $args);
+  $clients = get_users($client_query_args);
   return $clients;
 }
 

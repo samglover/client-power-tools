@@ -162,7 +162,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
     $curr_user      = Common\cpt_get_name(get_current_user_id());
     $curr_mgr_param = isset($_REQUEST['client_manager']) ? sanitize_text_field(urldecode($_REQUEST['client_manager'])) : '';
     $views          = array();
-    $client_ids     = Common\cpt_get_client_ids();
+    $client_ids     = Common\cpt_get_clients(['fields' => 'ID']);
 
     if ($client_ids) array_unshift($params, 'Mine');
     array_unshift($params, 'All');
