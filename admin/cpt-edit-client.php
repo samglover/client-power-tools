@@ -5,7 +5,6 @@ use Client_Power_Tools\Core\Common;
 
 function cpt_edit_client($clients_user_id) {
   if (!$clients_user_id || !is_user_logged_in()) return;
-
   $client_data = Common\cpt_get_client_data($clients_user_id);
   $client_name = Common\cpt_get_name($clients_user_id);
   if (is_admin() && current_user_can('cpt_manage_clients')) {

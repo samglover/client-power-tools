@@ -40,14 +40,14 @@ function cpt_clients() {
             </h1>
             <?php if (isset($client_data['manager_id']) && !empty($client_data['manager_id'])) { ?>
               <p id="cpt-client-manager">
-              <?php
-                if (get_current_user_id() == $client_data['manager_id']) {
-                  _e('Your Client', 'client-power-tools');
-                } else {
-                  echo Common\cpt_get_name($client_data['manager_id']) . '\'s ' . __('Client', 'client-power-tools');
-                }
-              ?>
-            </p>
+                <?php
+                  if (get_current_user_id() == $client_data['manager_id']) {
+                    _e('Your Client', 'client-power-tools');
+                  } else {
+                    echo Common\cpt_get_name($client_data['manager_id']) . '\'s ' . __('Client', 'client-power-tools');
+                  }
+                ?>
+              </p>
             <?php } ?>
           <?php } ?>
         </div>
@@ -75,15 +75,6 @@ function cpt_clients() {
   <?php
 }
 
-function cpt_get_client_profile($clients_user_id) {
-  if (!$clients_user_id) return;
-  cpt_edit_client($clients_user_id);
-  if (get_option('cpt_module_messaging')) {
-    echo '<h2>' . __('Messages', 'client-power-tools') . '</h2>';
-    Common\cpt_messages($clients_user_id);
-  }
-}
-
 function cpt_client_list() {
   $client_list = new Client_List_Table();
   $client_list->prepare_items();
@@ -93,4 +84,13 @@ function cpt_client_list() {
       <?php $client_list->display() ?>
     </form>
   <?php
+}
+
+function cpt_get_client_profile($clients_user_id) {
+  if (!$clients_user_id) return;
+  cpt_edit_client($clients_user_id);
+  if (get_option('cpt_module_messaging')) {
+    echo '<h2>' . __('Messages', 'client-power-tools') . '</h2>';
+    Common\cpt_messages($clients_user_id);
+  }
 }

@@ -1,6 +1,8 @@
 <?php
   namespace Client_Power_Tools\Core\Admin;
   use Client_Power_Tools\Core\Common;
+
+  $client_ids = Common\cpt_get_client_ids();
 ?>
 
 <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
@@ -13,20 +15,16 @@
           <label for="client_id">Client<br /><small>(required)</small></label>
         </th>
         <td>
-          <?php 
-            if ($clients) {
-              ?>
-                <select name="client_id" id="client_id" required>
-                  <option disabled selected value><?php _e('Select client.', 'client-power-tools'); ?></option>
-                  <?php
-                    foreach ($clients as $client) {
-                      echo '<option value="' . $client . '">' . Common\cpt_get_name($client) . '</option>';
-                    }
-                  ?>
-                </select>
+          <?php if ($client_ids) { ?>
+            <select name="client_id" id="client_id" required>
+              <option disabled selected value><?php _e('Select client.', 'client-power-tools'); ?></option>
               <?php
-            }
-          ?>
+                foreach ($client_ids as $client_id) {
+                  echo '<option value="' . $client_id . '">' . Common\cpt_get_name($client_id) . '</option>';
+                }
+              ?>
+            </select>
+          <?php } ?>
         </td>
       </tr>
       <tr>

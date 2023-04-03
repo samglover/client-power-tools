@@ -162,15 +162,9 @@ class Client_List_Table extends Includes\WP_List_Table  {
     $curr_user      = Common\cpt_get_name(get_current_user_id());
     $curr_mgr_param = isset($_REQUEST['client_manager']) ? sanitize_text_field(urldecode($_REQUEST['client_manager'])) : '';
     $views          = array();
+    $client_ids     = Common\cpt_get_client_ids();
 
-    $clients = get_users([
-      'fields' => 'ID',
-      'role' => 'cpt-client',
-      'meta_key' => 'cpt_client_manager',
-      'meta_value' => get_current_user_id(),
-    ]);
-
-    if ($clients) array_unshift($params, 'Mine');
+    if ($client_ids) array_unshift($params, 'Mine');
     array_unshift($params, 'All');
 
     foreach($params as $key => $val) {
@@ -216,15 +210,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
     $this->_column_headers = [$columns, $hidden, $sortable];
     $this->process_bulk_action();
 
-    /**
-     * Query Clients
-     */
-    $client_query  = new \WP_USER_QUERY([
-      'role'    => 'cpt-client',
-      'orderby' => isset($_REQUEST['orderby'])  ? sanitize_key($_REQUEST['orderby'])  : 'display_name',
-      'order'   => isset($_REQUEST['order'])    ? sanitize_key($_REQUEST['order'])    : 'ASC',
-    ]);
-    $clients = $client_query->get_results();
+    $clients = Common\cpt_get_clients();
     $data = [];
 
     // Creates the data set.

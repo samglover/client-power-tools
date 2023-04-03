@@ -184,14 +184,14 @@ function cpt_client_manager_list() {
 
 // Returns an array of client user objects.
 function cpt_get_managers_clients($user_id) {
-  if (!$user_id) { return; }
+  if (!$user_id) return;
 
   $args = [
-    'meta_key'      => 'cpt_client_manager',
-    'meta_value'    => $user_id,
-    'role'          => 'cpt-client',
-    'orderby'       => 'display_name',
-    'order'         => 'ASC',
+    'meta_key'    => 'cpt_client_manager',
+    'meta_value'  => $user_id,
+    'role'        => 'cpt-client',
+    'orderby'     => 'display_name',
+    'order'       => 'ASC',
  ];
 
   $client_query  = new \WP_USER_QUERY($args);

@@ -92,6 +92,25 @@ function cpt_is_client($user_id = null) {
   }
 }
 
+function cpt_get_client_ids() {
+  $client_ids = get_users([
+    'fields' => 'ID',
+    'role' => 'cpt-client',
+    'orderby' => isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'display_name',
+    'order' => isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC',
+  ]);
+  return $client_ids;
+}
+
+function cpt_get_clients() {
+  $clients = get_users([
+    'role' => 'cpt-client',
+    'orderby' => isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'display_name',
+    'order' => isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC',
+  ]);
+  return $clients;
+}
+
 function cpt_get_client_profile_url($clients_user_id) {
   if (!$clients_user_id) return;
   return add_query_arg('user_id', $clients_user_id, admin_url('admin.php?page=cpt'));
@@ -117,6 +136,19 @@ function cpt_get_projects_label($n = null) {
     default:
       return  $projects_label;
   }
+}
+
+function cpt_get_project_data($project_id) {
+  if (!$project_id) return;
+  $project_data = [
+    'post_id'         => $project_id,
+    'project_id'      => get_post_meta($project_id, 'cpt_project_id', true),
+    'project_name'    => get_the_title($project_id),
+    'project_status'  => get_post_meta($project_id, 'cpt_project_status', true),
+    'clients_user_id' => get_post_meta($project_id, 'cpt_client_id', true),
+    'manager_id'      => cpt_get_client_manager_id(get_post_meta($project_id, 'cpt_client_id', true)),
+  ];
+  return $project_data;
 }
 
 function cpt_get_knowledge_base_url() {
