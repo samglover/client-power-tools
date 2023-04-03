@@ -38,7 +38,7 @@ function cpt_clients() {
                 <span style="color:silver">(<?php echo $client_id; ?>)</span>
               <?php } ?>
             </h1>
-            <?php if (isset($client_data['manager_id'])) { ?>
+            <?php if (isset($client_data['manager_id']) && !empty($client_data['manager_id'])) { ?>
               <p id="cpt-client-manager">
               <?php
                 if (get_current_user_id() == $client_data['manager_id']) {
