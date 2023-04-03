@@ -149,7 +149,7 @@ function cpt_activate() {
 		'cpt_status_update_req_notice_email'	=> null,
 		'cpt_module_messaging'								=> true,
 		'cpt_projects_label'									=> ['project', 'projects'],
-		'cpt_project_statuses'								=> 'Active' . "\n" . 'Inactive',
+		'cpt_project_statuses'								=> 'Open' . "\n" . 'Closed',
 		'cpt_default_project_status'					=> 'Active',
 		'cpt_send_message_content'						=> false,
  ];
