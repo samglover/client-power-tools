@@ -3,9 +3,9 @@
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
-function cpt_edit_project($project_id) {
-  if (!$project_id || !is_user_logged_in()) return;
-  $project_data = Common\cpt_get_project_data($project_id);
+function cpt_edit_project($project_post_id) {
+  if (!$project_post_id || !is_user_logged_in()) return;
+  $project_data = Common\cpt_get_project_data($project_post_id);
 
   if (is_admin() && current_user_can('cpt_manage_projects')) {
     ?>
@@ -20,38 +20,22 @@ function cpt_edit_project($project_id) {
 
 function cpt_process_project_update() {
   if (isset($_POST['cpt_project_updated_nonce']) && wp_verify_nonce($_POST['cpt_project_updated_nonce'], 'cpt_project_updated')) {
-    $project_id = sanitize_key(intval($_POST['project_id']));
+    $project_post_id = sanitize_key(intval($_POST['project_post_id']));
 
-    $userdata = [
-      'ID'            => $clients_user_id,
-      'first_name'    => sanitize_text_field($_POST['first_name']),
-      'last_name'     => sanitize_text_field($_POST['last_name']),
-      'display_name'  => sanitize_text_field($_POST['first_name']) . ' ' . sanitize_text_field($_POST['last_name']),
-      'user_email'    => sanitize_email($_POST['email']),
+    $project_data = [
+      'ID' => $project_post_id,
+      'post_title' => sanitize_text_field($_POST['project_name']),
+      'meta_input' => [
+        'cpt_project_id' => sanitize_text_field($_POST['project_id']),
+        'cpt_project_status' => sanitize_text_field($_POST['project_status']),
+        'cpt_client_id' => sanitize_text_field($_POST['client_id']),
+      ],
     ];
 
-    $clients_user_id = wp_update_user($userdata);
+    $update_project = wp_update_post($project_data);
+    $result = 'Project updated.';
 
-    if (is_wp_error($clients_user_id)) {
-      $result = 'Client could not be updated. Error message: ' . $clients_user_id->get_error_message();
-    } else {
-      $client_id      = sanitize_text_field($_POST['client_id']);
-      $client_manager = sanitize_text_field($_POST['client_manager']);
-      $client_status  = sanitize_text_field($_POST['client_status']);
-
-      update_user_meta($clients_user_id, 'cpt_client_id', $client_id);
-      update_user_meta($clients_user_id, 'cpt_client_manager', $client_manager);
-      update_user_meta($clients_user_id, 'cpt_client_status', $client_status);
-
-      $custom_fields = Common\cpt_custom_client_fields();
-      if ($custom_fields) {
-        foreach ($custom_fields as $field) {
-          update_user_meta($clients_user_id, $field['id'], sanitize_text_field($_POST[$field['id']]));
-        }
-      }
-
-      $result = 'Client updated.';
-    }
+    if (is_wp_error($update_project)) $result = 'Project could not be updated. Error message: ' . $update_project->get_error_message();
 
     set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
     wp_redirect($_POST['_wp_http_referer']);
@@ -64,13 +48,13 @@ function cpt_process_project_update() {
 add_action('admin_post_cpt_project_updated', __NAMESPACE__ . '\cpt_process_project_update');
 
 
-function cpt_delete_project_button($project_id) {
-  if (!$project_id) return;
+function cpt_delete_project_button($project_post_id) {
+  if (!$project_post_id) return;
   ?>
     <form id="cpt_delete_project_button" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
       <?php wp_nonce_field('cpt_project_deleted', 'cpt_project_deleted_nonce'); ?>
       <input name="action" value="cpt_project_deleted" type="hidden">
-      <input name="project_id" value="<?php echo $project_id ?>" type="hidden">
+      <input name="project_post_id" value="<?php echo $project_post_id ?>" type="hidden">
       <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Delete this Project', 'client-power-tools'); ?>">
     </form>
   <?php
@@ -79,8 +63,8 @@ function cpt_delete_project_button($project_id) {
 
 function cpt_process_delete_project() {
   if (isset($_POST['cpt_project_deleted_nonce']) && wp_verify_nonce($_POST['cpt_project_deleted_nonce'], 'cpt_project_deleted')) {
-    $project_id = sanitize_key(intval($_POST['project_id']));
-    $project_deleted = wp_delete_post($project_id);
+    $project_post_id = sanitize_key(intval($_POST['project_post_id']));
+    $project_deleted = wp_delete_post($project_post_id);
 
     if ($project_deleted == true) {
       $result = __('Project deleted.', 'client-power-tools');

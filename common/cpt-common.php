@@ -130,15 +130,15 @@ function cpt_get_projects_label($n = null) {
   }
 }
 
-function cpt_get_project_data($project_id) {
-  if (!$project_id) return;
+function cpt_get_project_data($project_post_id) {
+  if (!$project_post_id) return;
   $project_data = [
-    'post_id'         => $project_id,
-    'project_id'      => get_post_meta($project_id, 'cpt_project_id', true),
-    'project_name'    => get_the_title($project_id),
-    'project_status'  => get_post_meta($project_id, 'cpt_project_status', true),
-    'clients_user_id' => get_post_meta($project_id, 'cpt_client_id', true),
-    'manager_id'      => cpt_get_client_manager_id(get_post_meta($project_id, 'cpt_client_id', true)),
+    'project_post_id' => $project_post_id,
+    'project_id'      => get_post_meta($project_post_id, 'cpt_project_id', true),
+    'project_name'    => get_the_title($project_post_id),
+    'project_status'  => get_post_meta($project_post_id, 'cpt_project_status', true),
+    'clients_user_id' => get_post_meta($project_post_id, 'cpt_client_id', true),
+    'manager_id'      => cpt_get_client_manager_id(get_post_meta($project_post_id, 'cpt_client_id', true)),
   ];
   return $project_data;
 }

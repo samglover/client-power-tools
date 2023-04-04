@@ -45,7 +45,7 @@ class Project_List_Table extends Includes\WP_List_Table  {
    */
   function column_project($item) {
     // Return the contents.
-    return sprintf('<strong><a href="' . add_query_arg('project_id', $item['ID']) . '">%1$s</a></strong>%2$s',
+    return sprintf('<strong><a href="' . add_query_arg('project_post_id', $item['ID']) . '">%1$s</a></strong>%2$s',
       /* $1%s */ $item['project'],
       /* $2%s */ $item['project_id'] ? ' <span style="color:silver">(' . $item['project_id'] . ')</span>' : '',
     );
