@@ -79,6 +79,7 @@ function cpt_is_knowledge_base() {
 function cpt_is_client($user_id = null) {
   if (!$user_id && !is_user_logged_in()) return false;
   if (!$user_id) $user_id = get_current_user_id();
+  
   $user = get_userdata($user_id);
 
   if (
