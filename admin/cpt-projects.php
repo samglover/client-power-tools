@@ -4,24 +4,20 @@ namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
 function cpt_projects() {
-  if (!current_user_can('cpt_view_projects')) {
-    wp_die('<p>' . __('Sorry, you are not allowed to access this page.') . '</p>', 403);
-  }
-
+  if (!current_user_can('cpt_view_projects')) wp_die('<p>' . __('Sorry, you are not allowed to access this page.') . '</p>', 403);
   $projects_label = Common\cpt_get_projects_label();
-
   ?>
     <div id="cpt-admin" class="wrap">
       <div id="cpt-admin-header">
         <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/cpt-logo.svg'); ?>
         <div id="cpt-admin-page-title">
-          <?php if (!isset($_REQUEST['project_post_id'])) { ?>
+          <?php if (!isset($_REQUEST['projects_post_id'])) { ?>
             <h1 id="cpt-page-title"><?php echo $projects_label[1]; ?></h1>
             <p id="cpt-subtitle">Client Power Tools</p>
           <?php } else { ?>
             <?php
-              $project_post_id = isset($_REQUEST['project_post_id']) ? sanitize_key(intval($_REQUEST['project_post_id'])) : false;
-              $project_data = Common\cpt_get_project_data($project_post_id);
+              $projects_post_id = isset($_REQUEST['projects_post_id']) ? sanitize_key(intval($_REQUEST['projects_post_id'])) : false;
+              $project_data = Common\cpt_get_project_data($projects_post_id);
               $clients_user_id = $project_data['clients_user_id'];
               $client_data = $clients_user_id ? Common\cpt_get_client_data($clients_user_id) : false;
             ?>
@@ -30,14 +26,14 @@ function cpt_projects() {
             <?php } ?>
             <h1 id="cpt-page-title">
               <?php
-                if ($project_post_id) {
+                if ($projects_post_id) {
                   echo $project_data['project_name'];; 
                 } else {
                   echo 'Error: No such project.';
                 }
               ?>
-              <?php if ($project_data['project_post_id']) { ?>
-                <span style="color:silver">(<?php echo $project_data['project_post_id']; ?>)</span>
+              <?php if ($project_data['projects_post_id']) { ?>
+                <span style="color:silver">(<?php echo $project_data['projects_post_id']; ?>)</span>
               <?php } ?>
             </h1>
             <?php if ($clients_user_id) { ?>
@@ -54,7 +50,7 @@ function cpt_projects() {
       <hr class="wp-header-end">
       <?php
         $clients = Common\cpt_get_clients(['fields' => 'ID']);
-        if ($clients && !isset($_REQUEST['project_post_id'])) {
+        if ($clients && !isset($_REQUEST['projects_post_id'])) {
           if (current_user_can('cpt_manage_projects')) {
             if ($clients) {
               ?>
@@ -71,8 +67,8 @@ function cpt_projects() {
           }
           cpt_project_list();
         } else {
-          $project_post_id = sanitize_key(intval($_REQUEST['project_post_id']));
-          cpt_get_project($project_post_id);
+          $projects_post_id = sanitize_key(intval($_REQUEST['projects_post_id']));
+          cpt_get_project($projects_post_id);
         }
       ?>
     </div>
@@ -90,11 +86,11 @@ function cpt_project_list() {
   <?php
 }
 
-function cpt_get_project($project_post_id) {
-  if (!$project_post_id) return;
-  cpt_edit_project($project_post_id);
+function cpt_get_project($projects_post_id) {
+  if (!$projects_post_id) return;
+  cpt_edit_project($projects_post_id);
   if (get_option('cpt_module_messaging')) {
-    $clients_user_id = get_post_meta($project_post_id, 'cpt_client_id', true);
+    $clients_user_id = get_post_meta($projects_post_id, 'cpt_client_id', true);
     echo '<h2>' . __('Messages', 'client-power-tools') . '</h2>';
     Common\cpt_messages($clients_user_id);
   }

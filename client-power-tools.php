@@ -28,6 +28,7 @@ define('CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url(__FILE__));
  * Plugin Files
  */
 require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common.php');
+require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common-projects.php');
 require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-login.php');
 require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-status-update-request-button.php');
 require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php');

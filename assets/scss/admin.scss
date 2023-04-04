@@ -64,8 +64,29 @@
 }
 
 #cpt-delete-client-link {
-  color: gray;
+  color: LightSlateGray;
   cursor: pointer;
+
+  &:hover {
+    color: DarkSlateGray;
+    text-decoration: underline;
+  }
+}
+
+#cpt_delete_project_button {
+  #submit {
+    border: unset;
+    color: LightSlateGray;
+    cursor: pointer;
+    display: inline;
+    margin: 0 0 2em 0;
+    padding: unset;
+
+    &:hover {
+      color: DarkSlateGray;
+      text-decoration: underline;
+    }
+  }
 }
 
 .cpt-admin-modal {
