@@ -91,6 +91,7 @@ function cpt_get_client_profile($clients_user_id) {
   cpt_edit_client($clients_user_id);
   if (get_option('cpt_module_projects')) {
     echo '<h2>' . Common\cpt_get_projects_label('plural') . '</h2>';
+    // List client's projects.
     ?>
       <button class="button cpt-click-to-expand"><?php echo __('New', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?></button>
       <div class="cpt-this-expands">
