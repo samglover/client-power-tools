@@ -89,6 +89,15 @@ function cpt_client_list() {
 function cpt_get_client_profile($clients_user_id) {
   if (!$clients_user_id) return;
   cpt_edit_client($clients_user_id);
+  if (get_option('cpt_module_projects')) {
+    echo '<h2>' . Common\cpt_get_projects_label('plural') . '</h2>';
+    ?>
+      <button class="button cpt-click-to-expand"><?php echo __('New', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?></button>
+      <div class="cpt-this-expands">
+        <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'); ?>
+      </div>
+    <?php
+  }
   if (get_option('cpt_module_messaging')) {
     echo '<h2>' . __('Messages', 'client-power-tools') . '</h2>';
     Common\cpt_messages($clients_user_id);

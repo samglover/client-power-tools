@@ -2,6 +2,7 @@
   namespace Client_Power_Tools\Core\Admin;
   use Client_Power_Tools\Core\Common;
 
+  $user_id = isset($_REQUEST['user_id']) ? sanitize_key(intval($_REQUEST['user_id'])) : false;
   $client_ids = Common\cpt_get_clients(['fields' => 'ID']);
 ?>
 
@@ -20,7 +21,7 @@
               <option disabled selected value><?php _e('Select client.', 'client-power-tools'); ?></option>
               <?php
                 foreach ($client_ids as $client_id) {
-                  echo '<option value="' . $client_id . '">' . Common\cpt_get_name($client_id) . '</option>';
+                  echo '<option value="' . $client_id . '"' . selected($client_id, $user_id) . '>' . Common\cpt_get_name($client_id) . '</option>';
                 }
               ?>
             </select>

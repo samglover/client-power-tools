@@ -28,10 +28,11 @@ define('CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url(__FILE__));
  * Plugin Files
  */
 require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common.php');
-require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common-projects.php');
 require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-login.php');
-require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-status-update-request-button.php');
-require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php');
+
+if (get_option('cpt_module_projects')) require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common-projects.php');
+if (get_option('cpt_module_status_update_request_button')) require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-status-update-request-button.php');
+if (get_option('cpt_module_messaging')) require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php');
 
 function cpt_register_common_scripts() {
 	wp_enqueue_script('cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-common.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
@@ -70,8 +71,10 @@ if (is_admin()) {
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin.php');
 
 	// Messages
-	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin-messages.php');
-	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin-messages-table.php');
+	if (get_option('cpt_module_messaging')) {
+		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin-messages.php');
+		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin-messages-table.php');
+	}
 
 	// Clients
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-clients.php');
@@ -84,10 +87,12 @@ if (is_admin()) {
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-manager-table.php');
 
 	// Projects
-	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-projects.php');
-	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-projects-table.php');
-	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project.php');
-	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-project.php');
+	if (get_option('cpt_module_projects')) {
+		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-projects.php');
+		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-projects-table.php');
+		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project.php');
+		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-project.php');
+	}
 
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-settings.php');
 }
@@ -149,6 +154,7 @@ function cpt_activate() {
 		'cpt_status_update_req_freq'					=> 30,
 		'cpt_status_update_req_notice_email'	=> null,
 		'cpt_module_messaging'								=> true,
+		'cpt_module_projects'									=> true,
 		'cpt_projects_label'									=> ['project', 'projects'],
 		'cpt_project_statuses'								=> 'Open' . "\n" . 'Closed',
 		'cpt_default_project_status'					=> 'Active',
@@ -240,72 +246,74 @@ register_activation_hook(__FILE__, __NAMESPACE__ . '\cpt_activate');
 
 // Register CPT Messages Custom Post Type
 // Uses user-defined labels so can't be in the activation hook, above.
-function cpt_project_post_type() {
-	$projects_label = Common\cpt_get_projects_label();
-
-	$labels = [
-		'name'                  => _x($projects_label[1], 'Post Type General Name', 'client-power-tools'),
-		'singular_name'         => _x($projects_label[0], 'Post Type Singular Name', 'client-power-tools'),
-		'menu_name'             => __($projects_label[1], 'client-power-tools'),
-		'name_admin_bar'        => __($projects_label[0], 'client-power-tools'),
-		'archives'              => __($projects_label[0] . ' Archives', 'client-power-tools'),
-		'attributes'            => __($projects_label[0] . ' Attributes', 'client-power-tools'),
-		'parent_item_colon'     => __('Parent ' . $projects_label[0] . ':', 'client-power-tools'),
-		'all_items'             => __('All ' . $projects_label[1], 'client-power-tools'),
-		'add_new_item'          => __('Add New ' . $projects_label[0], 'client-power-tools'),
-		'add_new'               => __('Add New', 'client-power-tools'),
-		'new_item'              => __('New ' . $projects_label[0], 'client-power-tools'),
-		'edit_item'             => __('Edit ' . $projects_label[0], 'client-power-tools'),
-		'update_item'           => __('Update ' . $projects_label[0], 'client-power-tools'),
-		'view_item'             => __('View ' . $projects_label[0], 'client-power-tools'),
-		'view_items'            => __('View ' . $projects_label[1], 'client-power-tools'),
-		'search_items'          => __('Search ' . $projects_label[1], 'client-power-tools'),
-		'not_found'             => __($projects_label[0] . ' Not found', 'client-power-tools'),
-		'not_found_in_trash'    => __('Not found in Trash', 'client-power-tools'),
-		'featured_image'        => __('Featured Image', 'client-power-tools'),
-		'set_featured_image'    => __('Set featured image', 'client-power-tools'),
-		'remove_featured_image' => __('Remove featured image', 'client-power-tools'),
-		'use_featured_image'    => __('Use as featured image', 'client-power-tools'),
-		'insert_into_item'      => __('Insert into ' . strtolower($projects_label[0]), 'client-power-tools'),
-		'uploaded_to_this_item' => __('Uploaded to this ' . strtolower($projects_label[0]) , 'client-power-tools'),
-		'items_list'            => __($projects_label[1] . ' list', 'client-power-tools'),
-		'items_list_navigation' => __($projects_label[1] . ' list navigation', 'client-power-tools'),
-		'filter_items_list'     => __('Filter ' . strtolower($projects_label[1]) . ' list', 'client-power-tools'),
-	];
-
-	$capabilities = [
-		'edit_post'             => 'cpt_edit_project',
-		'read_post'             => 'cpt_read_project',
-		'delete_post'           => 'cpt_delete_project',
-		'edit_posts'            => 'cpt_edit_projects',
-		'edit_others_posts'     => 'cpt_edit_others_projects',
-		'publish_posts'         => 'cpt_publish_project',
-		'read_private_posts'    => 'cpt_read_private_projects',
-	];
-
-	$args = [
-		'label'                 => __($projects_label[0], 'client-power-tools'),
-		'description'           => __('Client Power Tools ' . strtolower($projects_label[1]), 'client-power-tools'),
-		'labels'                => $labels,
-		'supports'              => ['title'],
-		'hierarchical'          => false,
-		'public'                => false,
-		'show_ui'               => false,
-		'show_in_menu'          => false,
-		'menu_position'         => 5,
-		'show_in_admin_bar'     => false,
-		'show_in_nav_menus'     => false,
-		'can_export'            => false,
-		'has_archive'           => false,
-		'exclude_from_search'   => true,
-		'publicly_queryable'    => false,
-		'query_var'             => 'cpt_project',
-		'rewrite'               => false,
-		'capabilities'          => $capabilities,
-		'show_in_rest'          => false,
-	];
-
-	register_post_type('cpt_project', $args);
+if (get_option('cpt_module_projects')) {
+	function cpt_project_post_type() {
+		$projects_label = Common\cpt_get_projects_label();
+	
+		$labels = [
+			'name'                  => _x($projects_label[1], 'Post Type General Name', 'client-power-tools'),
+			'singular_name'         => _x($projects_label[0], 'Post Type Singular Name', 'client-power-tools'),
+			'menu_name'             => __($projects_label[1], 'client-power-tools'),
+			'name_admin_bar'        => __($projects_label[0], 'client-power-tools'),
+			'archives'              => __($projects_label[0] . ' Archives', 'client-power-tools'),
+			'attributes'            => __($projects_label[0] . ' Attributes', 'client-power-tools'),
+			'parent_item_colon'     => __('Parent ' . $projects_label[0] . ':', 'client-power-tools'),
+			'all_items'             => __('All ' . $projects_label[1], 'client-power-tools'),
+			'add_new_item'          => __('Add New ' . $projects_label[0], 'client-power-tools'),
+			'add_new'               => __('Add New', 'client-power-tools'),
+			'new_item'              => __('New ' . $projects_label[0], 'client-power-tools'),
+			'edit_item'             => __('Edit ' . $projects_label[0], 'client-power-tools'),
+			'update_item'           => __('Update ' . $projects_label[0], 'client-power-tools'),
+			'view_item'             => __('View ' . $projects_label[0], 'client-power-tools'),
+			'view_items'            => __('View ' . $projects_label[1], 'client-power-tools'),
+			'search_items'          => __('Search ' . $projects_label[1], 'client-power-tools'),
+			'not_found'             => __($projects_label[0] . ' Not found', 'client-power-tools'),
+			'not_found_in_trash'    => __('Not found in Trash', 'client-power-tools'),
+			'featured_image'        => __('Featured Image', 'client-power-tools'),
+			'set_featured_image'    => __('Set featured image', 'client-power-tools'),
+			'remove_featured_image' => __('Remove featured image', 'client-power-tools'),
+			'use_featured_image'    => __('Use as featured image', 'client-power-tools'),
+			'insert_into_item'      => __('Insert into ' . strtolower($projects_label[0]), 'client-power-tools'),
+			'uploaded_to_this_item' => __('Uploaded to this ' . strtolower($projects_label[0]) , 'client-power-tools'),
+			'items_list'            => __($projects_label[1] . ' list', 'client-power-tools'),
+			'items_list_navigation' => __($projects_label[1] . ' list navigation', 'client-power-tools'),
+			'filter_items_list'     => __('Filter ' . strtolower($projects_label[1]) . ' list', 'client-power-tools'),
+		];
+	
+		$capabilities = [
+			'edit_post'             => 'cpt_edit_project',
+			'read_post'             => 'cpt_read_project',
+			'delete_post'           => 'cpt_delete_project',
+			'edit_posts'            => 'cpt_edit_projects',
+			'edit_others_posts'     => 'cpt_edit_others_projects',
+			'publish_posts'         => 'cpt_publish_project',
+			'read_private_posts'    => 'cpt_read_private_projects',
+		];
+	
+		$args = [
+			'label'                 => __($projects_label[0], 'client-power-tools'),
+			'description'           => __('Client Power Tools ' . strtolower($projects_label[1]), 'client-power-tools'),
+			'labels'                => $labels,
+			'supports'              => ['title'],
+			'hierarchical'          => false,
+			'public'                => false,
+			'show_ui'               => false,
+			'show_in_menu'          => false,
+			'menu_position'         => 5,
+			'show_in_admin_bar'     => false,
+			'show_in_nav_menus'     => false,
+			'can_export'            => false,
+			'has_archive'           => false,
+			'exclude_from_search'   => true,
+			'publicly_queryable'    => false,
+			'query_var'             => 'cpt_project',
+			'rewrite'               => false,
+			'capabilities'          => $capabilities,
+			'show_in_rest'          => false,
+		];
+	
+		register_post_type('cpt_project', $args);
+	}
+	
+	add_action('init', __NAMESPACE__ . '\cpt_project_post_type', 0);
 }
-
-add_action('init', __NAMESPACE__ . '\cpt_project_post_type', 0);

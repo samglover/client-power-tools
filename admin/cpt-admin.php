@@ -74,15 +74,17 @@ function cpt_menu_pages() {
     __NAMESPACE__ . '\cpt_clients',
   );
 
-  $projects_label = Common\cpt_get_projects_label('plural');
-  add_submenu_page(
-    'cpt',
-    'Client Power Tools: ' . $projects_label,
-    $projects_label,
-    'cpt_view_clients',
-    'cpt-projects',
-    __NAMESPACE__ . '\cpt_projects',
-  );
+  if (get_option('cpt_module_projects')) {
+    $projects_label = Common\cpt_get_projects_label('plural');
+    add_submenu_page(
+      'cpt',
+      'Client Power Tools: ' . $projects_label,
+      $projects_label,
+      'cpt_view_clients',
+      'cpt-projects',
+      __NAMESPACE__ . '\cpt_projects',
+    );
+  }
 
   if (get_option('cpt_module_messaging')) {
     add_submenu_page(
