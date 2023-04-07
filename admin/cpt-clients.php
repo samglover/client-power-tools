@@ -93,7 +93,7 @@ function cpt_get_client_profile($clients_user_id) {
     echo '<h2>' . Common\cpt_get_projects_label('plural') . '</h2>';
     // List client's projects.
     ?>
-      <button class="button cpt-click-to-expand"><?php echo __('New', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?></button>
+      <button class="button cpt-click-to-expand"><?php echo __('Add a', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?></button>
       <div class="cpt-this-expands">
         <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'); ?>
       </div>
