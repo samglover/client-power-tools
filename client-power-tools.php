@@ -32,7 +32,7 @@ require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-login.php');
 
 if (get_option('cpt_module_projects')) require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common-projects.php');
 if (get_option('cpt_module_status_update_request_button')) require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-status-update-request-button.php');
-if (get_option('cpt_module_messaging')) require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-messages.php');
+if (get_option('cpt_module_messaging')) require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common-messages.php');
 
 function cpt_register_common_scripts() {
 	wp_enqueue_script('cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-common.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);

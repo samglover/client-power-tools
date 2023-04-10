@@ -2,6 +2,21 @@
 
 namespace Client_Power_Tools\Core\Common;
 
+function cpt_project_list($clients_user_id) {
+  $projects = new \WP_Query([
+    'meta_key'        => 'cpt_client_id',
+    'meta_value'      => $clients_user_id,
+    'orderby'         => isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'project',
+    'order'           => isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC',
+    'post_type'       => 'cpt_project',
+    'posts_per_page'  => -1,
+  ]);
+
+  if ($projects->have_posts()) : while ($projects->have_posts()) : $projects->the_post();
+    echo '<h3 class="cpt-project-title"><a href="' . get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id=' . get_the_ID() . '">' . get_the_title() . '</a></h3>';
+  endwhile; endif;
+}
+
 function cpt_get_projects_label($n = null) {
   $projects_label = get_option('cpt_projects_label');
   switch ($n) {
