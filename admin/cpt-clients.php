@@ -98,7 +98,6 @@ function cpt_get_client_profile($clients_user_id) {
         <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'); ?>
       </div>
     <?php
-    cpt_project_list();
   }
   if (get_option('cpt_module_messaging')) {
     echo '<h2>' . __('Messages', 'client-power-tools') . '</h2>';
