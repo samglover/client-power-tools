@@ -16,7 +16,7 @@ function cpt_projects() {
             <p id="cpt-subtitle">Client Power Tools</p>
           <?php } else { ?>
             <?php
-              $projects_post_id = isset($_REQUEST['projects_post_id']) ? sanitize_key(intval($_REQUEST['projects_post_id'])) : false;
+              $projects_post_id = sanitize_key(intval($_REQUEST['projects_post_id']));
               $project_data = Common\cpt_get_project_data($projects_post_id);
               $clients_user_id = $project_data['clients_user_id'];
               $client_data = $clients_user_id ? Common\cpt_get_client_data($clients_user_id) : false;
@@ -88,10 +88,22 @@ function cpt_project_list() {
 
 function cpt_get_project($projects_post_id) {
   if (!$projects_post_id) return;
+  $project_data = Common\cpt_get_project_data($projects_post_id);
+  $clients_user_id = $project_data['clients_user_id'];
+  $client_data = $clients_user_id ? Common\cpt_get_client_data($clients_user_id) : false;
   cpt_edit_project($projects_post_id);
   if (get_option('cpt_module_messaging')) {
-    $clients_user_id = get_post_meta($projects_post_id, 'cpt_client_id', true);
-    echo '<h2>' . __('Messages', 'client-power-tools') . '</h2>';
-    Common\cpt_messages($clients_user_id);
+    ?>
+      <section id="cpt-messages">
+        <h2 class="cpt-row">
+          <?php _e('Messages', 'client-power-tools'); ?>
+          <button class="button cpt-click-to-expand"><?php _e('New Message', 'client-power-tools'); ?></button>
+        </h2>
+        <div class="cpt-this-expands">
+          <?php Common\cpt_new_message_form(get_current_user_id()); ?>
+        </div>
+        <?php Common\cpt_messages($clients_user_id); ?>
+      </section>
+    <?php
   }
 }

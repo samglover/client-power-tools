@@ -9,16 +9,16 @@ namespace Client_Power_Tools\Core\Common;
  * confusing.
  */
 
-function cpt_messages($user_id) {
+function cpt_messages($clients_user_id) {
   if (
-    !$user_id ||
+    !$clients_user_id ||
     (!cpt_is_messages() && !is_admin()) ||
     !get_option('cpt_module_messaging')
   ) return;
 
   ?>
     <div class="cpt-messages-list">
-      <?php cpt_message_list($user_id); ?>
+      <?php cpt_message_list($clients_user_id); ?>
     </div>
   <?php
 }

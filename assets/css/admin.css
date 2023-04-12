@@ -44,6 +44,7 @@
   animation: growDown 150ms ease-in-out forwards;
   background-color: rgba(0, 0, 0, 0.05);
   display: none;
+  margin-bottom: 20px;
   padding: 0 20px;
   transform-origin: top;
 }
@@ -159,6 +160,9 @@
 }
 
 /* Forms */
+#cpt-admin h2 {
+  margin-top: 3em;
+}
 #cpt-admin button,
 #cpt-admin .button {
   font-weight: normal;
