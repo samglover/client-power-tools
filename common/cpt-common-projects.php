@@ -4,8 +4,12 @@ namespace Client_Power_Tools\Core\Common;
 
 function cpt_project_list($clients_user_id) {
   $projects = new \WP_Query([
-    'meta_key'        => 'cpt_client_id',
-    'meta_value'      => $clients_user_id,
+    'meta_query'      => [
+      [
+        'key'   => 'cpt_client_id',
+        'value' => $clients_user_id,
+      ],
+    ],
     'orderby'         => isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'project',
     'order'           => isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC',
     'post_type'       => 'cpt_project',
@@ -14,14 +18,22 @@ function cpt_project_list($clients_user_id) {
 
   if ($projects->have_posts()) :
     ?>
-      <section class="cpt-projects-list">
+      <section class="cpt-projects-list cpt-row">
         <?php while ($projects->have_posts()) : $projects->the_post(); ?>
-          <?php $post_id = get_the_ID(); ?>
-          <div class="cpt-project">
+          <?php 
+            $post_id = get_the_ID(); 
+            $project_status = get_post_meta($post_id, 'cpt_project_status', true);
+            $project_classes = 'cpt-project cpt-project-status-' . sanitize_title(strtolower($project_status));
+            $project_id = get_post_meta($post_id, 'cpt_project_id', true);
+          ?>
+          <div class="<?php echo $project_classes; ?>">
             <h3 class="cpt-project-title">
               <a href="<?php echo get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id=' . $post_id; ?>"><?php the_title(); ?></a>
-              <span style="color:silver; font-weight: normal;">(<?php echo get_post_meta($post_id, 'cpt_project_id', true); ?>)</span>
+              <?php if ($project_id) { ?>
+                <span style="color:silver; font-weight: normal;">(<?php echo $project_id; ?>)</span>
+              <?php } ?>
             </h3>
+            <p class="cpt-project-status">Status: <?php echo $project_status; ?></p>
           </div>
         <?php endwhile; ?>
       </section>

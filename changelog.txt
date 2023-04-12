@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. The format 
 - Change capability names (replaced hyphens with underscores).
 - No default client manager.
 - Show an error if the page requests a non-existent client.
+- A number of minor user experience improvements.
 
 
 ### 1.6.5 - 2023-02-10
