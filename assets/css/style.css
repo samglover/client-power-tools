@@ -34,18 +34,22 @@
     transform: scaleY(1);
   }
 }
+.cpt-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
 .cpt-this-expands {
   animation: growDown 150ms ease-in-out forwards;
+  background-color: rgba(0, 0, 0, 0.05);
   display: none;
+  padding: 0 20px;
   transform-origin: top;
 }
 .cpt-this-expands.open {
   display: block;
-}
-
-.cpt-new-message-button .button {
-  display: inline-block;
-  margin-bottom: 1em;
 }
 
 .cpt-message {
@@ -92,6 +96,23 @@
 .cpt-message .cpt-message-meta p {
   margin: 0;
   padding: 0;
+}
+
+.cpt-projects-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.cpt-projects-list .cpt-project {
+  background-color: White;
+  box-shadow: 0 0 0 1px #ddd, 1px 1px 3px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  padding: 10px 20px;
+}
+.cpt-projects-list .cpt-project h3 a:not(:hover) {
+  text-decoration: none;
 }
 
 #cpt-new-message-form form p,

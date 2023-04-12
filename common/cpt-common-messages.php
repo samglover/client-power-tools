@@ -17,13 +17,8 @@ function cpt_messages($user_id) {
   ) return;
 
   ?>
-    <div class="cpt-messages">
-      <p class="cpt-new-message-button"><a class="button" href="#cpt-new-message-form">New Message</a></p>
+    <div class="cpt-messages-list">
       <?php cpt_message_list($user_id); ?>
-      <h2><?php _e('New Message', 'client-power-tools'); ?></h2>
-      <div id="cpt-new-message-form">
-        <?php cpt_new_message_form($user_id); ?>
-      </div>
     </div>
   <?php
 }

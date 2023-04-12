@@ -12,9 +12,21 @@ function cpt_project_list($clients_user_id) {
     'posts_per_page'  => -1,
   ]);
 
-  if ($projects->have_posts()) : while ($projects->have_posts()) : $projects->the_post();
-    echo '<h3 class="cpt-project-title"><a href="' . get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id=' . get_the_ID() . '">' . get_the_title() . '</a></h3>';
-  endwhile; endif;
+  if ($projects->have_posts()) :
+    ?>
+      <section class="cpt-projects-list">
+        <?php while ($projects->have_posts()) : $projects->the_post(); ?>
+          <?php $post_id = get_the_ID(); ?>
+          <div class="cpt-project">
+            <h3 class="cpt-project-title">
+              <a href="<?php echo get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id=' . $post_id; ?>"><?php the_title(); ?></a>
+              <span style="color:silver; font-weight: normal;">(<?php echo get_post_meta($post_id, 'cpt_project_id', true); ?>)</span>
+            </h3>
+          </div>
+        <?php endwhile; ?>
+      </section>
+    <?php
+  endif;
 }
 
 function cpt_get_projects_label($n = null) {

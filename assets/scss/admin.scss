@@ -56,6 +56,11 @@
 
 /* Forms */
 #cpt-admin {
+  button,
+  .button {
+    font-weight: normal;
+  }
+
   .form-table {
     th label small {
       font-weight: normal;
@@ -66,6 +71,7 @@
 #cpt-delete-client-link {
   color: LightSlateGray;
   cursor: pointer;
+  margin-bottom: 20px;
 
   &:hover {
     color: DarkSlateGray;

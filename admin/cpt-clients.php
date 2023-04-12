@@ -90,18 +90,31 @@ function cpt_get_client_profile($clients_user_id) {
   if (!$clients_user_id) return;
   cpt_edit_client($clients_user_id);
   if (get_option('cpt_module_projects')) {
-    echo '<h2>' . Common\cpt_get_projects_label('plural') . '</h2>';
-    // List client's projects.
-    Common\cpt_project_list($clients_user_id);
     ?>
-      <button class="button cpt-click-to-expand"><?php echo __('Add a', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?></button>
-      <div class="cpt-this-expands">
-        <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'); ?>
-      </div>
+      <section id="cpt-projects">
+        <h2 class="cpt-row">
+          <?php echo Common\cpt_get_projects_label('plural'); ?>
+          <button class="button cpt-click-to-expand"><?php echo __('Add a', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?></button>
+        </h2>
+        <div class="cpt-this-expands">
+          <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'); ?>
+        </div>
+        <?php Common\cpt_project_list($clients_user_id); ?>
+      </section>
     <?php
   }
   if (get_option('cpt_module_messaging')) {
-    echo '<h2>' . __('Messages', 'client-power-tools') . '</h2>';
-    Common\cpt_messages($clients_user_id);
+    ?>
+      <section id="cpt-messages">
+        <h2 class="cpt-row">
+          <?php _e('Messages', 'client-power-tools'); ?>
+          <button class="button cpt-click-to-expand"><?php _e('New Message', 'client-power-tools'); ?></button>
+        </h2>
+        <div class="cpt-this-expands">
+          <?php Common\cpt_new_message_form(get_current_user_id()); ?>
+        </div>
+        <?php Common\cpt_messages($clients_user_id); ?>
+      </section>
+    <?php
   }
 }
