@@ -70,11 +70,18 @@
       font-weight: normal;
     }
   }
+
+  .cpt-this-expands {
+    background-color: rgba(0, 0, 0, .05);
+    margin-bottom: 20px;
+    padding: 0 20px;
+  }
 }
 
 #cpt-delete-client-link {
   color: LightSlateGray;
   cursor: pointer;
+  display: inline-block;
   margin-bottom: 20px;
 
   &:hover {

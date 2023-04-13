@@ -43,10 +43,7 @@
 
 .cpt-this-expands {
   animation: growDown 150ms ease-in-out forwards;
-  background-color: rgba(0, 0, 0, 0.05);
   display: none;
-  margin-bottom: 20px;
-  padding: 0 20px;
   transform-origin: top;
 }
 .cpt-this-expands.open {
