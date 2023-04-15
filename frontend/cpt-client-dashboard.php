@@ -38,10 +38,13 @@ function cpt_client_dashboard($content) {
     Common\cpt_get_notices();
 
     // Breadcrumbs
+    $kb_id = get_option('cpt_knowledge_base_page_selection');
+    $kb_child_pages = cpt_get_child_pages($kb_id);
     if (
       Common\cpt_is_knowledge_base() &&
-      get_option('cpt_knowledge_base_page_selection') !== get_the_ID() &&
-      get_option('cpt_show_knowledge_base_breadcrumbs')
+      get_option('cpt_show_knowledge_base_breadcrumbs') &&
+      get_the_ID() != $kb_id && 
+      $kb_child_pages
     ) cpt_breadcrumbs();
 
     // Last Activity Timestamp
@@ -213,8 +216,8 @@ function cpt_nav_tabs_submenu($parent_id) {
  * Breadcrumbs
  */
 function cpt_breadcrumbs() {
-  $breadcrumbs[]    = '<span class="breadcrumb last-breadcrumb"><strong>' . get_the_title(get_the_ID()) . '</strong></span>';
-  $parent_id        = wp_get_post_parent_id(get_the_ID());
+  $breadcrumbs[] = '<span class="breadcrumb last-breadcrumb"><strong>' . get_the_title(get_the_ID()) . '</strong></span>';
+  $parent_id = wp_get_post_parent_id(get_the_ID());
 
   while ($parent_id) {
     $parent_url     = get_the_permalink($parent_id);

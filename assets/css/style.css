@@ -177,7 +177,7 @@
   top: 50%;
   right: 1em;
   transform: translateY(-50%);
-  transition: transform 0.2s;
+  transition: transform 150ms ease-in-out;
   width: 1em;
 }
 #cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item.cpt-click-to-expand.open svg {
