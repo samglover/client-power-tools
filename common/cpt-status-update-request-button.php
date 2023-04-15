@@ -12,7 +12,7 @@ namespace Client_Power_Tools\Core\Common;
 
 
 function cpt_status_update_request_button($user_id) {
-  if (!get_option('cpt_module_status_update_req_button') || !$user_id) return;
+  if (!$user_id) return;
 
   // Return (i.e. don't output the button) if the client has clicked the button
   // more recently than the request frequency option allows.

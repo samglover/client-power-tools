@@ -99,7 +99,7 @@ function cpt_get_client_profile($clients_user_id) {
         <div class="cpt-this-expands">
           <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'); ?>
         </div>
-        <?php Common\cpt_project_list($clients_user_id); ?>
+        <?php Common\cpt_clients_projects($clients_user_id); ?>
       </section>
     <?php
   }

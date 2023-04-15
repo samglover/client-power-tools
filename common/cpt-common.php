@@ -6,6 +6,7 @@ namespace Client_Power_Tools\Core\Common;
  * Adds the Client and Client Manager user roles and capabilities, and assigns
  * all CPT capabilities to admins.
  */
+add_action('init', __NAMESPACE__ . '\cpt_add_roles');
 function cpt_add_roles() {
   add_role(
     'cpt-client',
@@ -31,14 +32,10 @@ function cpt_add_roles() {
   $admin->add_cap('cpt_manage_settings');
 }
 
-add_action('init', __NAMESPACE__ . '\cpt_add_roles');
-
 function cpt_is_client_dashboard() {
   global $wp_query;
-
   $client_dashboard_id = get_option('cpt_client_dashboard_page_selection');
   $this_page_id = isset($wp_query->post->ID) ? $wp_query->post->ID : false;
-
   if ($this_page_id && $client_dashboard_id == $this_page_id) {
     return true;
   } else {
@@ -54,13 +51,19 @@ function cpt_is_messages() {
   }
 }
 
+function cpt_is_projects() {
+  if (cpt_is_client_dashboard() && isset($_REQUEST['tab']) && $_REQUEST['tab'] == 'projects') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function cpt_is_knowledge_base() {
   global $wp_query;
-
   $knowledge_base_id    = get_option('cpt_knowledge_base_page_selection');
   $this_page_id         = isset($wp_query->post->ID) ? $wp_query->post->ID : false;
   $this_page_ancestors  = get_post_ancestors($this_page_id);
-
   if ($this_page_id && ($knowledge_base_id == $this_page_id || in_array($knowledge_base_id, $this_page_ancestors))) {
     return true;
   } else {
@@ -73,13 +76,12 @@ function cpt_is_knowledge_base() {
  * Checks to see whether the current user is a client. Returns true if the current
  * user has the cpt-client role, false if not.
  *
- * If no user ID is provided, checks to see whether a user is logged-in with the
+ * If no user ID is provided, checks to see whether the current user is logged-in with the
  * cpt-client role.
  */
 function cpt_is_client($user_id = null) {
   if (!$user_id && !is_user_logged_in()) return false;
   if (!$user_id) $user_id = get_current_user_id();
-
   $user = get_userdata($user_id);
 
   if (
@@ -93,6 +95,7 @@ function cpt_is_client($user_id = null) {
   }
 }
 
+
 function cpt_get_clients($args = []) {
   $client_query_args = [
     'role' => 'cpt-client',
@@ -104,20 +107,24 @@ function cpt_get_clients($args = []) {
   return $clients;
 }
 
+
 function cpt_get_client_profile_url($clients_user_id) {
   if (!$clients_user_id) return;
   return add_query_arg('user_id', $clients_user_id, admin_url('admin.php?page=cpt'));
 }
+
 
 function cpt_get_client_dashboard_url() {
   $page_id = get_option('cpt_client_dashboard_page_selection');
   return get_permalink($page_id);
 }
 
+
 function cpt_get_knowledge_base_url() {
   $page_id = get_option('cpt_knowledge_base_page_selection');
   return get_permalink($page_id);
 }
+
 
 function cpt_get_name($user_id) {
   if (!$user_id) return;
@@ -131,13 +138,16 @@ function cpt_get_name($user_id) {
   return $name;
 }
 
+
 function cpt_custom_client_fields() {
   return apply_filters('cpt_custom_fields', []);
 }
 
+
 // Returns an array with the user's details.
 function cpt_get_client_data($clients_user_id) {
   if (!$clients_user_id) return;
+  if (!cpt_is_client($clients_user_id)) return;
   $userdata = get_userdata($clients_user_id);
   $client_data = [
     'user_id'       => $clients_user_id,
@@ -159,11 +169,13 @@ function cpt_get_client_data($clients_user_id) {
   return $client_data;
 }
 
+
 function cpt_get_client_manager_id($clients_user_id) {
   if (!$clients_user_id) return;
   $client_manager = get_user_meta($clients_user_id, 'cpt_client_manager', true);
   return $client_manager ? $client_manager : false;
 }
+
 
 function cpt_get_client_manager_email($clients_user_id) {
   if (!$clients_user_id) return;
@@ -203,6 +215,7 @@ function cpt_get_email_card(
  * outputs a notice. In the admin, this is a standard WordPress admin notice. On
  * the front end, this is a modal.
  */
+add_action('admin_notices', __NAMESPACE__ . '\cpt_get_notices');
 function cpt_get_notices() {
   $transient = 'cpt_notice_for_user_' . get_current_user_id();
   $notice = get_transient($transient);
@@ -226,5 +239,3 @@ function cpt_get_notices() {
   <?php
   delete_transient($transient);
 }
-
-add_action('admin_notices', __NAMESPACE__ . '\cpt_get_notices');

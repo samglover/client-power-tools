@@ -107,7 +107,6 @@ class Client_List_Table extends Includes\WP_List_Table  {
    */
   function get_columns() {
     $columns = [
-      // 'cb'              => '<input type="checkbox" />',
       'client_name'     => 'Client',
       'client_messages' => 'Messages',
       'client_projects' => 'Projects',
@@ -129,41 +128,10 @@ class Client_List_Table extends Includes\WP_List_Table  {
   function get_sortable_columns() {
     $sortable_columns = [
       'client_name'     => ['client_name', true],
-      // 'client_messages' => ['msg_count', false],
-      // 'client_projects' => ['project_count', false],
-      // 'client_status'   => ['client_status', false],
       'client_manager'  => ['client_manager', false],
       'last_activity'   => ['last_activity', false],
     ];
     return $sortable_columns;
-  }
-
-  /**
-   * Bulk Actions
-   *
-   * @return array An associative array containing all the bulk actions: 'slugs'=>'Visible Titles'
-   */
-  function get_bulk_actions() {
-    return; // Remove this line to enable bulk actions.
-    $actions = [
-      'delete'  => 'Delete',
-    ];
-    return $actions;
-  }
-
-
-  function process_bulk_action() {
-    $action = $this->current_action();
-    switch ($action) {
-      case 'delete':
-        wp_die('Delete something.');
-        break;
-      default:
-        return;
-        break;
-    }
-
-    return;
   }
 
 
@@ -219,7 +187,6 @@ class Client_List_Table extends Includes\WP_List_Table  {
     $sortable = $this->get_sortable_columns();
 
     $this->_column_headers = [$columns, $hidden, $sortable];
-    $this->process_bulk_action();
 
     $clients = Common\cpt_get_clients();
     $data = [];

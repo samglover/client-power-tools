@@ -40,6 +40,9 @@
   flex-wrap: wrap;
   gap: 20px;
 }
+.cpt-row.gap-10 {
+  gap: 10px;
+}
 
 .cpt-this-expands {
   animation: growDown 150ms ease-in-out forwards;

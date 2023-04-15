@@ -2,7 +2,6 @@
 
 namespace Client_Power_Tools\Core;
 use Client_Power_Tools\Core\Common;
-use Client_Power_Tools\Core\Frontend;
 
 function status_update_request_button_shortcode() {
   if (!Common\cpt_is_client()) return;

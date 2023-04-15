@@ -72,7 +72,6 @@ class Project_List_Table extends Includes\WP_List_Table  {
    */
   function get_columns() {
     $columns = [
-      // 'cb' => '<input type="checkbox" />',
       'project' => Common\cpt_get_projects_label('plural'),
       'client_name' => 'Client',
       'project_status' => 'Status',
@@ -88,36 +87,8 @@ class Project_List_Table extends Includes\WP_List_Table  {
     $sortable_columns = [
       'project' => ['title', true],
       'client_name' => ['client_name', false],
-      // 'project_status' => ['project_status', false],
     ];
     return $sortable_columns;
-  }
-
-  /**
-   * Bulk Actions
-   *
-   * @return array An associative array containing all the bulk actions: 'slugs'=>'Visible Titles'
-   */
-  function get_bulk_actions() {
-    return; // Remove this line to enable bulk actions.
-    $actions = [
-      'trash'  => 'Move to Trash',
-    ];
-    return $actions;
-  }
-
-
-  function process_bulk_action() {
-    $action = $this->current_action();
-    switch ($action) {
-      case 'trash':
-        wp_die('Trash something.');
-        break;
-      default:
-        return;
-        break;
-    }
-    return;
   }
 
 
@@ -179,7 +150,6 @@ class Project_List_Table extends Includes\WP_List_Table  {
     $sortable = $this->get_sortable_columns();
 
     $this->_column_headers = [$columns, $hidden, $sortable];
-    $this->process_bulk_action();
 
     /**
      * Query Projects

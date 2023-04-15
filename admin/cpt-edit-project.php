@@ -8,13 +8,24 @@ function cpt_edit_project($projects_post_id) {
   $project_data = Common\cpt_get_project_data($projects_post_id);
 
   if (is_admin() && current_user_can('cpt_manage_projects')) {
-    ?>
-      <button class="button cpt-click-to-expand"><?php _e('Edit Project', 'client-power-tools'); ?></button>
-      <div class="cpt-this-expands">
-        <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-project-form.php'); ?>
-        <?php cpt_delete_project_button($projects_post_id); ?>
-      </div>
-    <?php
+    if (get_post_status($projects_post_id) != 'trash') {
+      ?>
+        <button class="button cpt-click-to-expand"><?php _e('Edit Project', 'client-power-tools'); ?></button>
+        <div class="cpt-this-expands">
+          <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-project-form.php'); ?>
+          <?php cpt_delete_project_button($projects_post_id); ?>
+        </div>
+      <?php
+    } else {
+      ?>
+        <div class="cpt-row gap-10">
+          <?php
+            echo cpt_undelete_project_button($projects_post_id);
+            echo cpt_permadelete_project_button($projects_post_id);
+          ?>
+        </div>
+      <?php
+    }
   }
 }
 
@@ -59,7 +70,6 @@ function cpt_delete_project_button($projects_post_id) {
   <?php
 }
 
-
 function cpt_process_delete_project() {
   if (isset($_POST['cpt_project_deleted_nonce']) && wp_verify_nonce($_POST['cpt_project_deleted_nonce'], 'cpt_project_deleted')) {
     $projects_post_id = sanitize_key(intval($_POST['projects_post_id']));
@@ -90,7 +100,7 @@ function cpt_undelete_project_button($projects_post_id) {
       <?php wp_nonce_field('cpt_project_undeleted', 'cpt_project_undeleted_nonce'); ?>
       <input name="action" value="cpt_project_undeleted" type="hidden">
       <input name="projects_post_id" value="<?php echo $projects_post_id ?>" type="hidden">
-      <input name="submit" id="submit" type="submit" value="<?php _e('Undo', 'client-power-tools'); ?>">
+      <input name="submit" id="submit" type="submit" value="<?php _e('Restore', 'client-power-tools'); ?>">
     </form>
   <?php
   return ob_get_clean();
@@ -119,3 +129,39 @@ function cpt_process_undelete_project() {
 }
 
 add_action('admin_post_cpt_project_undeleted', __NAMESPACE__ . '\cpt_process_undelete_project');
+
+
+function cpt_permadelete_project_button($projects_post_id) {
+  if (!$projects_post_id) return;
+  ob_start();
+  ?>
+    <form id="cpt_permadelete_project_button" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+      <?php wp_nonce_field('cpt_project_permadeleted', 'cpt_project_permadeleted_nonce'); ?>
+      <input name="action" value="cpt_project_permadeleted" type="hidden">
+      <input name="projects_post_id" value="<?php echo $projects_post_id ?>" type="hidden">
+      <input name="submit" id="submit" type="submit" value="<?php _e('Delete Permanently', 'client-power-tools'); ?>">
+    </form>
+  <?php
+  return ob_get_clean();
+}
+
+function cpt_process_permadelete_project() {
+  if (isset($_POST['cpt_project_permadeleted_nonce']) && wp_verify_nonce($_POST['cpt_project_permadeleted_nonce'], 'cpt_project_permadeleted')) {
+    $projects_post_id = sanitize_key(intval($_POST['projects_post_id']));
+    $project_deleted = wp_delete_post($projects_post_id, true);
+
+    if ($project_deleted == true) {
+      $result = Common\cpt_get_projects_label('singular') . ' ' . __('deleted.', 'client-power-tools');
+    } else {
+      $result = Common\cpt_get_projects_label('singular') . ' ' . __('could not be deleted.', 'client-power-tools');
+    }
+
+    set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
+    wp_redirect(remove_query_arg('projects_post_id', $_POST['_wp_http_referer']));
+    exit;
+  } else {
+    die();
+  }
+}
+
+add_action('admin_post_cpt_project_permadeleted', __NAMESPACE__ . '\cpt_process_permadelete_project');

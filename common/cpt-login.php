@@ -2,6 +2,7 @@
 
 namespace Client_Power_Tools\Core\Common;
 
+add_action('wp_ajax_nopriv_check_password', __NAMESPACE__ . '\check_password');
 function check_password() {
   if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'cpt-login-nonce')) wp_send_json_error(['message' => 'Invalid nonce.']);
   if (!isset($_POST['email']) || strlen($_POST['email']) < 1) wp_send_json_error(['message' => 'Email address is missing.']);
@@ -16,9 +17,8 @@ function check_password() {
   wp_send_json_success(['message' => 'Logging you in …']);
 }
 
-add_action('wp_ajax_nopriv_check_password', __NAMESPACE__ . '\check_password'); // Not-logged-in users.
 
-
+add_action('wp_ajax_nopriv_send_login_code', __NAMESPACE__ . '\send_login_code');
 function send_login_code() {
   if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'cpt-login-nonce')) wp_send_json_error(['message' => 'Invalid nonce.']);
   if (!isset($_POST['email']) || strlen($_POST['email']) < 1) wp_send_json_error(['message' => 'Email address is missing.']);
@@ -54,9 +54,8 @@ function send_login_code() {
   wp_send_json_success(['message' => 'Login code sent to ' . $email . '. If you don\'t see it in your inbox, remember to check your spam folder just in case! The code will remain valid for 10 minutes.']);
 }
 
-add_action('wp_ajax_nopriv_send_login_code', __NAMESPACE__ . '\send_login_code'); // Not-logged-in users.
 
-
+add_action('wp_ajax_nopriv_check_login_code', __NAMESPACE__ . '\check_login_code');
 function check_login_code() {
   if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'cpt-login-nonce')) wp_send_json_error(['message' => 'Invalid nonce.']);
   if (!isset($_POST['email']) || strlen($_POST['email']) < 1) wp_send_json_error(['message' => 'Email address is missing.']);
@@ -86,5 +85,3 @@ function check_login_code() {
 	wp_set_auth_cookie($user->ID, true);
   wp_send_json_success(['message' => 'Logging you in …']);
 }
-
-add_action('wp_ajax_nopriv_check_login_code', __NAMESPACE__ . '\check_login_code'); // Not-logged-in users.
