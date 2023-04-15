@@ -63,7 +63,6 @@ function cpt_delete_project_button($projects_post_id) {
 function cpt_process_delete_project() {
   if (isset($_POST['cpt_project_deleted_nonce']) && wp_verify_nonce($_POST['cpt_project_deleted_nonce'], 'cpt_project_deleted')) {
     $projects_post_id = sanitize_key(intval($_POST['projects_post_id']));
-    
     $project_deleted = wp_delete_post($projects_post_id);
 
     if ($project_deleted == true) {

@@ -4,12 +4,8 @@ namespace Client_Power_Tools\Core\Common;
 
 function cpt_project_list($clients_user_id) {
   $projects = new \WP_Query([
-    'meta_query'      => [
-      [
-        'key'   => 'cpt_client_id',
-        'value' => $clients_user_id,
-      ],
-    ],
+    'meta_key'        => 'cpt_clients_user_id',
+    'meta_value'      => $client->ID,
     'orderby'         => isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'project',
     'order'           => isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC',
     'post_type'       => 'cpt_project',

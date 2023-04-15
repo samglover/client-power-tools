@@ -67,6 +67,15 @@ class Client_List_Table extends Includes\WP_List_Table  {
   }
 
   /**
+   * Client Projects Method
+   */
+  function column_client_projects($item) {
+    if ($item['project_count']) {
+      return sprintf($item['project_count']);
+    }
+  }
+
+  /**
    * Client Status Method
    */
   function column_client_status($item) {
@@ -101,6 +110,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       // 'cb'              => '<input type="checkbox" />',
       'client_name'     => 'Client',
       'client_messages' => 'Messages',
+      'client_projects' => 'Projects',
       'client_status'   => 'Status',
       'client_manager'  => 'Manager',
       'last_activity'   => 'Last Activity',
@@ -119,8 +129,9 @@ class Client_List_Table extends Includes\WP_List_Table  {
   function get_sortable_columns() {
     $sortable_columns = [
       'client_name'     => ['client_name', true],
-      'client_messages' => ['msg_count', false],
-      'client_status'   => ['client_status', false],
+      // 'client_messages' => ['msg_count', false],
+      // 'client_projects' => ['project_count', false],
+      // 'client_status'   => ['client_status', false],
       'client_manager'  => ['client_manager', false],
       'last_activity'   => ['last_activity', false],
     ];
@@ -224,6 +235,14 @@ class Client_List_Table extends Includes\WP_List_Table  {
           'posts_per_page'  => -1,
         ]);
 
+        $cpt_projects = new \WP_Query([
+          'fields'          => 'ids',
+          'meta_key'        => 'cpt_client_id',
+          'meta_value'      => $client->ID,
+          'post_type'       => 'cpt_project',
+          'posts_per_page'  => -1,
+        ]);
+
         $manager_data = get_userdata(get_user_meta($client->ID, 'cpt_client_manager', true));
 
         if ($manager_data) {
@@ -246,6 +265,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
           'client_status'   => get_user_meta($client->ID, 'cpt_client_status', true),
           'last_activity'   => get_user_meta($client->ID, 'cpt_last_activity', true),
           'msg_count'       => number_format_i18n($cpt_messages->post_count),
+          'project_count'   => number_format_i18n($cpt_projects->post_count),
         ];
       }
     }
@@ -270,8 +290,8 @@ class Client_List_Table extends Includes\WP_List_Table  {
     }
 
     // Sorts the data set.
-    $orderby  = isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby'])  : 'display_name';
-    $order    = isset($_REQUEST['order'])   ? sanitize_key($_REQUEST['order'])    : 'ASC';
+    $orderby  = isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'client_name';
+    $order    = isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC';
     $data     = wp_list_sort($data, $orderby, $order);
 
     /**

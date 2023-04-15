@@ -72,10 +72,10 @@ class Project_List_Table extends Includes\WP_List_Table  {
    */
   function get_columns() {
     $columns = [
-      // 'cb'      => '<input type="checkbox" />',
-      'project'           => Common\cpt_get_projects_label('plural'),
-      'client_name'       => 'Client',
-      'project_status'    => 'Status',
+      // 'cb' => '<input type="checkbox" />',
+      'project' => Common\cpt_get_projects_label('plural'),
+      'client_name' => 'Client',
+      'project_status' => 'Status',
     ];
     return $columns;
   }
@@ -86,9 +86,9 @@ class Project_List_Table extends Includes\WP_List_Table  {
    */
   function get_sortable_columns() {
     $sortable_columns = [
-      'project'         => ['project', true],
-      'client_name'     => ['client_name', false],
-      'project_status'  => ['project_status', false],
+      'project' => ['title', true],
+      'client_name' => ['client_name', false],
+      // 'project_status' => ['project_status', false],
     ];
     return $sortable_columns;
   }
@@ -101,7 +101,7 @@ class Project_List_Table extends Includes\WP_List_Table  {
   function get_bulk_actions() {
     return; // Remove this line to enable bulk actions.
     $actions = [
-      'delete'  => 'Delete',
+      'trash'  => 'Move to Trash',
     ];
     return $actions;
   }
@@ -110,8 +110,8 @@ class Project_List_Table extends Includes\WP_List_Table  {
   function process_bulk_action() {
     $action = $this->current_action();
     switch ($action) {
-      case 'delete':
-        wp_die('Delete something.');
+      case 'trash':
+        wp_die('Trash something.');
         break;
       default:
         return;
@@ -172,7 +172,7 @@ class Project_List_Table extends Includes\WP_List_Table  {
      * Query Projects
      */
     $projects = new \WP_Query([
-      'orderby'         => isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'project',
+      'orderby'         => isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'title',
       'order'           => isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC',
       'post_type'       => 'cpt_project',
       'posts_per_page'  => -1,
@@ -194,7 +194,6 @@ class Project_List_Table extends Includes\WP_List_Table  {
     endwhile; endif;
 
     // Filters the data set.
-
     if (isset($_REQUEST['project_status'])) {
       $project_status_filter = sanitize_text_field(urldecode($_REQUEST['project_status']));
       if ($project_status_filter) {
@@ -203,6 +202,11 @@ class Project_List_Table extends Includes\WP_List_Table  {
         }
       }
     }
+
+    // Sorts the data set.
+    $orderby  = isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'project';
+    $order    = isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC';
+    $data     = wp_list_sort($data, $orderby, $order);
 
     /**
      * Pagination

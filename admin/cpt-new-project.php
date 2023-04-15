@@ -19,7 +19,7 @@ function cpt_process_new_project() {
   if (is_wp_error($new_project)) {
     $result = 'Project could not be created. Error message: ' . $new_client->get_error_message();
   } else {
-    $result = 'Project created. <a href="' . get_permalink($new_project) . '">' . __('View project', 'client-power-tools') . '</a>.';
+    $result = 'Project created. <a href="' . get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id=' . $new_project . '">' . __('View project', 'client-power-tools') . '</a>.';
   }
 
   set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
