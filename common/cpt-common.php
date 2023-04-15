@@ -122,6 +122,7 @@ function cpt_get_knowledge_base_url() {
 function cpt_get_name($user_id) {
   if (!$user_id) return;
   $userdata = get_userdata($user_id);
+  if (!$userdata) return;
   if (isset($userdata->first_name) && isset($userdata->last_name)) {
     $name = $userdata->first_name . ' ' . $userdata->last_name;
   } else {

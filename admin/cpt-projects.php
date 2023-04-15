@@ -8,6 +8,9 @@ function cpt_projects() {
   $projects_label = Common\cpt_get_projects_label();
   ?>
     <div id="cpt-admin" class="wrap">
+      <?php if (isset($_REQUEST['projects_post_id'])) { ?>
+        <p><a href="<?php echo remove_query_arg('projects_post_id'); ?>">&larr; <?php _e('Back to Projects', 'client-power-tools'); ?></a></p>
+      <?php } ?>
       <div id="cpt-admin-header">
         <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/cpt-logo.svg'); ?>
         <div id="cpt-admin-page-title">
@@ -50,7 +53,7 @@ function cpt_projects() {
       <hr class="wp-header-end">
       <?php
         $clients = Common\cpt_get_clients(['fields' => 'ID']);
-        if ($clients && !isset($_REQUEST['projects_post_id'])) {
+        if (!isset($_REQUEST['projects_post_id'])) {
           if (current_user_can('cpt_manage_projects')) {
             if ($clients) {
               ?>

@@ -56,7 +56,7 @@
 
 /* Forms */
 #cpt-admin {
-  h2 {
+  h2:not(:first-child) {
     margin-top: 3em;
   }
 

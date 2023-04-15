@@ -72,7 +72,7 @@ function cpt_delete_client_modal($clients_user_id) {
       <div class="cpt-admin-modal-card">
         <h2 style="color: red;"><?php _e('WARNING'); ?></h2>
         <p><?php _e('<strong>Deleting a client is permanent.</strong> There is no undo. Make sure you have a backup!'); ?></p>
-        <p><?php _e('Deleting a client will also remove the associated user account, client messages, and other client information.'); ?></p>
+        <p><?php _e('Deleting a client will also remove the associated user account, client messages, projects, and other client information.'); ?></p>
         <?php cpt_delete_client_button($clients_user_id); ?>
         <button class="button cpt-cancel-delete-client"><?php _e('Cancel'); ?></button>
       </div>
@@ -104,21 +104,34 @@ function cpt_process_delete_client() {
     $clients_user_id      = sanitize_key(intval($_POST['clients_user_id']));
     $client_name  = Common\cpt_get_name($clients_user_id);
 
-    $args = [
+    $cpt_messages   = get_posts([
       'fields'          => 'ids',
       'meta_key'        => 'cpt_clients_user_id',
       'meta_value'      => $clients_user_id,
       'post_type'       => 'cpt_message',
       'posts_per_page'  => -1,
-    ];
-
-    $cpt_messages   = get_posts($args);
-    $message_count  = $cpt_messages ? count($cpt_messages) : 0;
-    $delete_count   = 0;
+    ]);
+    $message_count = $cpt_messages ? count($cpt_messages) : 0;
+    $msg_delete_count = 0;
 
     foreach($cpt_messages as $post_id) {
       $post_deleted = wp_delete_post($post_id, true);
-      if ($post_deleted) $delete_count++;
+      if ($post_deleted) $msg_delete_count++;
+    }
+
+    $cpt_projects   = get_posts([
+      'fields'          => 'ids',
+      'meta_key'        => 'cpt_client_id',
+      'meta_value'      => $clients_user_id,
+      'post_type'       => 'cpt_project',
+      'posts_per_page'  => -1,
+    ]);
+    $project_count = $cpt_projects ? count($cpt_projects) : 0;
+    $proj_delete_count = 0;
+
+    foreach($cpt_projects as $post_id) {
+      $post_deleted = wp_delete_post($post_id, true);
+      if ($post_deleted) $proj_delete_count++;
     }
 
     $client_deleted = wp_delete_user($clients_user_id);
@@ -130,9 +143,16 @@ function cpt_process_delete_client() {
     }
 
     if ($message_count > 0) {
-      $result .= ' ' . $delete_count . '/' . $message_count . __(' messages deleted.');
-      if ($delete_count < $messager_count) {
+      $result .= ' ' . $msg_delete_count . '/' . $message_count . __(' messages deleted.');
+      if ($msg_delete_count < $messager_count) {
         $result .= __(' <em>Not all messages could be deleted.</em>');
+      }
+    }
+
+    if ($project_count > 0) {
+      $result .= ' ' . $proj_delete_count . '/' . $project_count . ' ' . strtolower(Common\cpt_get_projects_label('plural')) . __(' deleted.');
+      if ($proj_delete_count < $project_count) {
+        $result .= __(' <em>Not all projects could be deleted.</em>');
       }
     }
 

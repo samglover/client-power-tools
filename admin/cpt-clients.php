@@ -8,7 +8,7 @@ function cpt_clients() {
   ?>
     <div id="cpt-admin" class="wrap">
       <?php if (isset($_REQUEST['user_id'])) { ?>
-        <p><a href="<?php echo remove_query_arg('user_id'); ?>">&larr; <?php _e('Back to Clients', 'client-pwoer-tools'); ?></a></p>
+        <p><a href="<?php echo remove_query_arg('user_id'); ?>">&larr; <?php _e('Back to Clients', 'client-power-tools'); ?></a></p>
       <?php } ?>
       <header id="cpt-admin-header">
         <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/cpt-logo.svg'); ?>

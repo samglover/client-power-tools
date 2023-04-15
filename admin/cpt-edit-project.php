@@ -66,9 +66,9 @@ function cpt_process_delete_project() {
     $project_deleted = wp_trash_post($projects_post_id);
 
     if ($project_deleted == true) {
-      $result = __('Project deleted.', 'client-power-tools');
+      $result = Common\cpt_get_projects_label('singular') . ' ' . __('moved to the trash.', 'client-power-tools') . ' ' . cpt_undelete_project_button($projects_post_id);
     } else {
-      $result = __('Project could not be deleted.', 'client-power-tools');
+      $result = Common\cpt_get_projects_label('singular') . ' ' . __('could not be moved to the trash.', 'client-power-tools');
     }
 
     set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
@@ -80,3 +80,42 @@ function cpt_process_delete_project() {
 }
 
 add_action('admin_post_cpt_project_deleted', __NAMESPACE__ . '\cpt_process_delete_project');
+
+
+function cpt_undelete_project_button($projects_post_id) {
+  if (!$projects_post_id) return;
+  ob_start();
+  ?>
+    <form id="cpt_undelete_project_button" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+      <?php wp_nonce_field('cpt_project_undeleted', 'cpt_project_undeleted_nonce'); ?>
+      <input name="action" value="cpt_project_undeleted" type="hidden">
+      <input name="projects_post_id" value="<?php echo $projects_post_id ?>" type="hidden">
+      <input name="submit" id="submit" type="submit" value="<?php _e('Undo', 'client-power-tools'); ?>">
+    </form>
+  <?php
+  return ob_get_clean();
+}
+
+function cpt_process_undelete_project() {
+  if (isset($_POST['cpt_project_undeleted_nonce']) && wp_verify_nonce($_POST['cpt_project_undeleted_nonce'], 'cpt_project_undeleted')) {
+    $projects_post_id = sanitize_key(intval($_POST['projects_post_id']));
+    $project_undeleted = wp_update_post([
+      'ID' => $projects_post_id,
+      'post_status' => 'publish',
+    ]);
+
+    if ($project_undeleted == true) {
+      $result = Common\cpt_get_projects_label('singular') . ' ' . __('restored.', 'client-power-tools');
+    } else {
+      $result = Common\cpt_get_projects_label('singular') . ' ' . __('could not be restored.', 'client-power-tools');
+    }
+
+    set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
+    wp_redirect(add_query_arg('projects_post_id', $projects_post_id, get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id='));
+    exit;
+  } else {
+    die();
+  }
+}
+
+add_action('admin_post_cpt_project_undeleted', __NAMESPACE__ . '\cpt_process_undelete_project');

@@ -157,7 +157,7 @@
 }
 
 /* Forms */
-#cpt-admin h2 {
+#cpt-admin h2:not(:first-child) {
   margin-top: 3em;
 }
 #cpt-admin button,
