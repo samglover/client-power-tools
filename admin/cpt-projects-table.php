@@ -123,10 +123,12 @@ class Project_List_Table extends Includes\WP_List_Table  {
 
   function get_views() {
     $params         = explode("\n", get_option('cpt_project_statuses'));
+    $count_projects = wp_count_posts($post_type = 'cpt_project');
     $current_status = isset($_REQUEST['project_status']) ? sanitize_text_field(urldecode($_REQUEST['project_status'])) : 'all';
-    $views          = array();
+    $views          = [];
 
     array_unshift($params, 'All');
+    if ($count_projects->trash > 0) array_push($params, 'Trash');
 
     foreach($params as $key => $val) {
       $class          = '';
@@ -136,15 +138,26 @@ class Project_List_Table extends Includes\WP_List_Table  {
       if (
         $current_status == $curr_param || 
         ($curr_param == 'All' && isset($_REQUEST['project_status']) && !$current_status) ||
-        ($curr_param == 'All' && !isset($_REQUEST['project_status']))
+        ($curr_param == 'All' && !isset($_REQUEST['project_status'])) ||
+        ($curr_param == 'Trash' && isset($_REQUEST['post_status']))
       ) {
         $class = ' class="current"';
       }
 
-      if ($curr_param == 'All') {
-        $link = '<a href="' . remove_query_arg('project_status') . '"' . $class . '>' . $val . '</a>';
-      } else {
-        $link = '<a href="' . add_query_arg('project_status', $curr_param) . '"' . $class . '>' . $val . '</a>';
+      switch ($curr_param) {
+        case 'All':
+          $url = remove_query_arg(['project_status', 'post_status']);
+          $link = '<a href="' . $url . '"' . $class . '>' . $val . ' <span class="count">(' . $count_projects->publish . ')</span></a>';
+          break;
+        case 'Trash':
+          $url = remove_query_arg('project_status');
+          $url = add_query_arg('post_status', 'trash');
+          $link = '<a href="' . $url . '"' . $class . '>' . $val . ' <span class="count">(' . $count_projects->trash . ')</span></a>';
+          break;
+        default:
+          $url = remove_query_arg('post_status');
+          $url = add_query_arg('project_status', $curr_param);
+          $link = '<a href="' . add_query_arg('project_status', $curr_param) . '"' . $class . '>' . $val . '</a>';
       }
 
       $views[$curr_param] = $link;
@@ -171,12 +184,14 @@ class Project_List_Table extends Includes\WP_List_Table  {
     /**
      * Query Projects
      */
-    $projects = new \WP_Query([
+    $args = [
       'orderby'         => isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'title',
       'order'           => isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC',
       'post_type'       => 'cpt_project',
       'posts_per_page'  => -1,
-    ]);
+    ];
+    if (isset($_REQUEST['post_status'])) $args['post_status'] = sanitize_key($_REQUEST['post_status']);
+    $projects = new \WP_Query($args);
     $data = [];
 
     if ($projects->have_posts()) : while ($projects->have_posts()) : $projects->the_post();

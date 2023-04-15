@@ -7,6 +7,7 @@ function cpt_process_new_project() {
   if (!isset($_POST['cpt_new_project_nonce']) || !wp_verify_nonce($_POST['cpt_new_project_nonce'], 'cpt_new_project_added')) exit('Invalid nonce.');
 
   $new_project = wp_insert_post([
+    'post_status' => 'publish',
     'post_title' => sanitize_text_field($_POST['project_name']),
     'post_type' => 'cpt_project',
     'meta_input' => [
