@@ -29,6 +29,7 @@ function cpt_edit_project($projects_post_id) {
   }
 }
 
+add_action('admin_post_cpt_project_updated', __NAMESPACE__ . '\cpt_process_project_update');
 function cpt_process_project_update() {
   if (isset($_POST['cpt_project_updated_nonce']) && wp_verify_nonce($_POST['cpt_project_updated_nonce'], 'cpt_project_updated')) {
     $projects_post_id = sanitize_key(intval($_POST['projects_post_id']));
@@ -55,8 +56,6 @@ function cpt_process_project_update() {
   }
 }
 
-add_action('admin_post_cpt_project_updated', __NAMESPACE__ . '\cpt_process_project_update');
-
 
 function cpt_delete_project_button($projects_post_id) {
   if (!$projects_post_id) return;
@@ -70,6 +69,7 @@ function cpt_delete_project_button($projects_post_id) {
   <?php
 }
 
+add_action('admin_post_cpt_project_deleted', __NAMESPACE__ . '\cpt_process_delete_project');
 function cpt_process_delete_project() {
   if (isset($_POST['cpt_project_deleted_nonce']) && wp_verify_nonce($_POST['cpt_project_deleted_nonce'], 'cpt_project_deleted')) {
     $projects_post_id = sanitize_key(intval($_POST['projects_post_id']));
@@ -89,8 +89,6 @@ function cpt_process_delete_project() {
   }
 }
 
-add_action('admin_post_cpt_project_deleted', __NAMESPACE__ . '\cpt_process_delete_project');
-
 
 function cpt_undelete_project_button($projects_post_id) {
   if (!$projects_post_id) return;
@@ -106,6 +104,7 @@ function cpt_undelete_project_button($projects_post_id) {
   return ob_get_clean();
 }
 
+add_action('admin_post_cpt_project_undeleted', __NAMESPACE__ . '\cpt_process_undelete_project');
 function cpt_process_undelete_project() {
   if (isset($_POST['cpt_project_undeleted_nonce']) && wp_verify_nonce($_POST['cpt_project_undeleted_nonce'], 'cpt_project_undeleted')) {
     $projects_post_id = sanitize_key(intval($_POST['projects_post_id']));
@@ -128,8 +127,6 @@ function cpt_process_undelete_project() {
   }
 }
 
-add_action('admin_post_cpt_project_undeleted', __NAMESPACE__ . '\cpt_process_undelete_project');
-
 
 function cpt_permadelete_project_button($projects_post_id) {
   if (!$projects_post_id) return;
@@ -145,6 +142,7 @@ function cpt_permadelete_project_button($projects_post_id) {
   return ob_get_clean();
 }
 
+add_action('admin_post_cpt_project_permadeleted', __NAMESPACE__ . '\cpt_process_permadelete_project');
 function cpt_process_permadelete_project() {
   if (isset($_POST['cpt_project_permadeleted_nonce']) && wp_verify_nonce($_POST['cpt_project_permadeleted_nonce'], 'cpt_project_permadeleted')) {
     $projects_post_id = sanitize_key(intval($_POST['projects_post_id']));
@@ -163,5 +161,3 @@ function cpt_process_permadelete_project() {
     die();
   }
 }
-
-add_action('admin_post_cpt_project_permadeleted', __NAMESPACE__ . '\cpt_process_permadelete_project');
