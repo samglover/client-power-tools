@@ -68,7 +68,7 @@ function cpt_projects() {
               <?php
             }
           }
-          cpt_clients_projects();
+          cpt_project_list();
         } else {
           $projects_post_id = sanitize_key(intval($_REQUEST['projects_post_id']));
           cpt_get_project($projects_post_id);
