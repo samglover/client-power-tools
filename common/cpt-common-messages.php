@@ -23,13 +23,12 @@ function cpt_messages($clients_user_id) {
   <?php
 }
 
+add_filter('the_title', __NAMESPACE__ . '\cpt_messages_page_title', 10, 2);
 function cpt_messages_page_title($title, $id) {
   $client_dashboard_id = get_option('cpt_client_dashboard_page_selection');
   if (cpt_is_messages() && $id == $client_dashboard_id && in_the_loop()) $title = $title . ': Messages';
   return $title;
 }
-
-add_filter('the_title', __NAMESPACE__ . '\cpt_messages_page_title', 10, 2);
 
 
 function cpt_message_list($user_id) {
@@ -218,6 +217,7 @@ function cpt_new_message_form($user_id) {
 }
 
 
+add_action('admin_post_cpt_new_message_added', __NAMESPACE__ . '\cpt_process_new_message');
 function cpt_process_new_message() {
   if (isset($_POST['cpt_new_message_nonce']) && wp_verify_nonce($_POST['cpt_new_message_nonce'], 'cpt_new_message_added')) {
     $post_title       = wp_strip_all_tags(sanitize_text_field($_POST['subject_line']));
@@ -279,8 +279,6 @@ function cpt_process_new_message() {
     die();
   }
 }
-
-add_action('admin_post_cpt_new_message_added', __NAMESPACE__ . '\cpt_process_new_message');
 
 
 function cpt_message_notification($message_id) {

@@ -17,6 +17,14 @@ function cpt_get_projects_label($n = null) {
 }
 
 
+add_filter('the_title', __NAMESPACE__ . '\cpt_projects_page_title', 10, 2);
+function cpt_projects_page_title($title, $id) {
+  $client_dashboard_id = get_option('cpt_client_dashboard_page_selection');
+  if (cpt_is_projects() && $id == $client_dashboard_id && in_the_loop()) $title = $title . ': ' . cpt_get_projects_label('plural');
+  return $title;
+}
+
+
 function cpt_get_project_data($projects_post_id) {
   if (!$projects_post_id) return;
   $project_data = [

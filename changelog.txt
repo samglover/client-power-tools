@@ -3,18 +3,21 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
 
 
-### 1.7 - Projects
+### 1.7 - 2023-04-??
 
 #### Added
+- NEW MODULE: Projects & Stages! Organize your client projects and assign stages to different project types.
 
 #### Changed
 - Change capability names (replaced hyphens with underscores).
 - No default client manager.
 - Show an error if the page requests a non-existent client.
 - A number of minor user experience improvements.
+- Many minor updates.
 
 #### Fixed
 - When one expander is active, clicking another expander now closes it and restores the button label.
+- Fixed page titles not showing up on empty dashboard pages.
 
 
 ### 1.6.5 - 2023-02-10
