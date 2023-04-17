@@ -19,6 +19,7 @@ function cpt_edit_client($clients_user_id) {
   }
 }
 
+add_action('admin_post_cpt_client_updated', __NAMESPACE__ . '\cpt_process_client_update');
 function cpt_process_client_update() {
   if (isset($_POST['cpt_client_updated_nonce']) && wp_verify_nonce($_POST['cpt_client_updated_nonce'], 'cpt_client_updated')) {
     $clients_user_id = sanitize_key(intval($_POST['clients_user_id']));
@@ -62,8 +63,6 @@ function cpt_process_client_update() {
   }
 }
 
-add_action('admin_post_cpt_client_updated', __NAMESPACE__ . '\cpt_process_client_update');
-
 
 function cpt_delete_client_modal($clients_user_id) {
   if (!$clients_user_id) return;
@@ -99,6 +98,7 @@ function cpt_delete_client_button($clients_user_id) {
 }
 
 
+add_action('admin_post_cpt_client_deleted', __NAMESPACE__ . '\cpt_process_delete_client');
 function cpt_process_delete_client() {
   if (isset($_POST['cpt_client_deleted_nonce']) && wp_verify_nonce($_POST['cpt_client_deleted_nonce'], 'cpt_client_deleted')) {
     $clients_user_id      = sanitize_key(intval($_POST['clients_user_id']));
@@ -163,5 +163,3 @@ function cpt_process_delete_client() {
     die();
   }
 }
-
-add_action('admin_post_cpt_client_deleted', __NAMESPACE__ . '\cpt_process_delete_client');
