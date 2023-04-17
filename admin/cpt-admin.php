@@ -3,9 +3,9 @@
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
+add_action('admin_init', __NAMESPACE__ . '\cpt_redirect_clients');
 function cpt_redirect_clients() {
   global $pagenow;
-
   if (
     Common\cpt_is_client() &&
     !current_user_can('cpt_manage_clients') &&
@@ -17,9 +17,8 @@ function cpt_redirect_clients() {
   }
 }
 
-add_action('admin_init', __NAMESPACE__ . '\cpt_redirect_clients');
 
-
+add_action('admin_notices', __NAMESPACE__ . '\cpt_security_warning', 1);
 function cpt_security_warning() {
   global $pagenow;
   if (!is_ssl() && cpt_is_cpt_admin_page()) {
@@ -31,9 +30,8 @@ function cpt_security_warning() {
   }
 }
 
-add_action('admin_notices', __NAMESPACE__ . '\cpt_security_warning', 1);
 
-
+add_action('admin_notices', __NAMESPACE__ . '\cpt_welcome_message');
 function cpt_welcome_message() {
   global $pagenow;
   if (cpt_is_cpt_admin_page() && get_transient('cpt_show_welcome_message')) {
@@ -51,9 +49,8 @@ function cpt_welcome_message() {
   }
 }
 
-add_action('admin_notices', __NAMESPACE__ . '\cpt_welcome_message');
 
-
+add_action('admin_menu', __NAMESPACE__ . '\cpt_menu_pages');
 function cpt_menu_pages() {
   add_menu_page(
     'Client Power Tools',
@@ -116,8 +113,6 @@ function cpt_menu_pages() {
   );
 }
 
-add_action('admin_menu', __NAMESPACE__ . '\cpt_menu_pages');
-
 
 function cpt_is_cpt_admin_page() {
   global $pagenow;
@@ -169,10 +164,9 @@ function cpt_get_status_select($option = null, $name = null, $selected = null) {
 }
 
 
+add_action('wp_mail_failed', 'cpt_show_wp_mail_errors', 10, 1);
 function cpt_show_wp_mail_errors($wp_error) {
   echo '<pre>';
     print_r($wp_error);
   echo '</pre>';
 }
-
-add_action('wp_mail_failed', 'cpt_show_wp_mail_errors', 10, 1);
