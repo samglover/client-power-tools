@@ -3,6 +3,7 @@
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
+add_action('admin_post_cpt_new_project_added', __NAMESPACE__ . '\cpt_process_new_project');
 function cpt_process_new_project() {
   if (!isset($_POST['cpt_new_project_nonce']) || !wp_verify_nonce($_POST['cpt_new_project_nonce'], 'cpt_new_project_added')) exit('Invalid nonce.');
 
@@ -27,5 +28,3 @@ function cpt_process_new_project() {
   wp_redirect($_POST['_wp_http_referer']);
   exit;
 }
-
-add_action('admin_post_cpt_new_project_added', __NAMESPACE__ . '\cpt_process_new_project');
