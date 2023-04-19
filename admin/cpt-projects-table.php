@@ -44,18 +44,13 @@ class Project_List_Table extends Includes\WP_List_Table  {
    * Project Column Method
    */
   function column_project($item) {
-    // Return the contents.
-    return sprintf('<strong><a href="' . add_query_arg('projects_post_id', $item['ID']) . '">%1$s</a></strong>%2$s',
-      /* $1%s */ $item['project'],
-      /* $2%s */ $item['project_id'] ? ' <span style="color:silver">(' . $item['project_id'] . ')</span>' : '',
-    );
+    return '<strong><a href="' . add_query_arg('projects_post_id', $item['ID']) . '">' . $item['project'] . '</a></strong>';
   }
 
   /**
    * Client Column Method
    */
   function column_client_name($item) {
-    // Return the contents.
     return sprintf('<strong><a href="' . Common\cpt_get_client_profile_url($item['clients_user_id']) . '">%1$s</a></strong>%2$s',
       /* $1%s */ $item['client_name'],
       /* $2%s */ $item['client_id'] ? ' <span style="color:silver">(' . $item['client_id'] . ')</span>' : '',
@@ -72,9 +67,11 @@ class Project_List_Table extends Includes\WP_List_Table  {
    */
   function get_columns() {
     $columns = [
+      'project_id' => Common\cpt_get_projects_label('singular') . ' ' . __('ID', 'client-power-tools'),
       'project' => Common\cpt_get_projects_label('plural'),
-      'client_name' => 'Client',
-      'project_status' => 'Status',
+      'project_type' => __('Type', 'client-power-tools'),
+      'client_name' => __('Client', 'client-power-tools'),
+      'project_status' => __('Status', 'client-power-tools'),
     ];
     return $columns;
   }
@@ -86,52 +83,49 @@ class Project_List_Table extends Includes\WP_List_Table  {
   function get_sortable_columns() {
     $sortable_columns = [
       'project' => ['title', true],
-      'client_name' => ['client_name', false],
+      'project_id' => ['project_id', true],
+      // 'project_type' => ['project_type', true],
+      // 'client_name' => ['client_name', false],
     ];
     return $sortable_columns;
   }
 
 
   function get_views() {
-    $params         = explode("\n", get_option('cpt_project_statuses'));
     $count_projects = wp_count_posts($post_type = 'cpt_project');
     $current_status = isset($_REQUEST['project_status']) ? sanitize_text_field(urldecode($_REQUEST['project_status'])) : 'all';
-    $views          = [];
+    $views = [];
 
-    array_unshift($params, 'All');
+    $params = ['All'];
+    $params = array_merge($params, explode("\n", get_option('cpt_project_statuses')));
     if ($count_projects->trash > 0) array_push($params, 'Trash');
 
     foreach($params as $key => $val) {
       $class          = '';
+      $current        = ' class="current"';
       $val            = trim($val);
-      $curr_param     = urlencode($val);
 
-      if (
-        $current_status == $curr_param || 
-        ($curr_param == 'All' && isset($_REQUEST['project_status']) && !$current_status) ||
-        ($curr_param == 'All' && !isset($_REQUEST['project_status'])) ||
-        ($curr_param == 'Trash' && isset($_REQUEST['post_status']))
-      ) {
-        $class = ' class="current"';
-      }
-
-      switch ($curr_param) {
+      switch ($val) {
         case 'All':
+          if (!isset($_REQUEST['project_status']) && !isset($_REQUEST['post_status'])) $class = $current;
           $url = remove_query_arg(['project_status', 'post_status']);
-          $link = '<a href="' . $url . '"' . $class . '>' . $val . ' <span class="count">(' . $count_projects->publish . ')</span></a>';
+          $link = '<a href="' . esc_url($url) . '"' . $class . '>' . $val . ' <span class="count">(' . $count_projects->publish . ')</span></a>';
           break;
         case 'Trash':
-          $url = remove_query_arg('project_status');
-          $url = add_query_arg('post_status', 'trash');
-          $link = '<a href="' . $url . '"' . $class . '>' . $val . ' <span class="count">(' . $count_projects->trash . ')</span></a>';
+          if (isset($_REQUEST['post_status']) && strtolower($_REQUEST['post_status']) == 'trash') $class = $current;
+          $url = remove_query_arg(['project_type', 'project_status']);
+          $url = add_query_arg('post_status', 'trash', $url);
+          $link = '<a href="' . esc_url($url) . '"' . $class . '>' . $val . ' <span class="count">(' . $count_projects->trash . ')</span></a>';
           break;
         default:
-          $url = remove_query_arg('post_status');
-          $url = add_query_arg('project_status', $curr_param);
-          $link = '<a href="' . add_query_arg('project_status', $curr_param) . '"' . $class . '>' . $val . '</a>';
+          if (isset($_REQUEST['project_status']) && $_REQUEST['project_status'] == $val) $class = $current;
+          $url = esc_url(remove_query_arg('post_status'));
+          $url = add_query_arg('project_status', $val, $url);
+          $link = '<a href="' . esc_url($url) . '"' . $class . '>' . $val . '</a>';
+          break;
       }
 
-      $views[$curr_param] = $link;
+      $views[$val] = $link;
     }
 
     return $views;
@@ -175,6 +169,7 @@ class Project_List_Table extends Includes\WP_List_Table  {
         'client_id' => get_user_meta($clients_user_id, 'cpt_client_id', true),
         'client_name' => Common\cpt_get_name(get_post_meta($post_id, 'cpt_client_id', true)),
         'project_status' => get_post_meta($post_id, 'cpt_project_status', true),
+        'project_type' => get_post_meta($post_id, 'cpt_project_type', true),
       ];
     endwhile; endif;
 
@@ -189,7 +184,7 @@ class Project_List_Table extends Includes\WP_List_Table  {
     }
 
     // Sorts the data set.
-    $orderby  = isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'project';
+    $orderby  = isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'project_id';
     $order    = isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC';
     $data     = wp_list_sort($data, $orderby, $order);
 

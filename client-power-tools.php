@@ -94,6 +94,7 @@ if (is_admin()) {
 		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-projects-table.php');
 		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project.php');
 		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-project.php');
+		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-project-types.php');
 	}
 
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-settings.php');
@@ -236,40 +237,41 @@ function cpt_activate() {
 register_activation_hook(__FILE__, __NAMESPACE__ . '\cpt_activate');
 
 
-// Register CPT Messages Custom Post Type
+// Register CPT Projects Custom Post Type
 // Uses user-defined labels so can't be in the activation hook, above.
 if (get_option('cpt_module_projects')) {
+	add_action('init', __NAMESPACE__ . '\cpt_project_post_type', 0);
 	function cpt_project_post_type() {
 		$projects_label = Common\cpt_get_projects_label();
 	
 		$labels = [
-			'name'                  => _x($projects_label[1], 'Post Type General Name', 'client-power-tools'),
-			'singular_name'         => _x($projects_label[0], 'Post Type Singular Name', 'client-power-tools'),
-			'menu_name'             => __($projects_label[1], 'client-power-tools'),
-			'name_admin_bar'        => __($projects_label[0], 'client-power-tools'),
-			'archives'              => __($projects_label[0] . ' Archives', 'client-power-tools'),
-			'attributes'            => __($projects_label[0] . ' Attributes', 'client-power-tools'),
-			'parent_item_colon'     => __('Parent ' . $projects_label[0] . ':', 'client-power-tools'),
-			'all_items'             => __('All ' . $projects_label[1], 'client-power-tools'),
-			'add_new_item'          => __('Add New ' . $projects_label[0], 'client-power-tools'),
+			'name'                  => $projects_label[0],
+			'singular_name'         => $projects_label[0],
+			'menu_name'             => $projects_label[1],
+			'name_admin_bar'        => $projects_label[0],
+			'archives'              => $projects_label[0] . ' ' . __('Archives', 'client-power-tools'),
+			'attributes'            => $projects_label[0] . ' ' . __('Attributes', 'client-power-tools'),
+			'parent_item_colon'     => __('Parent', 'client-power-tools') . ' ' . $projects_label[0] . ':',
+			'all_items'             => __('All', 'client-power-tools') . ' ' . $projects_label[1],
+			'add_new_item'          => __('Add New', 'client-power-tools') . ' ' . $projects_label[0],
 			'add_new'               => __('Add New', 'client-power-tools'),
-			'new_item'              => __('New ' . $projects_label[0], 'client-power-tools'),
-			'edit_item'             => __('Edit ' . $projects_label[0], 'client-power-tools'),
-			'update_item'           => __('Update ' . $projects_label[0], 'client-power-tools'),
-			'view_item'             => __('View ' . $projects_label[0], 'client-power-tools'),
-			'view_items'            => __('View ' . $projects_label[1], 'client-power-tools'),
+			'new_item'              => __('New', 'client-power-tools') . ' ' . $projects_label[0],
+			'edit_item'             => __('Edit', 'client-power-tools') . ' ' . $projects_label[0],
+			'update_item'           => __('Update', 'client-power-tools') . ' ' . $projects_label[0],
+			'view_item'             => __('View', 'client-power-tools') . ' ' . $projects_label[0],
+			'view_items'            => __('View', 'client-power-tools') . ' ' . $projects_label[1],
 			'search_items'          => __('Search ' . $projects_label[1], 'client-power-tools'),
-			'not_found'             => __($projects_label[0] . ' Not found', 'client-power-tools'),
+			'not_found'             => $projects_label[0] . ' ' . __('not found', 'client-power-tools'),
 			'not_found_in_trash'    => __('Not found in Trash', 'client-power-tools'),
 			'featured_image'        => __('Featured Image', 'client-power-tools'),
 			'set_featured_image'    => __('Set featured image', 'client-power-tools'),
 			'remove_featured_image' => __('Remove featured image', 'client-power-tools'),
 			'use_featured_image'    => __('Use as featured image', 'client-power-tools'),
-			'insert_into_item'      => __('Insert into ' . strtolower($projects_label[0]), 'client-power-tools'),
-			'uploaded_to_this_item' => __('Uploaded to this ' . strtolower($projects_label[0]) , 'client-power-tools'),
-			'items_list'            => __($projects_label[1] . ' list', 'client-power-tools'),
-			'items_list_navigation' => __($projects_label[1] . ' list navigation', 'client-power-tools'),
-			'filter_items_list'     => __('Filter ' . strtolower($projects_label[1]) . ' list', 'client-power-tools'),
+			'insert_into_item'      => __('Insert into', 'client-power-tools') . ' ' . strtolower($projects_label[0]),
+			'uploaded_to_this_item' => __('Uploaded to this', 'client-power-tools') . ' ' . strtolower($projects_label[0]),
+			'items_list'            => $projects_label[1] . ' ' . __('list', 'client-power-tools'),
+			'items_list_navigation' => $projects_label[1] . ' ' . __('list navigation', 'client-power-tools'),
+			'filter_items_list'     => __('Filter', 'client-power-tools') . ' ' . strtolower($projects_label[1]) . ' ' . __('list', 'client-power-tools'),
 		];
 	
 		$capabilities = [
@@ -283,13 +285,13 @@ if (get_option('cpt_module_projects')) {
 		];
 	
 		$args = [
-			'label'                 => __($projects_label[0], 'client-power-tools'),
-			'description'           => __('Client Power Tools ' . strtolower($projects_label[1]), 'client-power-tools'),
+			'label'                 => $projects_label[0],
+			'description'           => __('Client Power Tools', 'client-power-tools') . ' ' . strtolower($projects_label[1]),
 			'labels'                => $labels,
 			'supports'              => ['title'],
 			'hierarchical'          => false,
-			'public'                => false,
-			'show_ui'               => false,
+			'public'                => true,
+			'show_ui'               => true,
 			'show_in_menu'          => false,
 			'menu_position'         => 5,
 			'show_in_admin_bar'     => false,
@@ -306,6 +308,50 @@ if (get_option('cpt_module_projects')) {
 	
 		register_post_type('cpt_project', $args);
 	}
-	
-	add_action('init', __NAMESPACE__ . '\cpt_project_post_type', 0);
+
+	// Project Types
+	add_action('init', __NAMESPACE__ . '\register_project_type_custom_taxonomy', 0);
+  function register_project_type_custom_taxonomy() {
+		$projects_label = Common\cpt_get_projects_label();
+		
+  	$labels = [
+  		'name'                       	=> $projects_label[0] . ' ' . _x('Types', 'Taxonomy General Name', 'client-power-tools'),
+  		'singular_name'              	=> $projects_label[0] . ' ' . _x('Type', 'Taxonomy Singular Name', 'client-power-tools'),
+  		'menu_name'                  	=> $projects_label[0] . ' ' . __('Types', 'client-power-tools'),
+  		'all_items'                  	=> __('All', 'client-power-tools') . ' ' . $projects_label[0] . ' ' . __('Types', 'client-power-tools'),
+  		'parent_item'                	=> __('Parent', 'client-power-tools') . ' ' . $projects_label[0] . ' ' . __('Type', 'client-power-tools'),
+  		'parent_item_colon'          	=> __('All', 'client-power-tools') . ' ' . $projects_label[0] . ' ' . __('Type', 'client-power-tools') . ':',
+  		'new_item_name'              	=> __('New', 'client-power-tools') . ' ' . $projects_label[0] . ' ' . __('Type', 'client-power-tools'),
+  		'add_new_item'               	=> __('Add New', 'client-power-tools') . ' ' . $projects_label[0] . ' ' . __('Type', 'client-power-tools'),
+  		'edit_item'                  	=> __('Edit', 'client-power-tools') . ' ' . $projects_label[0] . ' ' . __('Type', 'client-power-tools'),
+  		'update_item'                	=> __('Update', 'client-power-tools') . ' ' . $projects_label[0] . ' ' . __('Type', 'client-power-tools'),
+  		'view_item'                  	=> $projects_label[0] . ' ' . __('Type Item', 'client-power-tools'),
+  		'separate_items_with_commas'	=> __('Separate', 'client-power-tools') . ' ' . strtolower($projects_label[0]) . ' ' . __('types with commas', 'client-power-tools'),
+  		'add_or_remove_items'        	=> __('Add or remove', 'client-power-tools') . ' ' . strtolower($projects_label[0]) . ' ' . __('types', 'client-power-tools'),
+  		'choose_from_most_used'      	=> __('Choose from the most used', 'client-power-tools'),
+  		'popular_items'              	=> __('Popular', 'client-power-tools') . ' ' . $projects_label[0] . ' ' . __('Types', 'client-power-tools'),
+  		'search_items'               	=> __('Search', 'client-power-tools') . ' ' . $projects_label[0] . ' ' . __('Types', 'client-power-tools'),
+  		'not_found'                  	=> __('Not Found', 'client-power-tools'),
+  		'no_terms'                   	=> __('No', 'client-power-tools') . ' ' . strtolower($projects_label[0]) . ' ' . __('types', 'client-power-tools'),
+  		'items_list'                 	=> $projects_label[0] . ' ' . __('types list', 'client-power-tools'),
+  		'items_list_navigation'      	=> $projects_label[0] . ' ' . __('types list navigation', 'client-power-tools'),
+  	];
+
+  	$args = [
+  		'labels'                     	=> $labels,
+			'default_term'							 	=> [
+				'name'											=> 'Default',
+				'slug'											=> 'default',
+			],
+  		'hierarchical'               	=> false,
+  		'public'                     	=> true,
+  		'show_ui'                    	=> true,
+  		'show_admin_column'          	=> true,
+  		'show_in_nav_menus'          	=> true,
+  		'show_tagcloud'              	=> false,
+  		'show_in_rest'               	=> true,
+  	];
+
+  	register_taxonomy('cpt-project-type', ['cpt_project'], $args);
+	}
 }

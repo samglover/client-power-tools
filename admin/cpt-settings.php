@@ -383,7 +383,7 @@ function cpt_projects_settings_init() {
     'cpt-settings',
   );
 
-  // Enable Status Update Request Button
+  // Enable Projects
   register_setting('cpt-settings', 'cpt_module_projects', 'absint');
   add_settings_field(
     'cpt_module_projects',
@@ -420,6 +420,26 @@ function cpt_projects_settings_init() {
       'cpt-settings',
       'cpt-projects-settings',
     );
+
+    add_settings_section(
+      'cpt-stages-settings',
+      __('Stages', 'client-power-tools'),
+      __NAMESPACE__ . '\cpt_stages_section',
+      'cpt-settings',
+    );
+
+    // Enable Stages
+    register_setting('cpt-settings', 'cpt_module_stages', 'absint');
+    add_settings_field(
+      'cpt_module_stages',
+      __('Enable', 'client-power-tools'),
+      __NAMESPACE__ . '\cpt_module_stages',
+      'cpt-settings',
+      'cpt-stages-settings',
+    );
+
+    if (get_option('cpt_module_stages')) {
+    }
   }
 }
 
@@ -471,14 +491,31 @@ if (get_option('cpt_module_projects')) {
   
     ?>
       <textarea name="cpt_project_statuses" class="small-text" rows="5"><?php echo $statuses; ?></textarea>
-      <p class="description"><?php _e('Enter one status per line.', 'client-power-tools'); ?></p>
+      <p class="description"><?php _e('Enter one status per line. Statuses apply to all project types.', 'client-power-tools'); ?></p>
     <?php
   }
   
   
   function cpt_default_project_status() {
     echo cpt_get_status_select('cpt_project_statuses', 'cpt_default_project_status');
-  }  
+  }
+
+  function cpt_stages_section() {
+  }
+
+  function cpt_module_stages() {
+    ?>
+      <fieldset>
+        <label for="cpt_module_stages">
+          <input name="cpt_module_stages" id="cpt_module_stages" type="checkbox" value="1" <?php checked(get_option('cpt_module_stages')); ?>>
+          <?php _e('Enable stages.', 'client-power-tools'); ?>
+        </label>
+      </fieldset>
+    <?php
+  }
+
+  if (get_option('cpt_module_stages')) {
+  }
 }
 
 // Knowledge Base
