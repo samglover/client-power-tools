@@ -19,47 +19,33 @@ function cpt_project_types() {
       <div id="col-container">
         <div id="col-left">
           <div class="col-wrap">
-            <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
-              <?php wp_nonce_field('cpt_new_project_type_added', 'cpt_new_project_type_nonce'); ?>
-              <input name="action" value="cpt_new_project_type_added" type="hidden">
-              <table class="form-table" role="presentation">
-                <tbody>
-                  <tr>
-                    <th scope="row">
-                      <label for="project_type">
-                        <?php printf(__('%s Type', 'client-power-tools'), $projects_label[0]); ?><br />
-                        <small>(<?php _e('required', 'client-power-tools'); ?>)</small>
-                      </label>
-                    </th>
-                    <td>
-                      <input name="project_type" id="project_type" class="regular-text" type="text" required aria-required="true">
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <p class="submit">
-                <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php printf(__('Add %s Type', 'client-power-tools'), $projects_label[0]); ?>">
-              </p>
-            </form>
+            <div class="form-wrap">
+              <h2><?php printf(__('Add New %s Type', 'client-power-tools'), $projects_label[0]); ?></h2>
+              <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+                <?php wp_nonce_field('cpt_new_project_type_added', 'cpt_new_project_type_nonce'); ?>
+                <input name="action" value="cpt_new_project_type_added" type="hidden">
+                <div class="form-field form-required term-name-wrap">
+                  <label for="project_type"><?php printf(__('%s Type', 'client-power-tools'), $projects_label[0]); ?></label>
+                  <input name="project_type" id="project_type" class="regular-text" type="text" required aria-required="true">
+                  <p class="description">(<?php _e('required', 'client-power-tools'); ?>)</p>
+                </div>
+                <p class="submit">
+                  <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php printf(__('Add %s Type', 'client-power-tools'), $projects_label[0]); ?>">
+                </p>
+              </form>
+            </div>
           </div>
         </div>
         <div id="col-right">
           <div class="col-wrap">
           <?php
-            $project_types = get_terms([
-              'taxonomy' => 'cpt-project-type',
-              'hide_empty' => false,
-            ]);
-            var_dump($project_types);
-            if ($project_types) {
-              ?>
-                <ul>
-                  <?php foreach($project_types as $key => $project_type) { ?>
-                    <li><?php echo $project_type->name; ?></li>
-                  <?php } ?>
-                </ul>
-              <?php
-            }
+            $project_types_list = new Project_Types_List_Table();
+            $project_types_list->prepare_items();
+            ?>
+              <form id="project-list" method="GET">
+                <?php $project_types_list->display() ?>
+              </form>
+            <?php
           ?>
           </div>
         </div>

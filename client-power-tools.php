@@ -95,6 +95,7 @@ if (is_admin()) {
 		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project.php');
 		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-project.php');
 		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-project-types.php');
+		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-project-types-table.php');
 	}
 
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-settings.php');
