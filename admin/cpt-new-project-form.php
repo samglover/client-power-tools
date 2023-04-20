@@ -30,6 +30,14 @@
       </tr>
       <tr>
         <th scope="row">
+          <label for="project_type">Project Type</label>
+        </th>
+        <td>
+          <?php echo cpt_get_project_type_select('project_type') ?>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">
           <label for="project_name">Project Name<br /><small>(required)</small></label>
         </th>
         <td>
@@ -42,14 +50,6 @@
         </th>
         <td>
           <input name="project_id" id="project_id" class="regular-text" type="text" autocapitalize="none" autocorrect="off">
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">
-          <label for="project_status">Project Status</label>
-        </th>
-        <td>
-          <?php echo cpt_get_status_select('cpt_project_statuses', 'project_status', 'cpt_default_project_status') ?>
         </td>
       </tr>
       <?php $custom_fields = Common\cpt_custom_client_fields(); ?>

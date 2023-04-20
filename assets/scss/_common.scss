@@ -98,16 +98,35 @@
       1px 1px 3px rgba(0, 0, 0, 0.2)
     ;
     box-sizing: border-box;
-    padding: 10px 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+
+    > :first-child {
+      margin-top: 0;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
 
     &.cpt-project-status-closed {
       background-color: rgba(255, 255, 255, 0.5);
     }
 
-    h3 {
+    .cpt-project-title {
+      margin-bottom: 5px;
+      
       a:not(:hover) {
         text-decoration: none;
       }
+    }
+
+    .cpt-project-meta {
+      font-size: 70%;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      text-transform: uppercase;
     }
   }
 }

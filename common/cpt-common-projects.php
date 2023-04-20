@@ -57,10 +57,11 @@ function cpt_get_clients_projects($clients_user_id = null) {
 function cpt_clients_projects($clients_user_id = null) {
   if (!$clients_user_id) $clients_user_id = get_current_user_id();
   if (!cpt_is_client($clients_user_id)) return;
+  $projects_label = cpt_get_projects_label();
   $projects = cpt_get_clients_projects($clients_user_id);
   if ($projects->have_posts()) :
     ?>
-      <section class="cpt-projects-list cpt-row">
+      <section class="cpt-projects-list">
         <?php while ($projects->have_posts()) : $projects->the_post(); ?>
           <?php 
             $post_id = get_the_ID(); 
@@ -78,11 +79,13 @@ function cpt_clients_projects($clients_user_id = null) {
                 }
               ?>
               <a href="<?php echo $project_url; ?>"><?php the_title(); ?></a>
-              <?php if ($project_id) { ?>
-                <span style="color:silver; font-weight: normal;">(<?php echo $project_id; ?>)</span>
-              <?php } ?>
             </h3>
-            <p class="cpt-project-status">Status: <?php echo $project_status; ?></p>
+            <ul class="cpt-project-meta">
+              <?php if ($project_id) { ?>
+                <li class="cpt-project-id"><?php printf(__('%1$s ID: %2$s', 'client-power-tools'), $projects_label[0], $project_id); ?></li>
+              <?php } ?>
+              <li class="cpt-project-status"><?php printf(__('%1$s Status: %2$s','client-power-tools'), $projects_label[0], $project_status); ?></li>
+            </ul>
           </div>
         <?php endwhile; ?>
       </section>

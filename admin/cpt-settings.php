@@ -421,30 +421,20 @@ function cpt_projects_settings_init() {
       'cpt-projects-settings',
     );
 
-    add_settings_section(
-      'cpt-stages-settings',
-      __('Stages', 'client-power-tools'),
-      __NAMESPACE__ . '\cpt_stages_section',
-      'cpt-settings',
-    );
-
-    // Enable Stages
-    register_setting('cpt-settings', 'cpt_module_stages', 'absint');
+    register_setting('cpt-settings', 'cpt_default_project_type');
     add_settings_field(
-      'cpt_module_stages',
-      __('Enable', 'client-power-tools'),
-      __NAMESPACE__ . '\cpt_module_stages',
+      'cpt_default_project_type',
+      '<label for="cpt_default_project_type">' . __('Default Project Type', 'client-power-tools') . '</label>',
+      __NAMESPACE__ . '\cpt_default_project_type',
       'cpt-settings',
-      'cpt-stages-settings',
+      'cpt-projects-settings',
     );
-
-    if (get_option('cpt_module_stages')) {
-    }
   }
 }
 
 
 function cpt_projects_section() {
+  _e('Projects can be assigned to clients, and each client may have multiple projects. You can create multiple project types, and give each project type a set of stages.', 'client-power-tools');
 }
 
 function cpt_module_projects() {
@@ -461,18 +451,18 @@ function cpt_module_projects() {
 if (get_option('cpt_module_projects')) {
   function cpt_projects_label() {
     ?>
-      <p class="description"><?php _e('What do you want to call your projects?', 'client-power-tools'); ?></p>
+      <p class="description"><?php _e('What do you want to call your projects? This label will be used everywhere other than this settings page.', 'client-power-tools'); ?></p>
       <ul>
         <li>
           <fieldset>
             <input name="cpt_projects_label[0]" type="text" value="<?php echo Common\cpt_get_projects_label('singular'); ?>">
-            <label for="cpt_projects_label[0]">Singular</label>
+            <label for="cpt_projects_label[0]"><?php _e('Singular', 'client-power-tools'); ?></label>
           </fieldset>
         </li>
         <li>
           <fieldset>
             <input name="cpt_projects_label[1]" type="text" value="<?php echo Common\cpt_get_projects_label('plural'); ?>">
-            <label for="cpt_projects_label[1]">Plural</label>
+            <label for="cpt_projects_label[1]"><?php _e('Singular', 'client-power-tools'); ?></label>
           </fieldset>
         </li>
       </ul>
@@ -500,21 +490,8 @@ if (get_option('cpt_module_projects')) {
     echo cpt_get_status_select('cpt_project_statuses', 'cpt_default_project_status');
   }
 
-  function cpt_stages_section() {
-  }
-
-  function cpt_module_stages() {
-    ?>
-      <fieldset>
-        <label for="cpt_module_stages">
-          <input name="cpt_module_stages" id="cpt_module_stages" type="checkbox" value="1" <?php checked(get_option('cpt_module_stages')); ?>>
-          <?php _e('Enable stages.', 'client-power-tools'); ?>
-        </label>
-      </fieldset>
-    <?php
-  }
-
-  if (get_option('cpt_module_stages')) {
+  function cpt_default_project_type() {
+    echo cpt_get_project_type_select('cpt_default_project_type');
   }
 }
 

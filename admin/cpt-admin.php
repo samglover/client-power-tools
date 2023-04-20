@@ -162,12 +162,11 @@ function cpt_get_client_manager_select($name = null, $selected = null) {
 function cpt_get_status_select($option = null, $name = null, $selected = null) {
   if (!$option || !$name) return;
   $statuses_array = explode("\n", get_option($option));
-
   if (!$selected) $selected = get_option($name);
-
   echo '<select name="' . $name . '" id="' . $name . '">';
     foreach ($statuses_array as $status) {
-      echo '<option value="' . $status . '"' . selected(trim($status), $selected) . '>' . $status . '</option>';
+      $status = trim($status);
+      echo '<option value="' . $status . '"' . selected($statusßå, $selected) . '>' . $status . '</option>';
     }
   echo '</select>';
 }

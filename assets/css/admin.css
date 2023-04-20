@@ -106,18 +106,35 @@
   background-color: White;
   box-shadow: 0 0 0 1px #ddd, 1px 1px 3px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
-  padding: 10px 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+.cpt-projects-list .cpt-project > :first-child {
+  margin-top: 0;
+}
+.cpt-projects-list .cpt-project > :last-child {
+  margin-bottom: 0;
 }
 .cpt-projects-list .cpt-project.cpt-project-status-closed {
   background-color: rgba(255, 255, 255, 0.5);
 }
-.cpt-projects-list .cpt-project h3 a:not(:hover) {
+.cpt-projects-list .cpt-project .cpt-project-title {
+  margin-bottom: 5px;
+}
+.cpt-projects-list .cpt-project .cpt-project-title a:not(:hover) {
   text-decoration: none;
+}
+.cpt-projects-list .cpt-project .cpt-project-meta {
+  font-size: 70%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
 }
 
 /**
-* Typography
-*/
+ * Typography
+ */
 #cpt-admin,
 .cpt-notice {
   font-family: Jost;
@@ -172,8 +189,31 @@
 }
 #cpt-admin .cpt-this-expands {
   background-color: rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
   margin-bottom: 20px;
-  padding: 0 20px;
+  padding: 20px;
+}
+#cpt-admin .cpt-this-expands > :first-child {
+  margin-top: 0;
+}
+#cpt-admin .cpt-this-expands > :last-child {
+  margin-bottom: 0;
+}
+#cpt-admin .cpt-this-expands .form-wrap > :first-child {
+  margin-top: 0;
+}
+#cpt-admin .cpt-this-expands .form-wrap > :last-child {
+  margin-bottom: 0;
+}
+#cpt-admin .cpt-this-expands #cpt_delete_project_button #submit {
+  margin-bottom: 0;
+}
+#cpt-admin .column-project_id {
+  width: 10%;
+}
+#cpt-admin .column-project_count {
+  text-align: center;
+  width: 10%;
 }
 
 #cpt-delete-client-link {

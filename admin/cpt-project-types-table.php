@@ -50,7 +50,8 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
   function get_columns() {
     $columns = [
       'project_type' => sprintf(__('%s Type', 'client-power-tools'), Common\cpt_get_projects_label('singular')),
-      'project_count' => sprintf(__('%s Count', 'client-power-tools'), Common\cpt_get_projects_label('singular')),
+      'project_type_stages' => __('Stages', 'client-power-tools'),
+      'project_count' => __('Count', 'client-power-tools'),
     ];
     return $columns;
   }
@@ -65,6 +66,16 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
       'project_count' => ['project_count', false],
     ];
     return $sortable_columns;
+  }
+
+  function handle_row_actions($item, $column_name, $primary) {
+    if ($primary !== $column_name ) return '';
+    if (!current_user_can('cpt_manage_projects')) return '';
+    $actions = [
+      'Edit',
+      'Delete' => '<a href="' . wp_nonce_url('?page=cpt-project-types&action=delete&project_type_term_id=' . $item['ID']) . '">' . __('Delete', 'client-power-tools') . '</a>',
+    ];
+    return $this->row_actions($actions);
   }
 
 
@@ -96,23 +107,14 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
 
     if ($project_types) {
       foreach($project_types as $project_type) {
-        $projects = get_posts([
-          'fields' => 'ids',
-          'numberposts' => -1,
-          'post_type' => 'cpt_project',
-          'tax_query' => [
-            [
-              'field' => 'slug',
-              'taxonomy' => 'cpt-project-type',
-              'terms' => $project_type->slug,
-            ],
-          ],
-        ]);
+        $stages_array = explode("\n", sanitize_textarea_field(get_term_meta($project_type->term_id, 'cpt_project_type_stages', true)));
+        $stages_output = implode('<br>', $stages_array);
 
         $data[] = [
           'ID' => $project_type->term_id,
           'project_type' => $project_type->name,
-          'project_count' => count($projects),
+          'project_type_stages' => $stages_output,
+          'project_count' => $project_type->count,
         ];
       }
     }

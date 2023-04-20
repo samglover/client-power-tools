@@ -21,18 +21,7 @@ function cpt_project_types() {
           <div class="col-wrap">
             <div class="form-wrap">
               <h2><?php printf(__('Add New %s Type', 'client-power-tools'), $projects_label[0]); ?></h2>
-              <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
-                <?php wp_nonce_field('cpt_new_project_type_added', 'cpt_new_project_type_nonce'); ?>
-                <input name="action" value="cpt_new_project_type_added" type="hidden">
-                <div class="form-field form-required term-name-wrap">
-                  <label for="project_type"><?php printf(__('%s Type', 'client-power-tools'), $projects_label[0]); ?></label>
-                  <input name="project_type" id="project_type" class="regular-text" type="text" required aria-required="true">
-                  <p class="description">(<?php _e('required', 'client-power-tools'); ?>)</p>
-                </div>
-                <p class="submit">
-                  <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php printf(__('Add %s Type', 'client-power-tools'), $projects_label[0]); ?>">
-                </p>
-              </form>
+              <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-type-form.php'); ?>
             </div>
           </div>
         </div>
@@ -67,6 +56,14 @@ function cpt_process_new_project_type() {
     $result = 'Project type could not be created. Error message: ' . $new_project_type->get_error_message();
   } else {
     $result = 'Project type created.';
+
+    $new_project_type_stages = add_term_meta(
+      $new_project_type['term_id'],
+      'cpt_project_type_stages',
+      sanitize_textarea_field($_POST['project_type_stages']),
+      true
+    );
+    if (is_wp_error($new_project_type_stages)) $result .= __('Stages could not be added. Error message:', 'client-power-tools') . ' ' . $new_project_type_stages->get_error_message();
   }
 
   set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);

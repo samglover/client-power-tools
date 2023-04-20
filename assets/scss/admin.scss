@@ -4,8 +4,8 @@
 
 
 /**
-* Typography
-*/
+ * Typography
+ */
 
 #cpt-admin,
 .cpt-notice {
@@ -73,8 +73,40 @@
 
   .cpt-this-expands {
     background-color: rgba(0, 0, 0, .05);
+    margin-top: 20px;
     margin-bottom: 20px;
-    padding: 0 20px;
+    padding: 20px;
+
+    > :first-child {
+      margin-top: 0;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+
+    .form-wrap {
+      > :first-child {
+        margin-top: 0;
+      }
+  
+      > :last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    #cpt_delete_project_button #submit {
+      margin-bottom: 0;
+    }
+  }
+
+  .column-project_id {
+    width: 10%;
+  }
+
+  .column-project_count {
+    text-align: center;
+    width: 10%;
   }
 }
 

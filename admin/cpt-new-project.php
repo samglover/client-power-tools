@@ -13,7 +13,7 @@ function cpt_process_new_project() {
     'post_type' => 'cpt_project',
     'meta_input' => [
       'cpt_project_id' => sanitize_text_field($_POST['project_id']),
-      'cpt_project_status' => sanitize_text_field($_POST['project_status']),
+      'cpt_project_type' => intval($_POST['project_type']),
       'cpt_client_id' => sanitize_text_field($_POST['client_id']),
     ]
   ]);

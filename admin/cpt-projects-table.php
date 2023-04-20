@@ -70,6 +70,7 @@ class Project_List_Table extends Includes\WP_List_Table  {
       'project_id' => Common\cpt_get_projects_label('singular') . ' ' . __('ID', 'client-power-tools'),
       'project' => Common\cpt_get_projects_label('plural'),
       'project_type' => __('Type', 'client-power-tools'),
+      'project_stage' => __('Stage', 'client-power-tools'),
       'client_name' => __('Client', 'client-power-tools'),
       'project_status' => __('Status', 'client-power-tools'),
     ];

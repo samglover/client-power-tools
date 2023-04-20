@@ -12,8 +12,11 @@ function cpt_edit_project($projects_post_id) {
       ?>
         <button class="button cpt-click-to-expand"><?php _e('Edit Project', 'client-power-tools'); ?></button>
         <div class="cpt-this-expands">
-          <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-project-form.php'); ?>
-          <?php cpt_delete_project_button($projects_post_id); ?>
+          <div class="form-wrap">
+            <h2><?php printf(__('Edit This %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?></h2>
+            <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-project-form.php'); ?>
+            <?php cpt_delete_project_button($projects_post_id); ?>
+          </div>
         </div>
       <?php
     } else {
@@ -39,6 +42,8 @@ function cpt_process_project_update() {
       'meta_input' => [
         'cpt_project_id' => sanitize_text_field($_POST['project_id']),
         'cpt_project_status' => sanitize_text_field($_POST['project_status']),
+        'cpt_project_type' => intval($_POST['project_type']),
+        'cpt_project_stage' => sanitize_text_field($_POST['project_stage']),
         'cpt_client_id' => sanitize_text_field($_POST['client_id']),
       ],
     ];
