@@ -59,7 +59,10 @@ function cpt_projects() {
               ?>
                 <button class="button cpt-click-to-expand"><?php printf(__('Add a %s', 'client-power-tools'), $projects_label[0]); ?></button>
                 <div class="cpt-this-expands">
-                  <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'); ?>
+                  <div class="form-wrap form-wrap-new_project">
+                    <h2><?php printf(__('Add a %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?></h2>
+                    <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'); ?>
+                  </div>
                 </div>
               <?php
             } else {

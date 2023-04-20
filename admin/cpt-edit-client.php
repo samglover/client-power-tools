@@ -11,9 +11,12 @@ function cpt_edit_client($clients_user_id) {
     ?>
       <button class="button cpt-click-to-expand"><?php _e('Edit Client', 'client-power-tools'); ?></button>
       <div class="cpt-this-expands">
-        <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-client-form.php'); ?>
-        <p style="margin-bottom: 2em; margin-top: 0;"><span id="cpt-delete-client-link"><?php echo __('Delete', 'client-power-tools') . ' ' . $client_name; ?></span></p>
-        <?php cpt_delete_client_modal($clients_user_id); ?>
+        <div class="form-wrap">
+          <h2><?php _e('Edit This Client', 'client-power-tools'); ?></h2>
+          <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-client-form.php'); ?>
+          <span id="cpt-delete-client-link"><?php echo __('Delete', 'client-power-tools') . ' ' . $client_name; ?></span>
+          <?php cpt_delete_client_modal($clients_user_id); ?>
+        </div>
       </div>
     <?php
   }

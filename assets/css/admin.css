@@ -39,8 +39,44 @@
   flex-wrap: wrap;
   gap: 20px;
 }
+.cpt-row > *:not(button) {
+  width: 12ch;
+}
+.cpt-row > *:not(button).span-2 {
+  width: calc(24ch + 20px);
+}
+.cpt-row > *:not(button).span-3 {
+  width: calc(36ch + 40px);
+}
+.cpt-row > *:not(button).span-4 {
+  width: calc(48ch + 60px);
+}
+.cpt-row > *:not(button).span-5 {
+  width: calc(60ch + 80px);
+}
+.cpt-row > *:not(button).span-6 {
+  width: calc(72ch + 90px);
+}
 .cpt-row.gap-10 {
   gap: 10px;
+}
+.cpt-row.gap-10 > * {
+  width: 12ch;
+}
+.cpt-row.gap-10 > *.span-2 {
+  width: calc(24ch + 10px);
+}
+.cpt-row.gap-10 > *.span-3 {
+  width: calc(36ch + 20px);
+}
+.cpt-row.gap-10 > *.span-4 {
+  width: calc(48ch + 30px);
+}
+.cpt-row.gap-10 > *.span-5 {
+  width: calc(60ch + 40px);
+}
+.cpt-row.gap-10 > *.span-6 {
+  width: calc(72ch + 50px);
 }
 
 .cpt-this-expands {
@@ -200,48 +236,39 @@
   text-align: center;
   width: 10%;
 }
-#cpt-admin .form-wrap-edit_project > :first-child {
+#cpt-admin .form-wrap > :first-child {
   margin-top: 0;
+  padding-top: 0;
 }
-#cpt-admin .form-wrap-edit_project > :last-child {
+#cpt-admin .form-wrap > form > :last-child {
   margin-bottom: 0;
+  padding-bottom: 0;
 }
-#cpt-admin .form-wrap-edit_project .form-field {
-  width: 12ch;
+#cpt-admin .form-wrap .form-field {
+  margin-top: 0;
+  margin-bottom: 1em;
 }
-#cpt-admin .form-wrap-edit_project .form-field input,
-#cpt-admin .form-wrap-edit_project .form-field select,
-#cpt-admin .form-wrap-edit_project .form-field textarea {
+#cpt-admin .form-wrap .form-field input,
+#cpt-admin .form-wrap .form-field select,
+#cpt-admin .form-wrap .form-field textarea {
   max-width: unset;
   width: 100%;
-}
-#cpt-admin .form-wrap-edit_project .form-field.span-2 {
-  width: calc(24ch + 20px);
-}
-#cpt-admin .form-wrap-edit_project .form-field.span-3 {
-  width: calc(36ch + 40px);
-}
-#cpt-admin .form-wrap-edit_project .form-field.span-4 {
-  width: calc(48ch + 60px);
-}
-#cpt-admin .form-wrap-edit_project .form-field.span-5 {
-  width: calc(60ch + 80px);
-}
-#cpt-admin .form-wrap-edit_project .form-field.span-6 {
-  width: calc(72ch + 90px);
 }
 
 #cpt-delete-client-link {
   color: LightSlateGray;
   cursor: pointer;
   display: inline-block;
-  margin-bottom: 20px;
+  margin-top: 1em;
 }
 #cpt-delete-client-link:hover {
   color: DarkSlateGray;
   text-decoration: underline;
 }
 
+#cpt_delete_project_button {
+  margin-top: 1em;
+}
 #cpt_delete_project_button #submit {
   background: unset;
   border: unset;

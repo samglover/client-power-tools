@@ -59,7 +59,10 @@ function cpt_clients() {
             ?>
               <button class="button cpt-click-to-expand"><?php _e('Add a Client'); ?></button>
               <div class="cpt-this-expands">
-                <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-client-form.php'); ?>
+                <div class="form-wrap">
+                  <h2><?php _e('Add a Client', 'client-power-tools'); ?></h2>
+                  <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-client-form.php'); ?>
+                </div>
               </div>
             <?php
           }

@@ -11,8 +11,56 @@
   flex-wrap: wrap;
   gap: 20px;
 
+  > *:not(button) {
+    width: 12ch;
+
+    &.span-2 {
+      width: calc(24ch + 20px);
+    }
+
+    &.span-3 {
+      width: calc(36ch + 40px);
+    }
+
+    &.span-4 {
+      width: calc(48ch + 60px);
+    }
+
+    &.span-5 {
+      width: calc(60ch + 80px);
+    }
+
+    &.span-6 {
+      width: calc(72ch + 90px);
+    }
+  }
+
   &.gap-10 {
     gap: 10px;
+
+    > * {
+      width: 12ch;
+  
+      &.span-2 {
+        width: calc(24ch + 10px);
+      }
+  
+      &.span-3 {
+        width: calc(36ch + 20px);
+      }
+  
+      &.span-4 {
+        width: calc(48ch + 30px);
+      }
+  
+      &.span-5 {
+        width: calc(60ch + 40px);
+      }
+  
+      &.span-6 {
+        width: calc(72ch + 50px);
+      }
+    }
   }
 }
 
@@ -115,7 +163,7 @@
 
     .cpt-project-title {
       margin-bottom: 5px;
-      
+
       a:not(:hover) {
         text-decoration: none;
       }

@@ -87,43 +87,26 @@
     width: 10%;
   }
 
-  .form-wrap-edit_project {
+  .form-wrap {
     > :first-child {
       margin-top: 0;
+      padding-top: 0;
     }
 
-    > :last-child {
+    > form > :last-child {
       margin-bottom: 0;
+      padding-bottom: 0;
     }
 
     .form-field {
-      width: 12ch;
+      margin-top: 0;
+      margin-bottom: 1em;
 
       input,
       select,
       textarea {
         max-width: unset;
         width: 100%;
-      }
-
-      &.span-2 {
-        width: calc(24ch + 20px);
-      }
-
-      &.span-3 {
-        width: calc(36ch + 40px);
-      }
-
-      &.span-4 {
-        width: calc(48ch + 60px);
-      }
-
-      &.span-5 {
-        width: calc(60ch + 80px);
-      }
-
-      &.span-6 {
-        width: calc(72ch + 90px);
       }
     }
   }
@@ -133,7 +116,7 @@
   color: LightSlateGray;
   cursor: pointer;
   display: inline-block;
-  margin-bottom: 20px;
+  margin-top: 1em;
 
   &:hover {
     color: DarkSlateGray;
@@ -142,6 +125,8 @@
 }
 
 #cpt_delete_project_button {
+  margin-top: 1em;
+
   #submit {
     background: unset;
     border: unset;

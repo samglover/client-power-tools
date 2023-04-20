@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file. The format 
 - Show an error if the page requests a non-existent client.
 - A number of minor user experience improvements.
 - Many minor updates.
+- All forms updated with an improved layout.
 
 #### Fixed
 - When one expander is active, clicking another expander now closes it and restores the button label.
