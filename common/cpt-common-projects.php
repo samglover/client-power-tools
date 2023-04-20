@@ -31,9 +31,11 @@ function cpt_get_project_data($projects_post_id) {
     'projects_post_id'  => $projects_post_id,
     'project_id'        => get_post_meta($projects_post_id, 'cpt_project_id', true),
     'project_name'      => get_the_title($projects_post_id),
+    'project_type'      => get_term(get_post_meta($projects_post_id, 'cpt_project_type', true))->name,
     'project_status'    => get_post_meta($projects_post_id, 'cpt_project_status', true),
+    'project_stage'     => get_post_meta($projects_post_id, 'cpt_project_stage', true),
     'clients_user_id'   => get_post_meta($projects_post_id, 'cpt_client_id', true),
-    'manager_id'        => cpt_get_client_manager_id(get_post_meta($projects_post_id, 'cpt_client_id', true)),
+    'managers_user_id'  => cpt_get_client_manager_id(get_post_meta($projects_post_id, 'cpt_client_id', true)),
   ];
   return $project_data;
 }
@@ -66,6 +68,7 @@ function cpt_clients_projects($clients_user_id = null) {
           <?php 
             $post_id = get_the_ID(); 
             $project_status = get_post_meta($post_id, 'cpt_project_status', true);
+            $project_type = '';
             $project_classes = 'cpt-project cpt-project-status-' . sanitize_title(strtolower($project_status));
             $project_id = get_post_meta($post_id, 'cpt_project_id', true);
           ?>
@@ -81,10 +84,11 @@ function cpt_clients_projects($clients_user_id = null) {
               <a href="<?php echo $project_url; ?>"><?php the_title(); ?></a>
             </h3>
             <ul class="cpt-project-meta">
-              <?php if ($project_id) { ?>
-                <li class="cpt-project-id"><?php printf(__('%1$s ID: %2$s', 'client-power-tools'), $projects_label[0], $project_id); ?></li>
-              <?php } ?>
-              <li class="cpt-project-status"><?php printf(__('%1$s Status: %2$s','client-power-tools'), $projects_label[0], $project_status); ?></li>
+              <?php 
+                if ($project_id) echo '<li class="cpt-project-id">' . sprintf(__('%1$s ID: %2$s', 'client-power-tools'), $projects_label[0], $project_id) . '</li>';
+                if ($project_status) echo '<li class="cpt-project-status">' . sprintf(__('%1$s Status: %2$s','client-power-tools'), $projects_label[0], $project_status) . '</li>';
+                if ($project_type) echo '<li class="cpt-project-type">' . sprintf(__('%1$s Type: %2$s','client-power-tools'), $projects_label[0], $project_type) . '</li>';
+              ?>
             </ul>
           </div>
         <?php endwhile; ?>

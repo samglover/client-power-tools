@@ -69,9 +69,9 @@ class Project_List_Table extends Includes\WP_List_Table  {
     $columns = [
       'project_id' => Common\cpt_get_projects_label('singular') . ' ' . __('ID', 'client-power-tools'),
       'project' => Common\cpt_get_projects_label('plural'),
+      'client_name' => __('Client', 'client-power-tools'),
       'project_type' => __('Type', 'client-power-tools'),
       'project_stage' => __('Stage', 'client-power-tools'),
-      'client_name' => __('Client', 'client-power-tools'),
       'project_status' => __('Status', 'client-power-tools'),
     ];
     return $columns;
@@ -160,17 +160,17 @@ class Project_List_Table extends Includes\WP_List_Table  {
     $data = [];
 
     if ($projects->have_posts()) : while ($projects->have_posts()) : $projects->the_post();
-      $post_id = get_the_ID();
-      $clients_user_id = get_post_meta($post_id, 'cpt_client_id', true);
+      $project_data = Common\cpt_get_project_data(get_the_ID());
       $data[] = [
-        'ID' => $post_id,
-        'project' => get_the_title(),
-        'project_id' => get_post_meta($post_id, 'cpt_project_id', true),
-        'clients_user_id' => $clients_user_id,
-        'client_id' => get_user_meta($clients_user_id, 'cpt_client_id', true),
-        'client_name' => Common\cpt_get_name(get_post_meta($post_id, 'cpt_client_id', true)),
-        'project_status' => get_post_meta($post_id, 'cpt_project_status', true),
-        'project_type' => get_post_meta($post_id, 'cpt_project_type', true),
+        'ID' => $project_data['projects_post_id'],
+        'project_id' => $project_data['project_id'],
+        'project' => $project_data['project_name'],
+        'clients_user_id' => $project_data['clients_user_id'],
+        'client_id' => get_user_meta($project_data['clients_user_id'], 'cpt_client_id', true),
+        'client_name' => Common\cpt_get_name(get_post_meta($project_data['projects_post_id'], 'cpt_client_id', true)),
+        'project_type' => $project_data['project_type'],
+        'project_status' => $project_data['project_status'],
+        'project_stage' => $project_data['project_stage'],
       ];
     endwhile; endif;
 
