@@ -9,7 +9,7 @@
   <?php wp_nonce_field('cpt_project_updated', 'cpt_project_updated_nonce'); ?>
   <input name="action" value="cpt_project_updated" type="hidden">
   <input name="projects_post_id" value="<?php echo $projects_post_id; ?>" type="hidden">
-  <div class="form-field form-required">
+  <div class="form-field span-2 form-required">
     <label for="client_id"><?php _e('Client', 'client-power-tools'); ?> <small>(required)</small></label>
     <?php if ($client_ids) { ?>
       <select name="client_id" id="client_id" required>
@@ -24,12 +24,12 @@
       <label for="project_id">Project ID</label>
       <input name="project_id" id="project_id" type="text" autocapitalize="none" autocorrect="off" value="<?php echo $project_data['project_id']; ?>">
     </div>
-    <div class="form-field form-required">
+    <div class="form-field span-4 form-required">
       <label for="project_name">Project Name <small>(required)</small></label>
       <input name="project_name" id="project_name" class="regular-text" type="text" required aria-required="true" value="<?php echo $project_data['project_name']; ?>">
     </div>
   </div>
-  <div class="cpt-row">
+  <div class="cpt-row project-meta-row">
     <div class="form-field">
       <label for="project_type">Project Type</label>
       <?php 

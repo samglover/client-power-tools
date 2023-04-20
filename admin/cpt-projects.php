@@ -35,8 +35,8 @@ function cpt_projects() {
                   printf(__('Error: No such %s.', 'client-power-tools'), strtolower($projects_label[0]));
                 }
               ?>
-              <?php if ($project_data['projects_post_id']) { ?>
-                <span style="color:silver">(<?php echo $project_data['projects_post_id']; ?>)</span>
+              <?php if ($project_data['project_id']) { ?>
+                <span style="color:silver">(<?php echo $project_data['project_id']; ?>)</span>
               <?php } ?>
             </h1>
             <?php if ($clients_user_id) { ?>

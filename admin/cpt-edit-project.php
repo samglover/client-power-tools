@@ -12,7 +12,7 @@ function cpt_edit_project($projects_post_id) {
       ?>
         <button class="button cpt-click-to-expand"><?php _e('Edit Project', 'client-power-tools'); ?></button>
         <div class="cpt-this-expands">
-          <div class="form-wrap">
+          <div class="form-wrap form-wrap-edit_project">
             <h2><?php printf(__('Edit This %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?></h2>
             <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-project-form.php'); ?>
             <?php cpt_delete_project_button($projects_post_id); ?>
