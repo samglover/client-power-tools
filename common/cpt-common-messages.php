@@ -12,7 +12,7 @@ namespace Client_Power_Tools\Core\Common;
 function cpt_messages($clients_user_id) {
   if (
     !$clients_user_id ||
-    (!cpt_is_messages() && !is_admin()) ||
+    (!cpt_is_client_dashboard('messages') && !is_admin()) ||
     !get_option('cpt_module_messaging')
   ) return;
 
@@ -26,7 +26,7 @@ function cpt_messages($clients_user_id) {
 add_filter('the_title', __NAMESPACE__ . '\cpt_messages_page_title', 10, 2);
 function cpt_messages_page_title($title, $id) {
   $client_dashboard_id = get_option('cpt_client_dashboard_page_selection');
-  if (cpt_is_messages() && $id == $client_dashboard_id && in_the_loop()) $title = $title . ': Messages';
+  if (cpt_is_client_dashboard('messages') && $id == $client_dashboard_id && in_the_loop()) $title = $title . ': Messages';
   return $title;
 }
 

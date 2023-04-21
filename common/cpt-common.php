@@ -32,31 +32,25 @@ function cpt_add_roles() {
   $admin->add_cap('cpt_manage_settings');
 }
 
-function cpt_is_client_dashboard() {
+function cpt_is_client_dashboard($page = false) {
   global $wp_query;
   $client_dashboard_id = get_option('cpt_client_dashboard_page_selection');
   $this_page_id = isset($wp_query->post->ID) ? $wp_query->post->ID : false;
-  if ($this_page_id && $client_dashboard_id == $this_page_id) {
-    return true;
-  } else {
-    return false;
+  if (!$page && $this_page_id && $client_dashboard_id == $this_page_id) return true;
+  if ($page) {
+    switch($page) {
+      case 'projects':
+        if (isset($_REQUEST['tab']) && $_REQUEST['tab'] == 'projects') return true;
+        break;
+      case 'messages':
+        if (isset($_REQUEST['tab']) && $_REQUEST['tab'] == 'messages') return true;
+        break;
+      case 'knowledge base':
+        if (cpt_is_knowledge_base()) return true;
+        break;
+    }
   }
-}
-
-function cpt_is_messages() {
-  if (cpt_is_client_dashboard() && isset($_REQUEST['tab']) && $_REQUEST['tab'] == 'messages') {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-function cpt_is_projects() {
-  if (cpt_is_client_dashboard() && isset($_REQUEST['tab']) && $_REQUEST['tab'] == 'projects') {
-    return true;
-  } else {
-    return false;
-  }
+  return false;
 }
 
 function cpt_is_knowledge_base() {

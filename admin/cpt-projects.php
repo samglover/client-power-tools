@@ -72,7 +72,8 @@ function cpt_projects() {
           cpt_project_list();
         } else {
           $projects_post_id = sanitize_key(intval($_REQUEST['projects_post_id']));
-          cpt_get_project($projects_post_id);
+          Common\cpt_get_project_progress_bar($projects_post_id);
+          cpt_edit_project($projects_post_id);
         }
       ?>
     </div>
@@ -90,13 +91,6 @@ function cpt_project_list() {
   <?php
 }
 
-function cpt_get_project($projects_post_id) {
-  if (!$projects_post_id) return;
-  $project_data = Common\cpt_get_project_data($projects_post_id);
-  $clients_user_id = $project_data['clients_user_id'];
-  $client_data = $clients_user_id ? Common\cpt_get_client_data($clients_user_id) : false;
-  cpt_edit_project($projects_post_id);
-}
 
 function cpt_get_project_type_select($field_name = 'project_type', $selected = null) {
   if (!$selected) $selected = get_option('cpt_default_project_type');

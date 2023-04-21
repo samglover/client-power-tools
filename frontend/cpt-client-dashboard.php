@@ -64,18 +64,22 @@ function cpt_client_dashboard($content) {
     }
 
     // Projects
-    if (Common\cpt_is_projects()) {
+    if (Common\cpt_is_client_dashboard('projects')) {
+      $projects_label = Common\cpt_get_projects_label();
       if (!isset($_REQUEST['projects_post_id'])) {
-        Common\cpt_clients_projects();
+        Common\cpt_get_projects();
       } else {
         $projects_post_id = sanitize_key(intval($_REQUEST['projects_post_id']));
-        Common\cpt_project_page($projects_post_id);
+        echo '<p><a href="' . remove_query_arg('projects_post_id') . '">' . sprintf(__('%s Back to %s', 'client-power-tools'), '&larr;', $projects_label[1]) . '</a></p>';
+        echo '<h2>' . get_the_title($projects_post_id) . '</h2>';
+        Common\cpt_get_project_progress_bar($projects_post_id);
+        Common\cpt_get_project_meta($projects_post_id);
       }
       $content = ob_get_clean();
     }
 
     // Messages
-    if (Common\cpt_is_messages()) {
+    if (Common\cpt_is_client_dashboard('messages')) {
       // Removes the current the_content filter so it doesn't execute within the
       // nested query for client messages.
       remove_filter(current_filter(), __FUNCTION__);
@@ -93,10 +97,10 @@ function cpt_nav() {
       <ul class="cpt-tabs">
         <li class="cpt-tab"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard() && !isset($_REQUEST['tab'])) echo ' current'; ?>"><?php _e('Dashboard', 'client-power-tools'); ?></a></li>
         <?php if (get_option('cpt_module_projects')) { ?>
-          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'projects', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_projects()) echo ' current'; ?>"><?php _e('Projects', 'client-power-tools'); ?></a></li>
+          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'projects', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('projects')) echo ' current'; ?>"><?php echo Common\cpt_get_projects_label('plural'); ?></a></li>
         <?php } ?>
         <?php if (get_option('cpt_module_messaging')) { ?>
-          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_messages()) echo ' current'; ?>"><?php _e('Messages', 'client-power-tools'); ?></a></li>
+          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('messages')) echo ' current'; ?>"><?php _e('Messages', 'client-power-tools'); ?></a></li>
         <?php } ?>
         <?php
           $knowledge_base_id = get_option('cpt_knowledge_base_page_selection');

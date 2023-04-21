@@ -90,7 +90,7 @@ function cpt_login() {
 function cpt_is_cpt() {
   if (
     Common\cpt_is_client_dashboard() || 
-    Common\cpt_is_messages() || 
+    Common\cpt_is_client_dashboard('messages') || 
     Common\cpt_is_knowledge_base()
   ) {
     return true;

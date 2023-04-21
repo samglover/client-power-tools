@@ -462,7 +462,7 @@ if (get_option('cpt_module_projects')) {
         <li>
           <fieldset>
             <input name="cpt_projects_label[1]" type="text" value="<?php echo Common\cpt_get_projects_label('plural'); ?>">
-            <label for="cpt_projects_label[1]"><?php _e('Singular', 'client-power-tools'); ?></label>
+            <label for="cpt_projects_label[1]"><?php _e('Plural', 'client-power-tools'); ?></label>
           </fieldset>
         </li>
       </ul>

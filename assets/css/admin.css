@@ -160,8 +160,46 @@
 .cpt-projects-list .cpt-project .cpt-project-title a:not(:hover) {
   text-decoration: none;
 }
-.cpt-projects-list .cpt-project .cpt-project-meta {
-  font-size: 70%;
+
+.cpt-project-stage-progress {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+.cpt-project-stage-progress .cpt-stage-labels {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 0;
+}
+.cpt-project-stage-progress .cpt-stage-label {
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+.cpt-project-stage-progress .cpt-stage-label:not(.current) {
+  color: Silver;
+}
+.cpt-project-stage-progress .cpt-stage-label.current {
+  font-weight: bold;
+}
+.cpt-project-stage-progress .cpt-stage-progress-container {
+  background-color: LightGray;
+  border: 1px solid Silver;
+  border-radius: 9999px;
+  height: 1em;
+  margin-top: 0.25em;
+  position: relative;
+  width: 100%;
+}
+.cpt-project-stage-progress .cpt-stage-progress-indicator {
+  background-color: SteelBlue;
+  border-radius: 9999px;
+  height: 1em;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.cpt-project-meta {
   list-style: none;
   margin: 0;
   padding: 0;

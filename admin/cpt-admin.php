@@ -166,7 +166,7 @@ function cpt_get_status_select($option = null, $name = null, $selected = null) {
   echo '<select name="' . $name . '" id="' . $name . '">';
     foreach ($statuses_array as $status) {
       $status = trim($status);
-      echo '<option value="' . $status . '"' . selected($statusßå, $selected) . '>' . $status . '</option>';
+      echo '<option value="' . $status . '"' . selected($status, $selected) . '>' . $status . '</option>';
     }
   echo '</select>';
 }

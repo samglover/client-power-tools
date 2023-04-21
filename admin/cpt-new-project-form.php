@@ -35,7 +35,7 @@
     </div>
   </div>
   <div class="cpt-row">
-    <div class="form-field">
+    <div class="form-field span-2">
       <label for="project_type">Project Type</label>
       <?php echo cpt_get_project_type_select('project_type') ?>
     </div>

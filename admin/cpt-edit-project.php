@@ -10,7 +10,7 @@ function cpt_edit_project($projects_post_id) {
   if (is_admin() && current_user_can('cpt_manage_projects')) {
     if (get_post_status($projects_post_id) != 'trash') {
       ?>
-        <button class="button cpt-click-to-expand"><?php _e('Edit Project', 'client-power-tools'); ?></button>
+        <button class="button cpt-click-to-expand"><?php printf(__('Edit %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?></button>
         <div class="cpt-this-expands">
           <div class="form-wrap form-wrap-edit_project">
             <h2><?php printf(__('Edit This %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?></h2>
@@ -69,7 +69,7 @@ function cpt_delete_project_button($projects_post_id) {
       <?php wp_nonce_field('cpt_project_deleted', 'cpt_project_deleted_nonce'); ?>
       <input name="action" value="cpt_project_deleted" type="hidden">
       <input name="projects_post_id" value="<?php echo $projects_post_id ?>" type="hidden">
-      <input name="submit" id="submit" type="submit" value="<?php _e('Delete this Project', 'client-power-tools'); ?>">
+      <input name="submit" id="submit" type="submit" value="<?php printf(__('Delete this %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?>">
     </form>
   <?php
 }
@@ -81,9 +81,9 @@ function cpt_process_delete_project() {
     $project_deleted = wp_trash_post($projects_post_id);
 
     if ($project_deleted == true) {
-      $result = Common\cpt_get_projects_label('singular') . ' ' . __('moved to the trash.', 'client-power-tools') . ' ' . cpt_undelete_project_button($projects_post_id);
+      $result = sprintf(__('%s moved to the trash.', 'client-power-tools'), Common\cpt_get_projects_label('singular')) . cpt_undelete_project_button($projects_post_id);
     } else {
-      $result = Common\cpt_get_projects_label('singular') . ' ' . __('could not be moved to the trash.', 'client-power-tools');
+      $result = sprintf(__('%s could not be moved to the trash.', 'client-power-tools'), Common\cpt_get_projects_label('singular'));
     }
 
     set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);

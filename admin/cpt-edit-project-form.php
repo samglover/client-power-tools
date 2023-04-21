@@ -33,7 +33,7 @@
     </div>
   </div>
   <div class="cpt-row">
-    <div class="form-field">
+    <div class="form-field span-2">
       <label for="project_type"><?php printf(__('%s Type', 'client-power-tools'), $projects_label[0]); ?></label>
       <?php 
         $project_type = get_post_meta($projects_post_id, 'cpt_project_type', true);
