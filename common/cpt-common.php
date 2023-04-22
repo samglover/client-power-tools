@@ -66,6 +66,16 @@ function cpt_is_knowledge_base() {
 }
 
 
+add_filter('the_title', __NAMESPACE__ . '\cpt_client_dashboard_page_titles', 10, 2);
+function cpt_client_dashboard_page_titles($title, $post_id) {
+  if (!in_the_loop()) return $title;
+  $client_dashboard = get_option('cpt_client_dashboard_page_selection');
+  if (cpt_is_client_dashboard('projects') && $post_id == $client_dashboard) $title .= ': ' . cpt_get_projects_label('plural');
+  if (cpt_is_client_dashboard('messages') && $post_id == $client_dashboard) $title .= ': ' . __('Messages', 'client-power-tools');
+  return $title;
+}
+
+
 /**
  * Checks to see whether the current user is a client. Returns true if the current
  * user has the cpt-client role, false if not.

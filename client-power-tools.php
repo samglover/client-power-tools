@@ -32,6 +32,7 @@ require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common.php');
 require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-login.php');
 
 function cpt_register_common_scripts() {
+	wp_enqueue_style('cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/common.css', [], CLIENT_POWER_TOOLS_PLUGIN_VERSION);
 	wp_enqueue_script('cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-common.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
 }
 
@@ -52,7 +53,7 @@ if (!is_admin()) {
 	function cpt_register_frontend_scripts() {
 		global $post; // For localizing cpt-frontend.js
 
-		wp_enqueue_style('cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/style.css', [], CLIENT_POWER_TOOLS_PLUGIN_VERSION);
+		wp_enqueue_style('cpt-frontend', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/frontend.css', [], CLIENT_POWER_TOOLS_PLUGIN_VERSION);
 
 		wp_register_script('cpt-frontend', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-frontend.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
 		wp_localize_script('cpt-frontend', 'cpt_vars', [

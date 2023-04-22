@@ -14,7 +14,7 @@ add_filter('the_content', __NAMESPACE__ . '\cpt_client_dashboard');
 function cpt_client_dashboard($content) {
   if (
     !cpt_is_cpt() ||
-    !in_the_loop()
+    get_post_type(get_the_ID()) == 'cpt_message'
   ) return $content;
   
   if (!is_user_logged_in()) {
@@ -80,12 +80,16 @@ function cpt_client_dashboard($content) {
 
     // Messages
     if (Common\cpt_is_client_dashboard('messages')) {
-      // Removes the current the_content filter so it doesn't execute within the
-      // nested query for client messages.
-      remove_filter(current_filter(), __FUNCTION__);
       Common\cpt_messages($clients_user_id);
+      ?>
+        <div class="form-wrap cpt-new-message-form">
+          <h3><?php _e('New Message', 'client-power-tools'); ?></h3>
+          <?php Common\cpt_new_message_form($clients_user_id); ?>
+        </div>
+      <?php
       $content = ob_get_clean();
     }
+    
   return $content;
 }
 

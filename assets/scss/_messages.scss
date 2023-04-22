@@ -1,16 +1,99 @@
-#cpt-new-message-form {
-  form {
-    p,
-    label,
-    input,
-    select,
-    textarea {
-      display: block;
+.cpt-message {
+  background-color: White;
+  box-shadow:
+    0 0 0 1px #ddd,
+    1px 1px 3px rgba(0, 0, 0, 0.2)
+  ;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  position: relative;
+
+  &:target .cpt-message-content {
+    background-color: LightYellow;
+  }
+
+  &.my-message {
+    margin-left: 10%;
+
+    .cpt-message-content {
+      background-color: LightBlue;
+    }
+  }
+
+  &.not-my-message {
+    margin-right: 10%;
+
+    .cpt-message-content {
+      background-color: rgba(0, 0, 0, .025);
+    }
+  }
+
+  &.status-update-request {
+    margin-left: 0;
+    margin-right: 0;
+
+    .cpt-message-content {
+      background-color: unset;
+    }
+  }
+
+  .cpt-message-content {
+    padding: 20px;
+
+    & > *:first-child {
+      margin-top: 0;
     }
 
-    .large-text {
-      box-sizing: border-box;
+    & > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .cpt-message-meta {
+    padding: 10px 20px;
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+.cpt-new-message-form {
+  background-color: rgba(0, 0, 0, .05);
+  padding: $spacing-regular;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: .5em;
+  }
+
+  .form-field {
+    margin-top: 0;
+    margin-bottom: 1em;
+
+    input:not([type="checkbox"]),
+    select,
+    textarea {
+      max-width: unset;
       width: 100%;
     }
+  }
+
+  label {
+    font-size: 80%;
+    font-weight: bold;
+    line-height: 1.1;
+    margin-bottom: .25em;
+  }
+
+  .description {
+    color: SlateGray;
+    font-size: 80%;
+    margin: .25em 0 ;
+  }
+
+  .submit {
+    margin: 0;
   }
 }

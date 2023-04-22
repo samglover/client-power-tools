@@ -1,0 +1,150 @@
+.cpt-projects-list {
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  .cpt-project {
+    background-color: White;
+    box-shadow:
+      0 0 0 1px #ddd,
+      1px 1px 3px rgba(0, 0, 0, 0.2)
+    ;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    padding: 20px;
+
+    > :first-child {
+      margin-top: 0;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+
+    &.cpt-project-status-closed {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .cpt-project-title {
+      margin-bottom: 5px;
+
+      a:not(:hover) {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.cpt-project-stage-progress {
+  margin-top: 1em;
+  margin-bottom: 1em;
+
+  .cpt-stages-container {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+    justify-content: space-between;
+    margin-top: .25em;
+    width: 100%;
+  }
+
+  .cpt-stage {
+    width: 100%;
+
+    .cpt-stage-progress-container {
+      background-color: LightGray;
+      border-top: 1px solid Silver;
+      border-bottom: 1px solid Silver;
+      box-sizing: content-box;
+      height: 1em;
+      margin-bottom: .25em;
+      position: relative;
+      width: 100%;
+    }
+
+    &:first-child {
+      .cpt-stage-label {
+        text-align: left;
+      }
+
+      .cpt-stage-progress-container {
+        border-left: 1px solid Silver;
+        border-radius: 9999px 0 0 9999px; 
+      }
+
+      .cpt-stage-progress-indicator {
+        border-radius: 9999px 0 0 9999px; 
+      }
+
+      &.current {
+        .cpt-stage-progress-indicator {
+          border-radius: 9999px;
+          width: 1em;
+        } 
+      }
+    }
+
+    &:last-child {
+      .cpt-stage-label {
+       text-align: right;
+      }
+
+      .cpt-stage-progress-container {
+        border-right: 1px solid Silver;
+        border-radius: 0 9999px 9999px 0; 
+      }
+
+      &.current {
+        .cpt-stage-progress-indicator {
+          width: 100%;
+        }
+      }
+    }
+
+    &.current {
+      .cpt-stage-label {
+        font-weight: bold;
+      }
+
+      .cpt-stage-progress-indicator {
+        border-radius: 0 9999px 9999px 0; 
+        width: 50%;
+      }
+    }
+
+    &.not-started {
+      .cpt-stage-label {
+        color: SlateGray;
+      }
+      
+      .cpt-stage-progress-indicator {
+        display: none;
+      } 
+    }
+  }
+
+  .cpt-stage-label {
+    line-height: 1.1;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .cpt-stage-progress-indicator {
+    background-color: SteelBlue;
+    height: 1em;
+    position: absolute;
+      top: 0;
+      left: 0;
+    width: 100%;
+  }
+}
+
+.cpt-project-meta {
+  color: DarkSlateGray;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  list-style: none;
+  margin: 1em 0;
+  padding: 0;
+  text-transform: uppercase;
+}

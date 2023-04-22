@@ -33,6 +33,7 @@
 
         &.current {
           background-color: LightGray;
+          font-weight: bold;
         }
 
         &.cpt-click-to-expand {
@@ -111,35 +112,4 @@
 #cpt-breadcrumbs {
   font-size: 80%;
   margin-bottom: 2em;
-}
-
-.cpt-stage-labels,
-.cpt-project-meta {
-  font-size: 80%;
-}
-
-.cpt-error,
-.cpt-success {
-  background-color: #eee;
-  border-left: 4px solid;
-  padding: 20px;
-}
-
-.cpt-error {
-  border-left-color: red;
-}
-
-.cpt-success {
-  border-left-color: green;
-}
-
-#cpt-status-update-request-button {  
-  &[disabled="true"] {
-    cursor: default;
-    opacity: .5;
-  
-    &:hover {
-      box-shadow: none;
-    }
-  }
 }

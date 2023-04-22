@@ -1,6 +1,5 @@
 @import 'variables';
 @import 'fonts';
-@import 'common';
 
 
 /**
@@ -102,7 +101,7 @@
       margin-top: 0;
       margin-bottom: 1em;
 
-      input,
+      input:not([type="checkbox"]),
       select,
       textarea {
         max-width: unset;

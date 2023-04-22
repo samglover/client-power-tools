@@ -1,0 +1,31 @@
+.cpt-section-header,
+.cpt-stage-label,
+.cpt-project-meta {
+  font-size: 80%;
+}
+
+.cpt-error,
+.cpt-success {
+  background-color: #eee;
+  border-left: 4px solid;
+  padding: $spacing-regular;
+}
+
+.cpt-error {
+  border-left-color: Red;
+}
+
+.cpt-success {
+  border-left-color: Green;
+}
+
+#cpt-status-update-request-button {  
+  &[disabled="true"] {
+    cursor: default;
+    opacity: .5;
+  
+    &:hover {
+      box-shadow: none;
+    }
+  }
+}

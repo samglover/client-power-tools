@@ -23,13 +23,6 @@ function cpt_messages($clients_user_id) {
   <?php
 }
 
-add_filter('the_title', __NAMESPACE__ . '\cpt_messages_page_title', 10, 2);
-function cpt_messages_page_title($title, $id) {
-  $client_dashboard_id = get_option('cpt_client_dashboard_page_selection');
-  if (cpt_is_client_dashboard('messages') && $id == $client_dashboard_id && in_the_loop()) $title = $title . ': Messages';
-  return $title;
-}
-
 
 function cpt_message_list($user_id) {
   if (!$user_id) return;
@@ -83,12 +76,7 @@ function cpt_message_list($user_id) {
       'total'   => $cpt_messages->max_num_pages,
     ]);
   else :
-    /**
-     * translators:
-     * 1: html
-     * 2: html
-     */
-    printf(__('%1$sNo messages found.%2$s' , 'client-power-tools'), '<p>', '</p>');
+    printf(__('%sNo messages found.%s' , 'client-power-tools'), '<p>', '</p>');
   endif;
 }
 
@@ -98,120 +86,65 @@ function cpt_new_message_form($user_id) {
     'media_buttons' => false,
     'quicktags'     => false,
     'textarea_name' => 'message',
+    'textarea_rows' => 10,  
     'tinymce'       => [
       'toolbar1'    => 'formatselect, bold, italic, bullist, numlist, blockquote, outdent, indent, link, unlink',
-   ],
+    ],
  ];
 
-  if (is_admin()) {
-    ob_start();
-      ?>
-        <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
-          <?php wp_nonce_field('cpt_new_message_added', 'cpt_new_message_nonce'); ?>
-          <input name="action" value="cpt_new_message_added" type="hidden">
-          <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
-          <table class="form-table" role="presentation">
-            <tbody>
-              <tr>
-                <th scope="row">
-                  <label for="subject_line"><?php _e('Subject Line', 'client-power-tools'); ?></label>
-                </th>
-                <td>
-                  <input name="subject_line" id="subject_line" class="large-text" type="text">
-                  <p><?php
-                    /*
-                     * translators:
-                     * 1: sender's name
-                     */
-                    printf(__('If you leave this field empty, the subject line will be "New message from %1$s".', 'client-power-tools'), cpt_get_name(get_current_user_id()));
-                  ?></p>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">
-                  <label for="message"><?php _e('Message', 'client-power-tools'); ?></label>
-                </th>
-                <td>
-                  <?php \wp_editor('', 'cpt-message-editor', $editor_args); ?>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">
-                  <?php _e('Options', 'client-power-tools'); ?>
-                </th>
-                <td>
-                  <fieldset>
-                    <?php if (get_option('cpt_send_message_content') == false) { ?>
-                      <label for="send_message_content">
-                        <input name="send_message_content" id="send_message_content" type="checkbox" value="1">
-                        <?php _e('Send message content.', 'client-power-tools'); ?>
-                      </label>
-                      <p class="description"><?php _e('If checked, the client will receive the actual message by email instead of a notification with a prompt to log into their client portal. This is less secure.', 'client-power-tools'); ?></p>
-                    <?php } else { ?>
-                      <label for="send_notification_only">
-                        <input name="send_notification_only" id="send_notification_only" type="checkbox" value="1">
-                        <?php _e('Send notification only.', 'client-power-tools'); ?>
-                      </label>
-                      <p class="description"><?php _e('If checked, the client will receive an email letting them know they have a message, but they will have to log into their client dashboard to view the body of the message. This is more secure.', 'client-power-tools'); ?></p>
-                    <?php } ?>
-                  </fieldset>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+  ob_start();
+    ?>
+      <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+        <?php wp_nonce_field('cpt_new_message_added', 'cpt_new_message_nonce'); ?>
+        <input name="action" value="cpt_new_message_added" type="hidden">
+        <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
+        <div class="cpt-row">
+          <div class="form-field span-6">
+            <label for="subject_line"><?php _e('Subject Line', 'client-power-tools'); ?></label>
+            <input name="subject_line" id="subject_line" class="large-text" type="text">
+            <p class="description"><?php printf(__('If you leave this field empty the subject line will be "New message from %s".', 'client-power-tools'), cpt_get_name(get_current_user_id())); ?></p>
+          </div>
+        </div>
+        <div class="cpt-row">
+          <div class="form-field span-6">
+            <label for="message"><?php _e('Message', 'client-power-tools'); ?></label>
+            <?php \wp_editor('', 'cpt-message-editor', $editor_args); ?>
+          </div>
+        </div>
+        <?php if (is_admin()) { ?>
+          <div class="cpt-row">
+            <div class="form-field span-6">
+              <fieldset>
+                <?php if (get_option('cpt_send_message_content') == false) { ?>
+                  <label for="send_message_content">
+                    <input name="send_message_content" id="send_message_content" type="checkbox" value="1">
+                    <?php _e('Send message content.', 'client-power-tools'); ?>
+                  </label>
+                  <p class="description"><?php _e('If checked, the client will receive the actual message by email instead of a notification with a prompt to log into their client portal. This is less secure.', 'client-power-tools'); ?></p>
+                <?php } else { ?>
+                  <label for="send_notification_only">
+                    <input name="send_notification_only" id="send_notification_only" type="checkbox" value="1">
+                    <?php _e('Send notification only.', 'client-power-tools'); ?>
+                  </label>
+                  <p class="description"><?php _e('If checked, the client will receive an email letting them know they have a message, but they will have to log into their client dashboard to view the body of the message. This is more secure.', 'client-power-tools'); ?></p>
+                <?php } ?>
+              </fieldset>
+            </div>
+          </div>
+        <?php } ?>
+        <div class="cpt-row">
           <p class="submit">
             <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Send Message', 'client-power-tools'); ?>">
           </p>
-        </form>
-      <?php
-    $new_message_form = ob_get_clean();
+        </div>
+      </form>
+    <?php
+  $new_message_form = ob_get_clean();
 
+  if (is_admin()) {
     \_WP_Editors::enqueue_scripts();
     \_WP_Editors::editor_js();
     \print_footer_scripts();
-  } else {
-    ob_start();
-      \wp_editor('', 'cpt-message-editor', $editor_args);
-    $message_editor = ob_get_clean();
-
-    ob_start();
-      ?>
-        <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
-          <?php wp_nonce_field('cpt_new_message_added', 'cpt_new_message_nonce'); ?>
-          <input name="action" value="cpt_new_message_added" type="hidden">
-          <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
-          <?php
-            /**
-             * translators:
-             * 1: html
-             * 2: html
-             * 3: html
-             * 4: html & text field
-             */
-            printf(__('%1$sSubject Line %2$s(optional)%3$s', 'client-power-tools'),
-              '<label for="subject_line">',
-              '<small>',
-              '</small></label><input name="subject_line" id="subject_line" class="large-text" type="text"><p style="line-height: 0; margin-bottom: 1em;"> </p>'
-           );
-
-            /**
-             * translators:
-             * 1: html
-             * 2: html
-             * 3: html & wp_editor textarea field
-             */
-            printf(__('%1$sMessage %2$s(required)%3$s', 'client-power-tools'),
-              '<label for="message">',
-              '<small>',
-              '</small></label>' . $message_editor . '<p style="line-height: 0; margin-bottom: 1em;"> </p>'
-           );
-          ?>
-          <p class="submit">
-            <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Send Message', 'client-power-tools'); ?>">
-          </p>
-        </form>
-      <?php
-    $new_message_form = ob_get_clean();
   }
   echo $new_message_form;
 }
@@ -262,11 +195,7 @@ function cpt_process_new_message() {
     $post = wp_insert_post($new_message, $wp_error);
 
     if (is_wp_error($post)) {
-      /**
-       * translators:
-       * 1: error message
-       */
-      $result = sprintf(__('Message could not be sent. Error message: %1$s', 'client-power-tools'), $post->get_error_message());
+      $result = sprintf(__('Message could not be sent. Error message: %s', 'client-power-tools'), $post->get_error_message());
     } else {
       cpt_message_notification($post);
       $result = __('Message sent!', 'client-power-tools');
@@ -297,11 +226,7 @@ function cpt_message_notification($message_id) {
   $headers[]        = 'Content-Type: text/html; charset=UTF-8';
   $headers[]        = 'From: ' . $from_name . ' <' . $from_email . '>';
 
-                      /**
-                       * translators:
-                       * 1: sender's name
-                       */
-  $subject          = $msg_obj->post_title ? $msg_obj->post_title : sprintf(__('You have a new message from %1$s', 'client-power-tools'), $from_name);
+  $subject          = $msg_obj->post_title ? $msg_obj->post_title : sprintf(__('You have a new message from %s', 'client-power-tools'), $from_name);
 
   if ($send_this_msg_content) {
     $message = apply_filters('the_content', get_the_content(null, false, $msg_obj));

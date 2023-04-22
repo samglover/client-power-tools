@@ -21,7 +21,7 @@ function cpt_edit_project($projects_post_id) {
       <?php
     } else {
       ?>
-        <div class="cpt-row gap-10">
+        <div class="cpt-row gap-sm">
           <?php
             echo cpt_undelete_project_button($projects_post_id);
             echo cpt_permadelete_project_button($projects_post_id);

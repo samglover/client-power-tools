@@ -171,8 +171,7 @@ function cpt_get_status_select($option = null, $name = null, $selected = null) {
   echo '</select>';
 }
 
-
-add_action('wp_mail_failed', 'cpt_show_wp_mail_errors', 10, 1);
+add_action('wp_mail_failed', __NAMESPACE__ . '\cpt_show_wp_mail_errors', 10, 1);
 function cpt_show_wp_mail_errors($wp_error) {
   echo '<pre>';
     print_r($wp_error);

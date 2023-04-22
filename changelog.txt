@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file. The format 
 - A number of minor user experience improvements.
 - Many minor updates.
 - All forms updated with an improved layout.
+- Reorganized stylesheets.
 
 #### Fixed
 - When one expander is active, clicking another expander now closes it and restores the button label.
@@ -288,6 +289,7 @@ All notable changes to this project will be documented in this file. The format 
 
 #### Fixed
 - Email notifications should now deliver with the intended formatting.
+- Implemented a simpler fix for the client dashboard's the_content filter infinite nesting of messages.
 
 
 ### 1.0.4 - 2020-10-05

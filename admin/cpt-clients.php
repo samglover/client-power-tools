@@ -59,7 +59,7 @@ function cpt_clients() {
             ?>
               <button class="button cpt-click-to-expand"><?php _e('Add a Client'); ?></button>
               <div class="cpt-this-expands">
-                <div class="form-wrap">
+                <div class="form-wrap form-wrap-new_client">
                   <h2><?php _e('Add a Client', 'client-power-tools'); ?></h2>
                   <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-client-form.php'); ?>
                 </div>
@@ -100,7 +100,10 @@ function cpt_get_client_profile($clients_user_id) {
           <button class="button cpt-click-to-expand"><?php echo __('Add a', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?></button>
         </h2>
         <div class="cpt-this-expands">
-          <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'); ?>
+          <div class="form-wrap form-wrap-new_project">
+            <h2><?php printf(__('Add a %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?></h2>
+            <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'); ?>
+          </div>
         </div>
         <?php Common\cpt_get_projects($clients_user_id); ?>
       </section>
@@ -114,7 +117,10 @@ function cpt_get_client_profile($clients_user_id) {
           <button class="button cpt-click-to-expand"><?php _e('New Message', 'client-power-tools'); ?></button>
         </h2>
         <div class="cpt-this-expands">
+          <div class="form-wrap">
+          <h3><?php _e('New Message', 'client-power-tools'); ?></h3>
           <?php Common\cpt_new_message_form(get_current_user_id()); ?>
+          </div>
         </div>
         <?php Common\cpt_messages($clients_user_id); ?>
       </section>
