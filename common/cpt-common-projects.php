@@ -84,28 +84,36 @@ function cpt_get_project_progress_bar($projects_post_id) {
   $project_stages = array_map('trim', explode("\n", get_term_meta($project_type->term_id, 'cpt_project_type_stages', true)));
   $current_stage = sanitize_text_field(get_post_meta($projects_post_id, 'cpt_project_stage', true));
   $current_stage_key = array_search($current_stage, $project_stages);
+  $stage_width = 100 / count($project_stages);
+
+  if ( $current_stage_key == 0) {
+    $indicator_width = false;
+  } elseif ($current_stage_key == count($project_stages) - 1) {
+    $indicator_width = 100;
+  } else {
+    $indicator_width = $stage_width * $current_stage_key + ($stage_width / 2);
+  }
+  $indicator_style = $indicator_width ? ' style="width: ' . $indicator_width . '%;"' : '';
 
   if ($current_stage) {
     ?>
       <div class="cpt-project-stage-progress">
         <p class="cpt-section-header">Progress</p>
         <div class="cpt-stages-container">
+          <div class="cpt-stage-progress-container">
+            <div class="cpt-stage-progress-indicator"<?php echo $indicator_style; ?>></div>
+          </div>
+          <div class="cpt-stage-labels">
           <?php
             foreach ($project_stages as $key => $stage) {
-              $stage_classes = 'cpt-stage';
+              $stage_classes = 'cpt-stage-label';
               if ($key < $current_stage_key) $stage_classes .= ' completed';
               if ($stage == $current_stage) $stage_classes .= ' current';
               if ($key > $current_stage_key) $stage_classes .= ' not-started';
-              ?>
-                <div class="<?php echo $stage_classes; ?>">
-                  <div class="cpt-stage-progress-container">
-                    <div class="cpt-stage-progress-indicator"></div>
-                  </div>
-                  <div class="cpt-stage-label"><?php echo $stage; ?></div>
-                </div>
-              <?php
+              echo '<div class="' . $stage_classes . '" ' . 'style="width: ' . $stage_width . '%;"' . '>' . $stage . '</div>';
             }
           ?>
+          </div>
         </div>
       </div>
     <?php

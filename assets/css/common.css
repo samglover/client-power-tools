@@ -104,76 +104,50 @@
   margin-top: 1em;
   margin-bottom: 1em;
 }
-.cpt-project-stage-progress .cpt-stages-container {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 0;
-  justify-content: space-between;
-  margin-top: 0.25em;
-  width: 100%;
-}
-.cpt-project-stage-progress .cpt-stage {
-  width: 100%;
-}
-.cpt-project-stage-progress .cpt-stage .cpt-stage-progress-container {
+.cpt-project-stage-progress .cpt-stage-progress-container {
   background-color: LightGray;
-  border-top: 1px solid Silver;
-  border-bottom: 1px solid Silver;
+  border: 1px solid Silver;
+  border-radius: 9999px;
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.2);
   box-sizing: content-box;
   height: 1em;
   margin-bottom: 0.25em;
+  overflow: hidden;
   position: relative;
   width: 100%;
 }
-.cpt-project-stage-progress .cpt-stage:first-child .cpt-stage-label {
-  text-align: left;
-}
-.cpt-project-stage-progress .cpt-stage:first-child .cpt-stage-progress-container {
-  border-left: 1px solid Silver;
-  border-radius: 9999px 0 0 9999px;
-}
-.cpt-project-stage-progress .cpt-stage:first-child .cpt-stage-progress-indicator {
-  border-radius: 9999px 0 0 9999px;
-}
-.cpt-project-stage-progress .cpt-stage:first-child.current .cpt-stage-progress-indicator {
-  border-radius: 9999px;
-  width: 1em;
-}
-.cpt-project-stage-progress .cpt-stage:last-child .cpt-stage-label {
-  text-align: right;
-}
-.cpt-project-stage-progress .cpt-stage:last-child .cpt-stage-progress-container {
-  border-right: 1px solid Silver;
-  border-radius: 0 9999px 9999px 0;
-}
-.cpt-project-stage-progress .cpt-stage:last-child.current .cpt-stage-progress-indicator {
-  width: 100%;
-}
-.cpt-project-stage-progress .cpt-stage.current .cpt-stage-label {
-  font-weight: bold;
-}
-.cpt-project-stage-progress .cpt-stage.current .cpt-stage-progress-indicator {
-  border-radius: 0 9999px 9999px 0;
-  width: 50%;
-}
-.cpt-project-stage-progress .cpt-stage.not-started .cpt-stage-label {
-  color: SlateGray;
-}
-.cpt-project-stage-progress .cpt-stage.not-started .cpt-stage-progress-indicator {
-  display: none;
-}
-.cpt-project-stage-progress .cpt-stage-label {
-  line-height: 1.1;
-  text-align: center;
-  text-transform: uppercase;
-}
 .cpt-project-stage-progress .cpt-stage-progress-indicator {
   background-color: SteelBlue;
+  border-radius: 9999px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
   height: 1em;
   position: absolute;
   top: 0;
   left: 0;
+  width: 1em;
+}
+.cpt-project-stage-progress .cpt-stage-labels {
+  display: flex;
+  gap: 0;
+  justify-content: space-between;
+  text-align: center;
   width: 100%;
+}
+.cpt-project-stage-progress .cpt-stage-label {
+  line-height: 1.1;
+  text-align: center;
+}
+.cpt-project-stage-progress .cpt-stage-label:first-child {
+  text-align: left;
+}
+.cpt-project-stage-progress .cpt-stage-label:last-child {
+  text-align: right;
+}
+.cpt-project-stage-progress .cpt-stage-label.current {
+  font-weight: bold;
+}
+.cpt-project-stage-progress .cpt-stage-label.not-started {
+  color: SlateGray;
 }
 
 .cpt-project-meta {

@@ -38,103 +38,57 @@
   margin-top: 1em;
   margin-bottom: 1em;
 
-  .cpt-stages-container {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 0;
-    justify-content: space-between;
-    margin-top: .25em;
+  .cpt-stage-progress-container {
+    background-color: LightGray;
+    border: 1px solid Silver;
+    border-radius: 9999px;
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.2);
+    box-sizing: content-box;
+    height: 1em;
+    margin-bottom: .25em;
+    overflow: hidden;
+    position: relative;
     width: 100%;
   }
 
-  .cpt-stage {
+  .cpt-stage-progress-indicator {
+    background-color: SteelBlue;
+    border-radius: 9999px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    height: 1em;
+    position: absolute;
+      top: 0;
+      left: 0;
+    width: 1em;
+  }
+
+  .cpt-stage-labels {
+    display: flex;
+    gap: 0;
+    justify-content: space-between;
+    text-align: center;
     width: 100%;
-
-    .cpt-stage-progress-container {
-      background-color: LightGray;
-      border-top: 1px solid Silver;
-      border-bottom: 1px solid Silver;
-      box-sizing: content-box;
-      height: 1em;
-      margin-bottom: .25em;
-      position: relative;
-      width: 100%;
-    }
-
-    &:first-child {
-      .cpt-stage-label {
-        text-align: left;
-      }
-
-      .cpt-stage-progress-container {
-        border-left: 1px solid Silver;
-        border-radius: 9999px 0 0 9999px; 
-      }
-
-      .cpt-stage-progress-indicator {
-        border-radius: 9999px 0 0 9999px; 
-      }
-
-      &.current {
-        .cpt-stage-progress-indicator {
-          border-radius: 9999px;
-          width: 1em;
-        } 
-      }
-    }
-
-    &:last-child {
-      .cpt-stage-label {
-       text-align: right;
-      }
-
-      .cpt-stage-progress-container {
-        border-right: 1px solid Silver;
-        border-radius: 0 9999px 9999px 0; 
-      }
-
-      &.current {
-        .cpt-stage-progress-indicator {
-          width: 100%;
-        }
-      }
-    }
-
-    &.current {
-      .cpt-stage-label {
-        font-weight: bold;
-      }
-
-      .cpt-stage-progress-indicator {
-        border-radius: 0 9999px 9999px 0; 
-        width: 50%;
-      }
-    }
-
-    &.not-started {
-      .cpt-stage-label {
-        color: SlateGray;
-      }
-      
-      .cpt-stage-progress-indicator {
-        display: none;
-      } 
-    }
   }
 
   .cpt-stage-label {
     line-height: 1.1;
     text-align: center;
-    text-transform: uppercase;
-  }
 
-  .cpt-stage-progress-indicator {
-    background-color: SteelBlue;
-    height: 1em;
-    position: absolute;
-      top: 0;
-      left: 0;
-    width: 100%;
+    &:first-child {
+      text-align: left;
+    }
+
+    &:last-child {
+      text-align: right;
+    }
+
+    &.current {
+      font-weight: bold;
+    }
+
+    &.not-started {
+      color: SlateGray;
+    }
   }
 }
 
