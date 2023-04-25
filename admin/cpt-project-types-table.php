@@ -42,7 +42,7 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
 
   /**
    * Get Columns
-   *
+   *  
    * @see WP_List_Table::::single_row_columns()
    * @return array An associative array containing column information:
    * 'slugs' => 'Visible Titles'.
@@ -55,7 +55,6 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
     ];
     return $columns;
   }
-
 
   /**
    * Sortable Columns
@@ -72,12 +71,11 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
     if ($primary !== $column_name ) return '';
     if (!current_user_can('cpt_manage_projects')) return '';
     $actions = [
-      'Edit',
+      'Edit' => '<span class="cpt-click-to-expand">' . __('Edit', 'client-power-tools') . '</span>',
       'Delete' => '<a href="' . wp_nonce_url('?page=cpt-project-types&action=delete&project_type_term_id=' . $item['ID']) . '">' . __('Delete', 'client-power-tools') . '</a>',
     ];
     return $this->row_actions($actions);
   }
-
 
   /**
    * Prepare Data for Display

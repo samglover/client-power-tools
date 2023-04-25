@@ -10,10 +10,9 @@ All notable changes to this project will be documented in this file. The format 
 
 #### Changed
 - Change capability names (replaced hyphens with underscores).
-- No default client manager.
-- Show an error if the page requests a non-existent client.
-- A number of minor user experience improvements.
-- Many minor updates.
+- Removed the default client manager.
+- Show an error if a page requests a nonexistent client.
+- Lots of small user experience improvements and updates.
 - All forms updated with an improved layout.
 - Reorganized stylesheets.
 

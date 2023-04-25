@@ -43,9 +43,10 @@ function cpt_project_types() {
   <?php
 }
 
+
 add_action('admin_post_cpt_new_project_type_added', __NAMESPACE__ . '\cpt_process_new_project_type');
 function cpt_process_new_project_type() {
-  if (!isset($_POST['cpt_new_project_type_nonce']) || !wp_verify_nonce($_POST['cpt_new_project_type_nonce'], 'cpt_new_project_type_added')) exit('Invalid nonce.');
+  if (!isset($_POST['cpt_new_project_type_nonce']) || !wp_verify_nonce($_POST['cpt_new_project_type_nonce'], 'cpt_new_project_type_added')) exit(__('Invalid nonce.', 'client-power-tools'));
 
   $new_project_type = wp_insert_term(
     sanitize_text_field($_POST['project_type']),
@@ -53,17 +54,16 @@ function cpt_process_new_project_type() {
   );
 
   if (is_wp_error($new_project_type)) {
-    $result = 'Project type could not be created. Error message: ' . $new_project_type->get_error_message();
+    $result = sprintf(__('Project type could not be created. Error message: %s', 'client-power-tools'), $new_project_type->get_error_message());
   } else {
-    $result = 'Project type created.';
-
+    $result = __('Project type created.', 'client-power-tools');
     $new_project_type_stages = add_term_meta(
       $new_project_type['term_id'],
       'cpt_project_type_stages',
       sanitize_textarea_field($_POST['project_type_stages']),
       true
     );
-    if (is_wp_error($new_project_type_stages)) $result .= __('Stages could not be added. Error message:', 'client-power-tools') . ' ' . $new_project_type_stages->get_error_message();
+    if (is_wp_error($new_project_type_stages)) $result .= sprintf(__('Stages could not be added. Error message: %s', 'client-power-tools'), $new_project_type_stages->get_error_message());
   }
 
   set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
