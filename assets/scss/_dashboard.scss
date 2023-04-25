@@ -6,17 +6,18 @@
 
 .cpt-error,
 .cpt-success {
-  background-color: #eee;
+  background-color: $gray-wash;
+  border: $border-style;
   border-left: 4px solid;
   padding: $spacing-regular;
 }
 
 .cpt-error {
-  border-left-color: Red;
+  border-left-color: $error;
 }
 
 .cpt-success {
-  border-left-color: Green;
+  border-left-color: $success;
 }
 
 #cpt-status-update-request-button {  

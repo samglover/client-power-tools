@@ -7,7 +7,8 @@
 
 .cpt-error,
 .cpt-success {
-  background-color: #eee;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid Silver;
   border-left: 4px solid;
   padding: 20px;
 }
@@ -17,7 +18,7 @@
 }
 
 .cpt-success {
-  border-left-color: Green;
+  border-left-color: SeaGreen;
 }
 
 #cpt-status-update-request-button[disabled=true] {
@@ -29,7 +30,7 @@
 }
 
 #cpt-nav {
-  margin-bottom: 2em;
+  margin-bottom: 30px;
 }
 #cpt-nav .cpt-tabs {
   align-items: stretch;
@@ -42,9 +43,6 @@
   padding: 0;
 }
 #cpt-nav .cpt-tabs .cpt-tab {
-  border-color: Silver;
-  border-style: solid;
-  border-width: 1px 1px 0 1px;
   display: block;
   margin: 0 4px 0 0;
   padding: 0;
@@ -56,10 +54,12 @@
   }
 }
 #cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item {
+  border: 1px solid Silver;
+  border-width: 1px 1px 0 1px;
   color: DarkSlateGray;
   cursor: pointer;
   display: block;
-  padding: 0.5em 1em;
+  padding: 10px 20px;
   text-decoration: none;
 }
 #cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item.current {
@@ -67,7 +67,7 @@
   font-weight: bold;
 }
 #cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item.cpt-click-to-expand {
-  padding-right: calc(2em + 4px);
+  padding-right: 44px;
   position: relative;
 }
 #cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item.cpt-click-to-expand svg {
@@ -86,12 +86,14 @@
 }
 #cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item:hover, #cpt-nav .cpt-tabs .cpt-tab .cpt-nav-menu-item:focus {
   background-color: Silver;
+  border-color: #b0b0b0;
 }
 
 .cpt-nav-tabs-submenu {
   border-bottom: 1px solid Silver;
-  margin: 0 0 2em 0;
-  padding: 2em;
+  line-height: 1.1;
+  margin: 0 0 30px 0;
+  padding: 30px;
   position: relative;
 }
 .cpt-nav-tabs-submenu > ul {
@@ -99,14 +101,11 @@
   padding: 0;
 }
 .cpt-nav-tabs-submenu > ul ul {
-  margin: 0 0 0 1em;
+  margin: 0 0 0 20px;
   padding: 0;
 }
 .cpt-nav-tabs-submenu ul {
   list-style: none;
-}
-.cpt-nav-tabs-submenu ul li {
-  margin: 0.5em 0;
 }
 .cpt-nav-tabs-submenu ul.current a {
   font-weight: bold;
@@ -125,7 +124,7 @@
 
 #cpt-breadcrumbs {
   font-size: 80%;
-  margin-bottom: 2em;
+  margin-bottom: 30px;
 }
 
 .cpt-modal {
@@ -141,7 +140,8 @@
 
 .cpt-modal-card {
   background-color: White;
-  box-shadow: 0 0 0 1px #ddd, 1px 1px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid Silver;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   grid-area: modal;
   margin: 3px;
@@ -149,7 +149,7 @@
   max-height: 90vh;
   max-width: 40vw;
   overflow: auto;
-  padding: 2em;
+  padding: 30px;
   position: relative;
   z-index: 100;
 }
@@ -179,8 +179,8 @@
 
 .cpt-dismiss-button {
   align-items: center;
-  background-color: #ccc;
-  border: 1px solid #bbb;
+  background-color: LightGray;
+  border: 1px solid Silver;
   border-radius: 50%;
   cursor: pointer;
   display: grid;
@@ -197,14 +197,14 @@
   width: 30px;
 }
 .cpt-dismiss-button:hover, .cpt-dismiss-button:focus {
-  background-color: #ddd;
-  border-color: #ccc;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+  background-color: Silver;
+  border-color: #b0b0b0;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
   text-decoration: none;
 }
 .cpt-dismiss-button:active {
-  background-color: #bbb;
-  border-color: #bbb;
+  background-color: Silver;
+  border-color: #b0b0b0;
   box-shadow: none;
   text-decoration: none;
 }
@@ -220,7 +220,7 @@
 }
 
 .cpt-modal-screen {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.1);
   display: none;
   height: 100vh;
   position: fixed;
@@ -232,9 +232,10 @@
 
 .cpt-notice {
   background-color: #fff;
-  box-shadow: 0 0 0 1px #ddd, 1px 1px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid Silver;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
-  margin: 3px 3px 2em 3px;
+  margin: 3px 3px 20px 3px;
   padding: 20px;
   position: relative;
 }
@@ -250,13 +251,13 @@
 
 #cpt-login #cpt-login-messages {
   display: none;
-  line-height: 1.25;
+  line-height: 1.2;
   margin: 1em 0;
   padding-left: 1.5em;
   position: relative;
 }
 #cpt-login #cpt-login-messages.error {
-  color: #c00;
+  color: Red;
 }
 #cpt-login #cpt-login-messages.success {
   color: SeaGreen;
@@ -275,7 +276,7 @@
   width: 1em;
 }
 #cpt-login #cpt-login-messages.error::before {
-  background-color: #c00;
+  background-color: Red;
   content: "!";
 }
 #cpt-login #cpt-login-messages.success::before {
@@ -291,7 +292,7 @@
 }
 #cpt-login #cpt-login-form .description {
   font-size: 80%;
-  margin-bottom: 1.25em;
+  margin-bottom: 20px;
 }
 #cpt-login #cpt-login-type-links {
   font-size: 80%;

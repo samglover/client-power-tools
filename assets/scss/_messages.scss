@@ -1,22 +1,20 @@
 .cpt-message {
   background-color: White;
-  box-shadow:
-    0 0 0 1px #ddd,
-    1px 1px 3px rgba(0, 0, 0, 0.2)
-  ;
+  border: $border-style;
+  box-shadow: $box-shadow;
   box-sizing: border-box;
-  margin-bottom: 20px;
+  margin-bottom: $spacing-regular;
   position: relative;
 
   &:target .cpt-message-content {
-    background-color: LightYellow;
+    background-color: $yellow-highlighter;
   }
 
   &.my-message {
     margin-left: 10%;
 
     .cpt-message-content {
-      background-color: LightBlue;
+      background-color: $blue-highlighter;
     }
   }
 
@@ -24,7 +22,7 @@
     margin-right: 10%;
 
     .cpt-message-content {
-      background-color: rgba(0, 0, 0, .025);
+      background-color: $gray-wash;
     }
   }
 
@@ -38,7 +36,7 @@
   }
 
   .cpt-message-content {
-    padding: 20px;
+    padding: $spacing-regular;
 
     & > *:first-child {
       margin-top: 0;
@@ -50,7 +48,7 @@
   }
 
   .cpt-message-meta {
-    padding: 10px 20px;
+    padding: $spacing-sm $spacing-regular;
 
     p {
       margin: 0;
@@ -60,17 +58,17 @@
 }
 
 .cpt-new-message-form {
-  background-color: rgba(0, 0, 0, .05);
+  background-color: $gray-wash;
   padding: $spacing-regular;
 
   h3 {
     margin-top: 0;
-    margin-bottom: .5em;
+    margin-bottom: $spacing-regular;
   }
 
   .form-field {
     margin-top: 0;
-    margin-bottom: 1em;
+    margin-bottom: $spacing-regular;
 
     input:not([type="checkbox"]),
     select,

@@ -1,9 +1,9 @@
 #cpt-nav {
-  margin-bottom: 2em;
+  margin-bottom: $spacing-md;
 
   .cpt-tabs {
     align-items: stretch;
-    border-bottom: 1px solid Silver;
+    border-bottom: $border-style;
     display: flex;
     flex-grow: 1;
     flex-wrap: wrap;
@@ -12,9 +12,6 @@
     padding: 0;
 
     .cpt-tab {
-      border-color: Silver;
-      border-style: solid;
-      border-width: 1px 1px 0 1px;
       display: block;
       margin: 0 4px 0 0;
       padding: 0;
@@ -25,10 +22,12 @@
       }
 
       .cpt-nav-menu-item {
+        border: $border-style;
+        border-width: 1px 1px 0 1px;
         color: DarkSlateGray;
         cursor: pointer;
         display: block;
-        padding: .5em 1em;
+        padding: $spacing-sm $spacing-regular;
         text-decoration: none;
 
         &.current {
@@ -37,7 +36,7 @@
         }
 
         &.cpt-click-to-expand {
-          padding-right: calc(2em + 4px);
+          padding-right: calc($spacing-lg + 4px);
           position: relative;
 
           svg {
@@ -62,6 +61,7 @@
         &:hover,
         &:focus {
           background-color: Silver;
+          border-color: $border-hover;
         }
       }
     }
@@ -69,9 +69,10 @@
 }
 
 .cpt-nav-tabs-submenu {
-  border-bottom: 1px solid Silver;
-  margin: 0 0 2em 0;
-  padding: 2em;
+  border-bottom: $border-style;
+  line-height: 1.1;
+  margin: 0 0 $spacing-md 0;
+  padding: $spacing-md;
   position: relative;
 
   & > ul {
@@ -79,17 +80,13 @@
     padding: 0;
 
     ul {
-      margin: 0 0 0 1em;
+      margin: 0 0 0 $spacing-regular;
       padding: 0;
     }
   }
 
   ul {
     list-style: none;
-
-    li {
-      margin: .5em 0;
-    }
 
     &.current a {
       font-weight: bold;
@@ -111,5 +108,5 @@
 
 #cpt-breadcrumbs {
   font-size: 80%;
-  margin-bottom: 2em;
+  margin-bottom: $spacing-md;
 }

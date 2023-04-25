@@ -68,7 +68,7 @@
 
 /* Forms */
 #cpt-admin h2:not(:first-child) {
-  margin-top: 3em;
+  margin-top: 30px;
 }
 #cpt-admin button,
 #cpt-admin .button {
@@ -78,9 +78,8 @@
   font-weight: normal;
 }
 #cpt-admin .cpt-this-expands {
-  background-color: rgba(0, 0, 0, 0.05);
-  margin-top: 20px;
-  margin-bottom: 20px;
+  background-color: rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
   padding: 20px;
 }
 #cpt-admin .column-project_id {
@@ -100,7 +99,7 @@
 }
 #cpt-admin .form-wrap .form-field {
   margin-top: 0;
-  margin-bottom: 1em;
+  margin-bottom: 20px;
 }
 #cpt-admin .form-wrap .form-field input:not([type=checkbox]),
 #cpt-admin .form-wrap .form-field select,
@@ -108,32 +107,38 @@
   max-width: unset;
   width: 100%;
 }
+#cpt-admin .form-wrap .submit {
+  margin: 0;
+  padding: 0;
+}
 
 #cpt-delete-client-link {
-  color: LightSlateGray;
   cursor: pointer;
   display: inline-block;
-  margin-top: 1em;
+  margin-top: 10px;
+}
+#cpt-delete-client-link:not(:hover) {
+  color: SlateGray;
 }
 #cpt-delete-client-link:hover {
-  color: DarkSlateGray;
   text-decoration: underline;
 }
 
 #cpt_delete_project_button {
-  margin-top: 1em;
+  margin-top: 10px;
 }
 #cpt_delete_project_button #submit {
   background: unset;
   border: unset;
-  color: LightSlateGray;
   cursor: pointer;
   display: inline;
   margin: 0;
   padding: unset;
 }
+#cpt_delete_project_button #submit:not(:hover) {
+  color: SlateGray;
+}
 #cpt_delete_project_button #submit:hover {
-  color: DarkSlateGray;
   text-decoration: underline;
 }
 
@@ -155,7 +160,8 @@
 
 .cpt-admin-modal-card {
   background-color: #fff;
-  box-shadow: 0 0 0 1px #ddd, 1px 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid Silver;
   box-sizing: border-box;
   grid-area: modal;
   margin: 3px;
@@ -174,7 +180,7 @@
 }
 
 .cpt-admin-modal-screen {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.1);
   height: 100%;
   position: fixed;
   left: 0;
