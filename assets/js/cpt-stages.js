@@ -1,8 +1,9 @@
 (function($) {
   $(document).ready(function() {
     // Get the value of the project type field when it changes.
-    let typesField = document.querySelector('select#project_type');
-    let stagesField = document.querySelector('select#project_stage');
+    const { __ } = wp.i18n;
+    const typesField = document.querySelector('select#project_type');
+    const stagesField = document.querySelector('select#project_stage');
 
     typesField.addEventListener('change', function(event) {
       let projectType = event.target.value;
@@ -25,13 +26,23 @@
           // Update stages field values. If the same one exists as was checked before, select it.
           let currentStage = stagesField.value;
           stagesField.innerHTML = '';
-          response.stages.forEach(element => {
+          if (response.stages.length > 0) {
+            response.stages.forEach(element => {
+              let option = document.createElement('option');
+              option.value = element;
+              option.innerHTML = element;
+              if (currentStage == element) option.selected = true;
+              stagesField.append(option);
+            });
+          } else {
             let option = document.createElement('option');
-            option.value = element;
-            option.innerHTML = element;
-            if (currentStage == element) option.selected = true;
+            option.setAttribute('disabled', '');
+            option.setAttribute('selected', '');
+            option.setAttribute('value', '');
+            option.innerHTML = __('Select another project type.', 'client-power-tools');
+            option.selected = true;
             stagesField.append(option);
-          });
+          }
         },
         failure: function(error) {
           console.debug(error);

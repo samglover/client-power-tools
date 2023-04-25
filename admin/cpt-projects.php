@@ -110,6 +110,7 @@ function cpt_get_project_type_select($field_name = 'project_type', $selected = n
   }
 }
 
+
 function cpt_get_project_stage_select($projects_post_id = null, $field_name = 'cpt_project_stage', $selected = null) {
   if ($projects_post_id) {
     $project_type = get_post_meta($projects_post_id, 'cpt_project_type', true);

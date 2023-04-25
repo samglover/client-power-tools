@@ -142,7 +142,10 @@ function cpt_update_stage_select() {
   if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'update-stages-nonce')) exit('Invalid nonce.');
 	$project_type	= $_POST['project_type'];
   $stages_array = explode("\n", sanitize_textarea_field(get_term_meta($project_type, 'cpt_project_type_stages', true)));
-  foreach ($stages_array as $key => $val) $stages_array[$key] = trim($val);
+  foreach ($stages_array as $key => $val) {
+    $stages_array[$key] = trim($val);
+    if (empty($stages_array[$key])) unset($stages_array[$key]);
+  }
   wp_send_json([
     'type' => $project_type,
     'stages' => $stages_array,

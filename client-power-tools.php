@@ -35,7 +35,7 @@ function cpt_register_common_scripts() {
 	wp_enqueue_style('cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/common.css', [], CLIENT_POWER_TOOLS_PLUGIN_VERSION);
 	wp_enqueue_script('cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-common.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
 
-	wp_register_script('cpt-stages', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-stages.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
+	wp_register_script('cpt-stages', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-stages.js', ['jquery', 'wp-i18n'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
   wp_localize_script(
     'cpt-stages',
     'vars', [
