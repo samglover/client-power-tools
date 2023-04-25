@@ -93,7 +93,6 @@ function cpt_project_list() {
 
 
 function cpt_get_project_type_select($field_name = 'project_type', $selected = null) {
-  if (!$selected) $selected = get_option('cpt_default_project_type');
   $project_types = get_terms([
     'taxonomy' => 'cpt-project-type',
     'hide_empty' => false,
@@ -112,14 +111,28 @@ function cpt_get_project_type_select($field_name = 'project_type', $selected = n
 }
 
 function cpt_get_project_stage_select($projects_post_id = null, $field_name = 'cpt_project_stage', $selected = null) {
-  if (!$projects_post_id) return;
-  $project_type = get_post_meta($projects_post_id, 'cpt_project_type', true);
+  if ($projects_post_id) {
+    $project_type = get_post_meta($projects_post_id, 'cpt_project_type', true);
+    $current_stage = get_post_meta($projects_post_id, 'cpt_project_stage', true);
+  } else {
+    $default_type = get_taxonomy('cpt-project-type')->default_term;
+    $project_type = get_term_by('slug', $default_type['slug'], 'cpt-project-type')->term_id;
+  }
+
   $stages_array = explode("\n", get_term_meta($project_type, 'cpt_project_type_stages', true));
-  $current_stage = get_post_meta($projects_post_id, 'cpt_project_stage', true);
+  foreach ($stages_array as $key => $val) {
+    $stages_array[$key] = trim($val);
+    if (empty($stages_array[$key])) unset($stages_array[$key]);
+  }
+
   echo '<select name="' . $field_name . '" id="' . $field_name . '">';
-    foreach ($stages_array as $stage) {
-      $stage = trim($stage);
-      echo '<option value="' . $stage . '"' . selected($stage, $selected) . '>' . $stage . '</option>';
+    if (!empty($stages_array)) {
+      foreach ($stages_array as $stage) {
+        $stage = trim($stage);
+        echo '<option value="' . $stage . '"' . selected($stage, $selected) . '>' . $stage . '</option>';
+      }
+    } else {
+      echo '<option disabled selected value>' . __('Select another project type.', 'client-power-tools') . '</option>';
     }
   echo '</select>';
 }

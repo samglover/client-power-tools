@@ -39,6 +39,12 @@
       <label for="project_type">Project Type</label>
       <?php echo cpt_get_project_type_select('project_type') ?>
     </div>
+    <div class="form-field span-2">
+      <label for="project_stage"><?php printf(__('%s Stage', 'client-power-tools'), $projects_label[0]); ?></label>
+      <?php 
+        echo cpt_get_project_stage_select('', 'project_stage');
+      ?>
+    </div>
   </div>
   <?php $custom_fields = Common\cpt_custom_client_fields(); ?>
   <?php if ($custom_fields) { ?>

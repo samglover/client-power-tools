@@ -57,7 +57,6 @@
   // Adjust anchor targets.
   $(document).ready(function(){
     let target = $(location.hash);
-
     if (target.length > 0) {
       let adminBar  = $('#wpadminbar').outerHeight();
       let offset    = target.offset();

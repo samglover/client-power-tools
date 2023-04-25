@@ -135,3 +135,17 @@ function cpt_get_project_meta($projects_post_id) {
     </ul>
   <?php
 }
+
+add_action('wp_ajax_cpt_update_stage_select', __NAMESPACE__ . '\cpt_update_stage_select');
+add_action('wp_ajax_nopriv_cpt_update_stage_select', __NAMESPACE__ . '\cpt_update_stage_select');
+function cpt_update_stage_select() {
+  if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'update-stages-nonce')) exit('Invalid nonce.');
+	$project_type	= $_POST['project_type'];
+  $stages_array = explode("\n", sanitize_textarea_field(get_term_meta($project_type, 'cpt_project_type_stages', true)));
+  foreach ($stages_array as $key => $val) $stages_array[$key] = trim($val);
+  wp_send_json([
+    'type' => $project_type,
+    'stages' => $stages_array,
+  ]);
+  wp_die();
+}

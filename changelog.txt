@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file. The format 
 ### 1.7 - 2023-04-??
 
 #### Added
-- NEW MODULES: Projects & Stages! Organize your client projects and assign stages to different project types.
+- NEW MODULE: Projects & Stages! Organize your client projects and assign stages to different project types.
 
 #### Changed
 - Change capability names (replaced hyphens with underscores).

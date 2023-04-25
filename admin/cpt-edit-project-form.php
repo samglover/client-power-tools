@@ -40,7 +40,7 @@
         echo cpt_get_project_type_select('project_type', $project_type);
       ?>
     </div>
-    <div class="form-field">
+    <div class="form-field span-2">
       <label for="project_stage"><?php printf(__('%s Stage', 'client-power-tools'), $projects_label[0]); ?></label>
       <?php 
         $current_project_stage = get_post_meta($projects_post_id, 'cpt_project_stage', true);
@@ -49,7 +49,7 @@
     </div>
     <div class="form-field">
       <label for="project_status"><?php printf(__('%s Status', 'client-power-tools'), $projects_label[0]); ?></label>
-      <?php echo cpt_get_status_select('cpt_project_statuses', 'project_status', 'cpt_default_project_status') ?>
+      <?php echo cpt_get_status_select('cpt_project_statuses', 'project_status', 'cpt_default_project_status'); ?>
     </div>
   </div>
   <?php 
