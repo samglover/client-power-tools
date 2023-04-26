@@ -40,7 +40,7 @@ function cpt_message_list($user_id) {
     while ($cpt_messages->have_posts()) : $cpt_messages->the_post();
       $message_id       = get_the_ID();
       $message_classes  = ['cpt-message'];
-      $message_meta     = '<p><small>';
+      $message_meta     = '<p>';
 
       if (get_post_meta($message_id, 'cpt_status_update_request')) $message_classes[] = 'status-update-request';
 
@@ -52,7 +52,7 @@ function cpt_message_list($user_id) {
         $message_meta .= __('Sent by ', 'client-power-tools') . get_the_author();
       }
 
-      $message_meta .= ' on ' . get_the_date('F jS, Y, \a\t g:i a') . '</small></p>';
+      $message_meta .= ' on ' . get_the_date('F jS, Y, \a\t g:i a') . '</p>';
 
       ?>
         <div id="cpt-message-<?php echo $message_id; ?>" class="<?php echo implode(' ', $message_classes); ?>">

@@ -57,18 +57,22 @@ function cpt_get_projects($clients_user_id = null) {
         <?php while ($projects->have_posts()) : $projects->the_post(); ?>
           <?php $projects_post_id = get_the_ID(); ?>
           <div class="cpt-project">
-            <h3 class="cpt-project-title">
-              <?php 
-                if (is_admin()) {
-                  $project_url = get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id=' . $projects_post_id;
-                } else {
-                  $project_url = cpt_get_client_dashboard_url() . '?tab=projects&projects_post_id=' . $projects_post_id;
-                }
-              ?>
-              <a href="<?php echo $project_url; ?>"><?php the_title(); ?></a>
-            </h3>
-            <?php cpt_get_project_progress_bar($projects_post_id); ?>
-            <?php cpt_get_project_meta($projects_post_id); ?>
+            <div class="cpt-project-content">
+              <h3 class="cpt-project-title">
+                <?php 
+                  if (is_admin()) {
+                    $project_url = get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id=' . $projects_post_id;
+                  } else {
+                    $project_url = cpt_get_client_dashboard_url() . '?tab=projects&projects_post_id=' . $projects_post_id;
+                  }
+                ?>
+                <a href="<?php echo $project_url; ?>"><?php the_title(); ?></a>
+              </h3>
+              <?php cpt_get_project_progress_bar($projects_post_id); ?>
+            </div>
+            <div class="cpt-project-meta">
+              <?php cpt_get_project_meta($projects_post_id); ?>
+            </div>
           </div>
         <?php endwhile; ?>
       </section>
@@ -98,7 +102,7 @@ function cpt_get_project_progress_bar($projects_post_id) {
   if ($current_stage) {
     ?>
       <div class="cpt-project-stage-progress">
-        <p class="cpt-section-header">Progress</p>
+        <p class="cpt-section-header"><?php _e('Progress', 'client-power-tools'); ?></p>
         <div class="cpt-stages-container">
           <div class="cpt-stage-progress-container">
             <div class="cpt-stage-progress-indicator"<?php echo $indicator_style; ?>></div>
@@ -126,13 +130,34 @@ function cpt_get_project_meta($projects_post_id) {
 
   $project_data = cpt_get_project_data($projects_post_id);
   ?>
-    <ul class="cpt-project-meta">
+    <div class="cpt-row">
       <?php 
-        if ($project_data['project_id']) echo '<li class="cpt-project-id">' . __('ID', 'client-power-tools') . ': <strong>' . $project_data['project_id'] . '</strong>' . '</li>';
-        if ($project_data['project_type']) echo '<li class="cpt-project-type">' . __('Type','client-power-tools') . ': <strong>' . $project_data['project_type'] . '</strong>' . '</li>';
-        if ($project_data['project_status']) echo '<li class="cpt-project-status">' . __('Status','client-power-tools') . ': <strong>' . $project_data['project_status'] . '</strong>' . '</li>';
+        if ($project_data['project_id']) {
+          ?>
+            <div class="cpt-col cpt-project-id">
+              <span class="cpt-project-meta-label"><?php _e('ID', 'client-power-tools'); ?></span>
+              <span class="cpt-project-meta-value"><?php echo $project_data['project_id']; ?></span>
+            </div>
+          <?php
+        }
+        if ($project_data['project_type']) {
+          ?>
+            <div class="cpt-col cpt-project-type">
+              <span class="cpt-project-meta-label"><?php _e('Type', 'client-power-tools'); ?></span>
+              <span class="cpt-project-meta-value"><?php echo $project_data['project_type']; ?></span>
+            </div>
+          <?php
+        }
+        if ($project_data['project_status']) {
+          ?>
+            <div class="cpt-col cpt-project-status">
+              <span class="cpt-project-meta-label"><?php _e('Status', 'client-power-tools'); ?></span>
+              <span class="cpt-project-meta-value"><?php echo $project_data['project_status']; ?></span>
+            </div>
+          <?php
+        }
       ?>
-    </ul>
+    </div>
   <?php
 }
 

@@ -1,10 +1,4 @@
 @charset "UTF-8";
-.cpt-section-header,
-.cpt-stage-label,
-.cpt-project-meta {
-  font-size: 80%;
-}
-
 .cpt-error,
 .cpt-success {
   background-color: rgba(0, 0, 0, 0.1);

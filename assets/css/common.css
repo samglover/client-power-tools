@@ -56,6 +56,7 @@
 }
 
 .cpt-section-header {
+  font-size: 15px;
   font-weight: bold;
   line-height: 1.1;
   margin-top: 0;
@@ -82,20 +83,29 @@
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   margin-bottom: 20px;
-  padding: 20px;
-}
-.cpt-projects-list .cpt-project > :first-child {
-  margin-top: 0;
-}
-.cpt-projects-list .cpt-project > :last-child {
-  margin-bottom: 0;
 }
 .cpt-projects-list .cpt-project.cpt-project-status-closed {
   background-color: rgba(255, 255, 255, 0.5);
 }
 .cpt-projects-list .cpt-project .cpt-project-title {
+  font-size: 20px;
+  font-weight: bold;
   margin-top: 0;
   margin-bottom: 20px;
+  text-transform: uppercase;
+}
+.cpt-projects-list .cpt-project .cpt-project-title a:not(:hover) {
+  color: inherit;
+  text-decoration: none;
+}
+.cpt-projects-list .cpt-project-content {
+  padding: 20px;
+}
+.cpt-projects-list .cpt-project-content > :first-child {
+  margin-top: 0;
+}
+.cpt-projects-list .cpt-project-content > :last-child {
+  margin-bottom: 0;
 }
 
 .cpt-project-stage-progress {
@@ -132,6 +142,7 @@
   width: 100%;
 }
 .cpt-project-stage-progress .cpt-stage-label {
+  font-size: 14px;
   line-height: 1.1;
   text-align: center;
 }
@@ -149,13 +160,21 @@
 }
 
 .cpt-project-meta {
-  display: flex;
-  gap: 20px;
-  justify-content: space-between;
-  list-style: none;
-  margin: 20px 0;
-  padding: 0;
-  text-transform: uppercase;
+  background-color: rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  line-height: 1.1;
+  padding: 10px 20px;
+}
+.cpt-project-meta .cpt-col {
+  width: auto;
+}
+.cpt-project-meta .cpt-project-meta-label {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+}
+.cpt-project-meta .cpt-project-meta-value {
+  display: block;
 }
 
 .cpt-message {
@@ -189,6 +208,7 @@
   background-color: unset;
 }
 .cpt-message .cpt-message-content {
+  font-size: 16px;
   padding: 20px;
 }
 .cpt-message .cpt-message-content > *:first-child {
@@ -197,7 +217,15 @@
 .cpt-message .cpt-message-content > *:last-child {
   margin-bottom: 0;
 }
+.cpt-message .cpt-message-title {
+  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
 .cpt-message .cpt-message-meta {
+  background-color: rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  line-height: 1.1;
   padding: 10px 20px;
 }
 .cpt-message .cpt-message-meta p {

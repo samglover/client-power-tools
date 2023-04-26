@@ -4,6 +4,7 @@
 
   $user_id = isset($_REQUEST['user_id']) ? sanitize_key(intval($_REQUEST['user_id'])) : false;
   $client_ids = Common\cpt_get_clients(['fields' => 'ID']);
+  $projects_label = Common\cpt_get_projects_label();
 ?>
 
 <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
@@ -62,6 +63,6 @@
     </div>
   <?php } ?>
   <p class="submit">
-    <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php echo __('Add', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?>">
+    <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php echo __('Add', 'client-power-tools') . ' ' . $projects_label[0]; ?>">
   </p>
 </form>

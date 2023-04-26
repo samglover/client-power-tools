@@ -71,11 +71,12 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
     if ($primary !== $column_name ) return '';
     if (!current_user_can('cpt_manage_projects')) return '';
     $actions = [
-      'Edit' => '<span class="cpt-click-to-expand">' . __('Edit', 'client-power-tools') . '</span>',
+      'Edit' => sprintf('<button type="button" class="button-link editinline" aria-label="%s" aria-expanded="false">%s</button>', $item['project_type'], __('Quick Edit', 'client-power-tools')),
       'Delete' => '<a href="' . wp_nonce_url('?page=cpt-project-types&action=delete&project_type_term_id=' . $item['ID']) . '">' . __('Delete', 'client-power-tools') . '</a>',
     ];
     return $this->row_actions($actions);
   }
+
 
   /**
    * Prepare Data for Display
