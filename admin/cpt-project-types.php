@@ -29,6 +29,7 @@ function cpt_project_types() {
           <div class="col-wrap">
           <?php
             $project_types_list = new Project_Types_List_Table();
+            cpt_process_project_type_actions($project_types_list->current_action());
             $project_types_list->prepare_items();
             ?>
               <form id="project-list" method="GET">
@@ -69,4 +70,21 @@ function cpt_process_new_project_type() {
   set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
   wp_redirect($_POST['_wp_http_referer']);
   exit;
+}
+
+
+function cpt_process_project_type_actions($action) {
+  if (!$action) return;
+
+  // $referer = wp_get_referer();
+  // if (!$referer) $referer = wp_unslash($_SERVER['REQUEST_URI']);
+  // $referer = remove_query_arg(['_wp_http_referer', '_wpnonce', 'error', 'message', 'paged'], $referer);
+  // check_admin_referer('delete', '_wpnonce');
+
+  // $project_type_id = $_POST['id'];
+
+  // var_dump($referer);
+  var_dump($action);
+  
+  return;
 }

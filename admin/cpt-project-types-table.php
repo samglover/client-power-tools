@@ -6,12 +6,14 @@ use Client_Power_Tools\Core\Includes;
 
 class Project_Types_List_Table extends Includes\WP_List_Table  {
   function __construct() {
-    global $status, $page;
+    global $action;
     parent::__construct([
       'singular'  => strtolower(Common\cpt_get_projects_label('singular')),
       'plural'    => strtolower(Common\cpt_get_projects_label('plural')),
       'ajax'      => false,
     ]);
+
+    $action = $this->screen->action;
   }
 
   /**
@@ -25,6 +27,7 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
     return $item[$column_name];
   }
 
+  
   /**
    * Checkboxes
    *
@@ -40,6 +43,7 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
     );
   }
 
+
   /**
    * Get Columns
    *  
@@ -49,6 +53,7 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
    */
   function get_columns() {
     $columns = [
+      'cb' => '<input type="checkbox" />',
       'project_type' => sprintf(__('%s Type', 'client-power-tools'), Common\cpt_get_projects_label('singular')),
       'project_type_stages' => __('Stages', 'client-power-tools'),
       'project_count' => __('Count', 'client-power-tools'),
@@ -66,6 +71,16 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
     ];
     return $sortable_columns;
   }
+
+
+  function get_bulk_actions()
+  {
+    $actions = array(
+      'bulk-delete' => __('Delete', 'client-power-tools'),
+    );
+    return $actions;
+  }
+
 
   function handle_row_actions($item, $column_name, $primary) {
     if ($primary !== $column_name ) return '';
