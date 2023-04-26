@@ -15,6 +15,7 @@ function cpt_process_new_project() {
       'cpt_project_id' => sanitize_text_field($_POST['project_id']),
       'cpt_project_type' => intval($_POST['project_type']),
       'cpt_project_stage' => sanitize_text_field($_POST['project_stage']),
+      'cpt_project_status' => sanitize_text_field($_POST['project_status']),
       'cpt_client_id' => sanitize_text_field($_POST['client_id']),
     ]
   ]);

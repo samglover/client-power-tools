@@ -11,7 +11,7 @@
   <input name="action" value="cpt_project_updated" type="hidden">
   <input name="projects_post_id" value="<?php echo $projects_post_id; ?>" type="hidden">
   <div class="cpt-row">
-    <div class="form-field span-2 form-required">
+    <div class="form-field span-4 form-required">
       <label for="client_id"><?php printf(__('Client %s(required)%s', 'client-power-tools'), '<small>', '</small>'); ?></label>
       <?php if ($client_ids) { ?>
         <select name="client_id" id="client_id" required>

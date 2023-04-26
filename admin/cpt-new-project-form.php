@@ -10,7 +10,7 @@
   <?php wp_nonce_field('cpt_new_project_added', 'cpt_new_project_nonce'); ?>
   <input name="action" value="cpt_new_project_added" type="hidden">
   <div class="cpt-row">
-    <div class="form-field span-2 form-required">
+    <div class="form-field span-4 form-required">
       <label for="client_id">Client <small>(required)</small></label>
       <?php if ($client_ids) { ?>
         <select name="client_id" id="client_id" required>
@@ -44,6 +44,10 @@
       <?php 
         echo cpt_get_project_stage_select('', 'project_stage');
       ?>
+    </div>
+    <div class="form-field">
+      <label for="project_status"><?php printf(__('%s Status', 'client-power-tools'), $projects_label[0]); ?></label>
+      <?php echo cpt_get_status_select('cpt_project_statuses', 'project_status', 'cpt_default_project_status'); ?>
     </div>
   </div>
   <?php $custom_fields = Common\cpt_custom_client_fields(); ?>
