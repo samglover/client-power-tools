@@ -29,7 +29,10 @@ function cpt_project_types() {
           <div class="col-wrap">
           <?php
             $project_types_list = new Project_Types_List_Table();
-            cpt_process_project_type_actions($project_types_list->current_action());
+            if (isset($_REQUEST['action'])) {
+              if (!wp_verify_nonce($_REQUEST['_wpnonce'])) exit(__('Invalid nonce.', 'client-power-tools'));
+              cpt_process_project_type_actions($project_types_list->current_action());
+            }
             $project_types_list->prepare_items();
             ?>
               <form id="project-list" method="GET">
@@ -64,6 +67,7 @@ function cpt_process_new_project_type() {
       sanitize_textarea_field($_POST['project_type_stages']),
       true
     );
+    
     if (is_wp_error($new_project_type_stages)) $result .= sprintf(__('Stages could not be added. Error message: %s', 'client-power-tools'), $new_project_type_stages->get_error_message());
   }
 
@@ -75,16 +79,28 @@ function cpt_process_new_project_type() {
 
 function cpt_process_project_type_actions($action) {
   if (!$action) return;
+  $redirect_url = remove_query_arg([
+    '_wpnonce', 
+    'project_type_term_id', 
+    'error', 
+    'message', 
+    'paged'
+  ]);
 
-  // $referer = wp_get_referer();
-  // if (!$referer) $referer = wp_unslash($_SERVER['REQUEST_URI']);
-  // $referer = remove_query_arg(['_wp_http_referer', '_wpnonce', 'error', 'message', 'paged'], $referer);
-  // check_admin_referer('delete', '_wpnonce');
-
-  // $project_type_id = $_POST['id'];
-
-  // var_dump($referer);
-  var_dump($action);
+  switch ($action) {
+    case 'delete':
+      $term_id = intval($_REQUEST['project_type_term_id']);
+      $term_deleted = wp_delete_term($term_id, 'cpt-project-type');
+      if (is_wp_error($term_deleted)) {
+        $result .= sprintf(__('Project type could not be deleted. Error message: %s', 'client-power-tools'), $term_deleted->get_error_message());
+      } else {
+        $result = __('Project type deleted.', 'client-power-tools');
+      }
+      set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
+      wp_redirect($redirect_url);
+      exit;
+      break;
+  }
   
   return;
 }
