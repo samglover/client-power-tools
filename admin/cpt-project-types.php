@@ -29,10 +29,6 @@ function cpt_project_types() {
           <div class="col-wrap">
           <?php
             $project_types_list = new Project_Types_List_Table();
-            if (isset($_REQUEST['action'])) {
-              if (!wp_verify_nonce($_REQUEST['_wpnonce'])) exit(__('Invalid nonce.', 'client-power-tools'));
-              cpt_process_project_type_actions($project_types_list->current_action());
-            }
             $project_types_list->prepare_items();
             ?>
               <form id="project-list" method="GET">
@@ -58,9 +54,9 @@ function cpt_process_new_project_type() {
   );
 
   if (is_wp_error($new_project_type)) {
-    $result = sprintf(__('Project type could not be created. Error message: %s', 'client-power-tools'), $new_project_type->get_error_message());
+    $result = sprintf(__('%s type could not be created. Error message: %s', 'client-power-tools'), Common\cpt_get_projects_label('singular'), $new_project_type->get_error_message());
   } else {
-    $result = __('Project type created.', 'client-power-tools');
+    $result = sprintf(__('%s type created.', 'client-power-tools'), Common\cpt_get_projects_label('singular'));
     $new_project_type_stages = add_term_meta(
       $new_project_type['term_id'],
       'cpt_project_type_stages',
@@ -77,30 +73,36 @@ function cpt_process_new_project_type() {
 }
 
 
+add_action('wp_loaded', __NAMESPACE__ . '\cpt_admin_actions');
+function cpt_admin_actions() {
+  if (!isset($_REQUEST['action']) || !isset($_REQUEST['_wpnonce'])) return;
+  if (!wp_verify_nonce($_REQUEST['_wpnonce'])) exit(__('Invalid nonce.', 'client-power-tools'));
+  if (isset($_REQUEST['page']) && $_REQUEST['page'] == 'cpt-project-types') cpt_process_project_type_actions(sanitize_text_field($_REQUEST['action']));
+  exit(__('Unknown page.', 'client-power-tools'));
+}
+
+
 function cpt_process_project_type_actions($action) {
   if (!$action) return;
   $redirect_url = remove_query_arg([
-    '_wpnonce', 
-    'project_type_term_id', 
-    'error', 
-    'message', 
-    'paged'
-  ]);
-
+    '_wpnonce',
+    'action',
+    'project_type_term_id',
+    'error',
+    'message',
+  ], wp_get_referer());
   switch ($action) {
     case 'delete':
       $term_id = intval($_REQUEST['project_type_term_id']);
       $term_deleted = wp_delete_term($term_id, 'cpt-project-type');
       if (is_wp_error($term_deleted)) {
-        $result .= sprintf(__('Project type could not be deleted. Error message: %s', 'client-power-tools'), $term_deleted->get_error_message());
+        $result .= sprintf(__('%s type could not be deleted. Error message: %s', 'client-power-tools'), Common\cpt_get_projects_label('singular'), $term_deleted->get_error_message());
       } else {
-        $result = __('Project type deleted.', 'client-power-tools');
+        $result = sprintf(__('%s type deleted.', 'client-power-tools'), Common\cpt_get_projects_label('singular'));
       }
       set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
-      wp_redirect($redirect_url);
-      exit;
       break;
   }
-  
-  return;
+  $redirect = wp_redirect($redirect_url);
+  exit;
 }
