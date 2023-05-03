@@ -25,11 +25,12 @@ function cpt_get_projects_label($n = null) {
 
 function cpt_get_project_data($projects_post_id) {
   if (!$projects_post_id) return;
+  $term_obj = get_term(get_post_meta($projects_post_id, 'cpt_project_type', true));
   $project_data = [
     'projects_post_id'  => $projects_post_id,
     'project_id'        => get_post_meta($projects_post_id, 'cpt_project_id', true),
     'project_name'      => get_the_title($projects_post_id),
-    'project_type'      => get_term(get_post_meta($projects_post_id, 'cpt_project_type', true))->name,
+    'project_type'      => $term_obj ? $term_obj->name : '',
     'project_status'    => get_post_meta($projects_post_id, 'cpt_project_status', true),
     'project_stage'     => get_post_meta($projects_post_id, 'cpt_project_stage', true),
     'clients_user_id'   => get_post_meta($projects_post_id, 'cpt_client_id', true),

@@ -53,7 +53,7 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
    */
   function get_columns() {
     $columns = [
-      'cb' => '<input type="checkbox" />',
+      // 'cb' => '<input type="checkbox" />',
       'project_type' => sprintf(__('%s Type', 'client-power-tools'), Common\cpt_get_projects_label('singular')),
       'project_type_stages' => __('Stages', 'client-power-tools'),
       'project_count' => __('Count', 'client-power-tools'),
@@ -70,15 +70,6 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
       'project_count' => ['project_count', false],
     ];
     return $sortable_columns;
-  }
-
-
-  function get_bulk_actions()
-  {
-    $actions = array(
-      'bulk-delete' => __('Delete', 'client-power-tools'),
-    );
-    return $actions;
   }
 
 

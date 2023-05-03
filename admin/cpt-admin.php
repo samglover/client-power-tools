@@ -18,6 +18,27 @@ function cpt_redirect_clients() {
 }
 
 
+add_action('wp_loaded', __NAMESPACE__ . '\cpt_admin_actions');
+function cpt_admin_actions() {
+  if (
+    !isset($_REQUEST['action']) || 
+    !isset($_REQUEST['page']) || 
+    !isset($_REQUEST['_wpnonce'])
+  ) return;
+  if (!wp_verify_nonce($_REQUEST['_wpnonce'])) exit(__('Invalid nonce.', 'client-power-tools'));
+
+  $page = sanitize_text_field($_REQUEST['page']);
+
+  switch ($page) {
+    case 'cpt-project-types':
+      cpt_process_project_type_actions(sanitize_text_field($_REQUEST['action']));
+      break;
+    default:
+      exit(__('Unknown page.', 'client-power-tools'));
+  }
+}
+
+
 add_action('admin_notices', __NAMESPACE__ . '\cpt_security_warning', 1);
 function cpt_security_warning() {
   global $pagenow;

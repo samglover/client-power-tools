@@ -41,6 +41,7 @@ function cpt_project_types() {
       </div>
     </div>
   <?php
+  $project_types_list->inline_edit();
 }
 
 
@@ -70,15 +71,6 @@ function cpt_process_new_project_type() {
   set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
   wp_redirect($_POST['_wp_http_referer']);
   exit;
-}
-
-
-add_action('wp_loaded', __NAMESPACE__ . '\cpt_admin_actions');
-function cpt_admin_actions() {
-  if (!isset($_REQUEST['action']) || !isset($_REQUEST['_wpnonce'])) return;
-  if (!wp_verify_nonce($_REQUEST['_wpnonce'])) exit(__('Invalid nonce.', 'client-power-tools'));
-  if (isset($_REQUEST['page']) && $_REQUEST['page'] == 'cpt-project-types') cpt_process_project_type_actions(sanitize_text_field($_REQUEST['action']));
-  exit(__('Unknown page.', 'client-power-tools'));
 }
 
 
