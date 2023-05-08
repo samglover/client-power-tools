@@ -3,12 +3,12 @@
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
+add_action('admin_init', __NAMESPACE__ . '\cpt_redirect_clients');
 function cpt_redirect_clients() {
   global $pagenow;
-
   if (
     Common\cpt_is_client() &&
-    !current_user_can('cpt-manage-clients') &&
+    !current_user_can('cpt_manage_clients') &&
     !(defined('DOING_AJAX') && DOING_AJAX) &&
     $pagenow !== 'admin-post.php'
   ) {
@@ -17,9 +17,29 @@ function cpt_redirect_clients() {
   }
 }
 
-add_action('admin_init', __NAMESPACE__ . '\cpt_redirect_clients');
+
+add_action('wp_loaded', __NAMESPACE__ . '\cpt_admin_actions');
+function cpt_admin_actions() {
+  if (
+    !isset($_REQUEST['action']) || 
+    !isset($_REQUEST['page']) || 
+    !isset($_REQUEST['_wpnonce'])
+  ) return;
+  if (!wp_verify_nonce($_REQUEST['_wpnonce'])) exit(__('Invalid nonce.', 'client-power-tools'));
+
+  $page = sanitize_text_field($_REQUEST['page']);
+
+  switch ($page) {
+    case 'cpt-project-types':
+      cpt_process_project_type_actions(sanitize_text_field($_REQUEST['action']));
+      break;
+    default:
+      exit(__('Unknown page.', 'client-power-tools'));
+  }
+}
 
 
+add_action('admin_notices', __NAMESPACE__ . '\cpt_security_warning', 1);
 function cpt_security_warning() {
   global $pagenow;
   if (!is_ssl() && cpt_is_cpt_admin_page()) {
@@ -31,9 +51,8 @@ function cpt_security_warning() {
   }
 }
 
-add_action('admin_notices', __NAMESPACE__ . '\cpt_security_warning', 1);
 
-
+add_action('admin_notices', __NAMESPACE__ . '\cpt_welcome_message');
 function cpt_welcome_message() {
   global $pagenow;
   if (cpt_is_cpt_admin_page() && get_transient('cpt_show_welcome_message')) {
@@ -51,61 +70,78 @@ function cpt_welcome_message() {
   }
 }
 
-add_action('admin_notices', __NAMESPACE__ . '\cpt_welcome_message');
 
-
+add_action('admin_menu', __NAMESPACE__ . '\cpt_menu_pages');
 function cpt_menu_pages() {
   add_menu_page(
     'Client Power Tools',
     'Clients',
-    'cpt-view-clients',
+    'cpt_view_clients',
     'cpt',
     __NAMESPACE__ . '\cpt_clients',
     CLIENT_POWER_TOOLS_DIR_URL . 'assets/images/cpt-icon.svg',
     '3', // Position
- );
+  );
 
   add_submenu_page(
     'cpt',
     'Client Power Tools: Clients',
     'Clients',
-    'cpt-view-clients',
+    'cpt_view_clients',
     'cpt',
     __NAMESPACE__ . '\cpt_clients',
- );
+  );
+
+  if (get_option('cpt_module_projects')) {
+    $projects_label = Common\cpt_get_projects_label();
+    add_submenu_page(
+      'cpt',
+      'Client Power Tools: ' . $projects_label[1],
+      $projects_label[1],
+      'cpt_view_projects',
+      'cpt-projects',
+      __NAMESPACE__ . '\cpt_projects',
+    );
+
+    add_submenu_page(
+      'cpt',
+      'Client Power Tools: ' . $projects_label[0] . ' Types',
+      $projects_label[0] . ' Types',
+      'cpt_view_projects',
+      'cpt-project-types',
+      __NAMESPACE__ . '\cpt_project_types',
+    );
+  }
 
   if (get_option('cpt_module_messaging')) {
     add_submenu_page(
       'cpt',
       'Client Power Tools: Messages',
       'Messages',
-      'cpt-view-clients',
+      'cpt_view_clients',
       'cpt-messages',
       __NAMESPACE__ . '\cpt_admin_messages',
-   );
+    );
   }
 
   add_submenu_page(
     'cpt',
     'Client Power Tools: Client Managers',
     'Managers',
-    'cpt-manage-team',
+    'cpt_manage_team',
     'cpt-managers',
     __NAMESPACE__ . '\cpt_client_managers',
- );
+  );
 
   add_submenu_page(
     'cpt',
     'Client Power Tools: Settings',
     'Settings',
-    'cpt-manage-settings',
+    'cpt_manage_settings',
     'cpt-settings',
     __NAMESPACE__ . '\cpt_settings',
- );
-
+  );
 }
-
-add_action('admin_menu', __NAMESPACE__ . '\cpt_menu_pages');
 
 
 function cpt_is_cpt_admin_page() {
@@ -120,10 +156,7 @@ function cpt_is_cpt_admin_page() {
 
 function cpt_get_client_manager_select($name = null, $selected = null) {
   if (!$name) $name = 'client_manager';
-  if (!$selected) {
-    $admin = get_user_by_email(get_bloginfo('admin_email'));
-    $selected = get_option('cpt_default_client_manager', $admin->ID);
-  }
+  if (!$selected) $selected = get_option('cpt_default_client_manager');
 
   // Query Client Managers
   $client_manager_query = new \WP_USER_QUERY([
@@ -136,6 +169,7 @@ function cpt_get_client_manager_select($name = null, $selected = null) {
 
   if ($client_managers) {
     echo '<select name="' . $name . '" id="' . $name . '">';
+      echo '<option value>'. __('Unassigned', 'client-power-tools') . '</option>';
       foreach ($client_managers as $client_manager) {
         echo '<option value="' . $client_manager->ID . '"' . selected($client_manager->ID, $selected) . '>' . $client_manager->display_name . '</option>';
       }
@@ -146,24 +180,21 @@ function cpt_get_client_manager_select($name = null, $selected = null) {
 }
 
 
-function cpt_get_client_statuses_select($name = null, $selected = null) {
-  $statuses_array = explode("\n", get_option('cpt_client_statuses'));
-
-  if (!$name) $name = 'client_status';
-  if (!$selected) $selected = get_option('cpt_default_client_status');
-
+function cpt_get_status_select($option = null, $name = null, $selected = null) {
+  if (!$option || !$name) return;
+  $statuses_array = explode("\n", get_option($option));
+  if (!$selected) $selected = get_option($name);
   echo '<select name="' . $name . '" id="' . $name . '">';
     foreach ($statuses_array as $status) {
-      echo '<option value="' . $status . '"' . selected(trim($status), $selected) . '>' . $status . '</option>';
+      $status = trim($status);
+      echo '<option value="' . $status . '"' . selected($status, $selected) . '>' . $status . '</option>';
     }
   echo '</select>';
 }
 
-
+add_action('wp_mail_failed', __NAMESPACE__ . '\cpt_show_wp_mail_errors', 10, 1);
 function cpt_show_wp_mail_errors($wp_error) {
   echo '<pre>';
     print_r($wp_error);
   echo '</pre>';
 }
-
-add_action('wp_mail_failed', 'cpt_show_wp_mail_errors', 10, 1);

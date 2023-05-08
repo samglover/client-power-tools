@@ -1,0 +1,121 @@
+.cpt-projects-list {
+  margin-top: $spacing-regular;
+  margin-bottom: $spacing-regular;
+
+  .cpt-project {
+    background-color: White;
+    border: $border-style;
+    box-shadow: $box-shadow;
+    box-sizing: border-box;
+    margin-bottom: $spacing-regular;
+
+    &.cpt-project-status-closed {
+      background-color: $black-wash;
+    }
+
+    .cpt-project-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 0;
+      margin-bottom: $spacing-regular;
+      text-transform: uppercase;
+
+      a:not(:hover) {
+        color: inherit;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .cpt-project-content {
+    padding: $spacing-regular;
+    
+    > :first-child {
+      margin-top: 0;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.cpt-project-stage-progress {
+  margin-top: $spacing-regular;
+  margin-bottom: $spacing-regular;
+
+  .cpt-stage-progress-container {
+    background-color: LightGray;
+    border: $border-style;
+    border-radius: 9999px;
+    box-shadow: inset $box-shadow;
+    box-sizing: content-box;
+    height: 1em;
+    margin-bottom: .25em;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  .cpt-stage-progress-indicator {
+    background-color: SteelBlue;
+    border-radius: 9999px;
+    box-shadow: $box-shadow;
+    height: 1em;
+    position: absolute;
+      top: 0;
+      left: 0;
+    width: 1em;
+  }
+
+  .cpt-stage-labels {
+    display: flex;
+    gap: 0;
+    justify-content: space-between;
+    text-align: center;
+    width: 100%;
+  }
+
+  .cpt-stage-label {
+    font-size: 14px;
+    line-height: 1.1;
+    text-align: center;
+
+    &:first-child {
+      text-align: left;
+    }
+
+    &:last-child {
+      text-align: right;
+    }
+
+    &.current {
+      font-weight: bold;
+    }
+
+    &.not-started {
+      color: $light-text;
+    }
+  }
+}
+
+.cpt-project-meta {
+  background-color: $gray-wash;
+  font-size: 14px;
+  line-height: 1.1;
+  padding: $spacing-sm $spacing-regular;
+
+  .cpt-col {
+    width: auto;
+  }
+
+  .cpt-project-meta-label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .cpt-project-meta-value {
+    display: block;
+  }
+}

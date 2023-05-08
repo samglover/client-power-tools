@@ -28,7 +28,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
    * @return string Text or HTML to be placed inside the column <td>
    */
   function column_default($item, $column_name) {
-    return;
+    return $item[$column_name];
   }
 
   /**
@@ -67,6 +67,15 @@ class Client_List_Table extends Includes\WP_List_Table  {
   }
 
   /**
+   * Client Projects Method
+   */
+  function column_client_projects($item) {
+    if ($item['project_count']) {
+      return sprintf($item['project_count']);
+    }
+  }
+
+  /**
    * Client Status Method
    */
   function column_client_status($item) {
@@ -98,9 +107,9 @@ class Client_List_Table extends Includes\WP_List_Table  {
    */
   function get_columns() {
     $columns = [
-      // 'cb'              => '<input type="checkbox" />',
       'client_name'     => 'Client',
       'client_messages' => 'Messages',
+      'client_projects' => 'Projects',
       'client_status'   => 'Status',
       'client_manager'  => 'Manager',
       'last_activity'   => 'Last Activity',
@@ -108,9 +117,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
     // Remove columns for disabled modules. (It's easier to remove columns add
     // them in the correct order.)
-    if (!get_option('cpt_module_messaging')) {
-      unset($columns['client_messages']);
-    }
+    if (!get_option('cpt_module_messaging')) unset($columns['client_messages']);
 
     return $columns;
   }
@@ -121,63 +128,34 @@ class Client_List_Table extends Includes\WP_List_Table  {
   function get_sortable_columns() {
     $sortable_columns = [
       'client_name'     => ['client_name', true],
-      'client_messages' => ['msg_count', false],
-      'client_status'   => ['client_status', false],
       'client_manager'  => ['client_manager', false],
-      'last_activity'      => ['last_activity', false],
+      'last_activity'   => ['last_activity', false],
     ];
-
     return $sortable_columns;
-  }
-
-  /**
-   * Bulk Actions
-   *
-   * @return array An associative array containing all the bulk actions: 'slugs'=>'Visible Titles'
-   */
-  function get_bulk_actions() {
-    return; // Remove this line to enable bulk actions.
-
-    $actions = [
-      'delete'  => 'Delete',
-    ];
-
-    return $actions;
-  }
-
-
-  function process_bulk_action() {
-    $action = $this->current_action();
-    switch ($action) {
-      case 'delete':
-        wp_die('Delete something.');
-        break;
-      default:
-        return;
-        break;
-    }
-
-    return;
   }
 
 
   function get_views() {
     $params         = explode("\n", get_option('cpt_client_statuses'));
     $current_status = isset($_REQUEST['client_status']) ? sanitize_text_field(urldecode($_REQUEST['client_status'])) : 'all';
-    $curr_mgr       = Common\cpt_get_name(get_current_user_id());
+    $curr_user      = Common\cpt_get_name(get_current_user_id());
     $curr_mgr_param = isset($_REQUEST['client_manager']) ? sanitize_text_field(urldecode($_REQUEST['client_manager'])) : '';
     $views          = array();
+    $client_ids     = Common\cpt_get_clients(['fields' => 'ID']);
 
-    array_unshift($params, 'All', 'Mine');
+    if ($client_ids) array_unshift($params, 'Mine');
+    array_unshift($params, 'All');
 
     foreach($params as $key => $val) {
       $class          = '';
       $val            = trim($val);
       $curr_param     = urlencode($val);
 
-      if ($current_status == $curr_param || ($key == 1 && $curr_mgr_param == $curr_mgr)) {
-        $class = ' class="current"';
-      } elseif (!isset($_REQUEST['client_status']) && !isset($_REQUEST['client_manager']) && $key == 0 && $current_status == 'all') {
+      if (
+        $current_status == $curr_param || 
+        ($curr_param == 'Mine' && $curr_mgr_param == $curr_user) ||
+        ($curr_param == 'All' && !isset($_REQUEST['client_status']) && !isset($_REQUEST['client_manager']))
+      ) {
         $class = ' class="current"';
       }
 
@@ -188,7 +166,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
       }
 
       if ($curr_param == 'Mine') {
-        $link = '<a href="' . add_query_arg('client_manager', $curr_mgr) . '"' . $class . '>' . $val . '</a>';
+        $link = '<a href="' . add_query_arg('client_manager', $curr_user) . '"' . $class . '>' . $val . '</a>';
       }
 
       $views[$curr_param] = $link;
@@ -209,20 +187,9 @@ class Client_List_Table extends Includes\WP_List_Table  {
     $sortable = $this->get_sortable_columns();
 
     $this->_column_headers = [$columns, $hidden, $sortable];
-    $this->process_bulk_action();
 
-    /**
-     * Query Clients
-     */
-    $args = [
-      'role'          => 'cpt-client',
-      'orderby'       => isset($_REQUEST['orderby'])  ? sanitize_key($_REQUEST['orderby'])  : 'display_name',
-      'order'         => isset($_REQUEST['order'])    ? sanitize_key($_REQUEST['order'])    : 'ASC',
-    ];
-
-    $client_query  = new \WP_USER_QUERY($args);
-    $clients       = $client_query->get_results();
-    $data          = [];
+    $clients = Common\cpt_get_clients();
+    $data = [];
 
     // Creates the data set.
     if (!empty($clients)) {
@@ -232,6 +199,14 @@ class Client_List_Table extends Includes\WP_List_Table  {
           'meta_key'        => 'cpt_clients_user_id',
           'meta_value'      => $client->ID,
           'post_type'       => 'cpt_message',
+          'posts_per_page'  => -1,
+        ]);
+
+        $cpt_projects = new \WP_Query([
+          'fields'          => 'ids',
+          'meta_key'        => 'cpt_client_id',
+          'meta_value'      => $client->ID,
+          'post_type'       => 'cpt_project',
           'posts_per_page'  => -1,
         ]);
 
@@ -257,6 +232,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
           'client_status'   => get_user_meta($client->ID, 'cpt_client_status', true),
           'last_activity'   => get_user_meta($client->ID, 'cpt_last_activity', true),
           'msg_count'       => number_format_i18n($cpt_messages->post_count),
+          'project_count'   => number_format_i18n($cpt_projects->post_count),
         ];
       }
     }
@@ -264,25 +240,25 @@ class Client_List_Table extends Includes\WP_List_Table  {
     // Filters the data set.
     if (isset($_REQUEST['client_status'])) {
       $client_status_filter = sanitize_text_field(urldecode($_REQUEST['client_status']));
-      foreach($data as $i => $client) {
-        if ($client['client_status'] !== $client_status_filter) {
-          unset($data[$i]);
+      if ($client_status_filter) {
+        foreach($data as $i => $client) {
+          if ($client['client_status'] !== $client_status_filter) unset($data[$i]);
         }
       }
     }
 
     if (isset($_REQUEST['client_manager'])) {
       $client_status_filter = sanitize_text_field(urldecode($_REQUEST['client_manager']));
-      foreach($data as $i => $client) {
-        if ($client['client_manager'] !== $client_status_filter) {
-          unset($data[$i]);
+      if ($client_status_filter) {
+        foreach($data as $i => $client) {
+          if ($client['client_manager'] !== $client_status_filter) unset($data[$i]);
         }
       }
     }
 
     // Sorts the data set.
-    $orderby  = isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby'])  : 'display_name';
-    $order    = isset($_REQUEST['order'])   ? sanitize_key($_REQUEST['order'])    : 'ASC';
+    $orderby  = isset($_REQUEST['orderby']) ? sanitize_key($_REQUEST['orderby']) : 'client_name';
+    $order    = isset($_REQUEST['order']) ? sanitize_key($_REQUEST['order']) : 'ASC';
     $data     = wp_list_sort($data, $orderby, $order);
 
     /**

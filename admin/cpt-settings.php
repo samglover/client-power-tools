@@ -5,7 +5,7 @@ use Client_Power_Tools\Core\Common;
 use Client_Power_Tools\Core\Frontend;
 
 function cpt_settings() {
-  if (!current_user_can('cpt-manage-settings')) {
+  if (!current_user_can('cpt_manage_settings')) {
     wp_die(
       '<p>' . __('Sorry, you are not allowed to access this page.', 'client-power-tools') . '</p>',
       403
@@ -40,6 +40,7 @@ function cpt_settings() {
 
 
 // Client Dashboard
+add_action('admin_init', __NAMESPACE__ . '\cpt_general_settings_init');
 function cpt_general_settings_init() {
   add_settings_section(
     'cpt-general-settings',
@@ -48,6 +49,7 @@ function cpt_general_settings_init() {
     'cpt-settings',
   );
 
+  register_setting('cpt-settings', 'cpt_client_dashboard_page_selection');
   add_settings_field(
     'cpt_client_dashboard_page_selection',
     '<label for="cpt_client_dashboard_page_selection">' . __('Client Dashboard Page', 'client-power-tools') . '</label>',
@@ -56,8 +58,7 @@ function cpt_general_settings_init() {
     'cpt-general-settings',
   );
 
-  register_setting('cpt-settings', 'cpt_client_dashboard_page_selection');
-
+  register_setting('cpt-settings', 'cpt_client_dashboard_addl_pages');
   add_settings_field(
     'cpt_client_dashboard_addl_pages',
     '<label for="cpt_client_dashboard_addl_pages">' . __('Additional Pages', 'client-power-tools') . '</label>',
@@ -66,8 +67,7 @@ function cpt_general_settings_init() {
     'cpt-general-settings',
   );
 
-  register_setting('cpt-settings', 'cpt_client_dashboard_addl_pages');
-
+  register_setting('cpt-settings', 'cpt_client_dashboard_addl_pages_children', 'absint');
   add_settings_field(
     'cpt_client_dashboard_addl_pages_children',
     __('Include Child Pages?', 'client-power-tools'),
@@ -76,8 +76,7 @@ function cpt_general_settings_init() {
     'cpt-general-settings',
   );
 
-  register_setting('cpt-settings', 'cpt_client_dashboard_addl_pages_children', 'absint');
-
+  register_setting('cpt-settings', 'cpt_default_client_manager');
   add_settings_field(
     'cpt_default_client_manager',
     '<label for="cpt_default_client_manager">' . __('Default Client Manager', 'client-power-tools') . '</label>',
@@ -86,8 +85,7 @@ function cpt_general_settings_init() {
     'cpt-general-settings',
   );
 
-  register_setting('cpt-settings', 'cpt_default_client_manager');
-
+  register_setting('cpt-settings', 'cpt_client_statuses');
   add_settings_field(
     'cpt_client_statuses',
     '<label for="cpt_client_statuses">' . __('Client Statuses', 'client-power-tools') . '</label>',
@@ -96,8 +94,7 @@ function cpt_general_settings_init() {
     'cpt-general-settings',
   );
 
-  register_setting('cpt-settings', 'cpt_client_statuses');
-
+  register_setting('cpt-settings', 'cpt_default_client_status');
   add_settings_field(
     'cpt_default_client_status',
     '<label for="cpt_default_client_status">' . __('Default New Client Status', 'client-power-tools') . '</label>',
@@ -105,11 +102,7 @@ function cpt_general_settings_init() {
     'cpt-settings',
     'cpt-general-settings',
   );
-
-  register_setting('cpt-settings', 'cpt_default_client_status');
 }
-
-add_action('admin_init', __NAMESPACE__ . '\cpt_general_settings_init');
 
 
 function cpt_general_settings_section() {
@@ -183,11 +176,12 @@ function cpt_client_statuses() {
 
 
 function cpt_default_client_status() {
-  echo cpt_get_client_statuses_select('cpt_default_client_status');
+  echo cpt_get_status_select('cpt_client_statuses', 'cpt_default_client_status');
 }
 
 
 // New Client Email Settings
+add_action('admin_init', __NAMESPACE__ . '\cpt_new_client_email_settings_init');
 function cpt_new_client_email_settings_init() {
   add_settings_section(
     'cpt-new-client-email-settings',
@@ -197,6 +191,7 @@ function cpt_new_client_email_settings_init() {
   );
 
   // Subject Line
+  register_setting('cpt-settings', 'cpt_new_client_email_subject_line', 'sanitize_text_field');
   add_settings_field(
     'cpt_new_client_email_subject_line',
     '<label for="cpt_new_client_email_subject_line">' . __('Subject Line', 'client-power-tools') . '<br /><small>' . __('(required)', 'client-power-tools') . '</small></label>',
@@ -205,9 +200,8 @@ function cpt_new_client_email_settings_init() {
     'cpt-new-client-email-settings',
   );
 
-  register_setting('cpt-settings', 'cpt_new_client_email_subject_line', 'sanitize_text_field');
-
   // Message Body
+  register_setting('cpt-settings', 'cpt_new_client_email_message_body', 'sanitize_textarea_field');
   add_settings_field(
     'cpt_new_client_email_message_body',
     '<label for="cpt_new_client_email_message_body">' . __('Message Body', 'client-power-tools') . '<br /><small>' . __('(optional)', 'client-power-tools') . '</small></label>',
@@ -215,11 +209,7 @@ function cpt_new_client_email_settings_init() {
     'cpt-settings',
     'cpt-new-client-email-settings',
   );
-
-  register_setting('cpt-settings', 'cpt_new_client_email_message_body', 'sanitize_textarea_field');
 }
-
-add_action('admin_init', __NAMESPACE__ . '\cpt_new_client_email_settings_init');
 
 
 function cpt_new_client_email_section() {
@@ -243,6 +233,7 @@ function cpt_new_client_email_message_body() {
 
 
 // Status Update Request Button settings
+add_action('admin_init', __NAMESPACE__ . '\cpt_status_update_request_button_settings_init');
 function cpt_status_update_request_button_settings_init() {
   add_settings_section(
     'cpt-status-update-request-button-settings',
@@ -252,6 +243,7 @@ function cpt_status_update_request_button_settings_init() {
   );
 
   // Enable Status Update Request Button
+  register_setting('cpt-settings', 'cpt_module_status_update_req_button', 'absint');
   add_settings_field(
     'cpt_module_status_update_req_button',
     __('Enable', 'client-power-tools'),
@@ -260,11 +252,9 @@ function cpt_status_update_request_button_settings_init() {
     'cpt-status-update-request-button-settings',
   );
 
-  register_setting('cpt-settings', 'cpt_module_status_update_req_button', 'absint');
-
   if (get_option('cpt_module_status_update_req_button')) {
-
     // Status Update Request Frequency
+    register_setting('cpt-settings', 'cpt_status_update_req_freq', 'absint');
     add_settings_field(
       'cpt_status_update_req_freq',
       '<label for="cpt_status_update_req_freq">' . __('Status Update Request Frequency', 'client-power-tools') . '<br /><small>' . __('(required)', 'client-power-tools') . '</small></label>',
@@ -273,9 +263,8 @@ function cpt_status_update_request_button_settings_init() {
       'cpt-status-update-request-button-settings',
     );
 
-    register_setting('cpt-settings', 'cpt_status_update_req_freq', 'absint');
-
     // Status Update Request Notification Email
+    register_setting('cpt-settings', 'cpt_status_update_req_notice_email', 'sanitize_email');
     add_settings_field(
       'cpt_status_update_req_notice_email',
       '<label for="cpt_status_update_req_notice_email">' . __('Additional Status Update Request Notification Email', 'client-power-tools') . '<br /><small>' . __('(optional)', 'client-power-tools') . '</small></label>',
@@ -283,12 +272,8 @@ function cpt_status_update_request_button_settings_init() {
       'cpt-settings',
       'cpt-status-update-request-button-settings',
     );
-
-    register_setting('cpt-settings', 'cpt_status_update_req_notice_email', 'sanitize_email');
   }
 }
-
-add_action('admin_init', __NAMESPACE__ . '\cpt_status_update_request_button_settings_init');
 
 
 function cpt_status_update_request_button_section() {
@@ -322,6 +307,7 @@ function cpt_status_update_req_notice_email() {
 
 
 // Client Messages Settings
+add_action('admin_init', __NAMESPACE__ . '\cpt_client_messaging_settings_init');
 function cpt_client_messaging_settings_init() {
   add_settings_section(
     'cpt-client-messaging-settings',
@@ -331,6 +317,7 @@ function cpt_client_messaging_settings_init() {
   );
 
   // Enable Messaging
+  register_setting('cpt-settings', 'cpt_module_messaging', 'absint');
   add_settings_field(
     'cpt_module_messaging',
     __('Enable', 'client-power-tools'),
@@ -339,10 +326,9 @@ function cpt_client_messaging_settings_init() {
     'cpt-client-messaging-settings',
   );
 
-  register_setting('cpt-settings', 'cpt_module_messaging', 'absint');
-
   if (get_option('cpt_module_messaging')) {
     // Send Message Content
+    register_setting('cpt-settings', 'cpt_send_message_content', 'absint');
     add_settings_field(
       'cpt_send_message_content',
       __('Email Notification Content', 'client-power-tools'),
@@ -350,13 +336,9 @@ function cpt_client_messaging_settings_init() {
       'cpt-settings',
       'cpt-client-messaging-settings',
     );
-
-    register_setting('cpt-settings', 'cpt_send_message_content', 'absint');
   }
 
 }
-
-add_action('admin_init', __NAMESPACE__ . '\cpt_client_messaging_settings_init');
 
 
 function cpt_client_messaging_section() {
@@ -391,7 +373,130 @@ function cpt_send_message_content() {
 }
 
 
+// Projects/Matters
+add_action('admin_init', __NAMESPACE__ . '\cpt_projects_settings_init');
+function cpt_projects_settings_init() {
+  add_settings_section(
+    'cpt-projects-settings',
+    __('Projects', 'client-power-tools'),
+    __NAMESPACE__ . '\cpt_projects_section',
+    'cpt-settings',
+  );
+
+  // Enable Projects
+  register_setting('cpt-settings', 'cpt_module_projects', 'absint');
+  add_settings_field(
+    'cpt_module_projects',
+    __('Enable', 'client-power-tools'),
+    __NAMESPACE__ . '\cpt_module_projects',
+    'cpt-settings',
+    'cpt-projects-settings',
+  );
+
+  if (get_option('cpt_module_projects')) {
+    register_setting('cpt-settings', 'cpt_projects_label');
+    add_settings_field(
+      'cpt_projects_label',
+      __('Projects Label', 'client-power-tools'),
+      __NAMESPACE__ . '\cpt_projects_label',
+      'cpt-settings',
+      'cpt-projects-settings',
+    );
+
+    register_setting('cpt-settings', 'cpt_project_statuses');
+    add_settings_field(
+      'cpt_project_statuses',
+      '<label for="cpt_project_statuses">' . __('Project Statuses', 'client-power-tools') . '</label>',
+      __NAMESPACE__ . '\cpt_project_statuses',
+      'cpt-settings',
+      'cpt-projects-settings',
+    );
+
+    register_setting('cpt-settings', 'cpt_default_project_status');
+    add_settings_field(
+      'cpt_default_project_status',
+      '<label for="cpt_default_project_status">' . __('Default Project Status', 'client-power-tools') . '</label>',
+      __NAMESPACE__ . '\cpt_default_project_status',
+      'cpt-settings',
+      'cpt-projects-settings',
+    );
+
+    register_setting('cpt-settings', 'cpt_default_project_type');
+    add_settings_field(
+      'cpt_default_project_type',
+      '<label for="cpt_default_project_type">' . __('Default Project Type', 'client-power-tools') . '</label>',
+      __NAMESPACE__ . '\cpt_default_project_type',
+      'cpt-settings',
+      'cpt-projects-settings',
+    );
+  }
+}
+
+
+function cpt_projects_section() {
+  _e('Projects can be assigned to clients, and each client may have multiple projects. You can create multiple project types, and give each project type a set of stages.', 'client-power-tools');
+}
+
+function cpt_module_projects() {
+  ?>
+    <fieldset>
+      <label for="cpt_module_projects">
+        <input name="cpt_module_projects" id="cpt_module_projects" type="checkbox" value="1" <?php checked(get_option('cpt_module_projects')); ?>>
+        <?php _e('Enable projects.', 'client-power-tools'); ?>
+      </label>
+    </fieldset>
+  <?php
+}
+
+if (get_option('cpt_module_projects')) {
+  function cpt_projects_label() {
+    ?>
+      <p class="description"><?php _e('What do you want to call your projects? This label will be used everywhere other than this settings page.', 'client-power-tools'); ?></p>
+      <ul>
+        <li>
+          <fieldset>
+            <input name="cpt_projects_label[0]" type="text" value="<?php echo Common\cpt_get_projects_label('singular'); ?>">
+            <label for="cpt_projects_label[0]"><?php _e('Singular', 'client-power-tools'); ?></label>
+          </fieldset>
+        </li>
+        <li>
+          <fieldset>
+            <input name="cpt_projects_label[1]" type="text" value="<?php echo Common\cpt_get_projects_label('plural'); ?>">
+            <label for="cpt_projects_label[1]"><?php _e('Plural', 'client-power-tools'); ?></label>
+          </fieldset>
+        </li>
+      </ul>
+    <?php
+  }
+  
+  
+  function cpt_project_statuses() {
+    $statuses_array = explode("\n", get_option('cpt_project_statuses'));
+    ob_start();
+      foreach ($statuses_array as $i => $status) {
+        echo sanitize_text_field($status);
+        if ($i + 1 < count($statuses_array)) echo "\n";
+      }
+    $statuses = ob_get_clean();
+  
+    ?>
+      <textarea name="cpt_project_statuses" class="small-text" rows="5"><?php echo $statuses; ?></textarea>
+      <p class="description"><?php _e('Enter one status per line. Statuses apply to all project types.', 'client-power-tools'); ?></p>
+    <?php
+  }
+  
+  
+  function cpt_default_project_status() {
+    echo cpt_get_status_select('cpt_project_statuses', 'cpt_default_project_status');
+  }
+
+  function cpt_default_project_type() {
+    echo cpt_get_project_type_select('cpt_default_project_type');
+  }
+}
+
 // Knowledge Base
+add_action('admin_init', __NAMESPACE__ . '\cpt_knowledge_base_settings_init');
 function cpt_knowledge_base_settings_init() {
   add_settings_section(
     'cpt-knowledge-base-settings',
@@ -401,6 +506,7 @@ function cpt_knowledge_base_settings_init() {
   );
 
   // Enable Knowledge Base
+  register_setting('cpt-settings', 'cpt_module_knowledge_base', 'absint');
   add_settings_field(
     'cpt_module_knowledge_base',
     __('Enable', 'client-power-tools'),
@@ -409,8 +515,7 @@ function cpt_knowledge_base_settings_init() {
     'cpt-knowledge-base-settings',
   );
 
-  register_setting('cpt-settings', 'cpt_module_knowledge_base', 'absint');
-
+  register_setting('cpt-settings', 'cpt_show_knowledge_base_breadcrumbs', 'absint');
   add_settings_field(
     'cpt_show_knowledge_base_breadcrumbs',
     __('Breadcrumbs', 'client-power-tools'),
@@ -419,9 +524,8 @@ function cpt_knowledge_base_settings_init() {
     'cpt-knowledge-base-settings',
   );
 
-  register_setting('cpt-settings', 'cpt_show_knowledge_base_breadcrumbs', 'absint');
-
   if (get_option('cpt_module_knowledge_base')) {
+    register_setting('cpt-settings', 'cpt_knowledge_base_page_selection');
     add_settings_field(
       'cpt_knowledge_base_page_selection',
       '<label for="cpt_knowledge_base_page_selection">' . __('Knowledge Base Page', 'client-power-tools') . '</label>',
@@ -429,12 +533,8 @@ function cpt_knowledge_base_settings_init() {
       'cpt-settings',
       'cpt-knowledge-base-settings',
     );
-
-    register_setting('cpt-settings', 'cpt_knowledge_base_page_selection');
   }
 }
-
-add_action('admin_init', __NAMESPACE__ . '\cpt_knowledge_base_settings_init');
 
 
 function cpt_knowledge_base_section() {

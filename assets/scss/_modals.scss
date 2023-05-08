@@ -11,10 +11,8 @@
 
 .cpt-modal-card {
   background-color: White;
-  box-shadow:
-    0 0 0 1px #ddd,
-    1px 1px 3px rgba(0, 0, 0, 0.2)
-  ;
+  border: $border-style;
+  box-shadow: $box-shadow;
   box-sizing: border-box;
   grid-area: modal;
   margin: 3px;
@@ -22,7 +20,7 @@
   max-height: 90vh;
   max-width: 40vw;
   overflow: auto;
-  padding: 2em;
+  padding: $spacing-md;
   position: relative;
   z-index: 100;
 
@@ -55,8 +53,8 @@
 
 .cpt-dismiss-button {
   align-items: center;
-  background-color: #ccc;
-  border: 1px solid #bbb;
+  background-color: LightGray;
+  border: $border-style;
   border-radius: 50%;
   cursor: pointer;
   display: grid;
@@ -67,22 +65,22 @@
   padding: 3px;
   place-items: center;
   position: absolute;
-    top: 30px;
-    right: 30px;
+    top: $spacing-md;
+    right: $spacing-md;
   text-decoration: none;
   width: 30px;
 
   &:hover,
   &:focus {
-    background-color: #ddd;
-    border-color: #ccc;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    background-color: Silver;
+    border-color: $border-hover;
+    box-shadow: $box-shadow;
     text-decoration: none;
   }
 
   &:active {
-    background-color: #bbb;
-    border-color: #bbb;
+    background-color: Silver;
+    border-color: $border-hover;
     box-shadow: none;
     text-decoration: none;
   }
@@ -95,12 +93,12 @@
 }
 
 .cpt-notice-dismiss-button {
-  top: 20px;
-  right: 20px;
+  top: $spacing-regular;
+  right: $spacing-regular;
 }
 
 .cpt-modal-screen {
-  background-color: rgb(0, 0, 0, .4);
+  background-color: $gray-wash;
   display: none;
   height: 100vh;
   position: fixed;
@@ -112,13 +110,11 @@
 
 .cpt-notice {
   background-color: #fff;
-  box-shadow:
-    0 0 0 1px #ddd,
-    1px 1px 3px rgba(0, 0, 0, 0.2)
-  ;
+  border: $border-style;
+  box-shadow: $box-shadow;
   box-sizing: border-box;
-  margin: 3px 3px 2em 3px;
-  padding: 20px;
+  margin: 3px 3px $spacing-regular 3px;
+  padding: $spacing-regular;
   position: relative;
 
   button:not(.cpt-dismiss-button) {

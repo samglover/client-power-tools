@@ -1,0 +1,26 @@
+.cpt-error,
+.cpt-success {
+  background-color: $gray-wash;
+  border: $border-style;
+  border-left: 4px solid;
+  padding: $spacing-regular;
+}
+
+.cpt-error {
+  border-left-color: $error;
+}
+
+.cpt-success {
+  border-left-color: $success;
+}
+
+#cpt-status-update-request-button {  
+  &[disabled="true"] {
+    cursor: default;
+    opacity: .5;
+  
+    &:hover {
+      box-shadow: none;
+    }
+  }
+}

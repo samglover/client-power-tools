@@ -1,0 +1,18 @@
+.cpt-section-header {
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 1.1;
+  margin-top: 0;
+  margin-bottom: .25em;
+  text-transform: uppercase;
+}
+
+.cpt-this-expands {
+  animation: growDown 150ms ease-in-out forwards;
+  display: none;
+  transform-origin: top;
+
+  &.open {
+    display: block;
+  }
+}

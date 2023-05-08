@@ -1,0 +1,58 @@
+.cpt-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-regular;
+
+  > *:not(button) {
+    width: 12ch;
+
+    &.span-2 {
+      width: calc((2 * 12ch) + 20px);
+    }
+
+    &.span-3 {
+      width: calc((3 * 12ch) + (2 * $spacing-regular));
+    }
+
+    &.span-4 {
+      width: calc((4 * 12ch) + (3 * $spacing-regular));
+    }
+
+    &.span-5 {
+      width: calc((5 * 12ch) + (4 * $spacing-regular));
+    }
+
+    &.span-6 {
+      width: calc((6 * 12ch) + (5 * $spacing-regular));
+    }
+  }
+
+  &.gap-sm {
+    gap: $spacing-sm;
+
+    > *:not(button) {
+      width: 12ch;
+  
+      &.span-2 {
+        width: calc((2 * 12ch) + $spacing-sm);
+      }
+  
+      &.span-3 {
+        width: calc((3 * 12ch) + (2 * $spacing-sm));
+      }
+  
+      &.span-4 {
+        width: calc((4 * 12ch) + (3 * $spacing-sm));
+      }
+  
+      &.span-5 {
+        width: calc((5 * 12ch) + (4 * $spacing-sm));
+      }
+  
+      &.span-6 {
+        width: calc((6 * 12ch) + (5 * $spacing-sm));
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@ add_filter('body_class', function($classes) {
 });
 
 
+add_filter('the_content', __NAMESPACE__ . '\cpt_add_nav_to_addl_pages');
 function cpt_add_nav_to_addl_pages($content) {
   $addl_pages_array = explode(',', get_option('cpt_client_dashboard_addl_pages'));
   if (!is_main_query() || !in_the_loop() || !$addl_pages_array) return $content;
@@ -21,13 +22,12 @@ function cpt_add_nav_to_addl_pages($content) {
   foreach ($addl_pages_array as $page_id) {
     $page_id = trim($page_id);
     if (in_array(get_the_ID(), $addl_pages_array)) $protected = true;
-    
     foreach ($ancestors as $ancestor) {
       if (in_array($ancestor, $addl_pages_array)) $protected = true;
     }
   }
   if (!$protected) return $content;
-
+  
   if (!is_user_logged_in()) {
     return sprintf(__('%1$sPlease %2$slog in%3$s to view this page.%4$s', 'client-power-tools'),
       /* %1$s */ '<p>',
@@ -40,12 +40,11 @@ function cpt_add_nav_to_addl_pages($content) {
   return cpt_nav() . $content;
 }
 
-add_filter('the_content', __NAMESPACE__ . '\cpt_add_nav_to_addl_pages');
-
 
 /**
  * Loads the login modal in the footer.
  */
+add_action('wp_footer', __NAMESPACE__ . '\cpt_login');
 function cpt_login() {
   ?>
     <div id="cpt-login" class="cpt-modal">
@@ -87,11 +86,13 @@ function cpt_login() {
   <?php
 }
 
-add_action('wp_footer', __NAMESPACE__ . '\cpt_login');
-
 
 function cpt_is_cpt() {
-  if (Common\cpt_is_client_dashboard() || Common\cpt_is_messages() || Common\cpt_is_knowledge_base()) {
+  if (
+    Common\cpt_is_client_dashboard() || 
+    Common\cpt_is_client_dashboard('messages') || 
+    Common\cpt_is_knowledge_base()
+  ) {
     return true;
   } else {
     return false;

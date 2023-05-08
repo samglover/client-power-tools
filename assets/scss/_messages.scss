@@ -1,16 +1,107 @@
-#cpt-new-message-form {
-  form {
-    p,
-    label,
-    input,
-    select,
-    textarea {
-      display: block;
+.cpt-message {
+  background-color: White;
+  border: $border-style;
+  box-shadow: $box-shadow;
+  box-sizing: border-box;
+  margin-bottom: $spacing-regular;
+  position: relative;
+
+  &:target .cpt-message-content {
+    background-color: $yellow-highlighter;
+  }
+
+  &.my-message {
+    margin-left: 10%;
+
+    .cpt-message-content {
+      background-color: $blue-highlighter;
+    }
+  }
+
+  &.not-my-message {
+    margin-right: 10%;
+
+    .cpt-message-content {
+      background-color: $gray-wash;
+    }
+  }
+
+  &.status-update-request {
+    margin-left: 0;
+    margin-right: 0;
+
+    .cpt-message-content {
+      background-color: unset;
+    }
+  }
+
+  .cpt-message-content {
+    font-size: 16px;
+    padding: $spacing-regular;
+
+    & > *:first-child {
+      margin-top: 0;
     }
 
-    .large-text {
-      box-sizing: border-box;
+    & > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .cpt-message-title {
+    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: $spacing-regular;
+  }
+
+  .cpt-message-meta {
+    background-color: $gray-wash;
+    font-size: 14px;
+    line-height: 1.1;
+    padding: $spacing-sm $spacing-regular;
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+.cpt-new-message-form {
+  background-color: $gray-wash;
+  padding: $spacing-regular;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: $spacing-regular;
+  }
+
+  .form-field {
+    margin-top: 0;
+    margin-bottom: $spacing-regular;
+
+    input:not([type="checkbox"]),
+    select,
+    textarea {
+      max-width: unset;
       width: 100%;
     }
+  }
+
+  label {
+    font-size: 80%;
+    font-weight: bold;
+    line-height: 1.1;
+    margin-bottom: .25em;
+  }
+
+  .description {
+    color: SlateGray;
+    font-size: 80%;
+    margin: .25em 0 ;
+  }
+
+  .submit {
+    margin: 0;
   }
 }

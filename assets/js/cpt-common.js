@@ -14,17 +14,16 @@
         $(expanderButtons[i]).click(function(event) {
           event.preventDefault();
           if ($(expanderButtons[i]).hasClass('open')){
-            $(expanderButtons[i]).removeClass('open');
-            $(expandableDivs[i]).removeClass('open');
+            expanderButtons[i].classList.remove('open');
+            expandableDivs[i].classList.remove('open');
           } else {
-            $(expanderButtons).each(function() {
-              $(this).removeClass('open');
-            });
-            $(expandableDivs).each(function() {
-              $(this).removeClass('open');
-            });
-            $(expanderButtons[i]).addClass('open');
-            $(expandableDivs[i]).addClass('open');
+            for (let i = 0; i < expanderButtons.length; i++) {
+              expanderButtons[i].classList.remove('open');
+              expanderButtons[i].innerHTML = buttonText[i];
+              expandableDivs[i].classList.remove('open');
+            }
+            expanderButtons[i].classList.add('open');
+            expandableDivs[i].classList.add('open');
           }
 
           // This adds/removes the *required* attribute based on form visibility.
@@ -58,7 +57,6 @@
   // Adjust anchor targets.
   $(document).ready(function(){
     let target = $(location.hash);
-
     if (target.length > 0) {
       let adminBar  = $('#wpadminbar').outerHeight();
       let offset    = target.offset();

@@ -4,18 +4,19 @@ namespace Client_Power_Tools\Core\Frontend;
 use Client_Power_Tools\Core\Common;
 
 // Noindexes the client dashboard because it's none of Google's business.
+add_action('wp_head',  __NAMESPACE__ . '\cpt_noindex_client_dashboard');
 function cpt_noindex_client_dashboard() {
-  if (cpt_is_cpt()) echo '<meta name="robots" content="noindex" /><!-- Added by the Client Power Tools plugin. -->';
+  if (cpt_is_cpt()) echo '<meta name="robots" content="noindex" />';
 }
 
-add_action('wp_head',  __NAMESPACE__ . '\cpt_noindex_client_dashboard');
 
-
+add_filter('the_content', __NAMESPACE__ . '\cpt_client_dashboard');
 function cpt_client_dashboard($content) {
   if (
     !cpt_is_cpt() ||
-    !in_the_loop()
+    get_post_type(get_the_ID()) == 'cpt_message'
   ) return $content;
+  
   if (!is_user_logged_in()) {
     return sprintf(__('%1$sPlease %2$slog in%3$s to view the client dashboard.%4$s', 'client-power-tools'),
       /* %1$s */ '<p>',
@@ -24,38 +25,73 @@ function cpt_client_dashboard($content) {
       /* %4$s */ '</p>'
     );
   }
-  if (!Common\cpt_is_client()) return '<p>' . __('Sorry, you don\'t have permission to view this page because your user account is missing the "Client" role.', 'client-power-tools') . '</p>';
 
+  $clients_user_id = get_current_user_id();
+  if (!Common\cpt_is_client($clients_user_id)) return '<p>' . __('Sorry, you don\'t have permission to view this page because your user account is missing the "Client" role.', 'client-power-tools') . '</p>';
+
+  // Client Dashboard
   ob_start();
+    // Nav menu tabs
     cpt_nav();
+
+    // Notices
     Common\cpt_get_notices();
+
+    // Knowledge Base Breadcrumbs
+    $kb_id = get_option('cpt_knowledge_base_page_selection');
+    $kb_child_pages = cpt_get_child_pages($kb_id);
     if (
       Common\cpt_is_knowledge_base() &&
-      get_option('cpt_knowledge_base_page_selection') !== get_the_ID() &&
-      get_option('cpt_show_knowledge_base_breadcrumbs')
-    ) cpt_breadcrumbs();
+      get_option('cpt_show_knowledge_base_breadcrumbs') &&
+      get_the_ID() != $kb_id && 
+      $kb_child_pages
+    ) cpt_kb_breadcrumbs();
 
-    $user_id = get_current_user_id();
-    update_user_meta($user_id, 'cpt_last_activity', current_time('U', true));
+    // Last Activity Timestamp
+    update_user_meta($clients_user_id, 'cpt_last_activity', current_time('U', true));
 
-    if (Common\cpt_is_client_dashboard() && !Common\cpt_is_messages()) {
-      $client_data = Common\cpt_get_client_data($user_id);
-      ?>
-        <p><strong><?php printf(__('Welcome back, %s!', 'client-power-tools'), $client_data['first_name']); ?></p></strong>
-      <?php
-      if (!has_shortcode($content, 'status-update-request-button')) Common\cpt_status_update_request_button($user_id);
+    // Dashboard
+    if (Common\cpt_is_client_dashboard() && !isset($_REQUEST['tab'])) {
+      $client_data = Common\cpt_get_client_data($clients_user_id);
+      echo '<p><strong>' . sprintf(__('Welcome back, %s!', 'client-power-tools'), $client_data['first_name']) . '</p></strong>';
+      if (
+        get_option('cpt_module_status_update_req_button') && 
+        !has_shortcode($content, 'status-update-request-button')
+      ) {
+        Common\cpt_status_update_request_button($clients_user_id);
+      }
       $content = ob_get_clean() . $content;
-    } elseif (Common\cpt_is_messages()) {
-      // Removes the current the_content filter so it doesn't execute within the
-      // nested query for client messages.
-      remove_filter(current_filter(), __FUNCTION__);
-      Common\cpt_messages($user_id);
+    }
+
+    // Projects
+    if (Common\cpt_is_client_dashboard('projects')) {
+      $projects_label = Common\cpt_get_projects_label();
+      if (!isset($_REQUEST['projects_post_id'])) {
+        Common\cpt_get_projects();
+      } else {
+        $projects_post_id = sanitize_key(intval($_REQUEST['projects_post_id']));
+        echo '<p><a href="' . remove_query_arg('projects_post_id') . '">' . sprintf(__('%s Back to %s', 'client-power-tools'), '&larr;', $projects_label[1]) . '</a></p>';
+        echo '<h2>' . get_the_title($projects_post_id) . '</h2>';
+        Common\cpt_get_project_progress_bar($projects_post_id);
+        Common\cpt_get_project_meta($projects_post_id);
+      }
       $content = ob_get_clean();
     }
+
+    // Messages
+    if (Common\cpt_is_client_dashboard('messages')) {
+      Common\cpt_messages($clients_user_id);
+      ?>
+        <div class="form-wrap cpt-new-message-form">
+          <h3><?php _e('New Message', 'client-power-tools'); ?></h3>
+          <?php Common\cpt_new_message_form($clients_user_id); ?>
+        </div>
+      <?php
+      $content = ob_get_clean();
+    }
+    
   return $content;
 }
-
-add_filter('the_content', __NAMESPACE__ . '\cpt_client_dashboard');
 
 
 function cpt_nav() {
@@ -63,9 +99,12 @@ function cpt_nav() {
   ?>
     <nav id="cpt-nav">
       <ul class="cpt-tabs">
-        <li class="cpt-tab"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard() && ! Common\cpt_is_messages()) echo ' current'; ?>"><?php _e('Dashboard', 'client-power-tools'); ?></a></li>
+        <li class="cpt-tab"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard() && !isset($_REQUEST['tab'])) echo ' current'; ?>"><?php _e('Dashboard', 'client-power-tools'); ?></a></li>
+        <?php if (get_option('cpt_module_projects')) { ?>
+          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'projects', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('projects')) echo ' current'; ?>"><?php echo Common\cpt_get_projects_label('plural'); ?></a></li>
+        <?php } ?>
         <?php if (get_option('cpt_module_messaging')) { ?>
-          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_messages()) echo ' current'; ?>"><?php _e('Messages', 'client-power-tools'); ?></a></li>
+          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('messages')) echo ' current'; ?>"><?php _e('Messages', 'client-power-tools'); ?></a></li>
         <?php } ?>
         <?php
           $knowledge_base_id = get_option('cpt_knowledge_base_page_selection');
@@ -111,9 +150,6 @@ function cpt_nav() {
       ?>
     </nav>
   <?php
-  // echo '<pre>';
-  // var_dump($child_pages_array);
-  // echo '</pre>';
 }
 
 
@@ -143,9 +179,9 @@ function cpt_get_child_pages($page_id) {
 function cpt_list_child_pages($page_id) {
   if (!$page_id) return;
 
-  $current_page_id  = get_the_ID();
-  $title            = get_the_title($page_id);
-  $url              = get_the_permalink($page_id);
+  $current_page_id = get_the_ID();
+  $title = get_the_title($page_id);
+  $url = get_the_permalink($page_id);
 
   if ($current_page_id == $page_id) {
     echo '<li><strong>' . $title . '</strong></li>';
@@ -166,7 +202,6 @@ function cpt_list_child_pages($page_id) {
   }
 }
 
-
 function cpt_nav_tabs_submenu($parent_id) {
   if (!$parent_id) return;
   $kb_child_pages = cpt_get_child_pages($parent_id);
@@ -185,20 +220,20 @@ function cpt_nav_tabs_submenu($parent_id) {
 
 
 /**
- * Breadcrumbs
+ * Knowledge Base Breadcrumbs
  */
-function cpt_breadcrumbs() {
-  $breadcrumbs[]    = '<span class="breadcrumb last-breadcrumb"><strong>' . get_the_title(get_the_ID()) . '</strong></span>';
-  $parent_id        = wp_get_post_parent_id(get_the_ID());
+function cpt_kb_breadcrumbs() {
+  $breadcrumbs[] = '<span class="breadcrumb last-breadcrumb"><strong>' . get_the_title(get_the_ID()) . '</strong></span>';
+  $parent_id = wp_get_post_parent_id(get_the_ID());
 
   while ($parent_id) {
-    $parent_url     = get_the_permalink($parent_id);
-    $parent_title   = get_the_title($parent_id);
-    $breadcrumbs[]  = '<span class="breadcrumb"><a href="' . $parent_url . '">' . $parent_title . '</a></span>';
-    $parent_id      = wp_get_post_parent_id($parent_id);
+    $parent_url = get_the_permalink($parent_id);
+    $parent_title = get_the_title($parent_id);
+    $breadcrumbs[] = '<span class="breadcrumb"><a href="' . $parent_url . '">' . $parent_title . '</a></span>';
+    $parent_id = wp_get_post_parent_id($parent_id);
   }
 
-  $breadcrumbs      = array_reverse($breadcrumbs);
+  $breadcrumbs = array_reverse($breadcrumbs);
 
   ?>
     <div id="cpt-breadcrumbs">

@@ -2,17 +2,15 @@
 
 namespace Client_Power_Tools\Core\Common;
 
-
-/*
+/**
  * This has to be loaded as a common file in order to use the admin-post action
  * hook. And it would probably be even more confusing to load it as a common
  * file but store it in the frontend directory/namespace. Even that sentence is
  * confusing.
  */
 
-
 function cpt_status_update_request_button($user_id) {
-  if (!get_option('cpt_module_status_update_req_button') || !$user_id) return;
+  if (!$user_id) return;
 
   // Return (i.e. don't output the button) if the client has clicked the button
   // more recently than the request frequency option allows.
@@ -134,31 +132,31 @@ function cpt_status_update_request_notification($message_id) {
     $cc             = get_option('cpt_status_update_req_notice_email');
     $headers[]      = 'Cc: ' . $cc;
   }
-                      /**
-                       * translators:
-                       * 1: message subject (already translated, above)
-                       * 2: sender's name
-                       */
-  $subject          = sprintf(__('%1$s by %2$s', 'client-power-tools'), $msg_obj->post_title, $from_name);
+  /**
+   * translators:
+   * 1: message subject (already translated, above)
+   * 2: sender's name
+   */
+  $subject = sprintf(__('%1$s by %2$s', 'client-power-tools'), $msg_obj->post_title, $from_name);
 
-                      /**
-                       * translators:
-                       * 1: message subject (already translated, above)
-                       * 2: html
-                       * 3: sender's name
-                       */
-  $subject_html     = sprintf(__('%1$s%2$s by %3$s', 'client-power-tools'), $msg_obj->post_title, '&nbsp;<br />', $from_name);
+  /**
+   * translators:
+   * 1: message subject (already translated, above)
+   * 2: html
+   * 3: sender's name
+   */
+  $subject_html = sprintf(__('%1$s%2$s by %3$s', 'client-power-tools'), $msg_obj->post_title, '&nbsp;<br />', $from_name);
 
-  $message          = '<p>' . __('Please give them an update.' , 'client-power-tools') . '</p>';
+  $message = '<p>' . __('Please give them an update.' , 'client-power-tools') . '</p>';
 
-                      /**
-                       * translators:
-                       * 1: sender's name
-                       */
-  $button_txt       = get_option('cpt_module_messaging') ? sprintf(__('Go to %1$s', 'client-power-tools'), $from_name) : null;
+  /**
+   * translators:
+   * 1: sender's name
+   */
+  $button_txt = get_option('cpt_module_messaging') ? sprintf(__('Go to %1$s', 'client-power-tools'), $from_name) : null;
 
-  $profile_url      = get_option('cpt_module_messaging') ? cpt_get_client_profile_url($sender_id) : null;
-  $message          = cpt_get_email_card($subject_html, $message, $button_txt, $profile_url);
+  $profile_url = get_option('cpt_module_messaging') ? cpt_get_client_profile_url($sender_id) : null;
+  $message = cpt_get_email_card($subject_html, $message, $button_txt, $profile_url);
 
   wp_mail($to, $subject, $message, $headers);
 }

@@ -3,7 +3,7 @@
 Contributors: samglover
 Tags: access control,communication,portal,restrict content,frontend login
 Requires at least: 5.5
-Tested up to: 6.1
+Tested up to: 6.2
 Requires PHP: 7.3.5
 Stable tag: trunk
 License: GPLv3
@@ -106,6 +106,30 @@ For more information on how to take advantage of the new and updated features, s
 
 
 == Changelog ==
+
+### 1.7 - 2023-05-08
+
+#### Added
+- NEW MODULE: Projects & Stages! Organize your client projects and assign stages to different project types.
+- The new project widget and progress bar give a visual representation of your client's projects on their profile and dashboard.
+- Customize the projects label to whatever makes sense for your industry (e.g., files, accounts, matters, cases, dossiers).
+
+#### Changed
+- Change capability names (replaced hyphens with underscores).
+- Removed the default client manager.
+- Show an error if a page requests a nonexistent client.
+- Lots of small user experience improvements and updates.
+- All forms updated with an improved layout.
+- Reorganized stylesheets.
+
+#### Removed
+- /assets/js/messages.js (It was empty.)
+
+#### Fixed
+- When one expander is active, clicking another expander now closes it and restores the button label.
+- Fixed page titles not showing up on empty dashboard pages.
+- Lots of smaller fixes in the course of adding the Projects & Stages module.
+
 
 ### 1.6.5 - 2023-02-10
 

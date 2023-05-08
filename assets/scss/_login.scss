@@ -1,21 +1,21 @@
 #cpt-login {
   #cpt-login-messages {
     display: none;
-    line-height: 1.25;
+    line-height: 1.2;
     margin: 1em 0;
     padding-left: 1.5em;
     position: relative;
 
     &.error {
-      color: #c00;
+      color: $error;
     }
 
     &.success {
-      color: SeaGreen;
+      color: $success;
     }
 
     &.error::before,
-    &.success::before {;
+    &.success::before {
       border-radius: 9999px;
       color: White;
       display: inline-grid;
@@ -30,12 +30,12 @@
     }
 
     &.error::before {
-      background-color: #c00;
+      background-color: $error;
       content: '!';
     }
 
     &.success::before {
-      background-color: SeaGreen;
+      background-color: $success;
       content: '\02713';
     }
   }
@@ -52,7 +52,7 @@
 
     .description {
       font-size: 80%;
-      margin-bottom: 1.25em;
+      margin-bottom: $spacing-regular;
     }
   }
 

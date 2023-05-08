@@ -1,11 +1,10 @@
 @import 'variables';
 @import 'fonts';
-@import 'common';
 
 
 /**
-* Typography
-*/
+ * Typography
+ */
 
 #cpt-admin,
 .cpt-notice {
@@ -28,21 +27,15 @@
   }
 }
 
-  #cpt-admin-page-title p#cpt-client-status,
-  #cpt-admin-page-title p#cpt-client-manager {
-    font-size: 16px;
-    line-height: 1.1;
-    margin: 0;
-  }
-
-  #cpt-admin-page-title h1#cpt-page-title {
+#cpt-admin-page-title {
+  #cpt-page-title {
     font-size: 42px;
     font-weight: bold;
     line-height: 1.1;
     padding-top: 0;
   }
 
-  #cpt-admin-page-title p#cpt-subtitle {
+  #cpt-subtitle {
     color: gray;
     font-size: 26px;
     font-weight: bold;
@@ -50,15 +43,111 @@
     margin: 0;
   }
 
+  #cpt-client-status,
+  #cpt-client-manager,
+  #cpt-project-status,
+  #cpt-project-client {
+    font-size: 16px;
+    line-height: 1.1;
+    margin: 0;
+  }
+}
 
 /* Forms */
-#cpt-admin .form-table th label small {
-  font-weight: normal;
+#cpt-admin {
+  h2:not(:first-child) {
+    margin-top: $spacing-md;
+  }
+
+  button,
+  .button {
+    font-weight: normal;
+  }
+
+  .form-table {
+    th label small {
+      font-weight: normal;
+    }
+  }
+
+  .cpt-this-expands {
+    background-color: $gray-wash;
+    margin: $spacing-regular 0;
+    padding: $spacing-regular;
+  }
+
+  .column-project_id {
+    width: 10%;
+  }
+
+  .column-project_count {
+    text-align: center;
+    width: 10%;
+  }
+
+  .form-wrap {
+    > :first-child {
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    > form > :last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .form-field {
+      margin-top: 0;
+      margin-bottom: $spacing-regular;
+
+      input:not([type="checkbox"]),
+      select,
+      textarea {
+        max-width: unset;
+        width: 100%;
+      }
+    }
+
+    .submit {
+      margin: 0;
+      padding: 0;
+    }
+  }
 }
 
 #cpt-delete-client-link {
-  color: gray;
   cursor: pointer;
+  display: inline-block;
+  margin-top: $spacing-sm;
+
+  &:not(:hover) {
+    color: $light-text;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+#cpt_delete_project_button {
+  margin-top: $spacing-sm;
+
+  #submit {
+    background: unset;
+    border: unset;
+    cursor: pointer;
+    display: inline;
+    margin: 0;
+    padding: unset;
+
+    &:not(:hover) {
+      color: $light-text;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .cpt-admin-modal {
@@ -79,21 +168,21 @@
 
   .cpt-admin-modal-card {
     background-color: #fff;
-    box-shadow:
-      0 0 0 1px #ddd,
-      1px 1px 3px rgba(0, 0, 0, 0.2)
-    ;
+    box-shadow: $box-shadow;
+    border: $border-style;
     box-sizing: border-box;
     grid-area: modal;
     margin: 3px;
-    padding: 30px;
+    padding: $spacing-md;
     position: relative;
   }
 
-    .cpt-admin-modal h2 {
-      border: none;
-      margin-top: 0;
-      padding: 0;
+    .cpt-admin-modal {
+      h2 {
+        border: none;
+        margin-top: 0;
+        padding: 0;
+      }
     }
 
     #cpt_delete_client_button {
@@ -101,11 +190,28 @@
     }
 
 .cpt-admin-modal-screen {
-  background-color: rgb(0, 0, 0, .4);
+  background-color: $gray-wash;
   height: 100%;
   position: fixed;
     left: 0;
     top: 0;
   width: 100%;
   z-index: 99;
+}
+
+
+#cpt-edit-row {
+  animation: growDown 150ms ease-in-out forwards;
+  background-color: $gray-wash;
+  display: none;
+  transform-origin: top;
+
+  td {
+    padding: $spacing-regular;
+  }
+
+  .submit {
+    margin: 0;
+    padding: 0;
+  }
 }

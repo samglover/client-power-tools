@@ -3,23 +3,7 @@
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
-function cpt_edit_client($clients_user_id) {
-  if (!$clients_user_id || !is_user_logged_in()) return;
-
-  $client_data = Common\cpt_get_client_data($clients_user_id);
-  $client_name = Common\cpt_get_name($clients_user_id);
-  if (is_admin() && current_user_can('cpt-manage-clients')) {
-    ?>
-      <button class="button cpt-click-to-expand"><?php _e('Edit Client', 'client-power-tools'); ?></button>
-      <div class="cpt-this-expands">
-        <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-client-form.php'); ?>
-        <p style="margin-bottom: 2em; margin-top: 0;"><span id="cpt-delete-client-link"><?php echo __('Delete', 'client-power-tools') . ' ' . $client_name; ?></span></p>
-        <?php cpt_delete_client_modal($clients_user_id); ?>
-      </div>
-    <?php
-  }
-}
-
+add_action('admin_post_cpt_client_updated', __NAMESPACE__ . '\cpt_process_client_update');
 function cpt_process_client_update() {
   if (isset($_POST['cpt_client_updated_nonce']) && wp_verify_nonce($_POST['cpt_client_updated_nonce'], 'cpt_client_updated')) {
     $clients_user_id = sanitize_key(intval($_POST['clients_user_id']));
@@ -63,8 +47,6 @@ function cpt_process_client_update() {
   }
 }
 
-add_action('admin_post_cpt_client_updated', __NAMESPACE__ . '\cpt_process_client_update');
-
 
 function cpt_delete_client_modal($clients_user_id) {
   if (!$clients_user_id) return;
@@ -73,7 +55,7 @@ function cpt_delete_client_modal($clients_user_id) {
       <div class="cpt-admin-modal-card">
         <h2 style="color: red;"><?php _e('WARNING'); ?></h2>
         <p><?php _e('<strong>Deleting a client is permanent.</strong> There is no undo. Make sure you have a backup!'); ?></p>
-        <p><?php _e('Deleting a client will also remove the associated user account, client messages, and other client information.'); ?></p>
+        <p><?php _e('Deleting a client will also remove the associated user account, client messages, projects, and other client information.'); ?></p>
         <?php cpt_delete_client_button($clients_user_id); ?>
         <button class="button cpt-cancel-delete-client"><?php _e('Cancel'); ?></button>
       </div>
@@ -100,26 +82,40 @@ function cpt_delete_client_button($clients_user_id) {
 }
 
 
+add_action('admin_post_cpt_client_deleted', __NAMESPACE__ . '\cpt_process_delete_client');
 function cpt_process_delete_client() {
   if (isset($_POST['cpt_client_deleted_nonce']) && wp_verify_nonce($_POST['cpt_client_deleted_nonce'], 'cpt_client_deleted')) {
     $clients_user_id      = sanitize_key(intval($_POST['clients_user_id']));
     $client_name  = Common\cpt_get_name($clients_user_id);
 
-    $args = [
+    $cpt_messages   = get_posts([
       'fields'          => 'ids',
       'meta_key'        => 'cpt_clients_user_id',
       'meta_value'      => $clients_user_id,
       'post_type'       => 'cpt_message',
       'posts_per_page'  => -1,
-    ];
-
-    $cpt_messages   = get_posts($args);
-    $message_count  = $cpt_messages ? count($cpt_messages) : 0;
-    $delete_count   = 0;
+    ]);
+    $message_count = $cpt_messages ? count($cpt_messages) : 0;
+    $msg_delete_count = 0;
 
     foreach($cpt_messages as $post_id) {
       $post_deleted = wp_delete_post($post_id, true);
-      if ($post_deleted) $delete_count++;
+      if ($post_deleted) $msg_delete_count++;
+    }
+
+    $cpt_projects   = get_posts([
+      'fields'          => 'ids',
+      'meta_key'        => 'cpt_client_id',
+      'meta_value'      => $clients_user_id,
+      'post_type'       => 'cpt_project',
+      'posts_per_page'  => -1,
+    ]);
+    $project_count = $cpt_projects ? count($cpt_projects) : 0;
+    $proj_delete_count = 0;
+
+    foreach($cpt_projects as $post_id) {
+      $post_deleted = wp_delete_post($post_id, true);
+      if ($post_deleted) $proj_delete_count++;
     }
 
     $client_deleted = wp_delete_user($clients_user_id);
@@ -131,9 +127,16 @@ function cpt_process_delete_client() {
     }
 
     if ($message_count > 0) {
-      $result .= ' ' . $delete_count . '/' . $message_count . __(' messages deleted.');
-      if ($delete_count < $messager_count) {
+      $result .= ' ' . $msg_delete_count . '/' . $message_count . __(' messages deleted.');
+      if ($msg_delete_count < $messager_count) {
         $result .= __(' <em>Not all messages could be deleted.</em>');
+      }
+    }
+
+    if ($project_count > 0) {
+      $result .= ' ' . $proj_delete_count . '/' . $project_count . ' ' . strtolower(Common\cpt_get_projects_label('plural')) . __(' deleted.');
+      if ($proj_delete_count < $project_count) {
+        $result .= __(' <em>Not all projects could be deleted.</em>');
       }
     }
 
@@ -144,5 +147,3 @@ function cpt_process_delete_client() {
     die();
   }
 }
-
-add_action('admin_post_cpt_client_deleted', __NAMESPACE__ . '\cpt_process_delete_client');
