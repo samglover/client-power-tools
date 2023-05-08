@@ -169,8 +169,8 @@ class Project_List_Table extends Includes\WP_List_Table  {
         'client_id' => get_user_meta($project_data['clients_user_id'], 'cpt_client_id', true),
         'client_name' => Common\cpt_get_name(get_post_meta($project_data['projects_post_id'], 'cpt_client_id', true)),
         'project_type' => $project_data['project_type'],
+        'project_stage' => $project_data['project_type'] ? $project_data['project_stage'] : '',
         'project_status' => $project_data['project_status'],
-        'project_stage' => $project_data['project_stage'],
       ];
     endwhile; endif;
 

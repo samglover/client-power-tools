@@ -27,21 +27,21 @@ function cpt_project_types() {
         </div>
         <div id="col-right">
           <div class="col-wrap">
-          <?php
-            $project_types_list = new Project_Types_List_Table();
-            $project_types_list->prepare_items();
-            ?>
-              <form id="project-list" method="GET">
-                <?php $project_types_list->display() ?>
-              </form>
             <?php
-          ?>
+              $project_types_list = new Project_Types_List_Table();
+              $project_types_list->prepare_items();
+            ?>
+            <form id="project-types-list" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+              <input name="action" value="cpt_project_type_edited" type="hidden">
+              <?php wp_nonce_field('cpt_project_type_edited', 'cpt_edit_project_type_nonce'); ?>
+              <?php $project_types_list->display() ?>
+            </form>
+            <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-project-type-form.php'); ?>
           </div>
         </div>
       </div>
     </div>
   <?php
-  $project_types_list->inline_edit();
 }
 
 
@@ -66,6 +66,41 @@ function cpt_process_new_project_type() {
     );
     
     if (is_wp_error($new_project_type_stages)) $result .= sprintf(__('Stages could not be added. Error message: %s', 'client-power-tools'), $new_project_type_stages->get_error_message());
+  }
+
+  set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
+  wp_redirect($_POST['_wp_http_referer']);
+  exit;
+}
+
+
+add_action('admin_post_cpt_project_type_edited', __NAMESPACE__ . '\cpt_process_edit_project_type');
+function cpt_process_edit_project_type() {
+  if (!isset($_POST['cpt_edit_project_type_nonce']) || !wp_verify_nonce($_POST['cpt_edit_project_type_nonce'], 'cpt_project_type_edited')) exit(__('Invalid nonce.', 'client-power-tools'));
+
+  $project_type_id = intval($_POST['edit_project_type_id']);
+  $project_type = $_POST['edit_project_type'];
+  $project_type_stages = $_POST['edit_project_type_stages'];
+  
+  $update_project_type = wp_update_term(
+    $project_type_id,
+    'cpt-project-type',
+    [
+      'name' => sanitize_text_field($_POST['edit_project_type']),
+    ]
+  );
+
+  if (is_wp_error($update_project_type)) {
+    $result = sprintf(__('%s type could not be updated. Error message: %s', 'client-power-tools'), Common\cpt_get_projects_label('singular'), $new_project_type->get_error_message());
+  } else {
+    $result = sprintf(__('%s type updated.', 'client-power-tools'), Common\cpt_get_projects_label('singular'));
+    $project_type_stages = update_term_meta(
+      $project_type_id,
+      'cpt_project_type_stages',
+      sanitize_textarea_field($_POST['edit_project_type_stages'])
+    );
+    
+    if (is_wp_error($project_type_stages)) $result .= sprintf(__('Stages could not be updated. Error message: %s', 'client-power-tools'), $new_project_type_stages->get_error_message());
   }
 
   set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);

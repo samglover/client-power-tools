@@ -27,31 +27,31 @@
   }
 }
 
-  #cpt-admin-page-title {
-    #cpt-page-title {
-      font-size: 42px;
-      font-weight: bold;
-      line-height: 1.1;
-      padding-top: 0;
-    }
-
-    #cpt-subtitle {
-      color: gray;
-      font-size: 26px;
-      font-weight: bold;
-      line-height: 1.1;
-      margin: 0;
-    }
-
-    #cpt-client-status,
-    #cpt-client-manager,
-    #cpt-project-status,
-    #cpt-project-client {
-      font-size: 16px;
-      line-height: 1.1;
-      margin: 0;
-    }
+#cpt-admin-page-title {
+  #cpt-page-title {
+    font-size: 42px;
+    font-weight: bold;
+    line-height: 1.1;
+    padding-top: 0;
   }
+
+  #cpt-subtitle {
+    color: gray;
+    font-size: 26px;
+    font-weight: bold;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  #cpt-client-status,
+  #cpt-client-manager,
+  #cpt-project-status,
+  #cpt-project-client {
+    font-size: 16px;
+    line-height: 1.1;
+    margin: 0;
+  }
+}
 
 /* Forms */
 #cpt-admin {
@@ -197,4 +197,21 @@
     top: 0;
   width: 100%;
   z-index: 99;
+}
+
+
+#cpt-edit-row {
+  animation: growDown 150ms ease-in-out forwards;
+  background-color: $gray-wash;
+  display: none;
+  transform-origin: top;
+
+  td {
+    padding: $spacing-regular;
+  }
+
+  .submit {
+    margin: 0;
+    padding: 0;
+  }
 }

@@ -189,4 +189,18 @@
   z-index: 99;
 }
 
+#cpt-edit-row {
+  animation: growDown 150ms ease-in-out forwards;
+  background-color: rgba(0, 0, 0, 0.1);
+  display: none;
+  transform-origin: top;
+}
+#cpt-edit-row td {
+  padding: 20px;
+}
+#cpt-edit-row .submit {
+  margin: 0;
+  padding: 0;
+}
+
 /*# sourceMappingURL=admin.css.map */

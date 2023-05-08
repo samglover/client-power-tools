@@ -16,6 +16,12 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
     $action = $this->screen->action;
   }
 
+  function single_row($term, $level = 0) {
+    echo '<tr data-id="' . esc_attr($term['ID']) . '" data-name="' . esc_attr($term['project_type']) . '" data-stages="' . esc_attr($term['project_type_stages_attr']) . '">';
+		$this->single_row_columns($term);
+		echo '</tr>';
+  }
+
   /**
    * Column Default
    *
@@ -77,7 +83,7 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
     if ($primary !== $column_name ) return '';
     if (!current_user_can('cpt_manage_projects')) return '';
     $actions = [
-      'Edit' => sprintf('<button type="button" class="button-link editinline" aria-label="%s" aria-expanded="false">%s</button>', $item['project_type'], __('Quick Edit', 'client-power-tools')),
+      'Edit' => sprintf('<button type="button" class="button-link cpt-edit-link" aria-label="%s" aria-expanded="false">%s</button>', $item['project_type'], __('Edit', 'client-power-tools')),
       'Delete' => '<a href="' . wp_nonce_url('?page=cpt-project-types&action=delete&project_type_term_id=' . $item['ID']) . '">' . __('Delete', 'client-power-tools') . '</a>',
     ];
     return $this->row_actions($actions);
@@ -112,13 +118,15 @@ class Project_Types_List_Table extends Includes\WP_List_Table  {
 
     if ($project_types) {
       foreach($project_types as $project_type) {
-        $stages_array = explode("\n", sanitize_textarea_field(get_term_meta($project_type->term_id, 'cpt_project_type_stages', true)));
+        $stages_raw = sanitize_textarea_field(get_term_meta($project_type->term_id, 'cpt_project_type_stages', true));
+        $stages_array = explode("\n", $stages_raw);
         $stages_output = implode('<br>', $stages_array);
 
         $data[] = [
           'ID' => $project_type->term_id,
           'project_type' => $project_type->name,
           'project_type_stages' => $stages_output,
+          'project_type_stages_attr' => esc_attr($stages_raw),
           'project_count' => $project_type->count,
         ];
       }

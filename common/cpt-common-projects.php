@@ -86,14 +86,17 @@ function cpt_get_project_progress_bar($projects_post_id) {
   if (!$projects_post_id) return;
 
   $project_type = get_term(get_post_meta($projects_post_id, 'cpt_project_type', true));
-  $project_stages = array_map('trim', explode("\n", get_term_meta($project_type->term_id, 'cpt_project_type_stages', true)));
+  $project_stages = isset($project_type->term_id) ? array_map('trim', explode("\n", get_term_meta($project_type->term_id, 'cpt_project_type_stages', true))) : false;
+
+  if (!$project_type || !$project_stages) return;
+
   $current_stage = sanitize_text_field(get_post_meta($projects_post_id, 'cpt_project_stage', true));
   $current_stage_key = array_search($current_stage, $project_stages);
   $stage_width = 100 / count($project_stages);
 
-  if ( $current_stage_key == 0) {
+  if ( $current_stage_key == 0 && count($project_stages) > 1) {
     $indicator_width = false;
-  } elseif ($current_stage_key == count($project_stages) - 1) {
+  } elseif ($current_stage_key + 1 == count($project_stages)) {
     $indicator_width = 100;
   } else {
     $indicator_width = $stage_width * $current_stage_key + ($stage_width / 2);

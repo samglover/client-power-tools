@@ -5,6 +5,8 @@
     const typesField = document.querySelector('select#project_type');
     const stagesField = document.querySelector('select#project_stage');
 
+    if (!typesField || !stagesField) return;
+
     typesField.addEventListener('change', function(event) {
       let projectType = event.target.value;
       updateStages(projectType);

@@ -3,25 +3,6 @@
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
-function cpt_edit_client($clients_user_id) {
-  if (!$clients_user_id || !is_user_logged_in()) return;
-  $client_data = Common\cpt_get_client_data($clients_user_id);
-  $client_name = Common\cpt_get_name($clients_user_id);
-  if (is_admin() && current_user_can('cpt_manage_clients')) {
-    ?>
-      <button class="button cpt-click-to-expand"><?php _e('Edit Client', 'client-power-tools'); ?></button>
-      <div class="cpt-this-expands">
-        <div class="form-wrap">
-          <h2><?php _e('Edit This Client', 'client-power-tools'); ?></h2>
-          <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-client-form.php'); ?>
-          <span id="cpt-delete-client-link"><?php echo __('Delete', 'client-power-tools') . ' ' . $client_name; ?></span>
-          <?php cpt_delete_client_modal($clients_user_id); ?>
-        </div>
-      </div>
-    <?php
-  }
-}
-
 add_action('admin_post_cpt_client_updated', __NAMESPACE__ . '\cpt_process_client_update');
 function cpt_process_client_update() {
   if (isset($_POST['cpt_client_updated_nonce']) && wp_verify_nonce($_POST['cpt_client_updated_nonce'], 'cpt_client_updated')) {

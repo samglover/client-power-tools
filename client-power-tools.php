@@ -106,6 +106,7 @@ add_action('admin_enqueue_scripts', __NAMESPACE__ . '\cpt_register_admin_scripts
 function cpt_register_admin_scripts() {
 	wp_enqueue_style('cpt-admin', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/admin.css', [], CLIENT_POWER_TOOLS_PLUGIN_VERSION);
 	wp_enqueue_script('cpt-admin', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-admin.js', [], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
+	wp_enqueue_script('cpt-types', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-types.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
 	wp_register_script('cpt-stages', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-stages.js', ['jquery', 'wp-i18n'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
   wp_localize_script(
     'cpt-stages',
@@ -161,7 +162,7 @@ function cpt_activate() {
 		'cpt_status_update_req_notice_email'	=> null,
 		'cpt_module_messaging'								=> true,
 		'cpt_module_projects'									=> true,
-		'cpt_projects_label'									=> ['project', 'projects'],
+		'cpt_projects_label'									=> ['Project', 'Projects'],
 		'cpt_project_statuses'								=> 'Open' . "\n" . 'Closed',
 		'cpt_default_project_status'					=> 'Active',
 		'cpt_send_message_content'						=> false,

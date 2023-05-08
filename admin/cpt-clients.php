@@ -78,6 +78,7 @@ function cpt_clients() {
   <?php
 }
 
+
 function cpt_client_list() {
   $client_list = new Client_List_Table();
   $client_list->prepare_items();
@@ -89,22 +90,56 @@ function cpt_client_list() {
   <?php
 }
 
+
 function cpt_get_client_profile($clients_user_id) {
   if (!$clients_user_id) return;
-  cpt_edit_client($clients_user_id);
-  if (get_option('cpt_module_projects')) {
-    ?>
-      <section id="cpt-projects">
-        <h2 class="cpt-row">
-          <?php echo Common\cpt_get_projects_label('plural'); ?>
-          <button class="button cpt-click-to-expand"><?php echo __('Add a', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?></button>
-        </h2>
+  $client_data = Common\cpt_get_client_data($clients_user_id);
+  $client_name = Common\cpt_get_name($clients_user_id);
+  ?>
+    <nav class="cpt-buttons cpt-row gap-sm">
+      <?php if (current_user_can('cpt_manage_clients')) { ?>
+        <button class="button cpt-click-to-expand"><?php _e('Edit Client', 'client-power-tools'); ?></button>
+      <?php } ?>
+      <?php if (get_option('cpt_module_projects')) { ?>
+        <button class="button cpt-click-to-expand"><?php echo __('Add a', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?></button>
+      <?php } ?>
+      <?php if (get_option('cpt_module_messaging')) { ?>
+        <button class="button cpt-click-to-expand"><?php _e('New Message', 'client-power-tools'); ?></button>
+      <?php } ?>
+    </nav>
+    <div class="cpt-expanders">
+      <?php if (current_user_can('cpt_manage_clients')) { ?>
+        <div class="cpt-this-expands">
+          <div class="form-wrap">
+            <h2><?php _e('Edit This Client', 'client-power-tools'); ?></h2>
+            <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-client-form.php'); ?>
+            <span id="cpt-delete-client-link"><?php echo __('Delete', 'client-power-tools') . ' ' . $client_name; ?></span>
+            <?php cpt_delete_client_modal($clients_user_id); ?>
+          </div>
+        </div>
+      <?php } ?>
+      <?php if (get_option('cpt_module_projects')) { ?>
         <div class="cpt-this-expands">
           <div class="form-wrap form-wrap-new_project">
             <h2><?php printf(__('Add a %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?></h2>
             <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'); ?>
           </div>
         </div>
+      <?php } ?>
+      <?php if (get_option('cpt_module_messaging')) { ?>
+        <div class="cpt-this-expands">
+          <div class="form-wrap">
+          <h3><?php _e('New Message', 'client-power-tools'); ?></h3>
+          <?php Common\cpt_new_message_form(get_current_user_id()); ?>
+          </div>
+        </div>
+      <?php } ?>
+    </div>
+  <?php
+  if (get_option('cpt_module_projects')) {
+    ?>
+      <section id="cpt-projects">
+        <h2 class="cpt-row"><?php echo Common\cpt_get_projects_label('plural'); ?></h2>
         <?php Common\cpt_get_projects($clients_user_id); ?>
       </section>
     <?php
@@ -112,16 +147,7 @@ function cpt_get_client_profile($clients_user_id) {
   if (get_option('cpt_module_messaging')) {
     ?>
       <section id="cpt-messages">
-        <h2 class="cpt-row">
-          <?php _e('Messages', 'client-power-tools'); ?>
-          <button class="button cpt-click-to-expand"><?php _e('New Message', 'client-power-tools'); ?></button>
-        </h2>
-        <div class="cpt-this-expands">
-          <div class="form-wrap">
-          <h3><?php _e('New Message', 'client-power-tools'); ?></h3>
-          <?php Common\cpt_new_message_form(get_current_user_id()); ?>
-          </div>
-        </div>
+        <h2 class="cpt-row"><?php _e('Messages', 'client-power-tools'); ?></h2>
         <?php Common\cpt_messages($clients_user_id); ?>
       </section>
     <?php
