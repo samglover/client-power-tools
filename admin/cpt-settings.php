@@ -394,7 +394,7 @@ function cpt_projects_settings_init() {
   );
 
   if (get_option('cpt_module_projects')) {
-    register_setting('cpt-settings', 'cpt_projects_label');
+    register_setting('cpt-settings', 'cpt_projects_label', ['Project', 'Projects']);
     add_settings_field(
       'cpt_projects_label',
       __('Projects Label', 'client-power-tools'),
@@ -403,7 +403,7 @@ function cpt_projects_settings_init() {
       'cpt-projects-settings',
     );
 
-    register_setting('cpt-settings', 'cpt_project_statuses');
+    register_setting('cpt-settings', 'cpt_project_statuses', 'Open' . "\n" . 'Closed');
     add_settings_field(
       'cpt_project_statuses',
       '<label for="cpt_project_statuses">' . __('Project Statuses', 'client-power-tools') . '</label>',
@@ -412,7 +412,7 @@ function cpt_projects_settings_init() {
       'cpt-projects-settings',
     );
 
-    register_setting('cpt-settings', 'cpt_default_project_status');
+    register_setting('cpt-settings', 'cpt_default_project_status', 'Open');
     add_settings_field(
       'cpt_default_project_status',
       '<label for="cpt_default_project_status">' . __('Default Project Status', 'client-power-tools') . '</label>',

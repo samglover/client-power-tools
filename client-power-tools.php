@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Client Power Tools
  * Plugin URI: https://clientpowertools.com
- * Description: Client Power Tools is an easy-to-use private client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
+ * Description: Client Power Tools is an easy-to-use client dashboard, project management, and communication portal built for designers, developers, consultants, lawyers, and other professionals.
  * Version: 1.7
  * Author: Sam Glover
  * Author URI: https://samglover.net
@@ -164,7 +164,7 @@ function cpt_activate() {
 		'cpt_module_projects'									=> true,
 		'cpt_projects_label'									=> ['Project', 'Projects'],
 		'cpt_project_statuses'								=> 'Open' . "\n" . 'Closed',
-		'cpt_default_project_status'					=> 'Active',
+		'cpt_default_project_status'					=> 'Open',
 		'cpt_send_message_content'						=> false,
  ];
 

@@ -1,7 +1,7 @@
 === Client Power Tools ===
 
 Contributors: samglover
-Tags: access control,communication,portal,restrict content,frontend login
+Tags: client management, project management, portal, restrict content, frontend login
 Requires at least: 5.5
 Tested up to: 6.2
 Requires PHP: 7.3.5
@@ -9,12 +9,12 @@ Stable tag: trunk
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-A free, easy-to-use client dashboard and communication portal built for independent contractors, consultants, lawyers, and other professionals.
+A free, easy-to-use client dashboard, project management, and communication portal built for designers, developers, consultants, lawyers, and other professionals.
 
 
 == Description ==
 
-Client Power Tools is built for independent contractors, consultants, and professionals. Give your clients a dashboard where they can check on the status of their project, access information and resources in your clients-only knowledge base, view other clients-only pages, and communicate with you—right on your own website!
+Client Power Tools is built for designers, developers, consultants, lawyers, and other professionals. Give your clients a dashboard where they can check on the status of their project, access information and resources in your clients-only knowledge base, view other clients-only pages, and communicate with you—right on your own website!
 
 ### Front-End Onboarding & Login
 
@@ -32,6 +32,18 @@ You can change the name or permalink of the default dashboard page, or select a 
 
 Each module can be enabled or disabled independently of the rest.
 
+#### Projects & Stages Module
+
+Now you can assign multiple projects to each client, create multiple project types with stages to keep track of your project progress with your clients.
+
+You can change the project label to whatever you prefer (files, matters, dossiers, schemes, capers, etc.) and it will be reflected throughout. The new progress bar provides you and your clients with a visual indicator of each project's progress.
+
+#### Knowledge Base Module
+
+The knowledge base is a clients-only page—or a collection of pages—that you can use to share information and resources with your clients.
+
+Just like the client dashboard, the knowledge base is a regular WordPress page with some special features. You can add as many child pages as you like—the knowledge base tab will use a drop-down index and breadcrumb navigation to help your clients find their way around.
+
 #### Status Update Request Button Module
 
 Your clients want to know how things are going!
@@ -46,17 +58,13 @@ Using Client Power Tools to communicate with your clients keeps all your message
 
 When you send a message to your client, they will receive an email notification with a link to their client dashboard so they can read it and reply. Or you can send them the full message—by default or on a message-by-message basis.
 
-#### Knowledge Base Module
-
-The knowledge base is a clients-only page—or a collection of pages—you can use to share information and resources with your clients.
-
-Just like the client dashboard, the knowledge base is a regular WordPress page with some special features. You can add as many child pages as you like—the knowledge base tab will use a drop-down index and breadcrumb navigation to help your clients find their way around.
-
 ### Customization
 
 Client Power Tools is built to be customizable where you need it to be. Here are some of the things you can change to suit your needs:
 
 * **Enable/disable all non-core modules.** (As of 1.4, the non-core modules are the Status Update Request Button, Messaging, and Knowledge Base.)
+* **Customize project labels.** Some people have projects, others have files, matters, dossiers, schemes, capers, etc. You can use whatever label you prefer, and it will be reflected throughout Client Power Tools.
+* **Project types & stages.** Add project types, and for each type specify the stages you want your client to be able to see on their progress bar.
 * **Additional pages.** Restrict any page on your website to logged-in clients.
 * **New-client email.** You can customize the email sent to newly added clients so that it reflects the name, email address, subject line, and messaging you prefer.
 * **Client IDs.** When adding or updating a client, you can add a custom client ID.
@@ -106,6 +114,13 @@ For more information on how to take advantage of the new and updated features, s
 
 
 == Changelog ==
+
+### 1.7.1 - 2023-05-08
+
+#### Changed
+- Defaults for new project-related settings.
+- Updated readme.txt.
+
 
 ### 1.7 - 2023-05-08
 
