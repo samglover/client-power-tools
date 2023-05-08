@@ -9,12 +9,12 @@ Stable tag: trunk
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-A free, easy-to-use client dashboard, project management, and communication portal built for designers, developers, consultants, lawyers, and other professionals.
+A free, easy-to-use client dashboard, project management, and communication portal built for designers, developers, consultants, lawyers, and other independent contractors and professionals.
 
 
 == Description ==
 
-Client Power Tools is built for designers, developers, consultants, lawyers, and other professionals. Give your clients a dashboard where they can check on the status of their project, access information and resources in your clients-only knowledge base, view other clients-only pages, and communicate with you—right on your own website!
+Client Power Tools is built for designers, developers, consultants, lawyers, and other independent contractors and professionals. Give your clients a dashboard where they can check on the status of their project, access information and resources in your clients-only knowledge base, view other clients-only pages, and communicate with you—right on your own website!
 
 ### Front-End Onboarding & Login
 
