@@ -51,17 +51,6 @@
       <?php echo cpt_get_status_select('cpt_project_statuses', 'project_status', 'cpt_default_project_status'); ?>
     </div>
   </div>
-  <?php $custom_fields = Common\cpt_custom_client_fields(); ?>
-  <?php if ($custom_fields) { ?>
-    <div class="cpt-row">
-      <?php foreach($custom_fields as $field) { ?>
-        <div class="form-field">
-          <label for="<?php echo $field['id']; ?>"><?php echo $field['label']; ?><br /><small>(<?php echo $field['required'] ? 'required' : 'optional'; ?>)</small></label>
-          <input name="<?php echo $field['id']; ?>" id="<?php echo $field['id']; ?>" class="regular-text" type="<?php echo $field['type']; ?>" data-required="<?php echo $field['required'] ? 'true' : 'false'; ?>">
-      </div>
-      <?php } ?>
-    </div>
-  <?php } ?>
   <p class="submit">
     <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php echo __('Add', 'client-power-tools') . ' ' . $projects_label[0]; ?>">
   </p>

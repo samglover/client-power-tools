@@ -120,6 +120,9 @@ For more information on how to take advantage of the new and updated features, s
 #### Changed
 - Added a "no projects found" message when a client does not have any projects.
 
+#### Removed
+- Removed custom fields from project forms.
+
 #### Fixed
 - Fixed a bug that was causing messages to be sent to the sender rather than the intended recipient, which is obviously not how it is supposed to work.
 
