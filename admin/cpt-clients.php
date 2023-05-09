@@ -68,10 +68,7 @@ function cpt_clients() {
           }
           cpt_client_list();
         } else {
-          if (Common\cpt_is_client($clients_user_id)) {
-            $clients_user_id = sanitize_key(intval($_REQUEST['user_id']));
-            cpt_get_client_profile($clients_user_id);
-          }
+          if (Common\cpt_is_client($clients_user_id)) cpt_get_client_profile($clients_user_id);
         }
       ?>
     </div>
@@ -130,7 +127,7 @@ function cpt_get_client_profile($clients_user_id) {
         <div class="cpt-this-expands">
           <div class="form-wrap">
           <h3><?php _e('New Message', 'client-power-tools'); ?></h3>
-          <?php Common\cpt_new_message_form(get_current_user_id()); ?>
+          <?php Common\cpt_new_message_form($clients_user_id); ?>
           </div>
         </div>
       <?php } ?>

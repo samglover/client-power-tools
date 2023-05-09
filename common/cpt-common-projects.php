@@ -78,6 +78,8 @@ function cpt_get_projects($clients_user_id = null) {
         <?php endwhile; ?>
       </section>
     <?php
+  else:
+    printf(__('%sNo %s found.%s' , 'client-power-tools'), '<p>', strtolower($projects_label[1]) , '</p>');
   endif;
 }
 

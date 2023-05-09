@@ -24,20 +24,20 @@ function cpt_messages($clients_user_id) {
 }
 
 
-function cpt_message_list($user_id) {
-  if (!$user_id) return;
+function cpt_message_list($clients_user_id) {
+  if (!$clients_user_id) return;
 
   $paged = isset($_GET['paged']) ? sanitize_key(intval($_GET['paged'])) : get_query_var('paged');
 
   $cpt_messages = new \WP_Query([
     'meta_key'    => 'cpt_clients_user_id',
-    'meta_value'  => $user_id,
+    'meta_value'  => $clients_user_id,
     'paged'       => $paged,
     'post_type'   => 'cpt_message',
  ]);
 
   if ($cpt_messages->have_posts()) :
-    while ($cpt_messages->have_posts()) : $cpt_messages->the_post();
+    while ($cpt_messages->have_posts()): $cpt_messages->the_post();
       $message_id       = get_the_ID();
       $message_classes  = ['cpt-message'];
       $message_meta     = '<p>';
@@ -75,13 +75,13 @@ function cpt_message_list($user_id) {
       'current' => max(1, $paged),
       'total'   => $cpt_messages->max_num_pages,
     ]);
-  else :
+  else:
     printf(__('%sNo messages found.%s' , 'client-power-tools'), '<p>', '</p>');
   endif;
 }
 
 
-function cpt_new_message_form($user_id) {
+function cpt_new_message_form($clients_user_id) {
   $editor_args = [
     'media_buttons' => false,
     'quicktags'     => false,
@@ -97,7 +97,7 @@ function cpt_new_message_form($user_id) {
       <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
         <?php wp_nonce_field('cpt_new_message_added', 'cpt_new_message_nonce'); ?>
         <input name="action" value="cpt_new_message_added" type="hidden">
-        <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
+        <input name="clients_user_id" value="<?php echo $clients_user_id; ?>" type="hidden">
         <div class="cpt-row">
           <div class="form-field span-6">
             <label for="subject_line"><?php _e('Subject Line', 'client-power-tools'); ?></label>

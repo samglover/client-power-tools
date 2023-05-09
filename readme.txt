@@ -115,6 +115,15 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.7.2 - 2023-05-08
+
+#### Changed
+- Added a "no projects found" message when a client does not have any projects.
+
+#### Fixed
+- Fixed a bug that was causing messages to be sent to the sender rather than the intended recipient, which is obviously not how it is supposed to work.
+
+
 ### 1.7.1 - 2023-05-08
 
 #### Changed
