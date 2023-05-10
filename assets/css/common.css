@@ -197,9 +197,6 @@
 .cpt-message.not-my-message {
   margin-right: 10%;
 }
-.cpt-message.not-my-message .cpt-message-content {
-  background-color: rgba(0, 0, 0, 0.1);
-}
 .cpt-message.status-update-request {
   margin-left: 0;
   margin-right: 0;

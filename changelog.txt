@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. The format 
 
 #### Changed
 - TinyMCE editor toolbar simplified.
+- Restore message background color.
 
 
 ### 1.7.2 - 2023-05-08
