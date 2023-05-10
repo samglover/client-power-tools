@@ -86,9 +86,10 @@ function cpt_new_message_form($clients_user_id) {
     'media_buttons' => false,
     'quicktags'     => false,
     'textarea_name' => 'message',
-    'textarea_rows' => 10,  
     'tinymce'       => [
-      'toolbar1'    => 'formatselect, bold, italic, bullist, numlist, blockquote, outdent, indent, link, unlink',
+      'toolbar1'    => 'bold, italic, bullist, numlist, blockquote, outdent, indent, link, unlink',
+      'toolbar2'    => '',
+      'toolbar3'    => '',
     ],
  ];
 
