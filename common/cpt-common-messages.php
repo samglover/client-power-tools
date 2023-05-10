@@ -133,7 +133,7 @@ function cpt_new_message_form($clients_user_id) {
             </div>
           </div>
         <?php } ?>
-        <div class="cpt-row">
+        <div class="cpt-row cpt-buttons">
           <p class="submit">
             <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Send Message', 'client-power-tools'); ?>">
           </p>

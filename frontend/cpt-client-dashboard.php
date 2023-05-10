@@ -13,7 +13,9 @@ function cpt_noindex_client_dashboard() {
 add_filter('the_content', __NAMESPACE__ . '\cpt_client_dashboard');
 function cpt_client_dashboard($content) {
   if (
-    !cpt_is_cpt() ||
+    !cpt_is_cpt() || 
+    !is_main_query() || 
+    !in_the_loop() || 
     get_post_type(get_the_ID()) == 'cpt_message'
   ) return $content;
   

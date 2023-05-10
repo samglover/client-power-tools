@@ -15,44 +15,47 @@
   flex-wrap: wrap;
   gap: 20px;
 }
-.cpt-row > *:not(button) {
+.cpt-row > * {
   width: 12ch;
 }
-.cpt-row > *:not(button).span-2 {
+.cpt-row > *.span-2 {
   width: calc(24ch + 20px);
 }
-.cpt-row > *:not(button).span-3 {
+.cpt-row > *.span-3 {
   width: calc(36ch + 40px);
 }
-.cpt-row > *:not(button).span-4 {
+.cpt-row > *.span-4 {
   width: calc(48ch + 60px);
 }
-.cpt-row > *:not(button).span-5 {
+.cpt-row > *.span-5 {
   width: calc(60ch + 80px);
 }
-.cpt-row > *:not(button).span-6 {
+.cpt-row > *.span-6 {
   width: calc(72ch + 100px);
 }
 .cpt-row.gap-sm {
   gap: 10px;
 }
-.cpt-row.gap-sm > *:not(button) {
+.cpt-row.gap-sm > * {
   width: 12ch;
 }
-.cpt-row.gap-sm > *:not(button).span-2 {
+.cpt-row.gap-sm > *.span-2 {
   width: calc(24ch + 10px);
 }
-.cpt-row.gap-sm > *:not(button).span-3 {
+.cpt-row.gap-sm > *.span-3 {
   width: calc(36ch + 20px);
 }
-.cpt-row.gap-sm > *:not(button).span-4 {
+.cpt-row.gap-sm > *.span-4 {
   width: calc(48ch + 30px);
 }
-.cpt-row.gap-sm > *:not(button).span-5 {
+.cpt-row.gap-sm > *.span-5 {
   width: calc(60ch + 40px);
 }
-.cpt-row.gap-sm > *:not(button).span-6 {
+.cpt-row.gap-sm > *.span-6 {
   width: calc(72ch + 50px);
+}
+.cpt-row.cpt-buttons > * {
+  width: revert;
 }
 
 .cpt-section-header {

@@ -115,6 +115,16 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.7.3 - 2023-05-10
+
+#### Changed
+- TinyMCE editor toolbar simplified.
+- Restore message background color.
+
+#### Fixed
+- Prevent multiple CPT nav menus from showing up on the knowledge base.
+
+
 ### 1.7.2 - 2023-05-08
 
 #### Changed

@@ -4,7 +4,7 @@
   flex-wrap: wrap;
   gap: $spacing-regular;
 
-  > *:not(button) {
+  > * {
     width: 12ch;
 
     &.span-2 {
@@ -31,7 +31,7 @@
   &.gap-sm {
     gap: $spacing-sm;
 
-    > *:not(button) {
+    > * {
       width: 12ch;
   
       &.span-2 {
@@ -53,6 +53,12 @@
       &.span-6 {
         width: calc((6 * 12ch) + (5 * $spacing-sm));
       }
+    }
+  }
+
+  &.cpt-buttons {
+    > * {
+      width: revert;
     }
   }
 }

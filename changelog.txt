@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file. The format 
 - TinyMCE editor toolbar simplified.
 - Restore message background color.
 
+#### Fixed
+- Prevent multiple CPT nav menus from showing up on the knowledge base.
+
 
 ### 1.7.2 - 2023-05-08
 
