@@ -378,7 +378,7 @@ add_action('admin_init', __NAMESPACE__ . '\cpt_projects_settings_init');
 function cpt_projects_settings_init() {
   add_settings_section(
     'cpt-projects-settings',
-    __('Projects', 'client-power-tools'),
+    __('Projects & Stages', 'client-power-tools'),
     __NAMESPACE__ . '\cpt_projects_section',
     'cpt-settings',
   );
