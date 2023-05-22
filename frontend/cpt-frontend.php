@@ -7,7 +7,12 @@ use Client_Power_Tools\Core\Common;
  * Adds a body class for overriding CPT styles.
  */
 add_filter('body_class', function($classes) {
-  return array_merge($classes, ['customize-cpt']);
+  $body_classes = ['customize-cpt'];
+  if (Common\cpt_is_client_dashboard()) $body_classes[] = 'client-dashboard';
+  if (Common\cpt_is_client_dashboard('messages')) $body_classes[] = 'client-dashboard-messages';
+  if (Common\cpt_is_client_dashboard('projects')) $body_classes[] = 'client-dashboard-projects';
+  if (Common\cpt_is_client_dashboard('knowledge base')) $body_classes[] = 'client-dashboard-knowledge-base';
+  return array_merge($classes, $body_classes);
 });
 
 

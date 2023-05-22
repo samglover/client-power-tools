@@ -72,10 +72,21 @@ function cpt_client_dashboard($content) {
         Common\cpt_get_projects();
       } else {
         $projects_post_id = sanitize_key(intval($_REQUEST['projects_post_id']));
+        $project_data = Common\cpt_get_project_data($projects_post_id);
         echo '<p><a href="' . remove_query_arg('projects_post_id') . '">' . sprintf(__('%s Back to %s', 'client-power-tools'), '&larr;', $projects_label[1]) . '</a></p>';
-        echo '<h2>' . get_the_title($projects_post_id) . '</h2>';
+        if ($project_data['project_status']) {
+          echo '<p class="cpt-project-status">';
+            echo $project_data['project_status'];
+            if ($project_data['project_type']) echo ' ' . $project_data['project_type'];
+            echo ' ' . $projects_label[0];
+          echo '</p>';
+        }
+        echo '<h2 class="cpt-project-title">';
+          echo get_the_title($projects_post_id);
+          if ($project_data['project_id']) echo ' <span style="color:silver">(' . $project_data['project_id'] . ')</span>';
+        echo '</h2>';
         Common\cpt_get_project_progress_bar($projects_post_id);
-        Common\cpt_get_project_meta($projects_post_id);
+        // Common\cpt_get_project_meta($projects_post_id);
       }
       $content = ob_get_clean();
     }

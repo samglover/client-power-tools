@@ -10,6 +10,7 @@ function cpt_is_project($post_id) {
 
 function cpt_get_projects_label($n = null) {
   $projects_label = get_option('cpt_projects_label');
+  foreach ($projects_label as $key => $label) $projects_label[$key] = ucwords($label);
   switch ($n) {
     case ('singular'):
       return $projects_label[0];

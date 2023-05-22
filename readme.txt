@@ -115,6 +115,14 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.7.4 - 2023-05-22
+
+#### Changed
+- Capitalize project labels just in case the user doesn't.
+- Add body classes for the primary dashboard tabs (dashboard, projects, and messages).
+- Updated front-end project page.
+
+
 ### 1.7.3 - 2023-05-10
 
 #### Changed
