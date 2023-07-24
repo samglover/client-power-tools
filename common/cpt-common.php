@@ -36,7 +36,9 @@ function cpt_is_client_dashboard($page = false) {
   global $wp_query;
   $client_dashboard_id = get_option('cpt_client_dashboard_page_selection');
   $this_page_id = isset($wp_query->post->ID) ? $wp_query->post->ID : false;
+  
   if (!$page && $this_page_id && $client_dashboard_id == $this_page_id) return true;
+
   if ($page) {
     switch($page) {
       case 'projects':
@@ -48,8 +50,24 @@ function cpt_is_client_dashboard($page = false) {
       case 'knowledge base':
         if (cpt_is_knowledge_base()) return true;
         break;
+      case 'additional page' || 'additional pages':
+        $addl_pages_array = get_option('cpt_client_dashboard_addl_pages') ? get_option('cpt_client_dashboard_addl_pages') : false;
+        if ($addl_pages_array) {
+          $is_addl_page = false;
+          $addl_pages_array = explode(',', $addl_pages_array);
+          foreach ($addl_pages_array as $key => $page_id) {
+            $page_id = intval(trim($page_id));
+            if (
+              $page_id == $this_page_id || 
+              in_array($page_id, get_post_ancestors($this_page_id))
+            ) $is_addl_page = true;
+          }
+          if ($is_addl_page) return true;
+        }
+        break;
     }
   }
+
   return false;
 }
 

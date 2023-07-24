@@ -139,7 +139,7 @@ function cpt_nav() {
           if ($addl_pages_array) $addl_pages_array = explode(',', $addl_pages_array);
           if ($addl_pages_array) {
             foreach($addl_pages_array as $page_id) {
-              $page_id = trim($page_id);
+              $page_id = intval(trim($page_id));
               $classes = 'cpt-nav-menu-item';
               if ($page_id == get_the_ID() || in_array($page_id, get_post_ancestors(get_the_ID()))) $classes .= ' current';
               if (get_option('cpt_client_dashboard_addl_pages_children') && cpt_get_child_pages($page_id)) $child_pages_array[$page_id] = cpt_get_child_pages($page_id);

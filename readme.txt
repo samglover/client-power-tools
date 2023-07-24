@@ -115,6 +115,12 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.7.5 - 2023-07-24
+
+#### Added
+- cpt_is_client_dashboard('additional page') now returns true on additional pages and their descendants.
+
+
 ### 1.7.4 - 2023-05-22
 
 #### Changed
