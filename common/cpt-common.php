@@ -32,15 +32,16 @@ function cpt_add_roles() {
   $admin->add_cap('cpt_manage_settings');
 }
 
-function cpt_is_client_dashboard($page = false) {
+function cpt_is_client_dashboard($tab = false) {
   global $wp_query;
-  $client_dashboard_id = get_option('cpt_client_dashboard_page_selection');
   $this_page_id = isset($wp_query->post->ID) ? $wp_query->post->ID : false;
-  
-  if (!$page && $this_page_id && $client_dashboard_id == $this_page_id) return true;
+  $client_dashboard_id = get_option('cpt_client_dashboard_page_selection');
 
-  if ($page) {
-    switch($page) {
+  if ($tab) {
+    switch ($tab) {
+      case 'dashboard':
+        if (!isset($_REQUEST['tab']) && $this_page_id && $this_page_id == $client_dashboard_id) return true;
+        break;
       case 'projects':
         if (isset($_REQUEST['tab']) && $_REQUEST['tab'] == 'projects') return true;
         break;
@@ -54,6 +55,12 @@ function cpt_is_client_dashboard($page = false) {
         if (cpt_is_additional_page()) return true;
         break;
     }
+  } else {
+    if (
+      $this_page_id && $this_page_id == $client_dashboard_id
+      || cpt_is_knowledge_base() 
+      || cpt_is_additional_page() 
+    ) return true;
   }
   return false;
 }
@@ -92,11 +99,18 @@ function cpt_is_additional_page() {
 
 add_filter('the_title', __NAMESPACE__ . '\cpt_client_dashboard_page_titles', 10, 2);
 function cpt_client_dashboard_page_titles($title, $post_id) {
-  if (!in_the_loop()) return $title;
-  $client_dashboard = get_option('cpt_client_dashboard_page_selection');
-  if (cpt_is_client_dashboard('projects') && $post_id == $client_dashboard) $title .= ': ' . cpt_get_projects_label('plural');
-  if (cpt_is_client_dashboard('messages') && $post_id == $client_dashboard) $title .= ': ' . __('Messages', 'client-power-tools');
-  return $title;
+  if (
+    !is_main_query() 
+    || !in_the_loop() 
+    || !cpt_is_client_dashboard()
+  ) return $title;
+
+  $client_dashboard_title = get_post(get_option('cpt_client_dashboard_page_selection'))->post_title;
+  $new_title = '<span class="cpt-client-dashboard-title">' . $client_dashboard_title . '</span><br>';
+
+  if (cpt_is_client_dashboard('messages')) return $new_title . __('Messages', 'client-power-tools');
+  if (cpt_is_client_dashboard('projects')) return $new_title . cpt_get_projects_label('plural');
+  return $new_title . $title;
 }
 
 

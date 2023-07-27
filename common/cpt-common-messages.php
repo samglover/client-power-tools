@@ -11,9 +11,9 @@ namespace Client_Power_Tools\Core\Common;
 
 function cpt_messages($clients_user_id) {
   if (
-    !$clients_user_id ||
-    (!cpt_is_client_dashboard('messages') && !is_admin()) ||
-    !get_option('cpt_module_messaging')
+    !get_option('cpt_module_messaging') 
+    || !$clients_user_id 
+    || (!cpt_is_client_dashboard('messages') && !is_admin())
   ) return;
 
   ?>

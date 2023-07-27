@@ -6,17 +6,17 @@ use Client_Power_Tools\Core\Common;
 // Noindexes the client dashboard because it's none of Google's business.
 add_action('wp_head',  __NAMESPACE__ . '\cpt_noindex_client_dashboard');
 function cpt_noindex_client_dashboard() {
-  if (cpt_is_cpt()) echo '<meta name="robots" content="noindex" />';
+  if (Common\cpt_is_client_dashboard()) echo '<meta name="robots" content="noindex" />';
 }
 
 
 add_filter('the_content', __NAMESPACE__ . '\cpt_client_dashboard');
 function cpt_client_dashboard($content) {
   if (
-    !cpt_is_cpt() || 
-    !is_main_query() || 
-    !in_the_loop() || 
-    get_post_type(get_the_ID()) == 'cpt_message'
+    !Common\cpt_is_client_dashboard() 
+    || !is_main_query() 
+    || !in_the_loop() 
+    || get_post_type(get_the_ID()) == 'cpt_message'
   ) return $content;
   
   if (!is_user_logged_in()) {
@@ -41,20 +41,18 @@ function cpt_client_dashboard($content) {
     update_user_meta($clients_user_id, 'cpt_last_activity', current_time('U', true));
 
     // Dashboard
-    if (Common\cpt_is_client_dashboard() && !isset($_REQUEST['tab'])) {
+    if (Common\cpt_is_client_dashboard('dashboard')) {
       $client_data = Common\cpt_get_client_data($clients_user_id);
       echo '<p><strong>' . sprintf(__('Welcome back, %s!', 'client-power-tools'), $client_data['first_name']) . '</p></strong>';
       if (
         get_option('cpt_module_status_update_req_button') && 
         !has_shortcode($content, 'status-update-request-button')
-      ) {
-        Common\cpt_status_update_request_button($clients_user_id);
-      }
-      $content = ob_get_clean() . $content;
+      ) Common\cpt_status_update_request_button($clients_user_id);
+      return ob_get_clean() . $content;
     }
 
     // Projects
-    if (Common\cpt_is_client_dashboard('projects')) {
+    if (get_option('cpt_module_projects') && Common\cpt_is_client_dashboard('projects')) {
       $projects_label = Common\cpt_get_projects_label();
       if (!isset($_REQUEST['projects_post_id'])) {
         Common\cpt_get_projects();
@@ -74,13 +72,12 @@ function cpt_client_dashboard($content) {
           if ($project_data['project_id']) echo ' <span style="color:silver">(' . $project_data['project_id'] . ')</span>';
         echo '</h2>';
         Common\cpt_get_project_progress_bar($projects_post_id);
-        // Common\cpt_get_project_meta($projects_post_id);
       }
-      $content = ob_get_clean();
+      return ob_get_clean();
     }
 
     // Messages
-    if (Common\cpt_is_client_dashboard('messages')) {
+    if (get_option('cpt_module_messaging') && Common\cpt_is_client_dashboard('messages')) {
       Common\cpt_messages($clients_user_id);
       ?>
         <div class="form-wrap cpt-new-message-form">
@@ -88,7 +85,7 @@ function cpt_client_dashboard($content) {
           <?php Common\cpt_new_message_form($clients_user_id); ?>
         </div>
       <?php
-      $content = ob_get_clean();
+      return ob_get_clean();
     }
     
   return $content;
@@ -96,16 +93,17 @@ function cpt_client_dashboard($content) {
 
 
 function cpt_nav() {
+  remove_filter('the_title', 'Client_Power_Tools\Core\Common\cpt_client_dashboard_page_titles', 10);
   $child_pages_array = [];
   ?>
     <nav id="cpt-nav">
       <ul class="cpt-tabs">
         <li class="cpt-tab"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard() && !isset($_REQUEST['tab'])) echo ' current'; ?>"><?php _e('Dashboard', 'client-power-tools'); ?></a></li>
-        <?php if (get_option('cpt_module_projects')) { ?>
-          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'projects', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('projects')) echo ' current'; ?>"><?php echo Common\cpt_get_projects_label('plural'); ?></a></li>
-        <?php } ?>
         <?php if (get_option('cpt_module_messaging')) { ?>
           <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('messages')) echo ' current'; ?>"><?php _e('Messages', 'client-power-tools'); ?></a></li>
+        <?php } ?>
+        <?php if (get_option('cpt_module_projects')) { ?>
+          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'projects', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('projects')) echo ' current'; ?>"><?php echo Common\cpt_get_projects_label('plural'); ?></a></li>
         <?php } ?>
         <?php
           $knowledge_base_id = get_option('cpt_knowledge_base_page_selection');
@@ -232,7 +230,7 @@ function cpt_kb_breadcrumbs() {
     || !Common\cpt_is_knowledge_base()
     || $this_page_id == $knowledge_base_id 
   ) return;
-  
+
   $breadcrumbs[] = '<span class="breadcrumb last-breadcrumb"><strong>' . get_the_title($this_page_id) . '</strong></span>';
   $parent_id = wp_get_post_parent_id($this_page_id);
   while ($parent_id) {

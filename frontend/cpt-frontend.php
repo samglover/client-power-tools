@@ -16,36 +16,6 @@ add_filter('body_class', function($classes) {
 });
 
 
-add_filter('the_content', __NAMESPACE__ . '\cpt_add_nav_to_addl_pages');
-function cpt_add_nav_to_addl_pages($content) {
-  $addl_pages_array = explode(',', get_option('cpt_client_dashboard_addl_pages'));
-  if (!is_main_query() || !in_the_loop() || !$addl_pages_array) return $content;
-
-  $protected = false;
-  $ancestors = get_post_ancestors(get_the_ID());
-
-  foreach ($addl_pages_array as $page_id) {
-    $page_id = trim($page_id);
-    if (in_array(get_the_ID(), $addl_pages_array)) $protected = true;
-    foreach ($ancestors as $ancestor) {
-      if (in_array($ancestor, $addl_pages_array)) $protected = true;
-    }
-  }
-  if (!$protected) return $content;
-  
-  if (!is_user_logged_in()) {
-    return sprintf(__('%1$sPlease %2$slog in%3$s to view this page.%4$s', 'client-power-tools'),
-      /* %1$s */ '<p>',
-      /* %2$s */ '<a class="cpt-login-link" href="#">',
-      /* %3$s */ '</a>',
-      /* %4$s */ '</p>'
-    );
-  }
-  if (!Common\cpt_is_client()) return '<p>' . __('Sorry, you don\'t have permission to view this page because your user account is missing the "Client" role.', 'client-power-tools') . '</p>';
-  return cpt_nav() . $content;
-}
-
-
 /**
  * Loads the login modal in the footer.
  */
@@ -91,15 +61,6 @@ function cpt_login() {
   <?php
 }
 
-
 function cpt_is_cpt() {
-  if (
-    Common\cpt_is_client_dashboard() || 
-    Common\cpt_is_client_dashboard('messages') || 
-    Common\cpt_is_knowledge_base()
-  ) {
-    return true;
-  } else {
-    return false;
-  }
+  return Common\cpt_is_client_dashboard();
 }
