@@ -33,21 +33,9 @@ function cpt_client_dashboard($content) {
 
   // Client Dashboard
   ob_start();
-    // Nav menu tabs
     cpt_nav();
-
-    // Notices
+    cpt_kb_breadcrumbs();
     Common\cpt_get_notices();
-
-    // Knowledge Base Breadcrumbs
-    $kb_id = get_option('cpt_knowledge_base_page_selection');
-    $kb_child_pages = cpt_get_child_pages($kb_id);
-    if (
-      Common\cpt_is_knowledge_base() &&
-      get_option('cpt_show_knowledge_base_breadcrumbs') &&
-      get_the_ID() != $kb_id && 
-      $kb_child_pages
-    ) cpt_kb_breadcrumbs();
 
     // Last Activity Timestamp
     update_user_meta($clients_user_id, 'cpt_last_activity', current_time('U', true));
@@ -236,16 +224,22 @@ function cpt_nav_tabs_submenu($parent_id) {
  * Knowledge Base Breadcrumbs
  */
 function cpt_kb_breadcrumbs() {
+  if (
+    !get_option('cpt_module_knowledge_base') || 
+    !get_option('cpt_show_knowledge_base_breadcrumbs') || 
+    !Common\cpt_is_knowledge_base() || 
+    get_the_ID() == get_option('cpt_knowledge_base_page_selection') || 
+    !cpt_get_child_pages(get_the_ID())
+  ) return;
+  
   $breadcrumbs[] = '<span class="breadcrumb last-breadcrumb"><strong>' . get_the_title(get_the_ID()) . '</strong></span>';
   $parent_id = wp_get_post_parent_id(get_the_ID());
-
   while ($parent_id) {
     $parent_url = get_the_permalink($parent_id);
     $parent_title = get_the_title($parent_id);
     $breadcrumbs[] = '<span class="breadcrumb"><a href="' . $parent_url . '">' . $parent_title . '</a></span>';
     $parent_id = wp_get_post_parent_id($parent_id);
   }
-
   $breadcrumbs = array_reverse($breadcrumbs);
 
   ?>
