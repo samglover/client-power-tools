@@ -51,19 +51,7 @@ function cpt_is_client_dashboard($page = false) {
         if (cpt_is_knowledge_base()) return true;
         break;
       case 'additional page' || 'additional pages':
-        $addl_pages_array = get_option('cpt_client_dashboard_addl_pages') ? get_option('cpt_client_dashboard_addl_pages') : false;
-        if ($addl_pages_array) {
-          $is_addl_page = false;
-          $addl_pages_array = explode(',', $addl_pages_array);
-          foreach ($addl_pages_array as $key => $page_id) {
-            $page_id = intval(trim($page_id));
-            if (
-              $page_id == $this_page_id || 
-              in_array($page_id, get_post_ancestors($this_page_id))
-            ) $is_addl_page = true;
-          }
-          if ($is_addl_page) return true;
-        }
+        if (cpt_is_additional_page()) return true;
         break;
     }
   }
@@ -79,6 +67,25 @@ function cpt_is_knowledge_base() {
 
   if ($this_page_id && $this_page_id == $knowledge_base_id) return true;
   if ($this_page_ancestors && in_array($knowledge_base_id, $this_page_ancestors)) return true;
+  return false;
+}
+
+function cpt_is_additional_page() {
+  global $wp_query;
+  $this_page_id = isset($wp_query->post->ID) ? $wp_query->post->ID : false;
+  $addl_pages_array = get_option('cpt_client_dashboard_addl_pages') ? get_option('cpt_client_dashboard_addl_pages') : false;
+  if ($addl_pages_array) {
+    $is_addl_page = false;
+    $addl_pages_array = explode(',', $addl_pages_array);
+    foreach ($addl_pages_array as $key => $page_id) {
+      $page_id = intval(trim($page_id));
+      if (
+        $page_id == $this_page_id || 
+        in_array($page_id, get_post_ancestors($this_page_id))
+      ) $is_addl_page = true;
+    }
+    if ($is_addl_page) return true;
+  }
   return false;
 }
 
