@@ -118,6 +118,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
     // Remove columns for disabled modules. (It's easier to remove columns add
     // them in the correct order.)
     if (!get_option('cpt_module_messaging')) unset($columns['client_messages']);
+    if (!get_option('cpt_module_projects')) unset($columns['client_projects']);
 
     return $columns;
   }

@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. The format 
 ### 1.7.6 - 2023-??-??
 
 ### Changed
+- No longer shows projects in the client list table if the Projects module is not active.
 - Consolidated Knowledge Base breadcrumbs logic in the cpt_kb_breadcrumbs() function.
 
 
