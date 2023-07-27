@@ -67,20 +67,19 @@ function cpt_is_client_dashboard($page = false) {
         break;
     }
   }
-
   return false;
 }
 
+
 function cpt_is_knowledge_base() {
   global $wp_query;
-  $knowledge_base_id    = get_option('cpt_knowledge_base_page_selection');
-  $this_page_id         = isset($wp_query->post->ID) ? $wp_query->post->ID : false;
-  $this_page_ancestors  = get_post_ancestors($this_page_id);
-  if ($this_page_id && ($knowledge_base_id == $this_page_id || in_array($knowledge_base_id, $this_page_ancestors))) {
-    return true;
-  } else {
-    return false;
-  }
+  $this_page_id = isset($wp_query->post->ID) ? $wp_query->post->ID : false;
+  $knowledge_base_id = get_option('cpt_knowledge_base_page_selection');
+  $this_page_ancestors = $this_page_id ? get_post_ancestors($this_page_id) : false;
+
+  if ($this_page_id && $this_page_id == $knowledge_base_id) return true;
+  if ($this_page_ancestors && in_array($knowledge_base_id, $this_page_ancestors)) return true;
+  return false;
 }
 
 

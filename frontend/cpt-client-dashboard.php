@@ -224,16 +224,17 @@ function cpt_nav_tabs_submenu($parent_id) {
  * Knowledge Base Breadcrumbs
  */
 function cpt_kb_breadcrumbs() {
+  $this_page_id = get_the_ID();
+  $knowledge_base_id = get_option('cpt_knowledge_base_page_selection');
   if (
-    !get_option('cpt_module_knowledge_base') || 
-    !get_option('cpt_show_knowledge_base_breadcrumbs') || 
-    !Common\cpt_is_knowledge_base() || 
-    get_the_ID() == get_option('cpt_knowledge_base_page_selection') || 
-    !cpt_get_child_pages(get_the_ID())
+    !get_option('cpt_module_knowledge_base') 
+    || !get_option('cpt_show_knowledge_base_breadcrumbs') 
+    || !Common\cpt_is_knowledge_base()
+    || $this_page_id == $knowledge_base_id 
   ) return;
   
-  $breadcrumbs[] = '<span class="breadcrumb last-breadcrumb"><strong>' . get_the_title(get_the_ID()) . '</strong></span>';
-  $parent_id = wp_get_post_parent_id(get_the_ID());
+  $breadcrumbs[] = '<span class="breadcrumb last-breadcrumb"><strong>' . get_the_title($this_page_id) . '</strong></span>';
+  $parent_id = wp_get_post_parent_id($this_page_id);
   while ($parent_id) {
     $parent_url = get_the_permalink($parent_id);
     $parent_title = get_the_title($parent_id);
