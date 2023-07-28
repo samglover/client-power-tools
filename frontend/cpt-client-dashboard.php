@@ -98,7 +98,7 @@ function cpt_nav() {
   ?>
     <nav id="cpt-nav">
       <ul class="cpt-tabs">
-        <li class="cpt-tab"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard() && !isset($_REQUEST['tab'])) echo ' current'; ?>"><?php _e('Dashboard', 'client-power-tools'); ?></a></li>
+        <li class="cpt-tab"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('dashboard') && !isset($_REQUEST['tab'])) echo ' current'; ?>"><?php _e('Dashboard', 'client-power-tools'); ?></a></li>
         <?php if (get_option('cpt_module_messaging')) { ?>
           <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('messages')) echo ' current'; ?>"><?php _e('Messages', 'client-power-tools'); ?></a></li>
         <?php } ?>
