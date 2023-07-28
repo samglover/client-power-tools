@@ -1,3 +1,8 @@
+.cpt-client-dashboard-title {
+  color: $light-text;
+  font-size: clamp(.5em, 16px, .8em);
+}
+
 #cpt-nav {
   margin-bottom: $spacing-md;
 

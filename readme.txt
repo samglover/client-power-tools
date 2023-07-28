@@ -115,6 +115,23 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.7.6 - 2023-07-27
+
+### Added
+- cpt_is_additional_page()
+- cpt_add_nav_to_addl_pages()
+
+### Changed
+- No longer shows projects in the client list table if the Projects module is not active.
+- Consolidated Knowledge Base breadcrumbs logic in the cpt_kb_breadcrumbs() function.
+- Clarified cpt_is_knowledge_base() logic.
+- cpt_is_client_dashboard() now functions more intuitively. If no arguments are given, it returns true if any dashboard page is being shown. Arguments may also be given in the form of an array.
+- Page titles within the client dashboard now include both the dashboard title and the name of the page for all pages.
+
+### Removed
+- Removed the confusingly named cpt_is_cpt() function from /frontend/frontend.php. cpt_is_client_dashboard() does the same job. (cpt_is_cpt() still works; it just returns the output of cpt_is_client_dashboard()).
+
+
 ### 1.7.5 - 2023-07-24
 
 #### Added

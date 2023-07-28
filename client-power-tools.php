@@ -4,7 +4,7 @@
  * Plugin Name: Client Power Tools
  * Plugin URI: https://clientpowertools.com
  * Description: Client Power Tools is an easy-to-use client dashboard, project management, and communication portal built for designers, developers, consultants, lawyers, and other professionals.
- * Version: 1.7.5
+ * Version: 1.7.6
  * Author: Sam Glover
  * Author URI: https://samglover.net
  * Text Domain: client-power-tools
@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) exit;
 /**
  * Constants
  */
-define('CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.7.5');
+define('CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.7.6');
 define('CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path(__FILE__));
 define('CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url(__FILE__));
 
@@ -58,7 +58,7 @@ if (!is_admin()) {
 		wp_register_script('cpt-frontend', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-frontend.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
 		wp_localize_script('cpt-frontend', 'cpt_vars', [
 			'postID'	=> $post ? $post->ID : null,
-			'isCPT'		=> Frontend\cpt_is_cpt(),
+			'isCPT'		=> Common\cpt_is_client_dashboard(),
 			'ajaxURL'	=> admin_url('admin-ajax.php'),
 			'nonce'		=> wp_create_nonce('cpt-login-nonce'),
 		]);
@@ -73,12 +73,6 @@ if (is_admin()) {
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'includes/class-wp-list-table.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin.php');
 
-	// Messages
-	if (get_option('cpt_module_messaging')) {
-		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin-messages.php');
-		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin-messages-table.php');
-	}
-
 	// Clients
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-clients.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-clients-table.php');
@@ -88,6 +82,12 @@ if (is_admin()) {
 	// Client Managers
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-managers.php');
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-client-manager-table.php');
+
+	// Messages
+	if (get_option('cpt_module_messaging')) {
+		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin-messages.php');
+		require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin-messages-table.php');
+	}
 
 	// Projects
 	if (get_option('cpt_module_projects')) {
