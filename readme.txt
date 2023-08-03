@@ -115,6 +115,15 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.7.7 - 2023-08-03
+
+### Changed
+- Renamed the primary dashboard page in the navigation tabs to "Home.'
+
+### Fixed
+- The home page title would show as "Client Dashboard: Client Dashboard" which was dumb. Fixed.
+- Moved the page title filter from /common/cpt-common.php to /frontend/cpt-frontend.php.
+
 ### 1.7.6 - 2023-07-27
 
 ### Added

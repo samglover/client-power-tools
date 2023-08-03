@@ -61,6 +61,26 @@ function cpt_login() {
   <?php
 }
 
+
+add_filter('the_title', __NAMESPACE__ . '\cpt_client_dashboard_page_titles', 10, 2);
+function cpt_client_dashboard_page_titles($title, $post_id) {
+  if (
+    !is_main_query() 
+    || !in_the_loop() 
+    || !Common\cpt_is_client_dashboard()
+  ) return $title;
+
+  $client_dashboard_title = get_post(get_option('cpt_client_dashboard_page_selection'))->post_title;
+  $new_title = '<span class="cpt-client-dashboard-title">' . $client_dashboard_title . '</span><br>';
+
+  if (Common\cpt_is_client_dashboard('dashboard')) return $new_title . __('Home', 'client-power-tools');
+  if (Common\cpt_is_client_dashboard('messages')) return $new_title . __('Messages', 'client-power-tools');
+  if (Common\cpt_is_client_dashboard('projects')) return $new_title . Common\cpt_get_projects_label('plural');
+  return $new_title . $title;
+}
+
+
+// Deprecated Functions
 function cpt_is_cpt() {
   return Common\cpt_is_client_dashboard();
 }
