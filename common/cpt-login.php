@@ -2,25 +2,9 @@
 
 namespace Client_Power_Tools\Core\Common;
 
-add_action('wp_ajax_nopriv_check_password', __NAMESPACE__ . '\check_password');
-function check_password() {
-  if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'cpt-login-nonce')) wp_send_json_error(['message' => __('Invalid nonce.', 'client-power-tools')]);
-  if (!isset($_POST['email']) || strlen($_POST['email']) < 1) wp_send_json_error(['message' => __('Email address is missing.', 'client-power-tools')]);
-  if (!isset($_POST['password']) || strlen($_POST['password']) < 1) wp_send_json_error(['message' => __('Password is missing.', 'client-power-tools')]);
-
-  $user = get_user_by('email', sanitize_email($_POST['email']));
-  $password = wp_check_password($_POST['password'], $user->data->user_pass, $user->ID);
-  if (!$user || !$password) wp_send_json_error(['message' => __('Login failed.', 'client-power-tools')]);
-
-  wp_set_current_user($user->ID);
-	wp_set_auth_cookie($user->ID, true);
-  wp_send_json_success(['message' => __('Logging you in …', 'client-power-tools')]);
-}
-
-
 add_action('wp_ajax_nopriv_send_login_code', __NAMESPACE__ . '\send_login_code');
 function send_login_code() {
-  if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'cpt-login-nonce')) wp_send_json_error(['message' => __('Invalid nonce.', 'client-power-tools')]);
+  if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'cpt-login')) wp_send_json_error(['message' => __('Invalid nonce.', 'client-power-tools')]);
   if (!isset($_POST['email']) || strlen($_POST['email']) < 1) wp_send_json_error(['message' => __('Email address is missing.', 'client-power-tools')]);
   if (!is_email(sanitize_email($_POST['email']))) wp_send_json_error(['message' => __('Please enter a valid email address.', 'client-power-tools')]);
 
@@ -62,7 +46,7 @@ function send_login_code() {
 
 add_action('wp_ajax_nopriv_check_login_code', __NAMESPACE__ . '\check_login_code');
 function check_login_code() {
-  if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'cpt-login-nonce')) wp_send_json_error(['message' => __('Invalid nonce.', 'client-power-tools')]);
+  if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'cpt-login')) wp_send_json_error(['message' => __('Invalid nonce.', 'client-power-tools')]);
   if (!isset($_POST['email']) || strlen($_POST['email']) < 1) wp_send_json_error(['message' => __('Email address is missing.', 'client-power-tools')]);
 
   $user = get_user_by('email', sanitize_email($_POST['email']));
@@ -89,6 +73,22 @@ function check_login_code() {
   }
 
   delete_transient('cpt_login_code_' . $user->ID);
+  wp_set_current_user($user->ID);
+	wp_set_auth_cookie($user->ID, true);
+  wp_send_json_success(['message' => __('Logging you in …', 'client-power-tools')]);
+}
+
+
+add_action('wp_ajax_nopriv_check_password', __NAMESPACE__ . '\check_password');
+function check_password() {
+  if (!isset($_POST['_ajax_nonce']) || !wp_verify_nonce($_POST['_ajax_nonce'], 'cpt-login')) wp_send_json_error(['message' => __('Invalid nonce.', 'client-power-tools')]);
+  if (!isset($_POST['email']) || strlen($_POST['email']) < 1) wp_send_json_error(['message' => __('Email address is missing.', 'client-power-tools')]);
+  if (!isset($_POST['password']) || strlen($_POST['password']) < 1) wp_send_json_error(['message' => __('Password is missing.', 'client-power-tools')]);
+
+  $user = is_email(sanitize_email($_POST['email'])) ? get_user_by('email', sanitize_email($_POST['email'])) : false;
+  $password = wp_check_password($_POST['password'], $user->data->user_pass, $user->ID);
+  if (!$user || !$password) wp_send_json_error(['message' => __('Login failed.', 'client-power-tools')]);
+
   wp_set_current_user($user->ID);
 	wp_set_auth_cookie($user->ID, true);
   wp_send_json_success(['message' => __('Logging you in …', 'client-power-tools')]);

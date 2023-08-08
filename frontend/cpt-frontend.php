@@ -31,6 +31,7 @@ function cpt_login() {
           <h2><?php _e('Client Login', 'client-power-tools'); ?></h2>
           <div id="cpt-login-messages"></div>
           <form id="cpt-login-form" name="cpt-login-form" action="<?php echo get_permalink(); ?>" method="post">
+            <?php wp_nonce_field('cpt-login', 'cpt-login-nonce'); ?>
             <p id="cpt-login-email">
               <label for="cpt-login-email-field">Email Address</label>
               <input id="cpt-login-email-field" class="input" name="cpt-login-email-field" type="text" autocomplete="username" value="" size="20">

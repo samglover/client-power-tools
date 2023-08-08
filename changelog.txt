@@ -2,30 +2,37 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
 
+
+### 1.7.8 - 2023-08-08
+
+#### Fixed
+- The login form would sometimes fail under unusual conditions. Now it should happily log you in as expected, or else deliver error messages instead of just sitting there opaquely.
+
+
 ### 1.7.7 - 2023-08-03
 
-### Changed
+#### Changed
 - Renamed the primary dashboard page in the navigation tabs to "Home.'
 - Moved the page title filter from /common/cpt-common.php to /frontend/cpt-frontend.php.
 
-### Fixed
+#### Fixed
 - The home page title would show as "Client Dashboard: Client Dashboard" which was dumb. Fixed.
 
 
 ### 1.7.6 - 2023-07-27
 
-### Added
+#### Added
 - cpt_is_additional_page()
 - cpt_add_nav_to_addl_pages()
 
-### Changed
+#### Changed
 - No longer shows projects in the client list table if the Projects module is not active.
 - Consolidated Knowledge Base breadcrumbs logic in the cpt_kb_breadcrumbs() function.
 - Clarified cpt_is_knowledge_base() logic.
 - cpt_is_client_dashboard() now functions more intuitively. If no arguments are given, it returns true if any dashboard page is being shown. Arguments may also be given in the form of an array.
 - Page titles within the client dashboard now include both the dashboard title and the name of the page for all pages.
 
-### Removed
+#### Removed
 - Removed the confusingly named cpt_is_cpt() function from /frontend/frontend.php. cpt_is_client_dashboard() does the same job. (cpt_is_cpt() still works; it just returns the output of cpt_is_client_dashboard()).
 
 

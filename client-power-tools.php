@@ -60,7 +60,6 @@ if (!is_admin()) {
 			'postID'	=> $post ? $post->ID : null,
 			'isCPT'		=> Common\cpt_is_client_dashboard(),
 			'ajaxURL'	=> admin_url('admin-ajax.php'),
-			'nonce'		=> wp_create_nonce('cpt-login-nonce'),
 		]);
 		wp_enqueue_script('cpt-frontend');
 	}

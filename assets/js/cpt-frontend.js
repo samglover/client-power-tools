@@ -65,6 +65,7 @@ if (cptModals) {
 }
 
 const messages = document.getElementById('cpt-login-messages');
+const nonceField = document.getElementById('cpt-login-nonce');
 const emailRow = document.getElementById('cpt-login-email');
 const emailField = document.getElementById('cpt-login-email-field');
 const passwordRow = document.getElementById('cpt-login-password');
@@ -112,7 +113,7 @@ function sendLoginCode(event) {
     type: 'POST',
     url: cpt_vars.ajaxURL,
     data: {
-      _ajax_nonce: cpt_vars.nonce,
+      _ajax_nonce: nonceField.value,
       action: 'send_login_code',
       email: emailField.value
     },
@@ -146,7 +147,7 @@ function checkLoginCode(event) {
     type: 'POST',
     url: cpt_vars.ajaxURL,
     data: {
-      _ajax_nonce: cpt_vars.nonce,
+      _ajax_nonce: nonceField.value,
       action: 'check_login_code',
       email: emailField.value ? emailField.value : decodeURIComponent(params.get('user')),
       code: codeField.value
@@ -169,14 +170,14 @@ function checkPassword(event) {
     type: 'POST',
     url: cpt_vars.ajaxURL,
     data: {
-      _ajax_nonce: cpt_vars.nonce,
+      _ajax_nonce: nonceField.value,
       action: 'check_password',
       email: emailField.value,
       password: passwordField.value
     },
     // beforeSend: function() {},
     success: function(response) {
-      // console.debug(response);
+      console.debug(response);
       displayMessages(response);
       if (response.success) location.reload();
     },
