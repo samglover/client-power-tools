@@ -91,7 +91,7 @@ function cpt_client_list() {
 function cpt_get_client_profile($clients_user_id) {
   if (!$clients_user_id) return;
   $client_data = Common\cpt_get_client_data($clients_user_id);
-  $client_name = Common\cpt_get_name($clients_user_id);
+  $client_name = Common\cpt_get_client_name($clients_user_id);
   ?>
     <nav class="cpt-buttons cpt-row gap-sm">
       <?php if (current_user_can('cpt_manage_clients')) { ?>

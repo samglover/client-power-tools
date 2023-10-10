@@ -10,6 +10,7 @@ function cpt_process_client_update() {
 
     $userdata = [
       'ID'            => $clients_user_id,
+      'client_name'   => sanitize_text_field($_POST['client_name']),
       'first_name'    => sanitize_text_field($_POST['first_name']),
       'last_name'     => sanitize_text_field($_POST['last_name']),
       'display_name'  => sanitize_text_field($_POST['first_name']) . ' ' . sanitize_text_field($_POST['last_name']),
@@ -22,10 +23,12 @@ function cpt_process_client_update() {
       $result = 'Client could not be updated. Error message: ' . $clients_user_id->get_error_message();
     } else {
       $client_id      = sanitize_text_field($_POST['client_id']);
+      $client_name    = sanitize_text_field($_POST['client_name']);
       $client_manager = sanitize_text_field($_POST['client_manager']);
       $client_status  = sanitize_text_field($_POST['client_status']);
 
       update_user_meta($clients_user_id, 'cpt_client_id', $client_id);
+      update_user_meta($clients_user_id, 'cpt_client_name', $client_name);
       update_user_meta($clients_user_id, 'cpt_client_manager', $client_manager);
       update_user_meta($clients_user_id, 'cpt_client_status', $client_status);
 

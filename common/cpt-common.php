@@ -151,6 +151,15 @@ function cpt_get_knowledge_base_url() {
 }
 
 
+// Requires the primary contact's user ID because the client object IS the primary contact.
+function cpt_get_client_name($user_id) {
+  if (!$user_id) return;
+  $client_name = get_user_meta($user_id, 'cpt_client_name', true);
+  if (!$client_name) $client_name = cpt_get_name($user_id);
+  return $client_name;
+}
+
+
 function cpt_get_name($user_id) {
   if (!$user_id) return;
   $userdata = get_userdata($user_id);
@@ -176,6 +185,7 @@ function cpt_get_client_data($clients_user_id) {
   $userdata = get_userdata($clients_user_id);
   $client_data = [
     'user_id'       => $clients_user_id,
+    'client_name'   => cpt_get_client_name($clients_user_id),
     'first_name'    => get_user_meta($clients_user_id, 'first_name', true),
     'last_name'     => get_user_meta($clients_user_id, 'last_name', true),
     'email'         => $userdata->user_email,

@@ -7,6 +7,19 @@
   <?php wp_nonce_field('cpt_new_client_added', 'cpt_new_client_nonce'); ?>
   <input name="action" value="cpt_new_client_added" type="hidden">
   <div class="cpt-row">
+    <div class="form-field">
+      <label for="client_id"><?php _e('Client ID', 'client-power-tools'); ?></label>
+      <input name="client_id" id="client_id" class="regular-text" type="text" autocapitalize="none" autocorrect="off">
+    </div>
+      <div class="form-field span-3">
+        <label for="client_name"><?php _e('Client Name', 'client-power-tools'); ?></label>
+        <input name="client_name" id="client_name" class="regular-text" type="text" autocapitalize="none" autocorrect="off">
+      </div>
+  </div>
+  <div class="cpt-row">
+    <p class="cpt-section-header span-3"><?php _e('Primary Contact', 'client-power-tools'); ?></p>
+  </div>
+  <div class="cpt-row">
     <div class="form-field span-2">
       <label for="first_name"><?php printf(__('First Name %s(required)%s', 'client-power-tools'), '<small>', '</small>'); ?></label>
       <input name="first_name" id="first_name" class="regular-text" type="text" required aria-required="true">
@@ -23,10 +36,19 @@
     </div>
   </div>
   <div class="cpt-row">
-    <div class="form-field">
-      <label for="client_id"><?php _e('Client ID', 'client-power-tools'); ?></label>
-      <input name="client_id" id="client_id" class="regular-text" type="text" autocapitalize="none" autocorrect="off">
+    <p class="cpt-section-header span-3"><?php _e('Additional Contacts', 'client-power-tools'); ?></p>
+  </div>
+  <div class="cpt-row">
+    <div class="form-field span-3">
+      <label for="email_ccs"><?php _e('Email Addresses to CC When Sending Messages', 'client-power-tools'); ?></label>
+      <textarea name="email_ccs" id="email_ccs" class="regular-text" rows="3" type="text" autocapitalize="none" autocorrect="off"></textarea>
+      <p class="description"><?php _e('Enter one email address per line.', 'client-power-tools'); ?></p>
     </div>
+  </div>
+  <div class="cpt-row">
+    <p class="cpt-section-header span-3"><?php _e('Client Details', 'client-power-tools'); ?></p>
+  </div>
+  <div class="cpt-row">
     <div class="form-field">
       <label for="client_manager"><?php _e('Client Manager', 'client-power-tools'); ?></label>
       <?php echo cpt_get_client_manager_select() ?>

@@ -81,7 +81,8 @@ function cpt_client_dashboard_page_titles($title, $post_id) {
 }
 
 
-// Deprecated Functions
+// @deprecated
 function cpt_is_cpt() {
+  trigger_error('Function ' . __FUNCTION__ . ' is deprecated as of 1.7.6 and will be removed soon.', E_USER_DEPRECATED);
   return Common\cpt_is_client_dashboard();
 }

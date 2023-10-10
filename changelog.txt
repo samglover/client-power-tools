@@ -32,8 +32,8 @@ All notable changes to this project will be documented in this file. The format 
 - cpt_is_client_dashboard() now functions more intuitively. If no arguments are given, it returns true if any dashboard page is being shown. Arguments may also be given in the form of an array.
 - Page titles within the client dashboard now include both the dashboard title and the name of the page for all pages.
 
-#### Removed
-- Removed the confusingly named cpt_is_cpt() function from /frontend/frontend.php. cpt_is_client_dashboard() does the same job. (cpt_is_cpt() still works; it just returns the output of cpt_is_client_dashboard()).
+#### Deprecated
+- Deprecated the confusingly named cpt_is_cpt() function from /frontend/frontend.php. cpt_is_client_dashboard() does the same job. (cpt_is_cpt() still works; it just returns the output of cpt_is_client_dashboard()).
 
 
 ### 1.7.5 - 2023-07-24
