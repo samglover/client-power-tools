@@ -29,7 +29,7 @@ function cpt_clients() {
             <h1 id="cpt-page-title">
               <?php 
                 if ($clients_user_id) {
-                  echo Common\cpt_get_name($clients_user_id); 
+                  echo $client_data['client_name'];
                 } else {
                   echo 'Error: No such client.';
                 }
@@ -44,7 +44,7 @@ function cpt_clients() {
                   if (get_current_user_id() == $client_data['manager_id']) {
                     _e('Your Client', 'client-power-tools');
                   } else {
-                    echo Common\cpt_get_name($client_data['manager_id']) . '\'s ' . __('Client', 'client-power-tools');
+                    echo Common\cpt_get_display_name($client_data['manager_id']) . '\'s ' . __('Client', 'client-power-tools');
                   }
                 ?>
               </p>

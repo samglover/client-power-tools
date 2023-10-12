@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
 
 
+### 1.8 - 2023-10-12
+
+#### Added
+- Separate client name and primary contact name.
+- Add additional contacts to be CCed on messages.
+
+
 ### 1.7.8 - 2023-08-08
 
 #### Fixed

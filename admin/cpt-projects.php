@@ -43,7 +43,7 @@ function cpt_projects() {
               <p id="cpt-project-client">
                 <?php
                   if (get_current_user_id() == $client_data['manager_id']) echo __('Your Client', 'client-power-tools') . ' ';
-                  echo Common\cpt_get_name($client_data['user_id']) . '\'s ' . $projects_label[0];
+                  echo Common\cpt_get_client_name($client_data['user_id']) . '\'s ' . $projects_label[0];
                 ?>
               </p>
             <?php } ?>

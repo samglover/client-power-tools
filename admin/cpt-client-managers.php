@@ -146,10 +146,10 @@ function cpt_new_client_manager_email($user_id) {
 
   $user           = get_userdata($user_id);
   $current_user   = wp_get_current_user();
-  $from_name      = Common\cpt_get_name($user->ID);
+  $from_name      = Common\cpt_get_display_name($user->ID);
   $from_email     = $user->user_email;
   $headers[]      = 'Content-Type: text/html; charset=UTF-8';
-  $headers[]      = 'From: ' . Common\cpt_get_name($current_user->ID) . ' <' . $current_user->user_email . '>';
+  $headers[]      = 'From: ' . Common\cpt_get_display_name($current_user->ID) . ' <' . $current_user->user_email . '>';
   $to             = $user->user_email;
   $subject        = 'Your client manager account has been created. Please set your password.';
   $activation_key = get_password_reset_key($user);
