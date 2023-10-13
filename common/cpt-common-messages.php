@@ -32,9 +32,10 @@ function cpt_message_list($clients_user_id) {
   $cpt_messages = new \WP_Query([
     'meta_key'    => 'cpt_clients_user_id',
     'meta_value'  => $clients_user_id,
+    'orderby'     => ['date' => 'DESC'],
     'paged'       => $paged,
     'post_type'   => 'cpt_message',
- ]);
+  ]);
 
   if ($cpt_messages->have_posts()) :
     while ($cpt_messages->have_posts()): $cpt_messages->the_post();
@@ -46,13 +47,21 @@ function cpt_message_list($clients_user_id) {
 
       if (get_the_author_meta('ID') == get_current_user_id()) {
         $message_classes[]  = 'my-message';
-        $message_meta       .= __('Sent', 'client-power-tools');
+        $message_meta       .= __('Sent by you ', 'client-power-tools');
       } else {
         $message_classes[] = 'not-my-message';
         $message_meta .= __('Sent by ', 'client-power-tools') . get_the_author();
       }
 
-      $message_meta .= ' on ' . get_the_date('F jS, Y, \a\t g:i a') . '</p>';
+      $message_meta .= ' ' . __('on', 'client-power-tools') . ' ' . get_the_date('F jS, Y') . ' ' . __('at', 'client-power-tools') . ' ' . get_the_date('g:i a') . '.';
+
+      $email_to = get_post_meta($message_id, 'cpt_email_to', true) ? get_post_meta($message_id, 'cpt_email_to', true) : get_the_author_meta('user_email');
+      $email_ccs = cpt_cleanse_array_of_emails(explode("\n", get_post_meta($message_id, 'cpt_email_ccs', true)));
+
+      $message_meta .= ' ' . __('Sent to', 'client-power-tools') . ' ' . $email_to . '.';
+      if (count($email_ccs)) $message_meta .= ' ' . __('CCed to', 'client-power-tools') . ' ' . cpt_array_to_strlist($email_ccs) . '.';
+      
+      $message_meta .= '</p>';
 
       ?>
         <div id="cpt-message-<?php echo $message_id; ?>" class="<?php echo implode(' ', $message_classes); ?>">
@@ -103,7 +112,7 @@ function cpt_new_message_form($clients_user_id) {
           <div class="form-field span-6">
             <label for="subject_line"><?php _e('Subject Line', 'client-power-tools'); ?></label>
             <input name="subject_line" id="subject_line" class="large-text" type="text">
-            <p class="description"><?php printf(__('If you leave this field empty the subject line will be "New message from %s".', 'client-power-tools'), cpt_get_name(get_current_user_id())); ?></p>
+            <p class="description"><?php printf(__('If you leave this field empty the subject line will be "New message from %s".', 'client-power-tools'), cpt_get_display_name(get_current_user_id())); ?></p>
           </div>
         </div>
         <div class="cpt-row">
@@ -113,6 +122,30 @@ function cpt_new_message_form($clients_user_id) {
           </div>
         </div>
         <?php if (is_admin()) { ?>
+          <?php 
+            $email_ccs = explode("\n", get_user_meta($clients_user_id, 'cpt_email_ccs', true));
+            $email_ccs = cpt_cleanse_array_of_emails($email_ccs);
+            if ($email_ccs) { 
+              ?>
+                <div class="cpt-row">
+                  <div class="form-field span-6">
+                    <fieldset>
+                      <legend>Email CCs</legend>
+                      <?php 
+                        foreach($email_ccs as $key => $val) {
+                          echo '<label for="email_cc_' . $key . '">';
+                            echo '<input name="email_ccs[]" value="' . $val . '" id="email_cc_' . $key . '" type="checkbox" checked>';
+                            echo ' ' . $val;
+                          echo '</label>';
+                        } 
+                      ?>
+                    </fieldset>
+                    <p class="description"><?php _e('To add or remove emails, use the Edit Client button, above.', 'client-power-tools'); ?></p>
+                  </div>
+                </div>
+              <?php 
+            } 
+          ?>
           <div class="cpt-row">
             <div class="form-field span-6">
               <fieldset>
@@ -157,6 +190,7 @@ function cpt_process_new_message() {
     $post_title       = wp_strip_all_tags(sanitize_text_field($_POST['subject_line']));
     $post_content     = wp_kses_post($_POST['message']);
     $clients_user_id  = sanitize_key(intval($_POST['clients_user_id']));
+    $client_data      = cpt_get_client_data($clients_user_id);
 
     // Figures out whether to send the full content of this message.
     $send_msg_content_default = get_option('cpt_send_message_content');
@@ -181,6 +215,8 @@ function cpt_process_new_message() {
      * hash from the timestamp plus a random integer, making the message URL
      * pretty much impossible to guess.
      */
+    $email_ccs = isset($_POST['email_ccs']) ? $_POST['email_ccs'] : false;
+    $email_ccs = implode("\n", cpt_cleanse_array_of_emails($email_ccs));
     $new_message = [
       'post_name'     => md5(time() . random_int(0, PHP_INT_MAX)),
       'post_title'    => $post_title,
@@ -190,7 +226,9 @@ function cpt_process_new_message() {
       'meta_input'    => [
         'cpt_clients_user_id'       => $clients_user_id,
         'cpt_send_message_content'  => $send_this_msg_content,
-     ],
+        'cpt_email_to'              => isset($_POST['email_to']) ? $_POST['email_to'] : false,
+        'cpt_email_ccs'             => isset($_POST['email_ccs']) ? implode("\n", $_POST['email_ccs']) : false,
+      ],
    ];
 
     $post = wp_insert_post($new_message, $wp_error);
@@ -223,9 +261,12 @@ function cpt_message_notification($message_id) {
 
   $from_name        = get_the_author_meta('display_name', $msg_obj->post_author);
   $from_email       = get_the_author_meta('user_email', $msg_obj->post_author);
+  $email_ccs        = explode("\n", get_post_meta($message_id, 'cpt_email_ccs', true));
 
   $headers[]        = 'Content-Type: text/html; charset=UTF-8';
   $headers[]        = 'From: ' . $from_name . ' <' . $from_email . '>';
+
+  foreach ($email_ccs as $i => $cc) $headers[] = 'Cc: ' . trim($cc);
 
   $subject          = $msg_obj->post_title ? $msg_obj->post_title : sprintf(__('You have a new message from %s', 'client-power-tools'), $from_name);
 

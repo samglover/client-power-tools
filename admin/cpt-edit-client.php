@@ -10,6 +10,7 @@ function cpt_process_client_update() {
 
     $userdata = [
       'ID'            => $clients_user_id,
+      'client_name'   => sanitize_text_field($_POST['client_name']),
       'first_name'    => sanitize_text_field($_POST['first_name']),
       'last_name'     => sanitize_text_field($_POST['last_name']),
       'display_name'  => sanitize_text_field($_POST['first_name']) . ' ' . sanitize_text_field($_POST['last_name']),
@@ -22,10 +23,14 @@ function cpt_process_client_update() {
       $result = 'Client could not be updated. Error message: ' . $clients_user_id->get_error_message();
     } else {
       $client_id      = sanitize_text_field($_POST['client_id']);
+      $client_name    = sanitize_text_field($_POST['client_name']);
+      $email_ccs      = sanitize_textarea_field($_POST['email_ccs']);
       $client_manager = sanitize_text_field($_POST['client_manager']);
       $client_status  = sanitize_text_field($_POST['client_status']);
 
       update_user_meta($clients_user_id, 'cpt_client_id', $client_id);
+      update_user_meta($clients_user_id, 'cpt_client_name', $client_name);
+      update_user_meta($clients_user_id, 'cpt_email_ccs', $email_ccs);
       update_user_meta($clients_user_id, 'cpt_client_manager', $client_manager);
       update_user_meta($clients_user_id, 'cpt_client_status', $client_status);
 
@@ -68,7 +73,7 @@ function cpt_delete_client_modal($clients_user_id) {
 function cpt_delete_client_button($clients_user_id) {
   if (!$clients_user_id) return;
 
-  $client_name  = Common\cpt_get_name($clients_user_id);
+  $client_name  = Common\cpt_get_client_name($clients_user_id);
   $button_txt   = __('Delete') . ' ' . $client_name;
 
   ?>
@@ -85,8 +90,8 @@ function cpt_delete_client_button($clients_user_id) {
 add_action('admin_post_cpt_client_deleted', __NAMESPACE__ . '\cpt_process_delete_client');
 function cpt_process_delete_client() {
   if (isset($_POST['cpt_client_deleted_nonce']) && wp_verify_nonce($_POST['cpt_client_deleted_nonce'], 'cpt_client_deleted')) {
-    $clients_user_id      = sanitize_key(intval($_POST['clients_user_id']));
-    $client_name  = Common\cpt_get_name($clients_user_id);
+    $clients_user_id = sanitize_key(intval($_POST['clients_user_id']));
+    $client_name  = Common\cpt_get_client_name($clients_user_id);
 
     $cpt_messages   = get_posts([
       'fields'          => 'ids',

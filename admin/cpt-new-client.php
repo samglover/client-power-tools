@@ -37,6 +37,8 @@ function cpt_process_new_client() {
     $result = 'Client could not be created. Error message: ' . $new_client->get_error_message();
   } else {
     update_user_meta($new_client, 'cpt_client_id', sanitize_text_field($_POST['client_id']));
+    update_user_meta($new_client, 'cpt_client_name', sanitize_text_field($_POST['client_name']));
+    update_user_meta($new_client, 'cpt_email_ccs', sanitize_textarea_field($_POST['email_ccs']));
     update_user_meta($new_client, 'cpt_client_manager', sanitize_text_field($_POST['client_manager']));
     update_user_meta($new_client, 'cpt_client_status', sanitize_text_field($_POST['client_status']));
 
@@ -49,7 +51,7 @@ function cpt_process_new_client() {
 
     if (!$existing_client_id) cpt_new_client_email($new_client);
     $client_profile_url = Common\cpt_get_client_profile_url($new_client);
-    $result = 'Client created. <a href="' . $client_profile_url . '">View ' . Common\cpt_get_name($new_client) . '\'s profile</a>.';
+    $result = 'Client created. <a href="' . $client_profile_url . '">View ' . Common\cpt_get_client_name($new_client) . '\'s profile</a>.';
   }
 
   set_transient('cpt_notice_for_user_' . get_current_user_id(), $result, 15);
@@ -65,7 +67,7 @@ function cpt_new_client_email($clients_user_id) {
 
   $user = get_userdata($clients_user_id);
   $client_data = Common\cpt_get_client_data($clients_user_id);
-  $from_name = Common\cpt_get_name($client_data['manager_id']);
+  $from_name = Common\cpt_get_display_name($client_data['manager_id']);
   $from_email = $client_data['manager_email'];
   $headers[] = 'Content-Type: text/html; charset=UTF-8';
   $headers[] = $from_name ? 'From: ' . $from_name . ' <' . $from_email . '>' : 'From: ' . $from_email;

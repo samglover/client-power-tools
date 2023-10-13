@@ -18,7 +18,7 @@
           <option disabled selected value><?php _e('Select client.', 'client-power-tools'); ?></option>
           <?php
             foreach ($client_ids as $client_id) {
-              echo '<option value="' . $client_id . '"' . selected($client_id, $user_id) . '>' . Common\cpt_get_name($client_id) . '</option>';
+              echo '<option value="' . $client_id . '"' . selected($client_id, $user_id) . '>' . Common\cpt_get_client_name($client_id) . '</option>';
             }
           ?>
         </select>

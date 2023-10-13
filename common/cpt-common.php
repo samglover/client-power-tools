@@ -151,7 +151,16 @@ function cpt_get_knowledge_base_url() {
 }
 
 
-function cpt_get_name($user_id) {
+// Requires the primary contact's user ID because the client object IS the primary contact.
+function cpt_get_client_name($user_id) {
+  if (!$user_id) return;
+  $client_name = get_user_meta($user_id, 'cpt_client_name', true);
+  if (!$client_name) $client_name = cpt_get_display_name($user_id);
+  return $client_name;
+}
+
+
+function cpt_get_display_name($user_id) {
   if (!$user_id) return;
   $userdata = get_userdata($user_id);
   if (!$userdata) return;
@@ -176,9 +185,11 @@ function cpt_get_client_data($clients_user_id) {
   $userdata = get_userdata($clients_user_id);
   $client_data = [
     'user_id'       => $clients_user_id,
+    'client_name'   => cpt_get_client_name($clients_user_id),
     'first_name'    => get_user_meta($clients_user_id, 'first_name', true),
     'last_name'     => get_user_meta($clients_user_id, 'last_name', true),
     'email'         => $userdata->user_email,
+    'email_ccs'     => get_user_meta($clients_user_id, 'cpt_email_ccs', true),
     'client_id'     => get_user_meta($clients_user_id, 'cpt_client_id', true),
     'manager_id'    => cpt_get_client_manager_id($clients_user_id),
     'manager_email' => cpt_get_client_manager_email($clients_user_id),
@@ -263,4 +274,54 @@ function cpt_get_notices() {
     </div>
   <?php
   delete_transient($transient);
+}
+
+
+function cpt_cleanse_array_of_emails($array) {
+  if (!$array || !is_array($array)) return;
+  foreach($array as $key => $val) {
+    if (empty(trim($val))) {
+      unset($array[$key]);
+    } else {
+      $array[$key] = sanitize_email(trim($val));
+    }
+  }
+  return $array;
+}
+
+
+function cpt_cleanse_array_of_strings($array) {
+  if (!$array || !is_array($array)) return;
+  foreach($array as $key => $val) {
+    if (empty(trim($val))) {
+      unset($array[$key]);
+    } else {
+      $array[$key] = sanitize_text_field(trim($val));
+    }
+  }
+  return $array;
+}
+
+
+function cpt_array_to_strlist($array) {
+  if (!$array || !is_array($array)) return;
+  $list = '';
+  switch (count($array)) {
+    case 0:
+      return false;
+    case 1:
+      return trim($array[0]);
+    case 2:
+      return trim($array[0]) . ' ' . __('and') . ' ' . $array[1];
+    case (count($array) >= 3):
+      foreach($array as $key => $val) {
+        $list .= trim($val);
+        if ($key < count($array) - 2) {
+          $list .= ', '; 
+        } elseif ($key < count($array) - 1) {
+          $list .= ', and '; 
+        }
+      }
+  }
+  return $list;
 }

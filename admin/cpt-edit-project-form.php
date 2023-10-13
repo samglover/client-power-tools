@@ -16,7 +16,7 @@
       <?php if ($client_ids) { ?>
         <select name="client_id" id="client_id" required>
           <?php foreach ($client_ids as $client_id) { ?>
-            <option value="<?php echo $client_id; ?>"<?php selected(get_post_meta($projects_post_id, 'cpt_client_id', true), $client_id); ?>><?php echo Common\cpt_get_name($client_id); ?></option>
+            <option value="<?php echo $client_id; ?>"<?php selected(get_post_meta($projects_post_id, 'cpt_client_id', true), $client_id); ?>><?php echo Common\cpt_get_client_name($client_id); ?></option>
           <?php } ?>
         </select>
       <?php } ?>

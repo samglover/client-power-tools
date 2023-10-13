@@ -139,7 +139,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
   function get_views() {
     $params         = explode("\n", get_option('cpt_client_statuses'));
     $current_status = isset($_REQUEST['client_status']) ? sanitize_text_field(urldecode($_REQUEST['client_status'])) : 'all';
-    $curr_user      = Common\cpt_get_name(get_current_user_id());
+    $curr_user      = Common\cpt_get_display_name(get_current_user_id());
     $curr_mgr_param = isset($_REQUEST['client_manager']) ? sanitize_text_field(urldecode($_REQUEST['client_manager'])) : '';
     $views          = array();
     $client_ids     = Common\cpt_get_clients(['fields' => 'ID']);
@@ -218,7 +218,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
           if (!in_array('cpt-client-manager', $manager_data->roles)) {
             $manager_name = '<span style="color: silver;">Unassigned</span>';
           } else {
-            $manager_name = trim(Common\cpt_get_name($manager_data->ID));
+            $manager_name = trim(Common\cpt_get_display_name($manager_data->ID));
           }
         } else {
           $manager_name = '<span style="color: silver;">Unassigned</span>';
@@ -226,7 +226,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
         $data[] = [
           'ID'              => $client->ID,
-          'client_name'     => $client->display_name,
+          'client_name'     => get_user_meta($client->ID, 'cpt_client_name', true),
           'client_email'    => $client->user_email,
           'client_id'       => get_user_meta($client->ID, 'cpt_client_id', true),
           'client_manager'  => $manager_name,
