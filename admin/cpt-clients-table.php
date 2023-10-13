@@ -226,7 +226,7 @@ class Client_List_Table extends Includes\WP_List_Table  {
 
         $data[] = [
           'ID'              => $client->ID,
-          'client_name'     => get_user_meta($client->ID, 'cpt_client_name', true),
+          'client_name'     => Common\cpt_get_client_name($client->ID),
           'client_email'    => $client->user_email,
           'client_id'       => get_user_meta($client->ID, 'cpt_client_id', true),
           'client_manager'  => $manager_name,

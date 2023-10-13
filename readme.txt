@@ -115,7 +115,13 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
-### 1.8 - 2023-10-12
+### 1.8.1 - 2023-10-13
+
+#### Fixed
+- Get client name for the admin client list table.
+
+
+### 1.8 - 2023-10-13
 
 #### Added
 - Separate client name and primary contact name.
