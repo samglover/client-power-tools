@@ -115,6 +115,13 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.8 - 2023-10-12
+
+#### Added
+- Separate client name and primary contact name.
+- Add additional contacts to be CCed on messages.
+
+
 ### 1.7.8 - 2023-08-08
 
 #### Fixed
