@@ -119,6 +119,7 @@ For more information on how to take advantage of the new and updated features, s
 
 #### Fixed
 - Get client name for the admin client list table.
+- Don't show recipients if they weren't stored when sending the message.
 
 
 ### 1.8 - 2023-10-13

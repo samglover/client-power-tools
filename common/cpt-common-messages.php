@@ -55,10 +55,10 @@ function cpt_message_list($clients_user_id) {
 
       $message_meta .= ' ' . __('on', 'client-power-tools') . ' ' . get_the_date('F jS, Y') . ' ' . __('at', 'client-power-tools') . ' ' . get_the_date('g:i a') . '.';
 
-      $email_to = get_post_meta($message_id, 'cpt_email_to', true) ? get_post_meta($message_id, 'cpt_email_to', true) : get_the_author_meta('user_email');
+      $email_to = get_post_meta($message_id, 'cpt_email_to', true) ? get_post_meta($message_id, 'cpt_email_to', true) : false;
       $email_ccs = cpt_cleanse_array_of_emails(explode("\n", get_post_meta($message_id, 'cpt_email_ccs', true)));
 
-      $message_meta .= ' ' . __('Sent to', 'client-power-tools') . ' ' . $email_to . '.';
+      if ($email_to) $message_meta .= ' ' . __('Sent to', 'client-power-tools') . ' ' . $email_to . '.';
       if (count($email_ccs)) $message_meta .= ' ' . __('CCed to', 'client-power-tools') . ' ' . cpt_array_to_strlist($email_ccs) . '.';
       
       $message_meta .= '</p>';
