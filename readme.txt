@@ -3,7 +3,7 @@
 Contributors: samglover
 Tags: client management, project management, portal, restrict content, frontend login
 Requires at least: 5.5
-Tested up to: 6.2
+Tested up to: 6.4.2
 Requires PHP: 7.3.5
 Stable tag: trunk
 License: GPLv3
@@ -100,20 +100,22 @@ To add pages to your knowledge base, just go to the page you want to add (or cre
 
 == Upgrade Notice ==
 
-With version 1.6 it is now possible to add pages to the client dashboard. Pages added will be restricted to logged-in clients.
+With version 1.8 your client can have a separate name than the primary contact, and you can add additional contacts to each client to receive CCs on messages.
 
-Version 1.5 makes a major change: passwordless login. By default, clients now request a login code by email—no password necessary. (Logging in with a username and password is still supported.)
-
-Passwordless login saves your clients from having to remember their username and password. Instead, they enter their email address to request a one-time-use login code that expires after 10 minutes. On entering the correct code, they will be logged in.
-
-Since WordPress has long supported password reset by email, passwordless login by email is much more convenient but no less secure.
-
-As usual, there are also lots of smaller updates, improvements, and tweaks.
+As usual, there are also lots of smaller updates, improvements, and tweaks. See the changelog for details.
 
 For more information on how to take advantage of the new and updated features, see the [documentation](https://clientpowertools.com/documentation/).
 
 
 == Changelog ==
+
+### 1.8.2 - 2024-01-08
+
+#### Changed
+- Client manager and custom fields are wider.
+- Disabled project type taxonomy archive pages.
+- Disabled autocomplete on the new- and edit-client forms.
+
 
 ### 1.8.1 - 2023-10-13
 

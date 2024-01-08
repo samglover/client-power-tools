@@ -3,17 +3,17 @@
   use Client_Power_Tools\Core\Common;
 ?>
 
-<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" autocapitalize="none" autocorrect="off" autocomplete="off">
   <?php wp_nonce_field('cpt_new_client_added', 'cpt_new_client_nonce'); ?>
   <input name="action" value="cpt_new_client_added" type="hidden">
   <div class="cpt-row">
     <div class="form-field">
       <label for="client_id"><?php _e('Client ID', 'client-power-tools'); ?></label>
-      <input name="client_id" id="client_id" class="regular-text" type="text" autocapitalize="none" autocorrect="off">
+      <input name="client_id" id="client_id" class="regular-text" type="text">
     </div>
       <div class="form-field span-3">
         <label for="client_name"><?php _e('Client Name', 'client-power-tools'); ?></label>
-        <input name="client_name" id="client_name" class="regular-text" type="text" autocapitalize="none" autocorrect="off">
+        <input name="client_name" id="client_name" class="regular-text" type="text">
       </div>
   </div>
   <div class="cpt-row">
@@ -32,7 +32,7 @@
   <div class="cpt-row">
     <div class="form-field span-3">
       <label for="email"><?php printf(__('Email Address %s(required)%s', 'client-power-tools'), '<small>', '</small>'); ?></label>
-      <input name="email" id="email" class="regular-text" type="text" required aria-required="true" autocapitalize="none" autocorrect="off">
+      <input name="email" id="email" class="regular-text" type="text" required aria-required="true">
     </div>
   </div>
   <div class="cpt-row">
@@ -41,7 +41,7 @@
   <div class="cpt-row">
     <div class="form-field span-3">
       <label for="email_ccs"><?php _e('Email Addresses to CC When Sending Messages', 'client-power-tools'); ?></label>
-      <textarea name="email_ccs" id="email_ccs" class="regular-text" rows="3" type="text" autocapitalize="none" autocorrect="off"></textarea>
+      <textarea name="email_ccs" id="email_ccs" class="regular-text" rows="3" type="text"></textarea>
       <p class="description"><?php _e('Enter one email address per line.', 'client-power-tools'); ?></p>
     </div>
   </div>
@@ -49,7 +49,7 @@
     <p class="cpt-section-header span-3"><?php _e('Client Details', 'client-power-tools'); ?></p>
   </div>
   <div class="cpt-row">
-    <div class="form-field">
+    <div class="form-field span-2">
       <label for="client_manager"><?php _e('Client Manager', 'client-power-tools'); ?></label>
       <?php echo cpt_get_client_manager_select() ?>
     </div>
@@ -62,7 +62,7 @@
   <?php if ($custom_fields) { ?>
     <div class="cpt-row">
       <?php foreach($custom_fields as $field) { ?>
-        <div class="form-field">
+        <div class="form-field span-2">
           <label for="<?php echo $field['id']; ?>"><?php echo $field['label']; echo $field['required'] ? ' <small>(required)</small>' : ''; ?></label>
           <input name="<?php echo $field['id']; ?>" id="<?php echo $field['id']; ?>" class="regular-text" type="<?php echo $field['type']; ?>" data-required="<?php echo $field['required'] ? 'true' : 'false'; ?>">
         </div>

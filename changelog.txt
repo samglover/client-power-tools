@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
 
 
+### 1.8.2 - 2024-01-08
+
+#### Changed
+- Client manager and custom fields are wider.
+- Disabled project type taxonomy archive pages.
+- Disabled autocomplete on the new- and edit-client forms.
+
+
 ### 1.8.1 - 2023-10-13
 
 #### Fixed
