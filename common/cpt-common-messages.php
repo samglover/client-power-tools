@@ -168,7 +168,7 @@ function cpt_new_message_form($clients_user_id) {
         <?php } ?>
         <div class="cpt-row cpt-buttons">
           <p class="submit">
-            <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Send Message', 'client-power-tools'); ?>">
+            <input name="submit" id="submit" class="button button-primary wp-element-button" type="submit" value="<?php _e('Send Message', 'client-power-tools'); ?>">
           </p>
         </div>
       </form>

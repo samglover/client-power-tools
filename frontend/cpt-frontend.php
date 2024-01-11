@@ -24,7 +24,7 @@ function cpt_login() {
   ?>
     <div id="cpt-login" class="cpt-modal">
       <div class="cpt-modal-card">
-        <button class="cpt-dismiss-button cpt-modal-dismiss-button">
+        <button class="wp-element-button cpt-dismiss-button cpt-modal-dismiss-button">
           <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
         </button>
         <?php if (!is_user_logged_in()): ?>
@@ -49,12 +49,12 @@ function cpt_login() {
               <a id="cpt-password-link" href="#"><?php _e('Use a password instead.', 'client-power-tools'); ?></a>
             </p>
             <p id="cpt-login-submit">
-              <input id="cpt-login-submit-button" class="button button-primary" name="cpt-login-submit-button" type="submit" value="<?php _e('Send Code', 'client-power-tools'); ?>">
+              <input id="cpt-login-submit-button" class="button button-primary wp-element-button" name="cpt-login-submit-button" type="submit" value="<?php _e('Send Code', 'client-power-tools'); ?>">
             </p>
           </form>
         <?php else: ?>
           <h2><?php _e('Log Out?', 'client-power-tools'); ?></h2>
-          <p><a id="cpt-logout" class="button" href="<?php echo wp_logout_url(home_url()); ?>" rel="nofollow"><?php _e('Log Out', 'client-power-tools'); ?></a></p>
+          <p><a id="cpt-logout" class="button wp-element-button" href="<?php echo wp_logout_url(home_url()); ?>" rel="nofollow"><?php _e('Log Out', 'client-power-tools'); ?></a></p>
         <?php endif; ?>
       </div>
     </div>

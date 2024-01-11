@@ -20,8 +20,8 @@
             <p class="description"><?php printf(__('Enter one stage per line. These stages will only apply to this %s type.', 'client-power-tools'), strtolower($projects_label[0])); ?></p>
           </div>
           <div class="submit cpt-row gap-sm">
-            <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Save', 'client-power-tools'); ?>">
-            <button id="edit-cancel" class="button button-secondary"><?php _e('Cancel', 'client-power-tools'); ?></button>
+            <input name="submit" id="submit" class="button button-primary wp-element-button" type="submit" value="<?php _e('Save', 'client-power-tools'); ?>">
+            <button id="edit-cancel" class="button button-secondary wp-element-button"><?php _e('Cancel', 'client-power-tools'); ?></button>
           </div>
         </td>
       </tr>

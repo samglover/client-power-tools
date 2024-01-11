@@ -28,7 +28,7 @@ function cpt_status_update_request_button($user_id) {
         <input name="action" value="cpt_status_update_requested" type="hidden">
         <input name="clients_user_id" value="<?php echo $user_id; ?>" type="hidden">
         <p class="submit">
-          <input name="cpt-status-update-request-button" id="cpt-status-update-request-button" class="button button-primary" type="submit" value="<?php echo $button_value; ?>"<?php if ($disabled) echo ' disabled="true"'; ?>>
+          <input name="cpt-status-update-request-button" id="cpt-status-update-request-button" class="button button-primary wp-element-button" type="submit" value="<?php echo $button_value; ?>"<?php if ($disabled) echo ' disabled="true"'; ?>>
         </p>
       </form>
     </div>

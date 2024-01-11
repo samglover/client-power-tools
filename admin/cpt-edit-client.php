@@ -62,7 +62,7 @@ function cpt_delete_client_modal($clients_user_id) {
         <p><?php _e('<strong>Deleting a client is permanent.</strong> There is no undo. Make sure you have a backup!'); ?></p>
         <p><?php _e('Deleting a client will also remove the associated user account, client messages, projects, and other client information.'); ?></p>
         <?php cpt_delete_client_button($clients_user_id); ?>
-        <button class="button cpt-cancel-delete-client"><?php _e('Cancel'); ?></button>
+        <button class="button wp-element-button cpt-cancel-delete-client"><?php _e('Cancel'); ?></button>
       </div>
     </div>
     <div class="cpt-admin-modal-screen" style="display: none;"></div>
@@ -81,7 +81,7 @@ function cpt_delete_client_button($clients_user_id) {
       <?php wp_nonce_field('cpt_client_deleted', 'cpt_client_deleted_nonce'); ?>
       <input name="action" value="cpt_client_deleted" type="hidden">
       <input name="clients_user_id" value="<?php echo $clients_user_id ?>" type="hidden">
-      <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php echo $button_txt; ?>">
+      <input name="submit" id="submit" class="button button-primary wp-element-button" type="submit" value="<?php echo $button_txt; ?>">
     </form>
   <?php
 }

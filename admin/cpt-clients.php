@@ -57,7 +57,7 @@ function cpt_clients() {
         if (!isset($_REQUEST['user_id'])) {
           if (current_user_can('cpt_manage_clients')) {
             ?>
-              <button class="button cpt-click-to-expand"><?php _e('Add a Client'); ?></button>
+              <button class="button wp-element-button cpt-click-to-expand"><?php _e('Add a Client'); ?></button>
               <div class="cpt-this-expands">
                 <div class="form-wrap form-wrap-new_client">
                   <h2><?php _e('Add a Client', 'client-power-tools'); ?></h2>
@@ -95,13 +95,13 @@ function cpt_get_client_profile($clients_user_id) {
   ?>
     <nav class="cpt-buttons cpt-row gap-sm">
       <?php if (current_user_can('cpt_manage_clients')) { ?>
-        <button class="button cpt-click-to-expand"><?php _e('Edit Client', 'client-power-tools'); ?></button>
+        <button class="button wp-element-button cpt-click-to-expand"><?php _e('Edit Client', 'client-power-tools'); ?></button>
       <?php } ?>
       <?php if (get_option('cpt_module_projects')) { ?>
-        <button class="button cpt-click-to-expand"><?php echo __('Add a', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?></button>
+        <button class="button wp-element-button cpt-click-to-expand"><?php echo __('Add a', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('singular'); ?></button>
       <?php } ?>
       <?php if (get_option('cpt_module_messaging')) { ?>
-        <button class="button cpt-click-to-expand"><?php _e('New Message', 'client-power-tools'); ?></button>
+        <button class="button wp-element-button cpt-click-to-expand"><?php _e('New Message', 'client-power-tools'); ?></button>
       <?php } ?>
     </nav>
     <div class="cpt-expanders">

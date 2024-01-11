@@ -52,6 +52,6 @@
     </div>
   </div>
   <p class="submit">
-    <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php echo __('Add', 'client-power-tools') . ' ' . $projects_label[0]; ?>">
+    <input name="submit" id="submit" class="button button-primary wp-element-button" type="submit" value="<?php echo __('Add', 'client-power-tools') . ' ' . $projects_label[0]; ?>">
   </p>
 </form>

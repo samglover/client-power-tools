@@ -10,7 +10,7 @@ function cpt_edit_project($projects_post_id) {
   if (is_admin() && current_user_can('cpt_manage_projects')) {
     if (get_post_status($projects_post_id) != 'trash') {
       ?>
-        <button class="button cpt-click-to-expand"><?php printf(__('Edit %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?></button>
+        <button class="button wp-element-button cpt-click-to-expand"><?php printf(__('Edit %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?></button>
         <div class="cpt-this-expands">
           <div class="form-wrap form-wrap-edit_project">
             <h2><?php printf(__('Edit This %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?></h2>

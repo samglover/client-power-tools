@@ -57,7 +57,7 @@ function cpt_projects() {
           if (current_user_can('cpt_manage_projects')) {
             if ($clients) {
               ?>
-                <button class="button cpt-click-to-expand"><?php printf(__('Add a %s', 'client-power-tools'), $projects_label[0]); ?></button>
+                <button class="button wp-element-button cpt-click-to-expand"><?php printf(__('Add a %s', 'client-power-tools'), $projects_label[0]); ?></button>
                 <div class="cpt-this-expands">
                   <div class="form-wrap form-wrap-new_project">
                     <h2><?php printf(__('Add a %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?></h2>

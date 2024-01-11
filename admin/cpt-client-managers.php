@@ -38,7 +38,7 @@ function cpt_client_managers() {
       <hr class="wp-header-end">
 
       <?php if (current_user_can('cpt_manage_team')) { ?>
-        <button class="button cpt-click-to-expand"><?php _e('Add a Client Manager'); ?></button>
+        <button class="button wp-element-button cpt-click-to-expand"><?php _e('Add a Client Manager'); ?></button>
         <div class="cpt-this-expands">
           <?php cpt_add_client_manager_form(); ?>
         </div>

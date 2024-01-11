@@ -15,6 +15,6 @@
     <p class="description"><?php printf(__('Enter one stage per line. These stages will only apply to this %s type.', 'client-power-tools'), strtolower($projects_label[0])); ?></p>
   </div>
   <p class="submit">
-    <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php printf(__('Add %s Type', 'client-power-tools'), $projects_label[0]); ?>">
+    <input name="submit" id="submit" class="button button-primary wp-element-button" type="submit" value="<?php printf(__('Add %s Type', 'client-power-tools'), $projects_label[0]); ?>">
   </p>
 </form>

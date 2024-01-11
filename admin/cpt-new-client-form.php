@@ -70,6 +70,6 @@
     </div>
   <?php } ?>
   <p class="submit">
-    <input name="submit" id="submit" class="button button-primary" type="submit" value="<?php _e('Add Client', 'client-power-tools'); ?>">
+    <input name="submit" id="submit" class="button button-primary wp-element-button" type="submit" value="<?php _e('Add Client', 'client-power-tools'); ?>">
   </p>
 </form>
