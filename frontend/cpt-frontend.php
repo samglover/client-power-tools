@@ -24,7 +24,7 @@ function cpt_login() {
   ?>
     <div id="cpt-login" class="cpt-modal">
       <div class="cpt-modal-card">
-        <button class="wp-element-button cpt-dismiss-button cpt-modal-dismiss-button">
+        <button class="cpt-dismiss-button cpt-modal-dismiss-button">
           <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
         </button>
         <?php if (!is_user_logged_in()): ?>

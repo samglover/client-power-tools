@@ -266,7 +266,7 @@ function cpt_get_notices() {
   ?>
     <div class="<?php echo implode(' ', $classes); ?>">
       <?php if (!is_admin()) { ?>
-        <button class="wp-element-buttoncpt-dismiss-button cpt-notice-dismiss-button">
+        <button class="cpt-dismiss-button cpt-notice-dismiss-button">
           <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
         </button>
       <?php } ?>

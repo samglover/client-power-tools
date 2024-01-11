@@ -109,6 +109,12 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.8.3 - 2024-01-11
+
+#### Changed
+- Added .wp-element-button to all buttons for better theme.json compatibility.
+
+
 ### 1.8.2 - 2024-01-08
 
 #### Changed
