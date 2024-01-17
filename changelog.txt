@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
 
 
+### 1.8.4beta
+
+#### Changed
+- Split up /assets/js/cpt-frontend.js into /assets/js/cpt-login-modal.js and /assets/js/cpt-notices.js.
+
+
 ### 1.8.3 - 2024-01-11
 
 #### Changed
