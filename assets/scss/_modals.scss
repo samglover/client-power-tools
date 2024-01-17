@@ -11,7 +11,7 @@
 
 .cpt-modal-card {
   background-color: White;
-  border: $border-style;
+  border: $border;
   box-shadow: $box-shadow;
   box-sizing: border-box;
   grid-area: modal;
@@ -52,80 +52,37 @@
 }
 
 .cpt-dismiss-button {
-  align-items: center;
   background-color: LightGray;
-  border: $border-style;
-  border-radius: 50%;
-  cursor: pointer;
-  display: grid;
-  height: 30px;
-  justify-content: center;
+  background-image: url("../images/close.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+  border: $border;
+  border-radius: 9999px;
+  height: 1em;
   line-height: 1;
   margin: 0;
-  padding: 3px;
-  place-items: center;
+  padding: 0;
   position: absolute;
-    top: $spacing-md;
-    right: $spacing-md;
-  text-decoration: none;
-  width: 30px;
+    right: $spacing-sm;
+    top: $spacing-sm;
+  transform: unset;
+  width: 1em;
 
-  &:hover,
-  &:focus {
-    background-color: Silver;
-    border-color: $border-hover;
+  &:hover:not(:active) {
     box-shadow: $box-shadow;
     text-decoration: none;
   }
-
-  &:active {
-    background-color: Silver;
-    border-color: $border-hover;
-    box-shadow: none;
-    text-decoration: none;
-  }
-
-  svg {
-    fill: White;
-    height: 100%;
-    width: auto;
-  }
-}
-
-.cpt-notice-dismiss-button {
-  top: $spacing-regular;
-  right: $spacing-regular;
 }
 
 .cpt-modal-screen {
-  background-color: $gray-wash;
+  background-color: rgb(0, 0, 0, .4);
   display: none;
   height: 100vh;
+  inset: 0;
   position: fixed;
-    left: 0;
     top: 0;
+    left: 0;
   width: 100vw;
   z-index: 99;
-}
-
-.cpt-notice {
-  background-color: #fff;
-  border: $border-style;
-  box-shadow: $box-shadow;
-  box-sizing: border-box;
-  margin: 3px 3px $spacing-regular 3px;
-  padding: $spacing-regular;
-  position: relative;
-
-  button:not(.cpt-dismiss-button) {
-    display: inline-block;
-  }
-
-  *:nth-child(2) {
-    margin-top: 0;
-  }
-
-  *:last-child {
-    margin-bottom: 0;
-  }
 }

@@ -215,8 +215,7 @@ function cpt_process_new_message() {
      * hash from the timestamp plus a random integer, making the message URL
      * pretty much impossible to guess.
      */
-    $email_ccs = isset($_POST['email_ccs']) ? $_POST['email_ccs'] : false;
-    $email_ccs = implode("\n", cpt_cleanse_array_of_emails($email_ccs));
+    if (is_admin() && isset($_POST['email_ccs'])) $email_ccs = implode("\n", cpt_cleanse_array_of_emails($_POST['email_ccs']));
     $new_message = [
       'post_name'     => md5(time() . random_int(0, PHP_INT_MAX)),
       'post_title'    => $post_title,
@@ -227,7 +226,7 @@ function cpt_process_new_message() {
         'cpt_clients_user_id'       => $clients_user_id,
         'cpt_send_message_content'  => $send_this_msg_content,
         'cpt_email_to'              => isset($_POST['email_to']) ? $_POST['email_to'] : false,
-        'cpt_email_ccs'             => isset($_POST['email_ccs']) ? implode("\n", $_POST['email_ccs']) : false,
+        'cpt_email_ccs'             => isset($email_ccs) ? $email_ccs : false,
       ],
    ];
 

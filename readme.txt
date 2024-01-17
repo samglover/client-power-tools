@@ -1,4 +1,4 @@
-=== Client Power Tools ===
+=== Client Power Tools Portal ===
 
 Contributors: samglover
 Tags: client management, project management, portal, restrict content, frontend login
@@ -160,7 +160,7 @@ For more information on how to take advantage of the new and updated features, s
 
 #### Changed
 - No longer shows projects in the client list table if the Projects module is not active.
-- Consolidated Knowledge Base breadcrumbs logic in the cpt_kb_breadcrumbs() function.
+- Consolidated Knowledge Base breadcrumbs logic in the cpt_breadcrumbs function.
 - Clarified cpt_is_knowledge_base() logic.
 - cpt_is_client_dashboard() now functions more intuitively. If no arguments are given, it returns true if any dashboard page is being shown. Arguments may also be given in the form of an array.
 - Page titles within the client dashboard now include both the dashboard title and the name of the page for all pages.

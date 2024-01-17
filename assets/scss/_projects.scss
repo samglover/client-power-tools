@@ -4,7 +4,7 @@
 
   .cpt-project {
     background-color: White;
-    border: $border-style;
+    border: $border;
     box-shadow: $box-shadow;
     box-sizing: border-box;
     margin-bottom: $spacing-regular;
@@ -46,7 +46,7 @@
 
   .cpt-stage-progress-container {
     background-color: LightGray;
-    border: $border-style;
+    border: $border;
     border-radius: 9999px;
     box-shadow: inset $box-shadow;
     box-sizing: content-box;

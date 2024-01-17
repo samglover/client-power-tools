@@ -43,7 +43,7 @@ if (cptModals) {
     let thisModal   = cptModals[i];
     let thisScreen  = modalScreens[i];
 
-    cptModals[i].querySelector('.cpt-modal-dismiss-button').addEventListener('click', function(event) {
+    cptModals[i].querySelector('.cpt-login-modal-dismiss').addEventListener('click', function(event) {
       event.preventDefault();
       thisModal.style.display = 'none';
       thisScreen.style.display = 'none';

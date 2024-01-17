@@ -6,7 +6,16 @@ All notable changes to this project will be documented in this file. The format 
 ### 1.8.4beta
 
 #### Changed
+- Name updated to Client Power Tools Portal since there is also a Client Power Tools theme as well as several helper plugins.
 - Split up /assets/js/cpt-frontend.js into /assets/js/cpt-login-modal.js and /assets/js/cpt-notices.js.
+- The client dashboard nav menu now uses the same classes as regular WordPress menus, so it should inherit styling and dropdown behavior, as well. This drastically reduces the amount of styling added by this plugin.
+- Enabling breadcrumb navigation now applies to additional pages as well as the knowledge base.
+
+### Fixed
+- Fixed error when sending messages from the front end.
+
+### Removed
+- Removed the /frontend/images folder and its contents, which were not used anywhere.
 
 
 ### 1.8.3 - 2024-01-11
@@ -61,7 +70,7 @@ All notable changes to this project will be documented in this file. The format 
 
 #### Changed
 - No longer shows projects in the client list table if the Projects module is not active.
-- Consolidated Knowledge Base breadcrumbs logic in the cpt_kb_breadcrumbs() function.
+- Consolidated Knowledge Base breadcrumbs logic in the cpt_breadcrumbs function.
 - Clarified cpt_is_knowledge_base() logic.
 - cpt_is_client_dashboard() now functions more intuitively. If no arguments are given, it returns true if any dashboard page is being shown. Arguments may also be given in the form of an array.
 - Page titles within the client dashboard now include both the dashboard title and the name of the page for all pages.

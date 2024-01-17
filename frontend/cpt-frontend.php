@@ -24,9 +24,7 @@ function cpt_login() {
   ?>
     <div id="cpt-login" class="cpt-modal">
       <div class="cpt-modal-card">
-        <button class="cpt-dismiss-button cpt-modal-dismiss-button">
-          <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
-        </button>
+        <button class="cpt-dismiss-button cpt-login-modal-dismiss"></button>
         <?php if (!is_user_logged_in()): ?>
           <h2><?php _e('Client Login', 'client-power-tools'); ?></h2>
           <div id="cpt-login-messages"></div>
@@ -71,13 +69,15 @@ function cpt_client_dashboard_page_titles($title, $post_id) {
     || !Common\cpt_is_client_dashboard()
   ) return $title;
 
-  $client_dashboard_title = get_post(get_option('cpt_client_dashboard_page_selection'))->post_title;
-  $new_title = '<span class="cpt-client-dashboard-title">' . $client_dashboard_title . '</span><br>';
+  return get_post(get_option('cpt_client_dashboard_page_selection'))->post_title;
+}
 
-  if (Common\cpt_is_client_dashboard('dashboard')) return $new_title . __('Home', 'client-power-tools');
-  if (Common\cpt_is_client_dashboard('messages')) return $new_title . __('Messages', 'client-power-tools');
-  if (Common\cpt_is_client_dashboard('projects')) return $new_title . Common\cpt_get_projects_label('plural');
-  return $new_title . $title;
+function cpt_get_the_title() {
+  remove_filter('the_title', __NAMESPACE__ . '\cpt_client_dashboard_page_titles', 10, 2);
+  if (Common\cpt_is_client_dashboard('dashboard')) return __('Home', 'client-power-tools');
+  if (Common\cpt_is_client_dashboard('messages')) return __('Messages', 'client-power-tools');
+  if (Common\cpt_is_client_dashboard('projects')) return Common\cpt_get_projects_label('plural');
+  return get_the_title();
 }
 
 

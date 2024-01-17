@@ -34,7 +34,8 @@ function cpt_client_dashboard($content) {
   // Client Dashboard
   ob_start();
     cpt_nav();
-    cpt_kb_breadcrumbs();
+    cpt_breadcrumbs();
+    echo '<h1 class="entry-title wp-block-post-title cpt-entry-title">' . cpt_get_the_title() . '</h1>';
     Common\cpt_get_notices();
 
     // Last Activity Timestamp
@@ -94,66 +95,60 @@ function cpt_client_dashboard($content) {
 
 function cpt_nav() {
   remove_filter('the_title', 'Client_Power_Tools\Core\Frontend\cpt_client_dashboard_page_titles', 10);
-  $child_pages_array = [];
   ?>
-    <nav id="cpt-nav">
-      <ul class="cpt-tabs">
-        <li class="cpt-tab"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('dashboard') && !isset($_REQUEST['tab'])) echo ' current'; ?>"><?php _e('Home', 'client-power-tools'); ?></a></li>
+    <nav id="cpt-nav" class="wp-block-group has-global-padding is-layout-constrained">
+      <ul class="cpt-tabs menu">
+        <li class="cpt-tab menu-item"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('dashboard') && !isset($_REQUEST['tab'])) echo ' current'; ?>"><?php _e('Home', 'client-power-tools'); ?></a></li>
         <?php if (get_option('cpt_module_messaging')) { ?>
-          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('messages')) echo ' current'; ?>"><?php _e('Messages', 'client-power-tools'); ?></a></li>
+          <li class="cpt-tab menu-item">
+            <a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('messages')) echo ' current'; ?>"><?php _e('Messages', 'client-power-tools'); ?></a>
+          </li>
         <?php } ?>
         <?php if (get_option('cpt_module_projects')) { ?>
-          <li class="cpt-tab"><a href="<?php echo add_query_arg('tab', 'projects', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('projects')) echo ' current'; ?>"><?php echo Common\cpt_get_projects_label('plural'); ?></a></li>
+          <li class="cpt-tab menu-item">
+            <a href="<?php echo add_query_arg('tab', 'projects', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('projects')) echo ' current'; ?>"><?php echo Common\cpt_get_projects_label('plural'); ?></a>
+          </li>
+        <?php } ?>
+        <?php if (get_option('cpt_module_knowledge_base')) { ?>
+          <?php
+            $kb_id = get_option('cpt_knowledge_base_page_selection');
+            $kb_children_ids = cpt_get_child_pages($kb_id);
+            
+            $kb_classes = 'cpt-tab menu-item';
+            if ($kb_children_ids) $kb_classes .= ' menu-item-has-children';
+            if (Common\cpt_is_knowledge_base()) $kb_classes .= ' current';
+          ?>
+          <li class="<?php echo $kb_classes; ?>">
+            <a href="<?php echo Common\cpt_get_knowledge_base_url(); ?>"><?php echo get_the_title($kb_id); ?></a>
+            <?php if ($kb_children_ids) echo cpt_get_submenu($kb_id); ?>
+          </li>
         <?php } ?>
         <?php
-          $knowledge_base_id = get_option('cpt_knowledge_base_page_selection');
-          $kb_pages_array = cpt_get_child_pages($knowledge_base_id);
-          if (get_option('cpt_module_knowledge_base')) {
-            $title = get_the_title($knowledge_base_id);
-            $classes = 'cpt-nav-menu-item';
-            if (Common\cpt_is_knowledge_base()) $classes .= ' current';
-            if ($kb_pages_array) $child_pages_array[$knowledge_base_id] = $kb_pages_array;
-            if ($kb_pages_array) {
-              $classes .= ' cpt-click-to-expand';
-              echo '<li class="cpt-tab"><span class="' . $classes . '">' . $title . file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/expand.svg') . '</span></li>';
-            } else {
-              echo '<li class="cpt-tab"><a href="' . Common\cpt_get_knowledge_base_url() . '" class="' . $classes . '" title="' . $title . '">' . $title . '</a></li>';
-            }
-          }
-
-          $addl_pages_array = get_option('cpt_client_dashboard_addl_pages') ? get_option('cpt_client_dashboard_addl_pages') : false;
-          if ($addl_pages_array) $addl_pages_array = explode(',', $addl_pages_array);
-          if ($addl_pages_array) {
-            foreach($addl_pages_array as $page_id) {
-              $page_id = intval(trim($page_id));
-              $classes = 'cpt-nav-menu-item';
-              if ($page_id == get_the_ID() || in_array($page_id, get_post_ancestors(get_the_ID()))) $classes .= ' current';
-              if (get_option('cpt_client_dashboard_addl_pages_children') && cpt_get_child_pages($page_id)) $child_pages_array[$page_id] = cpt_get_child_pages($page_id);
-              if (isset($child_pages_array[$page_id])) {
-                $classes .= ' cpt-click-to-expand';
-                echo '<li class="cpt-tab"><span class="' . $classes . '">' . get_the_title($page_id) . file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/expand.svg') . '</span></li>';
-              } else {
-                echo '<li class="cpt-tab"><a href="' . get_the_permalink($page_id) . '" class="' . $classes . '" title="' . get_the_title($page_id) . '">' . get_the_title($page_id) . '</a></li>';
-              }
+          $addl_pages_ids = get_option('cpt_client_dashboard_addl_pages') ? explode(',', get_option('cpt_client_dashboard_addl_pages')) : false;
+          if ($addl_pages_ids) {
+            foreach($addl_pages_ids as $addl_page_id) {
+              $addl_page_id = intval(trim($addl_page_id));
+              $addl_page_children_ids = cpt_get_child_pages($addl_page_id);
+              $addl_page_classes = 'cpt-tab menu-item';
+              if (get_option('cpt_client_dashboard_addl_pages_children') && $addl_page_children_ids) $addl_page_classes .= ' menu-item-has-children';
+              if ($addl_page_id == get_the_ID() || in_array($addl_page_id, get_post_ancestors(get_the_ID()))) $addl_page_classes .= ' current-menu-item';
+              ?>
+                <li class="<?php echo $addl_page_classes; ?>">
+                  <a href="<?php echo get_permalink($addl_page_id); ?>"><?php echo get_the_title($addl_page_id); ?></a>
+                  <?php if (get_option('cpt_client_dashboard_addl_pages_children') && $addl_page_children_ids) echo cpt_get_submenu($addl_page_id); ?>
+                </li>
+              <?php
             }
           }
         ?>
       </ul>
-      <?php
-        // If adding more drop-down tabs, just keep them in the same order.
-        if ($child_pages_array) {
-          foreach ($child_pages_array as $parent => $child_pages) {
-            echo cpt_nav_tabs_submenu($parent);
-          }
-        }
-      ?>
     </nav>
   <?php
 }
 
 
 /**
- * Nav Submenu
+ * Nav Submenus
  */
 function cpt_get_child_pages($page_id) {
   if (!$page_id) return;
@@ -175,64 +170,43 @@ function cpt_get_child_pages($page_id) {
   }
 }
 
-function cpt_list_child_pages($page_id) {
+function cpt_get_submenu($page_id) {
   if (!$page_id) return;
 
-  $current_page_id = get_the_ID();
-  $title = get_the_title($page_id);
-  $url = get_the_permalink($page_id);
+  $child_pages = cpt_get_child_pages($page_id);
+  if (!$child_pages) return;
 
-  if ($current_page_id == $page_id) {
-    echo '<li><strong>' . $title . '</strong></li>';
-  } else {
-    echo '<li><a href="' . $url . '" title="' . $title . '">' . $title . '</a></li>';
-  }
-
-  $kb_child_pages = cpt_get_child_pages($page_id);
-
-  if ($kb_child_pages) {
+  ob_start();
     ?>
-      <ul>
-        <?php foreach ($kb_child_pages as $child_page) cpt_list_child_pages($child_page); ?>
+      <ul class="sub-menu">
+        <?php foreach($child_pages as $id) { ?>
+          <?php
+            $children = cpt_get_child_pages($id);
+            $classes = 'menu-item';
+            if ($id == get_the_ID()) $classes .= ' current-menu-item';
+            if ($children) $classes .= ' menu-item-has-children';
+          ?>
+          <li class="<?php echo $classes; ?>">
+            <a href="<?php echo get_permalink($id); ?>"><?php echo get_the_title($id); ?></a>
+            <?php if ($children) cpt_get_submenu($id); ?>
+          </li>
+        <?php } ?>
       </ul>
     <?php
-  } else {
-   return;
-  }
-}
-
-function cpt_nav_tabs_submenu($parent_id) {
-  if (!$parent_id) return;
-  $kb_child_pages = cpt_get_child_pages($parent_id);
-  if ($kb_child_pages) {
-    ob_start();
-      ?>
-        <div class="cpt-this-expands cpt-nav-tabs-submenu">
-          <ul>
-            <?php cpt_list_child_pages($parent_id); ?>
-          </ul>
-        </div>
-      <?php
-    return ob_get_clean();
-  }
+  return ob_get_clean();
 }
 
 
 /**
  * Knowledge Base Breadcrumbs
  */
-function cpt_kb_breadcrumbs() {
+function cpt_breadcrumbs() {
+  if (!get_option('cpt_show_knowledge_base_breadcrumbs')) return;
+  if (!Common\cpt_is_knowledge_base() && !Common\cpt_is_additional_page()) return;
+  
   $this_page_id = get_the_ID();
-  $knowledge_base_id = get_option('cpt_knowledge_base_page_selection');
-  if (
-    !get_option('cpt_module_knowledge_base') 
-    || !get_option('cpt_show_knowledge_base_breadcrumbs') 
-    || !Common\cpt_is_knowledge_base()
-    || $this_page_id == $knowledge_base_id 
-  ) return;
-
-  $breadcrumbs[] = '<span class="breadcrumb last-breadcrumb"><strong>' . get_the_title($this_page_id) . '</strong></span>';
   $parent_id = wp_get_post_parent_id($this_page_id);
+  $breadcrumbs[] = '<span class="breadcrumb last-breadcrumb"><strong>' . get_the_title($this_page_id) . '</strong></span>';
   while ($parent_id) {
     $parent_url = get_the_permalink($parent_id);
     $parent_title = get_the_title($parent_id);
