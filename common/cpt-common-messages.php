@@ -92,6 +92,7 @@ function cpt_message_list($clients_user_id) {
 
 function cpt_new_message_form($clients_user_id) {
   $editor_args = [
+    'editor_height' => 205,
     'media_buttons' => false,
     'quicktags'     => false,
     'textarea_name' => 'message',

@@ -39,8 +39,8 @@ body {
     margin-bottom: $spacing-regular;
   }
 
-  :last-child,
-  :last-child :last-child {
+  :not(.cpt-notice) :last-child,
+  :not(.cpt-notice) :last-child :last-child {
     margin-bottom: 0;
   }
 }
@@ -74,39 +74,6 @@ body {
     top: $spacing-xs;
   transform: unset;
   width: 1em;
-}
-
-#cpt-login-messages {
-  align-items: center;
-  background-color: rgba(0, 0, 0, .1);
-  display: none;
-  line-height: $line-height-sm;
-  margin: $spacing-regular 0;
-  padding: $spacing-regular $spacing-regular $spacing-regular 3em;
-  position: relative;
-
-  &.error::before,
-  &.success::before {
-    color: White;
-    display: inline-grid;
-    font-weight: bold;
-    height: 100%;
-    place-content: center;
-    position: absolute;
-      top: 0;
-      left: 0;
-    width: 2em;
-  }
-
-  &.error::before {
-    background-color: $error;
-    content: '!';
-  }
-
-  &.success::before {
-    background-color: $success;
-    content: '\02713';
-  }
 }
 
 #cpt-login-form {

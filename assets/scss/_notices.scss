@@ -1,61 +1,59 @@
-.cpt-notice {
-  background-color: #fff;
-  border: $border;
-  box-shadow: $box-shadow;
-  box-sizing: border-box;
-  margin: 3px 3px $spacing-regular 3px;
-  padding: $spacing-regular;
+.cpt-notice:where(:not(body.wp-admin)) {
+  align-items: center;
+  background-color: rgba(0, 0, 0, .1);
+  display: none;
+  gap: 0;
+  line-height: $line-height-sm;
+  margin: $spacing-regular 0;
+  padding: 0;
+  position: relative;
 
-  &.notice-success > :nth-child(2),
-  &.notice-error > :nth-child(2) {
-    padding-left: 1.25em;
-    position: relative;
-    
-    &::before {
-      border-radius: 9999px;
-      color: White;
-      display: inline-grid;
-      font-weight: bold;
-      height: 1em;
-      margin: 0;
-      padding: 0;
-      place-content: center;
-      position: absolute;
-        top: 50%;
-        left: 0;
-      transform: translateY(-50%);
-      width: 1em;
+  &.card {
+    padding: 0;
+  }
+
+  &.visible {
+    display: flex;
+  }
+
+  &::before {
+    align-self: stretch;
+    background-color: LightGray;
+    color: White;
+    content: 'i';
+    display: grid;
+    font-weight: bold;
+    min-width: 2em;
+    place-content: center;
+    width: 2em;
+  }
+
+  &.notice-error::before {
+    background-color: $error;
+    content: '\0021'; // !
+  }
+
+  &.notice-success::before {
+    background-color: $success;
+    content: '\02713'; // ✓
+  }
+  
+  .cpt-notice-message {
+    display: block;
+    font-size: 80%;
+    padding-left: $spacing-regular;
+  }
+
+  &.is-dismissible {
+    min-height: calc($spacing-regular * 2 + 1px * 2 + 1em);
+
+    .cpt-notice-message {
+      padding-right: calc($spacing-regular * 2 + 1px * 2 + 1em);
     }
   }
 
-  &.notice-success {
-    > :nth-child(2)::before {
-      background-color: $success;
-      content: '\02713';
-    }
+  .cpt-notice-dismiss {
+    top: $spacing-regular;
+    right: $spacing-regular;
   }
-
-  &.notice-error {
-    > :nth-child(2)::before {
-      background-color: $error;
-      content: '!';
-    }
-  }
-
-  button:not(.cpt-dismiss-button) {
-    display: inline-block;
-  }
-
-  *:nth-child(2) {
-    margin-top: 0;
-  }
-
-  *:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.cpt-notice-dismiss {
-  top: revert;
-  right: revert;
 }

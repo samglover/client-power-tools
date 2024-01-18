@@ -26,7 +26,7 @@ function cpt_login() {
       <button class="cpt-dismiss-button cpt-login-modal-dismiss"></button>
       <?php if (!is_user_logged_in()): ?>
         <h2><?php _e('Client Login', 'client-power-tools'); ?></h2>
-        <div id="cpt-login-messages"></div>
+        <div id="cpt-login-notices" class="notice cpt-notice"></div>
         <form id="cpt-login-form" name="cpt-login-form" action="<?php echo get_permalink(); ?>" method="post">
           <?php wp_nonce_field('cpt-login', 'cpt-login-nonce'); ?>
           <p id="cpt-login-email">

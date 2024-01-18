@@ -38,7 +38,7 @@
 #cpt-nav .cpt-tabs {
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 9999px;
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
   margin-top: 0;
   margin-bottom: 0;
@@ -56,54 +56,55 @@
   margin-bottom: 30px;
 }
 
-.cpt-notice {
-  background-color: #fff;
-  border: 1px solid LightSlateGray;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-  box-sizing: border-box;
-  margin: 3px 3px 20px 3px;
-  padding: 20px;
-}
-.cpt-notice.notice-success > :nth-child(2), .cpt-notice.notice-error > :nth-child(2) {
-  padding-left: 1.25em;
+.cpt-notice:where(:not(body.wp-admin)) {
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  display: none;
+  gap: 0;
+  line-height: 1.15;
+  margin: 20px 0;
+  padding: 0;
   position: relative;
 }
-.cpt-notice.notice-success > :nth-child(2)::before, .cpt-notice.notice-error > :nth-child(2)::before {
-  border-radius: 9999px;
-  color: White;
-  display: inline-grid;
-  font-weight: bold;
-  height: 1em;
-  margin: 0;
+.cpt-notice:where(:not(body.wp-admin)).card {
   padding: 0;
+}
+.cpt-notice:where(:not(body.wp-admin)).visible {
+  display: flex;
+}
+.cpt-notice:where(:not(body.wp-admin))::before {
+  align-self: stretch;
+  background-color: LightGray;
+  color: White;
+  content: "i";
+  display: grid;
+  font-weight: bold;
+  min-width: 2em;
   place-content: center;
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  width: 1em;
+  width: 2em;
 }
-.cpt-notice.notice-success > :nth-child(2)::before {
-  background-color: SeaGreen;
-  content: "✓";
-}
-.cpt-notice.notice-error > :nth-child(2)::before {
+.cpt-notice:where(:not(body.wp-admin)).notice-error::before {
   background-color: Red;
   content: "!";
 }
-.cpt-notice button:not(.cpt-dismiss-button) {
-  display: inline-block;
+.cpt-notice:where(:not(body.wp-admin)).notice-success::before {
+  background-color: SeaGreen;
+  content: "✓";
 }
-.cpt-notice *:nth-child(2) {
-  margin-top: 0;
+.cpt-notice:where(:not(body.wp-admin)) .cpt-notice-message {
+  display: block;
+  font-size: 80%;
+  padding-left: 20px;
 }
-.cpt-notice *:last-child {
-  margin-bottom: 0;
+.cpt-notice:where(:not(body.wp-admin)).is-dismissible {
+  min-height: calc(42px + 1em);
 }
-
-.cpt-notice-dismiss {
-  top: revert;
-  right: revert;
+.cpt-notice:where(:not(body.wp-admin)).is-dismissible .cpt-notice-message {
+  padding-right: calc(42px + 1em);
+}
+.cpt-notice:where(:not(body.wp-admin)) .cpt-notice-dismiss {
+  top: 20px;
+  right: 20px;
 }
 
 body:has(#cpt-login.visible) {
@@ -139,8 +140,8 @@ body:not(.admin-bar) {
   margin-top: 0;
   margin-bottom: 20px;
 }
-#cpt-login :last-child,
-#cpt-login :last-child :last-child {
+#cpt-login :not(.cpt-notice) :last-child,
+#cpt-login :not(.cpt-notice) :last-child :last-child {
   margin-bottom: 0;
 }
 
@@ -173,35 +174,6 @@ body:not(.admin-bar) {
   top: 5px;
   transform: unset;
   width: 1em;
-}
-
-#cpt-login-messages {
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.1);
-  display: none;
-  line-height: 1.15;
-  margin: 20px 0;
-  padding: 20px 20px 20px 3em;
-  position: relative;
-}
-#cpt-login-messages.error::before, #cpt-login-messages.success::before {
-  color: White;
-  display: inline-grid;
-  font-weight: bold;
-  height: 100%;
-  place-content: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 2em;
-}
-#cpt-login-messages.error::before {
-  background-color: Red;
-  content: "!";
-}
-#cpt-login-messages.success::before {
-  background-color: SeaGreen;
-  content: "✓";
 }
 
 #cpt-login-form .input {

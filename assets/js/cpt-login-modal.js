@@ -43,7 +43,7 @@ function closeLogin(event) {
 
 
 // Handles the Internal Navigation and Login Code Functionality
-const messages = document.getElementById('cpt-login-messages');
+const notices = document.getElementById('cpt-login-notices');
 const nonceField = document.getElementById('cpt-login-nonce');
 const emailRow = document.getElementById('cpt-login-email');
 const emailField = document.getElementById('cpt-login-email-field');
@@ -80,10 +80,11 @@ if (passwordLink) passwordLink.addEventListener('click', function(event) {
   submitButton.addEventListener('click', checkPassword);
 });
 
-function displayMessages(response) {
-  messages.style.display = 'block';
-  messages.className = response.success ? 'success' : 'error';
-  messages.innerText = response.data.message;
+function displayNotices(response) {
+  notices.classList.add('visible');
+  if (response.success) notices.classList.add('notice-success');
+  if (!response.success) notices.classList.add('notice-error');
+  notices.innerHTML = '<p class="cpt-notice-message">' + response.data.message + '</p>';
 }
 
 function sendLoginCode(event) {
@@ -99,7 +100,7 @@ function sendLoginCode(event) {
     // beforeSend: function() {},
     success: function(response) {
       // console.debug(response);
-      displayMessages(response);
+      displayNotices(response);
       if (response.success) showCodeField();
     },
     failure: function(error) {
@@ -134,7 +135,7 @@ function checkLoginCode(event) {
     // beforeSend: function() {},
     success: function(response) {
       // console.debug(response);
-      displayMessages(response);
+      displayNotices(response);
       if (response.success || response.data.tries >= 3) location.reload();
     },
     failure: function(error) {
@@ -157,7 +158,7 @@ function checkPassword(event) {
     // beforeSend: function() {},
     success: function(response) {
       // console.debug(response);
-      displayMessages(response);
+      displayNotices(response);
       if (response.success) location.reload();
     },
     failure: function(error) {

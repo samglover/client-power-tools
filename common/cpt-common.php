@@ -258,19 +258,21 @@ function cpt_get_notices() {
   if (!$notice) return;
 
   $classes = [
-    'cpt-notice',
     'notice',
+    'cpt-notice',
     'is-dismissible',
   ];
+  if (!is_admin()) {
+    $classes[] = 'card';
+    $classes[] = 'visible';
+  }
   $classes[] = is_wp_error($notice) ? 'notice-error' : 'notice-success';
   ?>
     <div class="<?php echo implode(' ', $classes); ?>">
       <?php if (!is_admin()) { ?>
-        <button class="cpt-dismiss-button cpt-notice-dismiss">
-          <?php echo file_get_contents(CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/close.svg'); ?>
-        </button>
+        <button class="cpt-dismiss-button cpt-notice-dismiss"></button>
       <?php } ?>
-      <p><?php echo $notice; ?></p>
+      <p class="cpt-notice-message"><?php echo $notice; ?></p>
     </div>
   <?php
   delete_transient($transient);
