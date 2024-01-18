@@ -3,11 +3,15 @@
   margin-bottom: $spacing-regular;
 
   .cpt-project {
-    background-color: White;
-    border: $border;
-    box-shadow: $box-shadow;
     box-sizing: border-box;
-    margin-bottom: $spacing-regular;
+
+    &.card {
+      background-color: White;
+      border: $border;
+      box-shadow: $box-shadow;
+      margin-bottom: $spacing-regular;
+      padding: 0;
+    }
 
     &.cpt-project-status-closed {
       background-color: $black-wash;
@@ -78,7 +82,7 @@
 
   .cpt-stage-label {
     font-size: 14px;
-    line-height: 1.1;
+    line-height: $line-height-sm;
     text-align: center;
 
     &:first-child {
@@ -102,7 +106,7 @@
 .cpt-project-meta {
   background-color: $gray-wash;
   font-size: 14px;
-  line-height: 1.1;
+  line-height: $line-height-sm;
   padding: $spacing-sm $spacing-regular;
 
   .cpt-col {

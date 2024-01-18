@@ -20,6 +20,17 @@
     transform: translateX(-50%) scaleY(1);
   }
 }
+@keyframes pulse {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+  50% {
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
 .cpt-row {
   align-items: center;
   display: flex;
@@ -72,7 +83,7 @@
 .cpt-section-header {
   font-size: 15px;
   font-weight: bold;
-  line-height: 1.1;
+  line-height: 1.15;
   margin-top: 0;
   margin-bottom: 0.25em;
   text-transform: uppercase;
@@ -92,11 +103,14 @@
   margin-bottom: 20px;
 }
 .cpt-projects-list .cpt-project {
+  box-sizing: border-box;
+}
+.cpt-projects-list .cpt-project.card {
   background-color: White;
   border: 1px solid LightSlateGray;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-  box-sizing: border-box;
   margin-bottom: 20px;
+  padding: 0;
 }
 .cpt-projects-list .cpt-project.cpt-project-status-closed {
   background-color: rgba(255, 255, 255, 0.5);
@@ -157,7 +171,7 @@
 }
 .cpt-project-stage-progress .cpt-stage-label {
   font-size: 14px;
-  line-height: 1.1;
+  line-height: 1.15;
   text-align: center;
 }
 .cpt-project-stage-progress .cpt-stage-label:first-child {
@@ -176,7 +190,7 @@
 .cpt-project-meta {
   background-color: rgba(0, 0, 0, 0.1);
   font-size: 14px;
-  line-height: 1.1;
+  line-height: 1.15;
   padding: 10px 20px;
 }
 .cpt-project-meta .cpt-col {
@@ -199,12 +213,16 @@
 }
 
 .cpt-message {
+  box-sizing: border-box;
+  padding: 0;
+  position: relative;
+}
+.cpt-message.card {
   background-color: White;
   border: 1px solid LightSlateGray;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-  box-sizing: border-box;
   margin-bottom: 20px;
-  position: relative;
+  padding: 0;
 }
 .cpt-message:target .cpt-message-content {
   background-color: rgba(255, 255, 0, 0.5);
@@ -243,7 +261,7 @@
 .cpt-message .cpt-message-meta {
   background-color: rgba(0, 0, 0, 0.1);
   font-size: 14px;
-  line-height: 1.1;
+  line-height: 1.15;
   padding: 10px 20px;
 }
 .cpt-message .cpt-message-meta p {
@@ -272,7 +290,7 @@
 .cpt-new-message-form label {
   font-size: 80%;
   font-weight: bold;
-  line-height: 1.1;
+  line-height: 1.15;
   margin-bottom: 0.25em;
 }
 .cpt-new-message-form .description {

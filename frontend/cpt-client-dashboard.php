@@ -98,15 +98,15 @@ function cpt_nav() {
   ?>
     <nav id="cpt-nav" class="wp-block-group has-global-padding is-layout-constrained">
       <ul class="cpt-tabs menu">
-        <li class="cpt-tab menu-item"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('dashboard') && !isset($_REQUEST['tab'])) echo ' current'; ?>"><?php _e('Home', 'client-power-tools'); ?></a></li>
+        <li class="cpt-tab menu-item<?php if (Common\cpt_is_client_dashboard('dashboard') && !isset($_REQUEST['tab'])) echo ' current-menu-item'; ?>"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>"><?php _e('Home', 'client-power-tools'); ?></a></li>
         <?php if (get_option('cpt_module_messaging')) { ?>
-          <li class="cpt-tab menu-item">
-            <a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('messages')) echo ' current'; ?>"><?php _e('Messages', 'client-power-tools'); ?></a>
+          <li class="cpt-tab menu-item<?php if (Common\cpt_is_client_dashboard('messages')) echo ' current-menu-item'; ?>">
+            <a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>"><?php _e('Messages', 'client-power-tools'); ?></a>
           </li>
         <?php } ?>
         <?php if (get_option('cpt_module_projects')) { ?>
-          <li class="cpt-tab menu-item">
-            <a href="<?php echo add_query_arg('tab', 'projects', Common\cpt_get_client_dashboard_url()); ?>" class="cpt-nav-menu-item<?php if (Common\cpt_is_client_dashboard('projects')) echo ' current'; ?>"><?php echo Common\cpt_get_projects_label('plural'); ?></a>
+          <li class="cpt-tab menu-item<?php if (Common\cpt_is_client_dashboard('projects')) echo ' current-menu-item'; ?>">
+            <a href="<?php echo add_query_arg('tab', 'projects', Common\cpt_get_client_dashboard_url()); ?>"><?php echo Common\cpt_get_projects_label('plural'); ?></a>
           </li>
         <?php } ?>
         <?php if (get_option('cpt_module_knowledge_base')) { ?>
@@ -116,7 +116,7 @@ function cpt_nav() {
             
             $kb_classes = 'cpt-tab menu-item';
             if ($kb_children_ids) $kb_classes .= ' menu-item-has-children';
-            if (Common\cpt_is_knowledge_base()) $kb_classes .= ' current';
+            if (Common\cpt_is_knowledge_base()) $kb_classes .= ' current-menu-item';
           ?>
           <li class="<?php echo $kb_classes; ?>">
             <a href="<?php echo Common\cpt_get_knowledge_base_url(); ?>"><?php echo get_the_title($kb_id); ?></a>

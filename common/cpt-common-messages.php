@@ -40,7 +40,7 @@ function cpt_message_list($clients_user_id) {
   if ($cpt_messages->have_posts()) :
     while ($cpt_messages->have_posts()): $cpt_messages->the_post();
       $message_id       = get_the_ID();
-      $message_classes  = ['cpt-message'];
+      $message_classes  = ['cpt-message', 'card'];
       $message_meta     = '<p>';
 
       if (get_post_meta($message_id, 'cpt_status_update_request')) $message_classes[] = 'status-update-request';

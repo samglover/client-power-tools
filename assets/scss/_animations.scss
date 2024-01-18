@@ -11,3 +11,9 @@
   80% { transform: translateX(-50%) scaleY(1.1); }
   100% { transform: translateX(-50%) scaleY(1); }
 }
+
+@keyframes pulse {
+  from { transform: scale3d(1, 1, 1); }
+  50% { transform: scale3d(1.1, 1.1, 1.1); }
+  to { transform: scale3d(1, 1, 1); }
+}

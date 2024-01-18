@@ -47,14 +47,14 @@
 #cpt-admin-page-title #cpt-page-title {
   font-size: 42px;
   font-weight: bold;
-  line-height: 1.1;
+  line-height: 1.15;
   padding-top: 0;
 }
 #cpt-admin-page-title #cpt-subtitle {
   color: gray;
   font-size: 26px;
   font-weight: bold;
-  line-height: 1.1;
+  line-height: 1.15;
   margin: 0;
 }
 #cpt-admin-page-title #cpt-client-status,
@@ -63,7 +63,7 @@
 #cpt-admin-page-title #cpt-project-status,
 #cpt-admin-page-title #cpt-project-client {
   font-size: 16px;
-  line-height: 1.1;
+  line-height: 1.15;
   margin: 0;
 }
 

@@ -56,91 +56,6 @@
   margin-bottom: 30px;
 }
 
-.cpt-modal {
-  display: none;
-  height: 100vh;
-  place-content: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  z-index: 100;
-}
-
-.cpt-modal-card {
-  background-color: White;
-  border: 1px solid LightSlateGray;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-  box-sizing: border-box;
-  grid-area: modal;
-  margin: 3px;
-  min-width: 330px;
-  max-height: 90vh;
-  max-width: 40vw;
-  overflow: auto;
-  padding: 30px;
-  position: relative;
-  z-index: 100;
-}
-@media (max-width: 768px) {
-  .cpt-modal-card {
-    max-width: 90vw;
-  }
-}
-.cpt-modal-card h2 {
-  border: none;
-  margin-top: 0;
-  padding-right: 50px;
-  padding-top: 0;
-}
-.cpt-modal-card h2::before {
-  content: none;
-}
-.cpt-modal-card a.button,
-.cpt-modal-card button {
-  display: inline-block;
-}
-.cpt-modal-card > *:last-child,
-.cpt-modal-card .cpt-modal-inner > *:last-child,
-.cpt-modal-card .cpt-modal-inner form > *:last-child {
-  margin-bottom: 0;
-}
-
-.cpt-dismiss-button {
-  background-color: LightGray;
-  background-image: url("../images/close.svg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 50%;
-  border: 1px solid LightSlateGray;
-  border-radius: 9999px;
-  height: 1em;
-  line-height: 1;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  transform: unset;
-  width: 1em;
-}
-.cpt-dismiss-button:hover:not(:active) {
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-  text-decoration: none;
-}
-
-.cpt-modal-screen {
-  background-color: rgba(0, 0, 0, 0.4);
-  display: none;
-  height: 100vh;
-  inset: 0;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  z-index: 99;
-}
-
 .cpt-notice {
   background-color: #fff;
   border: 1px solid LightSlateGray;
@@ -191,57 +106,120 @@
   right: revert;
 }
 
-#cpt-login #cpt-login-messages {
+body:has(#cpt-login.visible) {
+  height: 100%;
+  overflow: hidden;
+}
+body:not(.admin-bar) {
+  --wp-admin--admin-bar--height: 0px;
+}
+
+#cpt-login {
+  animation: pulse 150ms ease-in-out forwards;
   display: none;
-  line-height: 1.2;
-  margin: 1em 0;
-  padding-left: 1.25em;
+  margin: 0 auto;
+  max-height: calc(100vh - 20px - var(--wp-admin--admin-bar--height));
+  max-width: calc(100vw - 20px);
+  overflow: auto;
+  position: fixed;
+  top: calc(10px + var(--wp-admin--admin-bar--height));
+  left: 50%;
+  transform: translateX(-50%) !important;
+  transform-origin: top center;
+  width: 556px;
+  z-index: 20;
+}
+#cpt-login.visible {
+  display: block;
+}
+#cpt-login.visible + #cpt-modal-screen {
+  display: block;
+}
+#cpt-login > h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+#cpt-login :last-child,
+#cpt-login :last-child :last-child {
+  margin-bottom: 0;
+}
+
+#cpt-modal-screen {
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  height: 100vh;
+  inset: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 10;
+}
+
+.cpt-dismiss-button {
+  background-color: LightGray;
+  background-image: url("../images/close.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+  border: 1px solid LightSlateGray;
+  border-radius: 9999px;
+  height: 1em;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  transform: unset;
+  width: 1em;
+}
+
+#cpt-login-messages {
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  display: none;
+  line-height: 1.15;
+  margin: 20px 0;
+  padding: 20px 20px 20px 3em;
   position: relative;
 }
-#cpt-login #cpt-login-messages.error {
-  color: Red;
-}
-#cpt-login #cpt-login-messages.success {
-  color: SeaGreen;
-}
-#cpt-login #cpt-login-messages.error::before, #cpt-login #cpt-login-messages.success::before {
-  border-radius: 9999px;
+#cpt-login-messages.error::before, #cpt-login-messages.success::before {
   color: White;
   display: inline-grid;
   font-weight: bold;
-  height: 1em;
+  height: 100%;
   place-content: center;
   position: absolute;
+  top: 0;
   left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1em;
+  width: 2em;
 }
-#cpt-login #cpt-login-messages.error::before {
+#cpt-login-messages.error::before {
   background-color: Red;
   content: "!";
 }
-#cpt-login #cpt-login-messages.success::before {
+#cpt-login-messages.success::before {
   background-color: SeaGreen;
   content: "✓";
 }
-#cpt-login #cpt-login-form > *:last-child {
-  margin-bottom: 0;
-}
-#cpt-login #cpt-login-form .input {
+
+#cpt-login-form .input {
   box-sizing: border-box;
   width: 100%;
 }
-#cpt-login #cpt-login-form .description {
+#cpt-login-form .description {
   font-size: 80%;
   margin-bottom: 20px;
 }
-#cpt-login #cpt-login-type-links {
+
+#cpt-login-type-links {
   font-size: 80%;
 }
-#cpt-login #cpt-login-code-link,
-#cpt-login #cpt-login-code,
-#cpt-login #cpt-login-password {
+
+#cpt-login-code-link,
+#cpt-login-code,
+#cpt-login-password {
   display: none;
 }
 
