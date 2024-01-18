@@ -31,6 +31,17 @@
     transform: scale3d(1, 1, 1);
   }
 }
+@keyframes pulse_centered {
+  from {
+    transform: translateX(-50%) scale3d(1, 1, 1);
+  }
+  50% {
+    transform: translateX(-50%) scale3d(1.1, 1.1, 1.1);
+  }
+  to {
+    transform: translateX(-50%) scale3d(1, 1, 1);
+  }
+}
 .cpt-row {
   align-items: center;
   display: flex;

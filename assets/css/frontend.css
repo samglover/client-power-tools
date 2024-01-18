@@ -45,6 +45,10 @@
   padding: 0.5em 1em;
 }
 @media (max-width: 576px) {
+  #cpt-nav .cpt-tabs {
+    border-radius: 0;
+    padding: 1em;
+  }
   #cpt-nav .cpt-tabs .cpt-tab {
     margin: 0;
     width: 100%;
@@ -116,7 +120,7 @@ body:not(.admin-bar) {
 }
 
 #cpt-login {
-  animation: pulse 150ms ease-in-out forwards;
+  animation: pulse_centered 150ms ease-in-out forwards;
   display: none;
   margin: 0 auto;
   max-height: calc(100vh - 20px - var(--wp-admin--admin-bar--height));
@@ -125,7 +129,6 @@ body:not(.admin-bar) {
   position: fixed;
   top: calc(10px + var(--wp-admin--admin-bar--height));
   left: 50%;
-  transform: translateX(-50%) !important;
   transform-origin: top center;
   width: 556px;
   z-index: 20;
@@ -140,8 +143,8 @@ body:not(.admin-bar) {
   margin-top: 0;
   margin-bottom: 20px;
 }
-#cpt-login :not(.cpt-notice) :last-child,
-#cpt-login :not(.cpt-notice) :last-child :last-child {
+#cpt-login :not(.cpt-notice-message):last-child,
+#cpt-login :not(.cpt-notice-message):last-child :last-child {
   margin-bottom: 0;
 }
 

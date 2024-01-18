@@ -22,12 +22,16 @@
     margin-bottom: 0;
     padding: .5em 1em;
 
-    .cpt-tab {
-      @media (max-width: $breakpoint-sm) {
+    @media (max-width: $breakpoint-sm) {
+      border-radius: 0;
+      padding: 1em;
+
+      .cpt-tab {
         margin: 0;
         width: 100%;
       }
     }
+
   }
 }
 

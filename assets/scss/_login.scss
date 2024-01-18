@@ -12,7 +12,7 @@ body {
 }
 
 #cpt-login {
-  animation: pulse 150ms ease-in-out forwards;
+  animation: pulse_centered 150ms ease-in-out forwards;
   display: none;
   margin: 0 auto;
   max-height: calc(100vh - $spacing-sm * 2 - var(--wp-admin--admin-bar--height));
@@ -21,7 +21,6 @@ body {
   position: fixed;
     top: calc($spacing-sm + var(--wp-admin--admin-bar--height));
     left: 50%;
-  transform: translateX(-50%) !important;
   transform-origin: top center;
   width: calc($breakpoint-sm - $spacing-sm * 2);
   z-index: 20;
@@ -39,8 +38,8 @@ body {
     margin-bottom: $spacing-regular;
   }
 
-  :not(.cpt-notice) :last-child,
-  :not(.cpt-notice) :last-child :last-child {
+  :not(.cpt-notice-message):last-child,
+  :not(.cpt-notice-message):last-child :last-child {
     margin-bottom: 0;
   }
 }

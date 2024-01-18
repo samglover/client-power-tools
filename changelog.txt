@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Fixed
 - Fixed error when sending messages from the front end.
+- Fixed login modal animation.
 
 ### Removed
 - Removed the /frontend/images folder and its contents, which were not used anywhere.
