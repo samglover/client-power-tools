@@ -3,10 +3,10 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
 
 
-### 1.8.4beta
+### 1.8.4 - 2024-01-11
 
 #### Changed
-- Name updated to Client Power Tools Portal since there is also a Client Power Tools theme as well as several helper plugins.
+- Name updated to Client Power Tools Portal since there is also a Client Power Tools theme and several helper plugins.
 - Split up /assets/js/cpt-frontend.js into /assets/js/cpt-login-modal.js and /assets/js/cpt-notices.js.
 - Simplified the login modal and notices functionality and styling. The CSS styling has been simplified with the idea that it should be relatively easy to customize. (Here is how I customize Client Power Tools for my own theme: https://github.com/samglover/cpt-theme/blob/main/assets/scss/_customize-cpt.scss. Each SCSS variable pulls in a corresponding CSS variable from theme.json that applies my styles for things like borders and shadows so that Client Power Tools looks as much a part of the theme as possible.)
 - The client dashboard nav menu now uses the same classes as regular WordPress menus, so it should inherit styling and dropdown behavior, as well. This drastically reduces the amount of styling added by this plugin.

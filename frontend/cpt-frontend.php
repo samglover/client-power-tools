@@ -72,9 +72,9 @@ function cpt_client_dashboard_page_titles($title, $post_id) {
 
 function cpt_get_the_title() {
   remove_filter('the_title', __NAMESPACE__ . '\cpt_client_dashboard_page_titles', 10, 2);
-  if (Common\cpt_is_client_dashboard('dashboard')) return __('Home', 'client-power-tools');
-  if (Common\cpt_is_client_dashboard('messages')) return __('Messages', 'client-power-tools');
-  if (Common\cpt_is_client_dashboard('projects')) return Common\cpt_get_projects_label('plural');
+  if (Common\cpt_is_client_dashboard('dashboard')) return __('Your Home', 'client-power-tools');
+  if (Common\cpt_is_client_dashboard('messages')) return __('Your Messages', 'client-power-tools');
+  if (Common\cpt_is_client_dashboard('projects')) return __('Your', 'client-power-tools') . ' ' . Common\cpt_get_projects_label('plural');
   return get_the_title();
 }
 

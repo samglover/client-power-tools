@@ -10,6 +10,8 @@
       border: $border;
       box-shadow: $box-shadow;
       margin-bottom: $spacing-regular;
+      max-width: 100%;
+      min-width: fit-content;
       padding: 0;
     }
 
