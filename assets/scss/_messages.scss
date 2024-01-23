@@ -1,10 +1,15 @@
 .cpt-message {
-  background-color: White;
-  border: $border-style;
-  box-shadow: $box-shadow;
   box-sizing: border-box;
-  margin-bottom: $spacing-regular;
+  padding: 0;
   position: relative;
+  
+  &.card {
+    background-color: White;
+    border: $border;
+    box-shadow: $box-shadow;
+    margin-bottom: $spacing-regular;
+    padding: 0;
+  }
 
   &:target .cpt-message-content {
     background-color: $yellow-highlighter;
@@ -53,7 +58,7 @@
   .cpt-message-meta {
     background-color: $gray-wash;
     font-size: 14px;
-    line-height: 1.1;
+    line-height: $line-height-sm;
     padding: $spacing-sm $spacing-regular;
 
     p {
@@ -87,7 +92,7 @@
   label {
     font-size: 80%;
     font-weight: bold;
-    line-height: 1.1;
+    line-height: $line-height-sm;
     margin-bottom: .25em;
   }
 

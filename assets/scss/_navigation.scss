@@ -1,113 +1,37 @@
-.cpt-client-dashboard-title {
-  color: $light-text;
-  font-size: clamp(.5em, 16px, .8em);
+.client-dashboard {
+  .page-header {
+    margin-bottom: $spacing-sm;
+  }
+
+  .entry-title:not(.cpt-entry-title) {
+    font-size: inherit;
+    font-weight: bold;
+  }
 }
 
 #cpt-nav {
+  margin-top: $spacing-sm;
   margin-bottom: $spacing-md;
-
+  
   .cpt-tabs {
-    align-items: stretch;
-    border-bottom: $border-style;
+    background-color: $gray-wash;
+    border-radius: 9999px;
     display: flex;
-    flex-grow: 1;
     flex-wrap: wrap;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: .5em 1em;
 
-    .cpt-tab {
-      display: block;
-      margin: 0 4px 0 0;
-      padding: 0;
+    @media (max-width: $breakpoint-sm) {
+      border-radius: 0;
+      padding: 1em;
 
-      @media (max-width: $breakpoint-sm) {
+      .cpt-tab {
         margin: 0;
         width: 100%;
       }
-
-      .cpt-nav-menu-item {
-        border: $border-style;
-        border-width: 1px 1px 0 1px;
-        color: DarkSlateGray;
-        cursor: pointer;
-        display: block;
-        padding: $spacing-sm $spacing-regular;
-        text-decoration: none;
-
-        &.current {
-          background-color: LightGray;
-          font-weight: bold;
-        }
-
-        &.cpt-click-to-expand {
-          padding-right: calc($spacing-lg + 4px);
-          position: relative;
-
-          svg {
-            height: 1em;
-            margin-left: 4px;
-            opacity: .5;
-            position: absolute;
-              top: 50%;
-              right: 1em;
-            transform: translateY(-50%);
-            transition: transform 150ms ease-in-out;
-            width: 1em;
-          }
-
-          &.open {
-            svg {
-              transform: translateY(-50%) rotate(180deg);
-            }
-          }
-        }
-
-        &:hover,
-        &:focus {
-          background-color: Silver;
-          border-color: $border-hover;
-        }
-      }
     }
-  }
-}
 
-.cpt-nav-tabs-submenu {
-  border-bottom: $border-style;
-  line-height: 1.1;
-  margin: 0 0 $spacing-md 0;
-  padding: $spacing-md;
-  position: relative;
-
-  & > ul {
-    margin: 0;
-    padding: 0;
-
-    ul {
-      margin: 0 0 0 $spacing-regular;
-      padding: 0;
-    }
-  }
-
-  ul {
-    list-style: none;
-
-    &.current a {
-      font-weight: bold;
-    }
-  }
-
-  &::before {
-    background-color: Silver;
-    content: ' ';
-    opacity: .5;
-    position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-    z-index: -1;
   }
 }
 

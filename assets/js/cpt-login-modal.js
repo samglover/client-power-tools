@@ -1,24 +1,15 @@
-// Shows/Hides the Login Modal
+const baseURL = [location.protocol, '//', location.host, location.pathname].join('');
+const params = new URLSearchParams(location.search);
+const loggedIn = document.querySelector('body.logged-in') ? true : false;
+const loginLinks = document.querySelectorAll('.cpt-login-link, a[href*="#cpt-login"], a[href*="#cpt-login"]');
 const loginModal = document.getElementById('cpt-login');
-const cptModals = document.querySelectorAll('.cpt-modal');
-const modalScreens = document.querySelectorAll('.cpt-modal-screen');
+const loginDismiss = document.querySelector('#cpt-login .cpt-login-modal-dismiss');
 
-function showLogin() {
-  loginModal.style.display = 'grid';
-  modalScreens[0].style.display = 'block';
-}
-
-// Handles login link clicks.
-const loggedIn = document.querySelector('body.logged-in');
-const loginLinks = document.querySelectorAll('.cpt-login-link, a[href*="#cpt-login"]');
-if (loginLinks) {
-  loginLinks.forEach(function(element) {
-    element.addEventListener('click', function(event) {
-      event.preventDefault();
-      showLogin();
-    });
-  });
-}
+if (loginLinks) loginLinks.forEach(element => element.addEventListener('click', showLogin));
+if (loginDismiss) loginDismiss.addEventListener('click', closeLogin);
+addEventListener('keyup', (event) => {
+  if (event.key === 'Escape') closeLogin();
+});
 
 // Changes link & button text if already logged in.
 if (loggedIn && loginLinks) {
@@ -27,44 +18,32 @@ if (loggedIn && loginLinks) {
   });
 }
 
-// Displays the Login Modal on the Dashboard Page
-if (!loggedIn && cpt_vars.isCPT) showLogin();
+// Displays the Login Modal 
+if (!loggedIn && cpt_vars.isCPT) showLogin(); // On the dashboard page to not-logged-in visitors
+if (params.has('cpt_login')) showLogin(); // Based on URL query parameters
 
-// Displays the Login Modal Based on URL Query Parameters
-const baseURL = [location.protocol, '//', location.host, location.pathname].join('');
-const params = new URLSearchParams(location.search);
-
-if (params.has('cpt_login')) showLogin();
-
-// Handles Dismiss Button Clicks and Clears Query Parameters
-if (cptModals) {
-  let i = 0;
-  cptModals.forEach(function() {
-    let thisModal   = cptModals[i];
-    let thisScreen  = modalScreens[i];
-
-    cptModals[i].querySelector('.cpt-modal-dismiss-button').addEventListener('click', function(event) {
-      event.preventDefault();
-      thisModal.style.display = 'none';
-      thisScreen.style.display = 'none';
-
-      // Removes query parameters from the URL just in case the user tries to
-      // bookmark it or copy and paste some reason.
-      params.delete('cpt_login');
-      params.delete('user');
-
-      if (params.toString().length > 0) {
-        history.replaceState({}, '', baseURL + '?' + params);
-      } else {
-        history.replaceState({}, '', baseURL);
-      }
-    });
-
-    i++;
-  });
+function showLogin(event) {
+  if (event) event.preventDefault();
+  loginModal.classList.add('visible');
 }
 
-const messages = document.getElementById('cpt-login-messages');
+function closeLogin(event) {
+  if (event) event.preventDefault();
+  loginModal.classList.remove('visible');
+
+  params.delete('cpt_login');
+  params.delete('user');
+
+  if (params.toString().length > 0) {
+    history.replaceState({}, '', baseURL + '?' + params);
+  } else {
+    history.replaceState({}, '', baseURL);
+  }
+}
+
+
+// Handles the Internal Navigation and Login Code Functionality
+const notices = document.getElementById('cpt-login-notices');
 const nonceField = document.getElementById('cpt-login-nonce');
 const emailRow = document.getElementById('cpt-login-email');
 const emailField = document.getElementById('cpt-login-email-field');
@@ -101,10 +80,11 @@ if (passwordLink) passwordLink.addEventListener('click', function(event) {
   submitButton.addEventListener('click', checkPassword);
 });
 
-function displayMessages(response) {
-  messages.style.display = 'block';
-  messages.className = response.success ? 'success' : 'error';
-  messages.innerText = response.data.message;
+function displayNotices(response) {
+  notices.classList.add('visible');
+  if (response.success) notices.classList.add('notice-success');
+  if (!response.success) notices.classList.add('notice-error');
+  notices.innerHTML = '<p class="cpt-notice-message">' + response.data.message + '</p>';
 }
 
 function sendLoginCode(event) {
@@ -120,7 +100,7 @@ function sendLoginCode(event) {
     // beforeSend: function() {},
     success: function(response) {
       // console.debug(response);
-      displayMessages(response);
+      displayNotices(response);
       if (response.success) showCodeField();
     },
     failure: function(error) {
@@ -132,10 +112,10 @@ function sendLoginCode(event) {
 if (params.get('cpt_login') == 'code') showCodeField();
 
 function showCodeField() {
-  emailRow.style.display = 'none';
-  passwordRow.style.display = 'none';
-  loginTypeLinks.style.display = 'none';
-  codeRow.style.display = 'block';
+  if (emailRow) emailRow.style.display = 'none';
+  if (passwordRow) passwordRow.style.display = 'none';
+  if (loginTypeLinks) loginTypeLinks.style.display = 'none';
+  if (codeRow) codeRow.style.display = 'block';
   submitButton.value = 'Check Code';
   submitButton.removeEventListener('click', sendLoginCode);
   submitButton.addEventListener('click', checkLoginCode);
@@ -154,8 +134,8 @@ function checkLoginCode(event) {
     },
     // beforeSend: function() {},
     success: function(response) {
-      console.debug(response);
-      displayMessages(response);
+      // console.debug(response);
+      displayNotices(response);
       if (response.success || response.data.tries >= 3) location.reload();
     },
     failure: function(error) {
@@ -177,23 +157,12 @@ function checkPassword(event) {
     },
     // beforeSend: function() {},
     success: function(response) {
-      console.debug(response);
-      displayMessages(response);
+      // console.debug(response);
+      displayNotices(response);
       if (response.success) location.reload();
     },
     failure: function(error) {
       console.debug(error);
     }
-  });
-}
-
-// Handles Dismiss Button Clicks for Notices/Inline Modals
-// (Not technically modals, but the code overlaps for efficiency.)
-const cptInlineModal = document.querySelector('.cpt-notice');
-const inlineModalDismiss = document.querySelector('.cpt-notice-dismiss-button');
-
-if (cptInlineModal && inlineModalDismiss) {
-  inlineModalDismiss.addEventListener('click', function() {
-    cptInlineModal.style.display = 'none';
   });
 }

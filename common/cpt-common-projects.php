@@ -58,7 +58,7 @@ function cpt_get_projects($clients_user_id = null) {
       <section class="cpt-projects-list">
         <?php while ($projects->have_posts()) : $projects->the_post(); ?>
           <?php $projects_post_id = get_the_ID(); ?>
-          <div class="cpt-project">
+          <div class="cpt-project card">
             <div class="cpt-project-content">
               <h3 class="cpt-project-title">
                 <?php 

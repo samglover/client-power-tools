@@ -4,7 +4,7 @@
  * Plugin Name: Client Power Tools
  * Plugin URI: https://clientpowertools.com
  * Description: Client Power Tools is an easy-to-use client dashboard, project management, and communication portal built for designers, developers, consultants, lawyers, and other professionals.
- * Version: 1.8.4beta
+ * Version: 1.8.4
  * Author: Sam Glover
  * Author URI: https://samglover.net
  * Text Domain: client-power-tools
@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) exit;
 /**
  * Constants
  */
-define('CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.8.4beta');
+define('CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.8.4');
 define('CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path(__FILE__));
 define('CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url(__FILE__));
 
@@ -51,17 +51,18 @@ if (!is_admin()) {
 	require_once(CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-client-dashboard.php');
 
 	function cpt_register_frontend_scripts() {
-		global $post; // For localizing cpt-frontend.js
+		global $post; // For localizing cpt-login-modal.js
 
 		wp_enqueue_style('cpt-frontend', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/frontend.css', [], CLIENT_POWER_TOOLS_PLUGIN_VERSION);
 
-		wp_register_script('cpt-frontend', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-frontend.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
-		wp_localize_script('cpt-frontend', 'cpt_vars', [
+		wp_register_script('cpt-login-modal', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-login-modal.js', [], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
+		wp_localize_script('cpt-login-modal', 'cpt_vars', [
 			'postID'	=> $post ? $post->ID : null,
 			'isCPT'		=> Common\cpt_is_client_dashboard(),
 			'ajaxURL'	=> admin_url('admin-ajax.php'),
 		]);
-		wp_enqueue_script('cpt-frontend');
+		wp_enqueue_script('cpt-login-modal');
+		wp_enqueue_script('cpt-notices', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-notices.js', ['jquery'], CLIENT_POWER_TOOLS_PLUGIN_VERSION, true);
 	}
 
 	add_action('wp_enqueue_scripts', __NAMESPACE__ . '\cpt_register_frontend_scripts');

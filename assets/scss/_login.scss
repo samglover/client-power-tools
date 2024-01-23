@@ -1,68 +1,98 @@
+// Stops the page from scrolling behind modals.
+body {
+  &:has(#cpt-login.visible) {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  // Sets the admin bar height variable to 0px when the admin bar is not present.
+  &:not(.admin-bar) {
+    --wp-admin--admin-bar--height: 0px;
+  }
+}
+
 #cpt-login {
-  #cpt-login-messages {
-    display: none;
-    line-height: 1.2;
-    margin: 1em 0;
-    padding-left: 1.5em;
-    position: relative;
+  animation: pulse_centered 150ms ease-in-out forwards;
+  display: none;
+  margin: 0 auto;
+  max-height: calc(100vh - $spacing-sm * 2 - var(--wp-admin--admin-bar--height));
+  max-width: calc(100vw - ($spacing-sm * 2));
+  overflow: auto;
+  position: fixed;
+    top: calc($spacing-sm + var(--wp-admin--admin-bar--height));
+    left: 50%;
+  transform-origin: top center;
+  width: calc($breakpoint-sm - $spacing-sm * 2);
+  z-index: 20;
 
-    &.error {
-      color: $error;
-    }
+  &.visible {
+    display: block;
 
-    &.success {
-      color: $success;
-    }
-
-    &.error::before,
-    &.success::before {
-      border-radius: 9999px;
-      color: White;
-      display: inline-grid;
-      font-weight: bold;
-      height: 1em;
-      place-content: center;
-      position: absolute;
-        left: 0;
-        top: 50%;
-      transform: translateY(-50%);
-      width: 1em;
-    }
-
-    &.error::before {
-      background-color: $error;
-      content: '!';
-    }
-
-    &.success::before {
-      background-color: $success;
-      content: '\02713';
+    + #cpt-modal-screen {
+      display: block;
     }
   }
 
-  #cpt-login-form {
-    & > *:last-child {
-      margin-bottom: 0;
-    }
-
-    .input {
-      box-sizing: border-box;
-      width: 100%;
-    }
-
-    .description {
-      font-size: 80%;
-      margin-bottom: $spacing-regular;
-    }
+  > h2 {
+    margin-top: 0;
+    margin-bottom: $spacing-regular;
   }
 
-  #cpt-login-type-links {
+  :not(.cpt-notice-message):last-child,
+  :not(.cpt-notice-message):last-child :last-child {
+    margin-bottom: 0;
+  }
+}
+
+#cpt-modal-screen {
+  background-color: rgb(0, 0, 0, .4);
+  display: none;
+  height: 100vh;
+  inset: 0;
+  position: fixed;
+    top: 0;
+    left: 0;
+  width: 100vw;
+  z-index: 10;
+}
+
+.cpt-dismiss-button {
+  background-color: LightGray;
+  background-image: url("../images/close.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+  border: $border;
+  border-radius: 9999px;
+  height: 1em;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+    right: $spacing-xs;
+    top: $spacing-xs;
+  transform: unset;
+  width: 1em;
+}
+
+#cpt-login-form {
+  .input {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .description {
     font-size: 80%;
+    margin-bottom: $spacing-regular;
   }
+}
 
-  #cpt-login-code-link,
-  #cpt-login-code,
-  #cpt-login-password {
-    display: none;
-  }
+#cpt-login-type-links {
+  font-size: 80%;
+}
+
+#cpt-login-code-link,
+#cpt-login-code,
+#cpt-login-password {
+  display: none;
 }

@@ -1,4 +1,4 @@
-=== Client Power Tools ===
+=== Client Power Tools Portal ===
 
 Contributors: samglover
 Tags: client management, project management, portal, restrict content, frontend login
@@ -109,6 +109,23 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.8.4 - 2024-01-11
+
+#### Changed
+- Name updated to Client Power Tools Portal since there is also a Client Power Tools theme and several helper plugins.
+- Split up /assets/js/cpt-frontend.js into /assets/js/cpt-login-modal.js and /assets/js/cpt-notices.js.
+- Simplified the login modal and notices functionality and styling. The CSS styling has been simplified with the idea that it should be relatively easy to customize. (Here is how I customize Client Power Tools for my own theme: https://github.com/samglover/cpt-theme/blob/main/assets/scss/_customize-cpt.scss. Each SCSS variable pulls in a corresponding CSS variable from theme.json that applies my styles for things like borders and shadows so that Client Power Tools looks as much a part of the theme as possible.)
+- The client dashboard nav menu now uses the same classes as regular WordPress menus, so it should inherit styling and dropdown behavior, as well. This drastically reduces the amount of styling added by this plugin.
+- Enabling breadcrumb navigation now applies to additional pages as well as the knowledge base.
+
+### Fixed
+- Fixed error when sending messages from the front end.
+- Fixed login modal animation.
+
+### Removed
+- Removed the /frontend/images folder and its contents, which were not used anywhere.
+
+
 ### 1.8.3 - 2024-01-11
 
 #### Changed
@@ -160,7 +177,7 @@ For more information on how to take advantage of the new and updated features, s
 
 #### Changed
 - No longer shows projects in the client list table if the Projects module is not active.
-- Consolidated Knowledge Base breadcrumbs logic in the cpt_kb_breadcrumbs() function.
+- Consolidated Knowledge Base breadcrumbs logic in the cpt_breadcrumbs function.
 - Clarified cpt_is_knowledge_base() logic.
 - cpt_is_client_dashboard() now functions more intuitively. If no arguments are given, it returns true if any dashboard page is being shown. Arguments may also be given in the form of an array.
 - Page titles within the client dashboard now include both the dashboard title and the name of the page for all pages.

@@ -1,0 +1,59 @@
+.cpt-notice:where(:not(body.wp-admin)) {
+  align-items: center;
+  background-color: rgba(0, 0, 0, .1);
+  display: none;
+  gap: 0;
+  line-height: $line-height-sm;
+  margin: $spacing-regular 0;
+  padding: 0;
+  position: relative;
+
+  &.card {
+    padding: 0;
+  }
+
+  &.visible {
+    display: flex;
+  }
+
+  &::before {
+    align-self: stretch;
+    background-color: LightGray;
+    color: White;
+    content: 'i';
+    display: grid;
+    font-weight: bold;
+    min-width: 2em;
+    place-content: center;
+    width: 2em;
+  }
+
+  &.notice-error::before {
+    background-color: $error;
+    content: '\0021'; // !
+  }
+
+  &.notice-success::before {
+    background-color: $success;
+    content: '\02713'; // ✓
+  }
+  
+  .cpt-notice-message {
+    display: block;
+    font-size: 80%;
+    padding-left: $spacing-regular;
+  }
+
+  &.is-dismissible {
+    min-height: calc($spacing-regular * 2 + 1px * 2 + 1em);
+
+    .cpt-notice-message {
+      padding-right: calc($spacing-regular * 2 + 1px * 2 + 1em);
+    }
+  }
+
+  .cpt-notice-dismiss {
+    top: $spacing-regular;
+    right: $spacing-regular;
+  }
+}

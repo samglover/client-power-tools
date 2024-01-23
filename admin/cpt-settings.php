@@ -558,7 +558,7 @@ function cpt_show_knowledge_base_breadcrumbs() {
     <fieldset>
       <label for="cpt_show_knowledge_base_breadcrumbs">
         <input name="cpt_show_knowledge_base_breadcrumbs" id="cpt_show_knowledge_base_breadcrumbs" type="checkbox" value="1" <?php checked(get_option('cpt_show_knowledge_base_breadcrumbs')); ?>>
-        <?php _e('Show breadcrumb navigation within the knowledge base.', 'client-power-tools'); ?>
+        <?php _e('Show breadcrumb navigation within the knowledge base and additional pages.', 'client-power-tools'); ?>
       </label>
     </fieldset>
   <?php

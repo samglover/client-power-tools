@@ -9,13 +9,15 @@ $blue-highlighter: rgba(135, 206, 250, .2);
 $gray-wash: rgba(0, 0, 0, .1);
 $black-wash: rgba(255, 255, 255, 0.5);
 
-$border-style: 1px solid Silver;
-$border-hover: #b0b0b0;
-
-
+$border: 1px solid LightSlateGray;
 $box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 
+// Line Height
+$line-height-sm: 1.15;
+$line-height-normal: 1.5;
+
 // Spacing
+$spacing-xxs: 2.5px;
 $spacing-xs: 5px;
 $spacing-sm: 10px;
 $spacing-regular: 20px;
