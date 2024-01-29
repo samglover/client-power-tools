@@ -109,7 +109,7 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
-### 1.8.4 - 2024-01-11
+### 1.8.4 - 2024-01-23
 
 #### Changed
 - Name updated to Client Power Tools Portal since there is also a Client Power Tools theme and several helper plugins.
