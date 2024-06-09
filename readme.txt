@@ -9,7 +9,7 @@ Stable tag: trunk
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-A free, easy-to-use client dashboard, project management, and communication portal built for designers, developers, consultants, lawyers, and other independent contractors and professionals.
+A free, easy-to-use client portal built for designers, developers, consultants, lawyers, and other independent contractors and professionals.
 
 
 == Description ==
