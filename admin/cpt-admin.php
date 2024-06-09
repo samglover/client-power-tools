@@ -3,32 +3,17 @@
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
 
-add_action('admin_init', __NAMESPACE__ . '\cpt_redirect_clients');
-function cpt_redirect_clients() {
-  global $pagenow;
-  if (
-    Common\cpt_is_client() &&
-    !current_user_can('cpt_manage_clients') &&
-    !(defined('DOING_AJAX') && DOING_AJAX) &&
-    $pagenow !== 'admin-post.php'
-  ) {
-    wp_safe_redirect(home_url());
-    exit;
-  }
-}
-
-
-add_action('wp_loaded', __NAMESPACE__ . '\cpt_admin_actions');
+add_action('admin_init', __NAMESPACE__ . '\cpt_admin_actions');
 function cpt_admin_actions() {
   if (
     !isset($_REQUEST['action']) || 
     !isset($_REQUEST['page']) || 
-    !isset($_REQUEST['_wpnonce'])
+    !str_starts_with($_REQUEST['page'], 'cpt-')
   ) return;
+  if (!$_REQUEST['_wpnonce']) exit(__('Missing nonce.', 'client-power-tools'));
   if (!wp_verify_nonce($_REQUEST['_wpnonce'])) exit(__('Invalid nonce.', 'client-power-tools'));
-
+  
   $page = sanitize_text_field($_REQUEST['page']);
-
   switch ($page) {
     case 'cpt-project-types':
       cpt_process_project_type_actions(sanitize_text_field($_REQUEST['action']));

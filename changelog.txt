@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
 
+### 1.8.5 - 2024-06-09
+
+#### Changed
+- Admin styles and scripts are now loaded only on CPT admin pages.
+- Removed cpt_redirect_clients() function from /admin/cpt-admin.php because it wasn't actually doing anything.
+
+#### Fixed
+- The guard statements in the cpt_admin_actions() function in /admin/cpt-admin.php were over-inclusive and allowing some processes through only to cause them to fail. See [issue #40](https://github.com/samglover/client-power-tools/issues/40) for an example where WP All Import uploads were failing. This is now fixed.
+
 
 ### 1.8.4 - 2024-01-23
 
