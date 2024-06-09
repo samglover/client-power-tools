@@ -3,7 +3,7 @@
 Contributors: samglover
 Tags: client management, project management, portal, restrict content, frontend login
 Requires at least: 5.5
-Tested up to: 6.4.2
+Tested up to: 6.5.4
 Requires PHP: 7.3.5
 Stable tag: trunk
 License: GPLv3
@@ -108,6 +108,16 @@ For more information on how to take advantage of the new and updated features, s
 
 
 == Changelog ==
+
+### 1.8.5 - 2024-06-09
+
+#### Changed
+- Admin styles and scripts are now loaded only on CPT admin pages.
+- Removed cpt_redirect_clients() function from /admin/cpt-admin.php because it wasn't actually doing anything.
+
+#### Fixed
+- The guard statements in the cpt_admin_actions() function in /admin/cpt-admin.php were over-inclusive and allowing some processes through only to cause them to fail. See [issue #40](https://github.com/samglover/client-power-tools/issues/40) for an example where WP All Import uploads were failing. This is now fixed.
+
 
 ### 1.8.4 - 2024-01-23
 
