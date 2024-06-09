@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) exit;
 /**
  * Constants
  */
-define('CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.8.4');
+define('CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.8.5');
 define('CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path(__FILE__));
 define('CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url(__FILE__));
 
