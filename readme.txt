@@ -3,7 +3,7 @@
 Contributors: samglover
 Tags: client management, project management, portal, restrict content, frontend login
 Requires at least: 5.5
-Tested up to: 6.5.4
+Tested up to: 6.6
 Requires PHP: 7.3.5
 Stable tag: trunk
 License: GPLv3
