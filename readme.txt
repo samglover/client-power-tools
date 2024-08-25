@@ -3,7 +3,7 @@
 Contributors: samglover
 Tags: client management, project management, portal, restrict content, frontend login
 Requires at least: 5.5
-Tested up to: 6.6
+Tested up to: 6.6.1
 Requires PHP: 7.3.5
 Stable tag: trunk
 License: GPLv3
@@ -108,6 +108,13 @@ For more information on how to take advantage of the new and updated features, s
 
 
 == Changelog ==
+
+### 1.8.6 - 2024-08-25
+
+#### Fixed
+- Fixed a bug in cpt_messages() where calling get_the_ID() after cpt_messages() would return the last message ID instead of the main post ID.
+- Fixed a bug in cpt_get_notices() where WordPress would add a second, unstyled dismiss button to notices on the frontend.
+
 
 ### 1.8.5 - 2024-06-09
 
