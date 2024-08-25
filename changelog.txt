@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
 
+### 1.8.6 - 2024-08-25
+
+#### Fixed
+- Fixed a bug in cpt_messages() where calling get_the_ID() after cpt_messages() would return the last message ID instead of the main post ID.
+- Fixed a bug in cpt_get_notices() where WordPress would add a second, unstyled dismiss button to notices on the frontend.
+
+
 ### 1.8.5 - 2024-06-09
 
 #### Changed

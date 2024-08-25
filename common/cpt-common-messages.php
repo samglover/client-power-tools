@@ -87,6 +87,7 @@ function cpt_message_list($clients_user_id) {
   else:
     printf(__('%sNo messages found.%s' , 'client-power-tools'), '<p>', '</p>');
   endif;
+  wp_reset_postdata();
 }
 
 
