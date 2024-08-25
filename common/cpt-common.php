@@ -258,10 +258,12 @@ function cpt_get_notices() {
   if (!$notice) return;
 
   $classes = [
-    'notice',
     'cpt-notice',
-    'is-dismissible',
   ];
+  if (is_admin()) {
+    $classes[] = 'notice';
+    $classes[] = 'is-dismissible';
+  }
   if (!is_admin()) {
     $classes[] = 'card';
     $classes[] = 'visible';
