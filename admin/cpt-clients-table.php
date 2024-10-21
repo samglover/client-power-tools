@@ -6,10 +6,9 @@
  */
 
 namespace Client_Power_Tools\Core\Admin;
-use Client_Power_Tools\Core\Includes;
 use Client_Power_Tools\Core\Common;
 
-class Client_List_Table extends Includes\WP_List_Table  {
+class Client_List_Table extends \WP_List_Table  {
   function __construct() {
     global $status, $page;
 

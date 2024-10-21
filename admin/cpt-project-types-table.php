@@ -2,9 +2,8 @@
 
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
-use Client_Power_Tools\Core\Includes;
 
-class Project_Types_List_Table extends Includes\WP_List_Table  {
+class Project_Types_List_Table extends \WP_List_Table  {
   function __construct() {
     global $action;
     parent::__construct([

@@ -7,9 +7,8 @@
 
 namespace Client_Power_Tools\Core\Admin;
 use Client_Power_Tools\Core\Common;
-use Client_Power_Tools\Core\Includes;
 
-class Message_List_Table extends Includes\WP_List_Table  {
+class Message_List_Table extends \WP_List_Table  {
   function __construct() {
     global $status, $page;
     parent::__construct([
