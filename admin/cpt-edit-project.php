@@ -10,10 +10,14 @@ function cpt_edit_project($projects_post_id) {
   if (is_admin() && current_user_can('cpt_manage_projects')) {
     if (get_post_status($projects_post_id) != 'trash') {
       ?>
-        <button class="button wp-element-button cpt-click-to-expand"><?php printf(__('Edit %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?></button>
+        <button class="button wp-element-button cpt-click-to-expand">
+          <?php echo wp_kses_post(sprintf(__('Edit %s', 'client-power-tools'), Common\cpt_get_projects_label('singular'))); ?>
+        </button>
         <div class="cpt-this-expands">
           <div class="form-wrap form-wrap-edit_project">
-            <h2><?php printf(__('Edit This %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?></h2>
+            <h2>
+              <?php echo wp_kses_post(sprintf(__('Edit This %s', 'client-power-tools'), Common\cpt_get_projects_label('singular'))); ?>
+            </h2>
             <?php include(CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-project-form.php'); ?>
             <?php cpt_delete_project_button($projects_post_id); ?>
           </div>
@@ -23,8 +27,8 @@ function cpt_edit_project($projects_post_id) {
       ?>
         <div class="cpt-row gap-sm">
           <?php
-            echo cpt_undelete_project_button($projects_post_id);
-            echo cpt_permadelete_project_button($projects_post_id);
+            echo wp_kses_post(cpt_undelete_project_button($projects_post_id));
+            echo wp_kses_post(cpt_permadelete_project_button($projects_post_id));
           ?>
         </div>
       <?php
@@ -65,11 +69,28 @@ function cpt_process_project_update() {
 function cpt_delete_project_button($projects_post_id) {
   if (!$projects_post_id) return;
   ?>
-    <form id="cpt_delete_project_button" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+    <form 
+      id="cpt_delete_project_button" 
+      action="<?php echo esc_url(admin_url('admin-post.php')); ?>" 
+      method="POST"
+    >
       <?php wp_nonce_field('cpt_project_deleted', 'cpt_project_deleted_nonce'); ?>
-      <input name="action" value="cpt_project_deleted" type="hidden">
-      <input name="projects_post_id" value="<?php echo $projects_post_id ?>" type="hidden">
-      <input name="submit" id="submit" type="submit" value="<?php printf(__('Delete this %s', 'client-power-tools'), Common\cpt_get_projects_label('singular')); ?>">
+      <input 
+        name="action" 
+        value="cpt_project_deleted" 
+        type="hidden"
+      >
+      <input 
+        name="projects_post_id" 
+        value="<?php echo esc_attr($projects_post_id); ?>" 
+        type="hidden"
+      >
+      <input 
+        name="submit" 
+        id="submit" 
+        type="submit" 
+        value="<?php echo esc_attr(sprintf(__('Delete this %s', 'client-power-tools'), Common\cpt_get_projects_label('singular'))); ?>"
+      >
     </form>
   <?php
 }
@@ -99,11 +120,28 @@ function cpt_undelete_project_button($projects_post_id) {
   if (!$projects_post_id) return;
   ob_start();
   ?>
-    <form id="cpt_undelete_project_button" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+    <form 
+      id="cpt_undelete_project_button" 
+      action="<?php echo esc_url(admin_url('admin-post.php')); ?>" 
+      method="POST"
+    >
       <?php wp_nonce_field('cpt_project_undeleted', 'cpt_project_undeleted_nonce'); ?>
-      <input name="action" value="cpt_project_undeleted" type="hidden">
-      <input name="projects_post_id" value="<?php echo $projects_post_id ?>" type="hidden">
-      <input name="submit" id="submit" type="submit" value="<?php _e('Restore', 'client-power-tools'); ?>">
+      <input 
+        name="action" 
+        value="cpt_project_undeleted" 
+        type="hidden"
+      >
+      <input 
+        name="projects_post_id" 
+        value="<?php echo esc_attr($projects_post_id); ?>" 
+        type="hidden"
+      >
+      <input 
+        name="submit" 
+        id="submit" 
+        type="submit" 
+        value="<?php esc_attr_e('Restore', 'client-power-tools'); ?>"
+      >
     </form>
   <?php
   return ob_get_clean();
@@ -137,11 +175,28 @@ function cpt_permadelete_project_button($projects_post_id) {
   if (!$projects_post_id) return;
   ob_start();
   ?>
-    <form id="cpt_permadelete_project_button" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+    <form 
+      id="cpt_permadelete_project_button" 
+      action="<?php echo esc_url(admin_url('admin-post.php')); ?>" 
+      method="POST"
+    >
       <?php wp_nonce_field('cpt_project_permadeleted', 'cpt_project_permadeleted_nonce'); ?>
-      <input name="action" value="cpt_project_permadeleted" type="hidden">
-      <input name="projects_post_id" value="<?php echo $projects_post_id ?>" type="hidden">
-      <input name="submit" id="submit" type="submit" value="<?php _e('Delete Permanently', 'client-power-tools'); ?>">
+      <input 
+        name="action" 
+        value="cpt_project_permadeleted" 
+        type="hidden"
+      >
+      <input 
+        name="projects_post_id" 
+        value="<?php echo esc_attr($projects_post_id); ?>" 
+        type="hidden"
+      >
+      <input 
+        name="submit" 
+        id="submit" 
+        type="submit" 
+        value="<?php esc_attr_e('Delete Permanently', 'client-power-tools'); ?>"
+      >
     </form>
   <?php
   return ob_get_clean();

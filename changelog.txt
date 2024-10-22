@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
 
+
+### 1.9 - 2024-10-21
+
+#### Added
+- Installed Composer in order to use WordPress Coding Standards formatting aids.
+- Added notes for translators.
+
+#### Changed
+- Include WP_List_Table from core instead of including the file.
+- Reformatted PHP according to the WordPress Coding Standards.
+
+#### Fixed
+- Added escape functions for all output to resolve Plugin Check alerts.
+
+
 ### 1.8.6 - 2024-08-25
 
 #### Fixed

@@ -35,7 +35,7 @@ function cpt_client_dashboard($content) {
   ob_start();
     cpt_nav();
     cpt_breadcrumbs();
-    echo '<h1 class="entry-title wp-block-post-title cpt-entry-title">' . cpt_get_the_title() . '</h1>';
+    echo '<h1 class="entry-title wp-block-post-title cpt-entry-title">' . wp_kses_post(cpt_get_the_title()) . '</h1>';
     Common\cpt_get_notices();
 
     // Last Activity Timestamp
@@ -44,7 +44,7 @@ function cpt_client_dashboard($content) {
     // Dashboard
     if (Common\cpt_is_client_dashboard('dashboard')) {
       $client_data = Common\cpt_get_client_data($clients_user_id);
-      echo '<p><strong>' . sprintf(__('Welcome back, %s!', 'client-power-tools'), $client_data['first_name']) . '</p></strong>';
+      echo '<p><strong>' . wp_kses_post(sprintf(__('Welcome back, %s!', 'client-power-tools'), $client_data['first_name'])) . '</p></strong>';
       if (
         get_option('cpt_module_status_update_req_button') && 
         !has_shortcode($content, 'status-update-request-button')
@@ -60,17 +60,17 @@ function cpt_client_dashboard($content) {
       } else {
         $projects_post_id = sanitize_key(intval($_REQUEST['projects_post_id']));
         $project_data = Common\cpt_get_project_data($projects_post_id);
-        echo '<p><a href="' . remove_query_arg('projects_post_id') . '">' . sprintf(__('%s Back to %s', 'client-power-tools'), '&larr;', $projects_label[1]) . '</a></p>';
+        echo '<p><a href="' . esc_url(remove_query_arg('projects_post_id')) . '">' . wp_kses_post(sprintf(__('%s Back to %s', 'client-power-tools'), '&larr;', wp_kses_post($projects_label[1]))) . '</a></p>';
         if ($project_data['project_status']) {
           echo '<p class="cpt-project-status">';
-            echo $project_data['project_status'];
-            if ($project_data['project_type']) echo ' ' . $project_data['project_type'];
-            echo ' ' . $projects_label[0];
+            echo wp_kses_post($project_data['project_status']);
+            if ($project_data['project_type']) echo ' ' . wp_kses_post($project_data['project_type']);
+            echo ' ' . wp_kses_post($projects_label[0]);
           echo '</p>';
         }
         echo '<h2 class="cpt-project-title">';
-          echo get_the_title($projects_post_id);
-          if ($project_data['project_id']) echo ' <span style="color:silver">(' . $project_data['project_id'] . ')</span>';
+          echo wp_kses_post(get_the_title($projects_post_id));
+          if ($project_data['project_id']) echo ' <span style="color:silver">(' . wp_kses_post($project_data['project_id']) . ')</span>';
         echo '</h2>';
         Common\cpt_get_project_progress_bar($projects_post_id);
       }
@@ -82,7 +82,7 @@ function cpt_client_dashboard($content) {
       Common\cpt_messages($clients_user_id);
       ?>
         <div class="form-wrap cpt-new-message-form">
-          <h3><?php _e('New Message', 'client-power-tools'); ?></h3>
+          <h3><?php esc_html_e('New Message', 'client-power-tools'); ?></h3>
           <?php Common\cpt_new_message_form($clients_user_id); ?>
         </div>
       <?php
@@ -96,17 +96,28 @@ function cpt_client_dashboard($content) {
 function cpt_nav() {
   remove_filter('the_title', 'Client_Power_Tools\Core\Frontend\cpt_client_dashboard_page_titles', 10);
   ?>
-    <nav id="cpt-nav" class="wp-block-group has-global-padding is-layout-constrained">
+    <nav 
+      id="cpt-nav" 
+      class="wp-block-group has-global-padding is-layout-constrained"
+    >
       <ul class="cpt-tabs menu">
-        <li class="cpt-tab menu-item<?php if (Common\cpt_is_client_dashboard('dashboard') && !isset($_REQUEST['tab'])) echo ' current-menu-item'; ?>"><a href="<?php echo Common\cpt_get_client_dashboard_url(); ?>"><?php _e('Home', 'client-power-tools'); ?></a></li>
+        <li class="cpt-tab menu-item<?php if (Common\cpt_is_client_dashboard('dashboard') && !isset($_REQUEST['tab'])) echo ' current-menu-item'; ?>">
+          <a href="<?php echo esc_url(Common\cpt_get_client_dashboard_url()); ?>">
+            <?php esc_html_e('Home', 'client-power-tools'); ?>
+          </a>
+        </li>
         <?php if (get_option('cpt_module_messaging')) { ?>
           <li class="cpt-tab menu-item<?php if (Common\cpt_is_client_dashboard('messages')) echo ' current-menu-item'; ?>">
-            <a href="<?php echo add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url()); ?>"><?php _e('Messages', 'client-power-tools'); ?></a>
+            <a href="<?php echo esc_url(add_query_arg('tab', 'messages', Common\cpt_get_client_dashboard_url())); ?>">
+              <?php esc_html_e('Messages', 'client-power-tools'); ?>
+            </a>
           </li>
         <?php } ?>
         <?php if (get_option('cpt_module_projects')) { ?>
           <li class="cpt-tab menu-item<?php if (Common\cpt_is_client_dashboard('projects')) echo ' current-menu-item'; ?>">
-            <a href="<?php echo add_query_arg('tab', 'projects', Common\cpt_get_client_dashboard_url()); ?>"><?php echo Common\cpt_get_projects_label('plural'); ?></a>
+            <a href="<?php echo esc_url(add_query_arg('tab', 'projects', Common\cpt_get_client_dashboard_url())); ?>">
+              <?php echo wp_kses_post(Common\cpt_get_projects_label('plural')); ?>
+            </a>
           </li>
         <?php } ?>
         <?php if (get_option('cpt_module_knowledge_base')) { ?>
@@ -118,9 +129,11 @@ function cpt_nav() {
             if ($kb_children_ids) $kb_classes .= ' menu-item-has-children';
             if (Common\cpt_is_knowledge_base()) $kb_classes .= ' current-menu-item';
           ?>
-          <li class="<?php echo $kb_classes; ?>">
-            <a href="<?php echo Common\cpt_get_knowledge_base_url(); ?>"><?php echo get_the_title($kb_id); ?></a>
-            <?php if ($kb_children_ids) echo cpt_get_submenu($kb_id); ?>
+          <li class="<?php echo esc_attr($kb_classes); ?>">
+            <a href="<?php echo esc_url(Common\cpt_get_knowledge_base_url()); ?>">
+              <?php echo wp_kses_post(get_the_title($kb_id)); ?>
+            </a>
+            <?php if ($kb_children_ids) echo wp_kses_post(cpt_get_submenu($kb_id)); ?>
           </li>
         <?php } ?>
         <?php
@@ -133,9 +146,11 @@ function cpt_nav() {
               if (get_option('cpt_client_dashboard_addl_pages_children') && $addl_page_children_ids) $addl_page_classes .= ' menu-item-has-children';
               if ($addl_page_id == get_the_ID() || in_array($addl_page_id, get_post_ancestors(get_the_ID()))) $addl_page_classes .= ' current-menu-item';
               ?>
-                <li class="<?php echo $addl_page_classes; ?>">
-                  <a href="<?php echo get_permalink($addl_page_id); ?>"><?php echo get_the_title($addl_page_id); ?></a>
-                  <?php if (get_option('cpt_client_dashboard_addl_pages_children') && $addl_page_children_ids) echo cpt_get_submenu($addl_page_id); ?>
+                <li class="<?php echo esc_attr($addl_page_classes); ?>">
+                  <a href="<?php echo esc_url(get_permalink($addl_page_id)); ?>">
+                    <?php echo wp_kses_post(get_the_title($addl_page_id)); ?>
+                  </a>
+                  <?php if (get_option('cpt_client_dashboard_addl_pages_children') && $addl_page_children_ids) echo wp_kses_post(cpt_get_submenu($addl_page_id)); ?>
                 </li>
               <?php
             }
@@ -186,8 +201,8 @@ function cpt_get_submenu($page_id) {
             if ($id == get_the_ID()) $classes .= ' current-menu-item';
             if ($children) $classes .= ' menu-item-has-children';
           ?>
-          <li class="<?php echo $classes; ?>">
-            <a href="<?php echo get_permalink($id); ?>"><?php echo get_the_title($id); ?></a>
+          <li class="<?php echo esc_attr($classes); ?>">
+            <a href="<?php echo esc_url(get_permalink($id)); ?>"><?php echo wp_kses_post(get_the_title($id)); ?></a>
             <?php if ($children) cpt_get_submenu($id); ?>
           </li>
         <?php } ?>
@@ -217,7 +232,7 @@ function cpt_breadcrumbs() {
 
   ?>
     <div id="cpt-breadcrumbs">
-      <?php echo implode(' / ', $breadcrumbs); ?>
+      <?php echo wp_kses_post(implode(' / ', $breadcrumbs)); ?>
     </div>
   <?php
 }
