@@ -48,7 +48,7 @@ function cpt_message_list( $clients_user_id ) {
 			$cpt_messages->the_post();
 			$message_id      = get_the_ID();
 			$message_classes = array( 'cpt-message', 'card' );
-			$message_meta    = '<p>';
+			$message_meta    = '';
 
 			if ( get_post_meta( $message_id, 'cpt_status_update_request' ) ) {
 				$message_classes[] = 'status-update-request';
@@ -74,8 +74,6 @@ function cpt_message_list( $clients_user_id ) {
 				$message_meta .= ' ' . __( 'CCed to', 'client-power-tools' ) . ' ' . cpt_array_to_strlist( $email_ccs ) . '.';
 			}
 
-			$message_meta .= '</p>';
-
 			?>
 				<div 
 					id="cpt-message-<?php echo esc_attr( $message_id ); ?>" 
@@ -90,14 +88,14 @@ function cpt_message_list( $clients_user_id ) {
 							the_content();}
 						?>
 					</div>
-					<div class="cpt-message-meta"><?php echo esc_html( $message_meta ); ?></div>
+					<p class="cpt-message-meta"><?php echo esc_html( $message_meta ); ?></p>
 				</div>
 			<?php
 		endwhile;
 
 		$big = 999999;
 
-		echo esc_html(
+		echo wp_kses_post(
 			paginate_links(
 				array(
 					'base'    => str_replace( $big, '%#%', get_pagenum_link( $big, false ) ),
@@ -117,129 +115,148 @@ function cpt_message_list( $clients_user_id ) {
 
 
 function cpt_new_message_form( $clients_user_id ) {
-	$editor_args = array(
-		'editor_height' => 205,
-		'media_buttons' => false,
-		'quicktags'     => false,
-		'textarea_name' => 'message',
-		'tinymce'       => array(
-			'toolbar1' => 'bold, italic, bullist, numlist, blockquote, outdent, indent, link, unlink',
-			'toolbar2' => '',
-			'toolbar3' => '',
-		),
-	);
-
-	ob_start();
 	?>
-			<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST">
-				<?php wp_nonce_field( 'cpt_new_message_added', 'cpt_new_message_nonce' ); ?>
-				<input 
-					name="action" 
-					value="cpt_new_message_added" 
-					type="hidden"
-				>
-				<input 
-					name="clients_user_id" 
-					value="<?php echo esc_html( $clients_user_id ); ?>" 
-					type="hidden"
-				>
-				<div class="cpt-row">
-					<div class="form-field span-6">
-						<label for="subject_line"><?php esc_html_e( 'Subject Line', 'client-power-tools' ); ?></label>
-						<input name="subject_line" id="subject_line" class="large-text" type="text">
-						<p class="description">
-							<?php
-								printf(
-									// translators: %s is the current user's display name.
-									esc_html__( 'If you leave this field empty the subject line will be "New message from %s".', 'client-power-tools' ),
-									esc_html( cpt_get_display_name( get_current_user_id() ) )
-								);
-							?>
-						</p>
-					</div>
-				</div>
-				<div class="cpt-row">
-					<div class="form-field span-6">
-						<label for="message"><?php esc_html_e( 'Message', 'client-power-tools' ); ?></label>
-						<?php \wp_editor( '', 'cpt-message-editor', $editor_args ); ?>
-					</div>
-				</div>
-				<?php if ( is_admin() ) { ?>
-					<?php
-						$email_ccs = explode( "\n", get_user_meta( $clients_user_id, 'cpt_email_ccs', true ) );
-						$email_ccs = cpt_cleanse_array_of_emails( $email_ccs );
-					if ( $email_ccs ) {
+		<form 
+			action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" 
+			method="POST"
+		>
+			<?php wp_nonce_field( 'cpt_new_message_added', 'cpt_new_message_nonce' ); ?>
+			<input 
+				name="action" 
+				value="cpt_new_message_added" 
+				type="hidden"
+			>
+			<input 
+				name="clients_user_id" 
+				value="<?php echo esc_attr( $clients_user_id ); ?>" 
+				type="hidden"
+			>
+			<div class="cpt-row">
+				<div class="form-field span-6">
+					<label for="subject_line">
+						<?php esc_html_e( 'Subject Line', 'client-power-tools' ); ?>
+					</label>
+					<input 
+						name="subject_line" 
+						id="subject_line" 
+						class="large-text" 
+						type="text"
+					>
+					<p class="description">
+						<?php
+							printf(
+								// translators: %s is the current user's display name.
+								esc_html__( 'If you leave this field empty the subject line will be "New message from %s".', 'client-power-tools' ),
+								esc_html( cpt_get_display_name( get_current_user_id() ) )
+							);
 						?>
-								<div class="cpt-row">
-									<div class="form-field span-6">
-										<fieldset>
-											<legend>Email CCs</legend>
-											<?php foreach ( $email_ccs as $key => $val ) { ?>
-												<label for="email_cc_<?php echo esc_attr( $key ); ?>">
-													<input 
-														name="email_ccs[]" 
-														value="<?php echo esc_attr( $val ); ?>"
-														id="email_cc_<?php echo esc_attr( $key ); ?>"
-														type="checkbox" 
-														checked
-													>
-													<?php echo esc_html( $val ); ?>
-												</label>
-											<?php } ?>
-										</fieldset>
-										<p class="description">
-											<?php esc_html_e( 'To add or remove emails, use the Edit Client button, above.', 'client-power-tools' ); ?>
-										</p>
-									</div>
-								</div>
-							<?php
-					}
-					?>
-					<div class="cpt-row">
-						<div class="form-field span-6">
-							<fieldset>
-								<?php if ( get_option( 'cpt_send_message_content' ) === false ) { ?>
-									<label for="send_message_content">
-										<input name="send_message_content" id="send_message_content" type="checkbox" value="1">
-										<?php esc_html_e( 'Send message content.', 'client-power-tools' ); ?>
-									</label>
-									<p class="description">
-										<?php esc_html_e( 'If checked, the client will receive the actual message by email instead of a notification with a prompt to log into their client portal. This is less secure.', 'client-power-tools' ); ?>
-									</p>
-								<?php } else { ?>
-									<label for="send_notification_only">
-										<input name="send_notification_only" id="send_notification_only" type="checkbox" value="1">
-										<?php esc_html_e( 'Send notification only.', 'client-power-tools' ); ?>
-									</label>
-									<p class="description">
-										<?php esc_html_e( 'If checked, the client will receive an email letting them know they have a message, but they will have to log into their client dashboard to view the body of the message. This is more secure.', 'client-power-tools' ); ?>
-									</p>
-								<?php } ?>
-							</fieldset>
-						</div>
-					</div>
-				<?php } ?>
-				<div class="cpt-row cpt-buttons">
-					<p class="submit">
-						<input 
-							name="submit" 
-							id="submit" 
-							class="button button-primary wp-element-button" 
-							type="submit" 
-							value="<?php esc_html_e( 'Send Message', 'client-power-tools' ); ?>"
-						>
 					</p>
 				</div>
-			</form>
-		<?php
-		$new_message_form = ob_get_clean();
+			</div>
+			<div class="cpt-row">
+				<div class="form-field span-6">
+					<label for="message">
+						<?php esc_html_e( 'Message', 'client-power-tools' ); ?>
+					</label>
+					<?php
+					$editor_args = array(
+						'editor_height' => 205,
+						'media_buttons' => false,
+						'quicktags'     => false,
+						'textarea_name' => 'message',
+						'tinymce'       => array(
+							'toolbar1' => 'bold, italic, bullist, numlist, blockquote, outdent, indent, link, unlink',
+							'toolbar2' => '',
+							'toolbar3' => '',
+						),
+					);
+					\wp_editor( '', 'cpt-message-editor', $editor_args );
+					?>
+				</div>
+			</div>
+			<?php
+			if ( is_admin() ) {
+				$email_ccs = explode( "\n", get_user_meta( $clients_user_id, 'cpt_email_ccs', true ) );
+				$email_ccs = cpt_cleanse_array_of_emails( $email_ccs );
+				if ( $email_ccs ) {
+					?>
+						<div class="cpt-row">
+							<div class="form-field span-6">
+								<fieldset>
+									<legend>Email CCs</legend>
+										<?php foreach ( $email_ccs as $key => $val ) { ?>
+											<label for="email_cc_<?php echo esc_attr( $key ); ?>">
+												<input 
+													name="email_ccs[]" 
+													value="<?php echo esc_attr( $val ); ?>"
+													id="email_cc_<?php echo esc_attr( $key ); ?>"
+													type="checkbox" 
+													checked
+												>
+												<?php echo esc_html( $val ); ?>
+											</label>
+										<?php } ?>
+								</fieldset>
+								<p class="description">
+									<?php
+										printf(
+											wp_kses_post(
+												// translators: %1$s and %2$s are strong tags.
+												__( 'To add or remove emails, use the %1$sEdit Client%2$s button, above.', 'client-power-tools' )
+											),
+											'<strong>',
+											'</strong>'
+										);
+									?>
+								</p>
+							</div>
+						</div>
+					<?php
+				}
+				?>
+				<div class="cpt-row">
+					<div class="form-field span-6">
+						<fieldset>
+						<?php if ( get_option( 'cpt_send_message_content' ) === false ) { ?>
+								<label for="send_message_content">
+									<input name="send_message_content" id="send_message_content" type="checkbox" value="1">
+									<?php esc_html_e( 'Send message content.', 'client-power-tools' ); ?>
+								</label>
+								<p class="description">
+									<?php esc_html_e( 'If checked, the client will receive the actual message by email instead of a notification with a prompt to log into their client portal. This is less secure.', 'client-power-tools' ); ?>
+								</p>
+							<?php } else { ?>
+								<label for="send_notification_only">
+									<input name="send_notification_only" id="send_notification_only" type="checkbox" value="1">
+									<?php esc_html_e( 'Send notification only.', 'client-power-tools' ); ?>
+								</label>
+								<p class="description">
+									<?php esc_html_e( 'If checked, the client will receive an email letting them know they have a message, but they will have to log into their client dashboard to view the body of the message. This is more secure.', 'client-power-tools' ); ?>
+								</p>
+							<?php } ?>
+						</fieldset>
+					</div>
+				</div>
+			<?php } ?>
+			<div class="cpt-row cpt-buttons">
+				<p class="submit">
+					<input 
+						name="submit" 
+						id="submit" 
+						class="button button-primary wp-element-button" 
+						type="submit" 
+						value="<?php esc_html_e( 'Send Message', 'client-power-tools' ); ?>"
+					>
+				</p>
+			</div>
+		</form>
+	<?php
 
-		if ( is_admin() ) {
-			\_WP_Editors::enqueue_scripts();
-			\_WP_Editors::editor_js();
-			\print_footer_scripts();
-		}
-		echo esc_html( $new_message_form );
+	if ( is_admin() ) {
+		\_WP_Editors::enqueue_scripts();
+		\_WP_Editors::editor_js();
+		\print_footer_scripts();
+	}
 }
 
 
@@ -247,7 +264,7 @@ add_action( 'admin_post_cpt_new_message_added', __NAMESPACE__ . '\cpt_process_ne
 function cpt_process_new_message() {
 	if ( isset( $_POST['cpt_new_message_nonce'] ) && wp_verify_nonce( $_POST['cpt_new_message_nonce'], 'cpt_new_message_added' ) ) {
 		$post_title      = wp_strip_all_tags( sanitize_text_field( $_POST['subject_line'] ) );
-		$post_content    = esc_html( $_POST['message'] );
+		$post_content    = wp_kses_post( $_POST['message'] );
 		$clients_user_id = sanitize_key( intval( $_POST['clients_user_id'] ) );
 		$client_data     = cpt_get_client_data( $clients_user_id );
 

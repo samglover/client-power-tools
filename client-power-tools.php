@@ -162,10 +162,12 @@ function cpt_activate() {
 						<p>
 							<?php
 								printf(
-									// Translators: 1 and 2 are HTML <a> tags for a link to the settings page.
-									esc_html__( 'Something went wrong when creating pages. Please select a page from the %1$sSettings page%2$s.', 'client-power-tools' ),
-									/* %1$s */ '<a href="' . esc_url( add_query_arg( 'cpt', 'cpt-settings', admin_url( 'admin.php' ) ) ) . '">',
-									/* %2$s */ '</a>'
+									wp_kses_post(
+										// Translators: %1$s and %2$s are HTML <a> tags for a link to the settings page.
+										__( 'Something went wrong when creating pages. Please select a page from the %1$sSettings page%2$s.', 'client-power-tools' ),
+										/* %1$s */ '<a href="' . esc_url( add_query_arg( 'cpt', 'cpt-settings', admin_url( 'admin.php' ) ) ) . '">',
+										/* %2$s */ '</a>'
+									)
 								);
 							?>
 						</p>

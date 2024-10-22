@@ -17,7 +17,7 @@ function cpt_projects() {
 			<?php if ( isset( $_REQUEST['projects_post_id'] ) ) { ?>
 				<p>
 					<a href="<?php echo esc_url( remove_query_arg( 'projects_post_id' ) ); ?>">
-						&larr; 
+						&lt; 
 						<?php
 							printf(
 								// Translators: %s is the projects label.
