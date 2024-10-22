@@ -120,7 +120,11 @@ function cpt_client_dashboard( $content ) {
 				<?php
 				echo esc_html( get_the_title( $projects_post_id ) );
 				if ( $project_data['project_id'] ) {
-					echo ' <span style="color:silver">(' . wp_kses_post( $project_data['project_id'] ) . ')</span>';
+					?>
+						<span style="color:silver">
+							(<?php echo esc_html( $project_data['project_id'] ); ?>)
+						</span>
+					<?php
 				}
 				?>
 			</h2>
@@ -182,7 +186,7 @@ function cpt_nav() {
 							?>
 					">
 						<a href="<?php echo esc_url( add_query_arg( 'tab', 'projects', Common\cpt_get_client_dashboard_url() ) ); ?>">
-							<?php echo wp_kses_post( Common\cpt_get_projects_label( 'plural' ) ); ?>
+							<?php echo esc_html( Common\cpt_get_projects_label( 'plural' ) ); ?>
 						</a>
 					</li>
 				<?php } ?>
@@ -201,7 +205,7 @@ function cpt_nav() {
 							?>
 					<li class="<?php echo esc_attr( $kb_classes ); ?>">
 						<a href="<?php echo esc_url( Common\cpt_get_knowledge_base_url() ); ?>">
-							<?php echo wp_kses_post( get_the_title( $kb_id ) ); ?>
+							<?php echo esc_html( get_the_title( $kb_id ) ); ?>
 						</a>
 							<?php
 							if ( $kb_children_ids ) {
@@ -225,7 +229,7 @@ function cpt_nav() {
 								?>
 								<li class="<?php echo esc_attr( $addl_page_classes ); ?>">
 									<a href="<?php echo esc_url( get_permalink( $addl_page_id ) ); ?>">
-									<?php echo wp_kses_post( get_the_title( $addl_page_id ) ); ?>
+										<?php echo esc_html( get_the_title( $addl_page_id ) ); ?>
 									</a>
 								<?php
 								if ( get_option( 'cpt_client_dashboard_addl_pages_children' ) && $addl_page_children_ids ) {
@@ -294,7 +298,7 @@ function cpt_get_submenu( $page_id ) {
 					}
 					?>
 					<li class="<?php echo esc_attr( $classes ); ?>">
-						<a href="<?php echo esc_url( get_permalink( $id ) ); ?>"><?php echo wp_kses_post( get_the_title( $id ) ); ?></a>
+						<a href="<?php echo esc_url( get_permalink( $id ) ); ?>"><?php echo esc_url( get_the_title( $id ) ); ?></a>
 						<?php
 						if ( $children ) {
 							cpt_get_submenu( $id );}
@@ -331,7 +335,7 @@ function cpt_breadcrumbs() {
 
 	?>
 		<div id="cpt-breadcrumbs">
-	<?php echo wp_kses_post( implode( ' / ', $breadcrumbs ) ); ?>
+			<?php echo wp_kses_post( implode( ' / ', $breadcrumbs ) ); ?>
 		</div>
-			<?php
+	<?php
 }

@@ -9,16 +9,16 @@
 	<input name="action" value="cpt_new_client_added" type="hidden">
 	<div class="cpt-row">
 	<div class="form-field">
-		<label for="client_id"><?php echo wp_kses_post( __( 'Client ID', 'client-power-tools' ) ); ?></label>
+		<label for="client_id"><?php esc_html_e( 'Client ID', 'client-power-tools' ); ?></label>
 		<input name="client_id" id="client_id" class="regular-text" type="text">
 	</div>
 		<div class="form-field span-3">
-		<label for="client_name"><?php echo wp_kses_post( __( 'Client Name', 'client-power-tools' ) ); ?></label>
+		<label for="client_name"><?php esc_html_e( 'Client Name', 'client-power-tools' ); ?></label>
 		<input name="client_name" id="client_name" class="regular-text" type="text">
 		</div>
 	</div>
 	<div class="cpt-row">
-	<p class="cpt-section-header span-3"><?php echo wp_kses_post( __( 'Primary Contact', 'client-power-tools' ) ); ?></p>
+	<p class="cpt-section-header span-3"><?php esc_html_e( 'Primary Contact', 'client-power-tools' ); ?></p>
 	</div>
 	<div class="cpt-row">
 		<div class="form-field span-2">
@@ -64,25 +64,25 @@
 		</div>
 	</div>
 	<div class="cpt-row">
-	<p class="cpt-section-header span-3"><?php echo wp_kses_post( __( 'Additional Contacts', 'client-power-tools' ) ); ?></p>
+	<p class="cpt-section-header span-3"><?php esc_html_e( 'Additional Contacts', 'client-power-tools' ); ?></p>
 	</div>
 	<div class="cpt-row">
 	<div class="form-field span-3">
-		<label for="email_ccs"><?php echo wp_kses_post( __( 'Email Addresses to CC When Sending Messages', 'client-power-tools' ) ); ?></label>
+		<label for="email_ccs"><?php esc_html_e( 'Email Addresses to CC When Sending Messages', 'client-power-tools' ); ?></label>
 		<textarea name="email_ccs" id="email_ccs" class="regular-text" rows="3" type="text"></textarea>
-		<p class="description"><?php echo wp_kses_post( __( 'Enter one email address per line.', 'client-power-tools' ) ); ?></p>
+		<p class="description"><?php esc_html_e( 'Enter one email address per line.', 'client-power-tools' ); ?></p>
 	</div>
 	</div>
 	<div class="cpt-row">
-	<p class="cpt-section-header span-3"><?php echo wp_kses_post( __( 'Client Details', 'client-power-tools' ) ); ?></p>
+	<p class="cpt-section-header span-3"><?php esc_html_e( 'Client Details', 'client-power-tools' ); ?></p>
 	</div>
 	<div class="cpt-row">
 	<div class="form-field span-2">
-		<label for="client_manager"><?php echo wp_kses_post( __( 'Client Manager', 'client-power-tools' ) ); ?></label>
+		<label for="client_manager"><?php esc_html_e( 'Client Manager', 'client-power-tools' ); ?></label>
 		<?php echo wp_kses_post( cpt_get_client_manager_select() ); ?>
 	</div>
 	<div class="form-field">
-		<label for="client_status"><?php echo wp_kses_post( __( 'Client Status', 'client-power-tools' ) ); ?></label>
+		<label for="client_status"><?php esc_html_e( 'Client Status', 'client-power-tools' ); ?></label>
 		<?php echo wp_kses_post( cpt_get_status_select( 'cpt_client_statuses', 'client_status', 'cpt_default_client_status' ) ); ?>
 	</div>
 	</div>

@@ -356,7 +356,7 @@ function cpt_status_update_req_freq() {
 		<p class="description">
 			<?php
 				printf(
-					wp_kses(
+					wp_kses_post(
 						// Translators: %1$s and %2$s are <strong> tags.
 						esc_html__( 'Enter how frequently you want to allow your clients to request a status update using the %1$sRequest Status Update%2$s button on their client dashboard.', 'client-power-tools' ),
 						/* %1$s */ '<strong>',
