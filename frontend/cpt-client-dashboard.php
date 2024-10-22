@@ -285,29 +285,30 @@ function cpt_get_submenu( $page_id ) {
 
 	ob_start();
 	?>
-			<ul class="sub-menu">
-		<?php foreach ( $child_pages as $id ) { ?>
+		<ul class="sub-menu">
+			<?php foreach ( $child_pages as $id ) { ?>
+				<?php
+					$children = cpt_get_child_pages( $id );
+					$classes  = 'menu-item';
+				if ( get_the_ID() === $id ) {
+					$classes .= ' current-menu-item';
+				}
+				if ( $children ) {
+					$classes .= ' menu-item-has-children';
+				}
+				?>
+				<li class="<?php echo esc_attr( $classes ); ?>">
+					<a href="<?php echo esc_url( get_permalink( $id ) ); ?>"><?php echo esc_html( get_the_title( $id ) ); ?></a>
 					<?php
-						$children = cpt_get_child_pages( $id );
-						$classes  = 'menu-item';
-					if ( $id == get_the_ID() ) {
-						$classes .= ' current-menu-item';
-					}
 					if ( $children ) {
-						$classes .= ' menu-item-has-children';
+						echo wp_kses_post( cpt_get_submenu( $id ) );
 					}
 					?>
-					<li class="<?php echo esc_attr( $classes ); ?>">
-						<a href="<?php echo esc_url( get_permalink( $id ) ); ?>"><?php echo esc_url( get_the_title( $id ) ); ?></a>
-						<?php
-						if ( $children ) {
-							cpt_get_submenu( $id );}
-						?>
-					</li>
-				<?php } ?>
-			</ul>
-				<?php
-				return ob_get_clean();
+				</li>
+			<?php } ?>
+		</ul>
+	<?php
+	return ob_get_clean();
 }
 
 

@@ -62,8 +62,8 @@ function cpt_delete_client_modal( $clients_user_id ) {
 		<div id="cpt-delete-client-modal" class="cpt-admin-modal" style="display: none;">
 			<div class="cpt-admin-modal-card">
 				<h2 style="color: red;"><?php esc_html_e( 'WARNING' ); ?></h2>
-				<p><?php esc_html_e( '<strong>Deleting a client is permanent.</strong> There is no undo. Make sure you have a backup!' ); ?></p>
-				<p><?php esc_html_e( 'Deleting a client will also remove the associated user account, client messages, projects, and other client information.' ); ?></p>
+				<p><?php echo wp_kses_post( '<strong>Deleting a client is permanent.</strong> There is no undo. Make sure you have a backup!' ); ?></p>
+				<p><?php echo wp_kses_post( 'Deleting a client will also remove the associated user account, client messages, projects, and other client information.' ); ?></p>
 				<?php cpt_delete_client_button( $clients_user_id ); ?>
 				<button class="button wp-element-button cpt-cancel-delete-client">
 					<?php esc_html_e( 'Cancel' ); ?>
@@ -86,9 +86,23 @@ function cpt_delete_client_button( $clients_user_id ) {
 	?>
 		<form id="cpt_delete_client_button" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST">
 			<?php wp_nonce_field( 'cpt_client_deleted', 'cpt_client_deleted_nonce' ); ?>
-			<input name="action" value="cpt_client_deleted" type="hidden">
-			<input name="clients_user_id" value="<?php echo esc_attr( $clients_user_id ); ?>" type="hidden">
-			<input name="submit" id="submit" class="button button-primary wp-element-button" type="submit" value="<?php echo esc_attr( $button_txt ); ?>">
+			<input 
+				name="action" 
+				value="cpt_client_deleted" 
+				type="hidden"
+			>
+			<input 
+				name="clients_user_id" 
+				value="<?php echo esc_attr( $clients_user_id ); ?>" 
+				type="hidden"
+			>
+			<input 
+				name="submit" 
+				id="submit" 
+				class="button button-primary wp-element-button" 
+				type="submit" 
+				value="<?php echo esc_attr( $button_txt ); ?>"
+			>
 		</form>
 	<?php
 }

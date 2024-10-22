@@ -142,7 +142,7 @@ function cpt_get_client_profile( $clients_user_id ) {
 							<?php
 								printf(
 									// translators: %s is the client's name.
-									esc_html_e( 'Delete %s', 'client-power-tools' ),
+									esc_html__( 'Delete %s', 'client-power-tools' ),
 									esc_html( $client_name )
 								);
 							?>

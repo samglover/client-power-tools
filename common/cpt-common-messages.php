@@ -56,10 +56,10 @@ function cpt_message_list( $clients_user_id ) {
 
 			if ( get_the_author_meta( 'ID' ) === get_current_user_id() ) {
 				$message_classes[] = 'my-message';
-				$message_meta     .= __( 'Sent by you ', 'client-power-tools' );
+				$message_meta     .= '<strong>' . __( 'Sent by you ', 'client-power-tools' ) . '</strong>';
 			} else {
 				$message_classes[] = 'not-my-message';
-				$message_meta     .= __( 'Sent by ', 'client-power-tools' ) . get_the_author();
+				$message_meta     .= '<strong>' . __( 'Sent by ', 'client-power-tools' ) . get_the_author() . '</strong>';
 			}
 
 			$message_meta .= ' ' . __( 'on', 'client-power-tools' ) . ' ' . get_the_date( 'F jS, Y' ) . ' ' . __( 'at', 'client-power-tools' ) . ' ' . get_the_date( 'g:i a' ) . '.';
@@ -68,10 +68,10 @@ function cpt_message_list( $clients_user_id ) {
 			$email_ccs = cpt_cleanse_array_of_emails( explode( "\n", get_post_meta( $message_id, 'cpt_email_ccs', true ) ) );
 
 			if ( $email_to ) {
-				$message_meta .= ' ' . __( 'Sent to', 'client-power-tools' ) . ' ' . $email_to . '.';
+				$message_meta .= ' <strong>' . __( 'Sent to', 'client-power-tools' ) . '</strong> ' . $email_to . '.';
 			}
 			if ( count( $email_ccs ) ) {
-				$message_meta .= ' ' . __( 'CCed to', 'client-power-tools' ) . ' ' . cpt_array_to_strlist( $email_ccs ) . '.';
+				$message_meta .= ' <strong>' . __( 'CCed to', 'client-power-tools' ) . '</strong> ' . cpt_array_to_strlist( $email_ccs ) . '.';
 			}
 
 			?>
@@ -88,7 +88,7 @@ function cpt_message_list( $clients_user_id ) {
 							the_content();}
 						?>
 					</div>
-					<p class="cpt-message-meta"><?php echo esc_html( $message_meta ); ?></p>
+					<p class="cpt-message-meta"><?php echo wp_kses_post( $message_meta ); ?></p>
 				</div>
 			<?php
 		endwhile;
