@@ -28,10 +28,10 @@ function cpt_client_dashboard( $content ) {
 		return '<p>' . sprintf(
 			wp_kses_post(
 				// translators: %1$s and %2$s are <a> tags for the login link.
-				__( 'Please %1$slog in%2$s to view the client dashboard.', 'client-power-tools' ),
-				/* %1$s */ '<a class="cpt-login-link" href="#">',
-				/* %2$s */ '</a>',
-			)
+				__( 'Please %1$slog in%2$s to view the client dashboard.', 'client-power-tools' )
+			),
+			/* %1$s */ '<a class="cpt-login-link" href="#">',
+			/* %2$s */ '</a>'
 		) . '</p>';
 	}
 
