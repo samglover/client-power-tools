@@ -187,8 +187,8 @@ class Project_List_Table extends \WP_List_Table {
 					'project_stage'   => $project_data['project_type'] ? $project_data['project_stage'] : '',
 					'project_status'  => $project_data['project_status'],
 				);
-		endwhile;
-endif;
+			endwhile;
+		endif;
 
 		// Filters the data set.
 		if ( isset( $_REQUEST['project_status'] ) ) {
