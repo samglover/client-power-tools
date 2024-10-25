@@ -117,7 +117,7 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\cpt_register_admin_script
 function cpt_register_admin_scripts() {
 	// Only loads CPT admin styles and scripts on CPT admin pages.
 	global $pagenow;
-	$page = sanitize_key( $_GET['page'] );
+	$page = isset( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : '';
 	if ( 'admin.php' !== $pagenow || ! str_starts_with( $page, 'cpt' ) ) {
 		return;
 	}

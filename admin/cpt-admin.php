@@ -196,7 +196,7 @@ function cpt_menu_pages() {
 
 function cpt_is_cpt_admin_page() {
 	global $pagenow;
-	$page = sanitize_key( $_GET['page'] );
+	$page = isset( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : '';
 	if ( 'admin.php' === $pagenow && str_starts_with( $page, 'cpt' ) ) {
 		return true;
 	} else {
