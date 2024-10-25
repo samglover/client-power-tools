@@ -93,21 +93,20 @@ function cpt_message_list( $clients_user_id ) {
 			<?php
 		endwhile;
 
-		$big = 999999;
-
-		echo wp_kses_post(
-			paginate_links(
-				array(
-					'base'    => str_replace( $big, '%#%', get_pagenum_link( $big, false ) ),
-					'format'  => '?paged=%#%',
-					'current' => max( 1, $paged ),
-					'total'   => $cpt_messages->max_num_pages,
-				)
+		$big        = 999999;
+		$page_links = paginate_links(
+			array(
+				'base'    => str_replace( $big, '%#%', get_pagenum_link( $big, false ) ),
+				'format'  => '?paged=%#%',
+				'current' => max( 1, $paged ),
+				'total'   => $cpt_messages->max_num_pages,
 			)
 		);
+
+		echo $page_links ? wp_kses_post( $page_links ) : '';
 	else :
 		?>
-			<p><?php esc_html__( 'No messages found.', 'client-power-tools' ); ?></p>
+			<p><?php esc_html_e( 'No messages found.', 'client-power-tools' ); ?></p>
 		<?php
 	endif;
 	wp_reset_postdata();
@@ -272,12 +271,12 @@ function cpt_process_new_message() {
 		$send_msg_content_default = get_option( 'cpt_send_message_content' );
 
 		if ( ! $send_msg_content_default ) {
-			if ( isset( $_POST['send_message_content'] ) && $_POST['send_message_content'] == 1 ) {
+			if ( isset( $_POST['send_message_content'] ) && $_POST['send_message_content'] === 1 ) {
 				$send_this_msg_content = true;
 			} else {
 				$send_this_msg_content = false;
 			}
-		} elseif ( isset( $_POST['send_notification_only'] ) && $_POST['send_notification_only'] == 1 ) {
+		} elseif ( isset( $_POST['send_notification_only'] ) && $_POST['send_notification_only'] === 1 ) {
 				$send_this_msg_content = false;
 		} else {
 			$send_this_msg_content = true;
@@ -291,6 +290,7 @@ function cpt_process_new_message() {
 		if ( is_admin() && isset( $_POST['email_ccs'] ) ) {
 			$email_ccs = implode( "\n", cpt_cleanse_array_of_emails( $_POST['email_ccs'] ) );
 		}
+
 		$new_message = array(
 			'post_name'    => md5( time() . random_int( 0, PHP_INT_MAX ) ),
 			'post_title'   => $post_title,
@@ -308,14 +308,18 @@ function cpt_process_new_message() {
 		$post = wp_insert_post( $new_message, $wp_error );
 
 		if ( is_wp_error( $post ) ) {
-			$result = sprintf( __( 'Message could not be sent. Error message: %s', 'client-power-tools' ), $post->get_error_message() );
+			$result = sprintf(
+				// translators: %s is the error message.
+				__( 'Message could not be sent. Error message: %s', 'client-power-tools' ),
+				$post->get_error_message()
+			);
 		} else {
 			cpt_message_notification( $post );
 			$result = __( 'Message sent!', 'client-power-tools' );
 		}
 
 		set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
-		wp_safe_redirect( $_POST['_wp_http_referer'] );
+		wp_redirect( $_POST['_wp_http_referer'] );
 		exit;
 	} else {
 		die();
@@ -346,14 +350,22 @@ function cpt_message_notification( $message_id ) {
 		$headers[] = 'Cc: ' . trim( $cc );
 	}
 
-	$subject = $msg_obj->post_title ? $msg_obj->post_title : sprintf( __( 'You have a new message from %s', 'client-power-tools' ), $from_name );
+	if ( $msg_obj->post_title ) {
+		$subject = $msg_obj->post_title;
+	} else {
+		$subject = sprintf(
+			// translators: %s is the sender's name.
+			__( 'You have a new message from %s', 'client-power-tools' ),
+			$from_name
+		);
+	}
 
 	if ( $send_this_msg_content ) {
 		$message = apply_filters( 'the_content', get_the_content( null, false, $msg_obj ) );
 	} elseif ( $sender_id === $clients_user_id ) {
-			$message = sprintf( __( '%1$sTo read your message, please visit your client dashboard.%2$s', 'client-power-tools' ), '<p>', '</p>' );
+		$message = '<p>' . __( 'To read your message, please visit your client dashboard.', 'client-power-tools' ) . '</p>';
 	} else {
-		$message = sprintf( __( '%1$sTo read this message, please view the client page.%2$s', 'client-power-tools' ), '<p>', '</p>' );
+		$message = '<p>' . __( 'To read this message, please view the client page.', 'client-power-tools' ) . '</p>';
 	}
 
 	if ( $sender_id === $clients_user_id ) {

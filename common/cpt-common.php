@@ -279,7 +279,7 @@ function cpt_get_email_card(
 				<?php } ?>
 				<?php
 				if ( ! empty( $content ) ) {
-					echo esc_html( $content );}
+					echo wp_kses_post( $content );}
 				?>
 				<?php if ( ! empty( $button_url ) ) { ?>
 					<a 
@@ -326,7 +326,7 @@ function cpt_get_notices() {
 			<?php if ( ! is_admin() ) { ?>
 				<button class="cpt-dismiss-button cpt-notice-dismiss"></button>
 			<?php } ?>
-			<p class="cpt-notice-message"><?php echo esc_html( $notice ); ?></p>
+			<p class="cpt-notice-message"><?php echo wp_kses_post( $notice ); ?></p>
 		</div>
 	<?php
 	delete_transient( $transient );

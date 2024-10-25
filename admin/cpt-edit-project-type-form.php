@@ -11,8 +11,11 @@
 				<td colspan="3">
 					<p class="cpt-section-header">
 						<?php
+						printf(
 							// Translators: %s is the project type label.
-							printf( esc_html__( 'Edit %s Type', 'client-power-tools' ), esc_html( Common\cpt_get_projects_label( 'singular' ) ) );
+							esc_html__( 'Edit %s Type', 'client-power-tools' ),
+							esc_html( Common\cpt_get_projects_label( 'singular' ) )
+						);
 						?>
 					</p>
 					<input 
@@ -23,8 +26,11 @@
 					<div class="form-field form-required term-name-wrap">
 						<label for="edit_project_type">
 							<?php
+							printf(
 								// Translators: %s is the project type label.
-								printf( esc_html__( '%s Type', 'client-power-tools' ), esc_html( $projects_label[0] ) );
+								esc_html__( '%s Type', 'client-power-tools' ),
+								esc_html( $projects_label[0] )
+							);
 							?>
 							<small>(<?php esc_html_e( 'required', 'client-power-tools' ); ?>)</small>	
 						</label>
@@ -39,8 +45,11 @@
 					<div class="form-field">
 						<label for="edit_project_type_stages">
 							<?php
+							printf(
 								// Translators: %s is the project type label.
-								printf( esc_html__( '%s Type Stages', 'client-power-tools' ), esc_html( $projects_label[0] ) );
+								esc_html__( '%s Type Stages', 'client-power-tools' ),
+								esc_html( $projects_label[0] )
+							);
 							?>
 						</label>
 						<textarea 
@@ -52,8 +61,11 @@
 						></textarea>
 						<p class="description">
 							<?php
+							printf(
 								// Translators: %s is the project type label.
-								printf( esc_html__( 'Enter one stage per line. These stages will only apply to this %s type.', 'client-power-tools' ), esc_html( strtolower( $projects_label[0] ) ) );
+								esc_html__( 'Enter one stage per line. These stages will only apply to this %s type.', 'client-power-tools' ),
+								esc_html( strtolower( $projects_label[0] ) )
+							);
 							?>
 						</p>
 					</div>

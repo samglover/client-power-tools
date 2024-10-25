@@ -210,9 +210,7 @@ function cpt_new_client_manager_email( $user_id ) {
 	<?php
 	$card_content = ob_get_clean();
 
-	ob_start();
-		echo esc_html( Common\cpt_get_email_card( $subject, $card_content, 'Activate Your Account', $activation_url ) );
-	$message = ob_get_clean();
+	$message = Common\cpt_get_email_card( $subject, $card_content, 'Activate Your Account', $activation_url );
 
 	wp_mail( $to, $subject, $message, $headers );
 }

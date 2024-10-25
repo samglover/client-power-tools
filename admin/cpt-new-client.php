@@ -65,7 +65,7 @@ function cpt_process_new_client() {
 	}
 
 	set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
-	wp_safe_redirect( $_POST['_wp_http_referer'] );
+	wp_redirect( $_POST['_wp_http_referer'] );
 	exit;
 }
 
@@ -89,10 +89,7 @@ function cpt_new_client_email( $clients_user_id ) {
 	$button_txt   = __( 'Visit Your Client Dashboard', 'client-power-tools' );
 	$button_url   = Common\cpt_get_client_dashboard_url();
 
-	ob_start();
-		echo esc_html( get_option( 'cpt_new_client_email_message_body' ) );
-		echo esc_html( Common\cpt_get_email_card( $title, $card_content, $button_txt, $button_url ) );
-	$message = ob_get_clean();
+	$message = get_option( 'cpt_new_client_email_message_body' ) . Common\cpt_get_email_card( $title, $card_content, $button_txt, $button_url );
 
 	wp_mail( $to, $subject, $message, $headers );
 }

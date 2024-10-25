@@ -75,7 +75,7 @@ function cpt_process_project_update() {
 		}
 		set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
 
-		wp_safe_redirect( $_POST['_wp_http_referer'] );
+		wp_redirect( $_POST['_wp_http_referer'] );
 		exit;
 	} else {
 		die();
@@ -135,7 +135,7 @@ function cpt_process_delete_project() {
 		}
 
 		set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
-		wp_safe_redirect( remove_query_arg( 'projects_post_id', $_POST['_wp_http_referer'] ) );
+		wp_redirect( remove_query_arg( 'projects_post_id', $_POST['_wp_http_referer'] ) );
 		exit;
 	} else {
 		die();
@@ -202,7 +202,7 @@ function cpt_process_undelete_project() {
 		}
 
 		set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
-		wp_safe_redirect( add_query_arg( 'projects_post_id', $projects_post_id, get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id=' ) );
+		wp_redirect( add_query_arg( 'projects_post_id', $projects_post_id, get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id=' ) );
 		exit;
 	} else {
 		die();

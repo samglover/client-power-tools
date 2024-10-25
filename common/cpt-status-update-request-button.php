@@ -55,11 +55,7 @@ function cpt_status_update_request_button( $user_id ) {
 }
 
 
-/**
- * Calculates the number of days since the client last clicked the status update
- * request button. (Since status updates are just cpt_message posts with a custom
- * field, this is based on a custom query.)
- */
+// Calculates the number of days since the client last clicked the status update request button.
 function cpt_days_since_last_request( $user_id ) {
 	if ( ! $user_id ) {
 		return;
@@ -89,8 +85,8 @@ function cpt_days_since_last_request( $user_id ) {
 		while ( $status_update_requests->have_posts() ) :
 			$status_update_requests->the_post();
 			$last_request_date = new \DateTime( get_the_date( 'Y-m-d' ) );
-	endwhile;
-endif;
+		endwhile;
+	endif;
 
 	$current_date            = new \DateTime( strtotime( date( get_option( 'Y-m-d' ) ) ) );
 	$days_since_last_request = $last_request_date ? $last_request_date->diff( $current_date )->days : null;
@@ -98,7 +94,7 @@ endif;
 	return $days_since_last_request;
 }
 
-
+add_action( 'admin_post_cpt_status_update_requested', __NAMESPACE__ . '\cpt_process_status_update_request' );
 function cpt_process_status_update_request() {
 	if ( isset( $_POST['cpt_status_update_request_nonce'] ) && wp_verify_nonce( $_POST['cpt_status_update_request_nonce'], 'cpt_status_update_requested' ) ) {
 		$clients_user_id = sanitize_key( intval( $_POST['clients_user_id'] ) );
@@ -118,12 +114,9 @@ function cpt_process_status_update_request() {
 		$post = wp_insert_post( $status_update_request, $wp_error );
 
 		if ( is_wp_error( $post ) ) {
-			/**
-			 * translators:
-			 * 1: error message
-			 */
 			$result = sprintf(
-				__( 'Your status update request could not be sent. Error message: %1$s', 'client-power-tools' ),
+				// translators: %s is the error message.
+				__( 'Your status update request could not be sent. Error message: %s', 'client-power-tools' ),
 				$post->get_error_message()
 			);
 		} else {
@@ -139,7 +132,7 @@ function cpt_process_status_update_request() {
 	}
 }
 
-add_action( 'admin_post_cpt_status_update_requested', __NAMESPACE__ . '\cpt_process_status_update_request' );
+
 
 
 function cpt_status_update_request_notification( $message_id ) {
@@ -161,31 +154,36 @@ function cpt_status_update_request_notification( $message_id ) {
 		$cc        = get_option( 'cpt_status_update_req_notice_email' );
 		$headers[] = 'Cc: ' . $cc;
 	}
-	/**
-	 * translators:
-	 * 1: message subject (already translated, above)
-	 * 2: sender's name
-	 */
-	$subject = sprintf( __( '%1$s by %2$s', 'client-power-tools' ), $msg_obj->post_title, $from_name );
+	$subject = sprintf(
+		// translators: %1$s is the message subject. %2$s is the sender's name.
+		__( '%1$s by %2$s', 'client-power-tools' ),
+		$msg_obj->post_title,
+		$from_name
+	);
 
-	/**
-	 * translators:
-	 * 1: message subject (already translated, above)
-	 * 2: html
-	 * 3: sender's name
-	 */
-	$subject_html = sprintf( __( '%1$s%2$s by %3$s', 'client-power-tools' ), $msg_obj->post_title, '&nbsp;<br />', $from_name );
+	$subject_html = sprintf(
+		// translators: %1$s is the message subject. %2$s is an HTML line break. %3$s is the sender's name.
+		__( '%1$s%2$s by %3$s', 'client-power-tools' ),
+		$msg_obj->post_title,
+		'&nbsp;<br />',
+		$from_name
+	);
 
 	$message = '<p>' . __( 'Please give them an update.', 'client-power-tools' ) . '</p>';
 
-	/**
-	 * translators:
-	 * 1: sender's name
-	 */
-	$button_txt = get_option( 'cpt_module_messaging' ) ? sprintf( __( 'Go to %1$s', 'client-power-tools' ), $from_name ) : null;
+	if ( get_option( 'cpt_module_messaging' ) ) {
+		$button_txt = sprintf(
+			// translators: %s is the sender's name.
+			__( 'Go to %s', 'client-power-tools' ),
+			$from_name
+		);
+		$profile_url = cpt_get_client_profile_url( $sender_id );
+	} else {
+		$button_txt  = null;
+		$profile_url = null;
+	}
 
-	$profile_url = get_option( 'cpt_module_messaging' ) ? cpt_get_client_profile_url( $sender_id ) : null;
-	$message     = cpt_get_email_card( $subject_html, $message, $button_txt, $profile_url );
+	$message = cpt_get_email_card( $subject_html, $message, $button_txt, $profile_url );
 
 	wp_mail( $to, $subject, $message, $headers );
 }
