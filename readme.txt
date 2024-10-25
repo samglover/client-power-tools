@@ -100,7 +100,7 @@ To add pages to your knowledge base, just go to the page you want to add (or cre
 
 == Upgrade Notice ==
 
-With version 1.8 your client can have a separate name than the primary contact, and you can add additional contacts to each client to receive CCs on messages.
+Version 1.9 addresses a number of output escaping issues identified by the WordPress Plugin Review Team's [Plugin Check plugin](https://wordpress.org/plugins/plugin-check/), as well as a potential cross-site-scripting (XSS) vulnerability.
 
 As usual, there are also lots of smaller updates, improvements, and tweaks. See the changelog for details.
 
@@ -108,6 +108,25 @@ For more information on how to take advantage of the new and updated features, s
 
 
 == Changelog ==
+
+### 1.9.0 - 2024-10-24
+
+#### Added
+- Installed Composer in order to use WordPress Coding Standards formatting aids.
+- Added notes for translators.
+
+#### Changed
+- Include WP_List_Table from core instead of including the file.
+- Reformatted PHP according to the WordPress Coding Standards.
+- Switch the SVG logo used in the admin for a PNG to fix a Plugin Check alert.
+
+#### Removed
+- /includes
+- /includes/class/wp-list-table.php
+
+#### Fixed
+- Added escape functions for all output to resolve Plugin Check alerts. In many cases this resulted in minor changes to the output, some of which would impact existing translations. As a result this release merits a minor version increment to 1.9.0, but since there are no actual translations (that I am aware of, at least) I don't think it will impact any existing users.
+
 
 ### 1.8.6 - 2024-08-25
 
