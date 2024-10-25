@@ -14,8 +14,8 @@ function cpt_client_managers() {
 
 	if ( isset( $_REQUEST['cpt_action'] ) && isset( $_REQUEST['user_id'] ) ) {
 		$action_user_id = sanitize_key( intval( $_REQUEST['user_id'] ) );
-
-		switch ( sanitize_key( $_REQUEST['cpt_action'] ) ) {
+		$action         = sanitize_key( $_REQUEST['cpt_action'] );
+		switch ( $action ) {
 			case 'cpt_remove_client_manager':
 				cpt_remove_client_manager( $action_user_id );
 				break;
@@ -241,7 +241,7 @@ function cpt_get_managers_clients( $user_id ) {
 		'order'      => 'ASC',
 	);
 
-	$client_query = new \WP_USER_QUERY( $args );
+	$client_query = new \WP_User_Query( $args );
 	$clients      = $client_query->get_results();
 
 	if ( $clients ) {

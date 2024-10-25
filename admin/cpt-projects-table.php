@@ -46,7 +46,8 @@ class Project_List_Table extends \WP_List_Table {
 	 * Project Column Method
 	 */
 	function column_project( $item ) {
-		return '<strong><a href="' . add_query_arg( 'projects_post_id', $item['ID'] ) . '">' . $item['project'] . '</a></strong>';
+		$url = admin_url( 'admin.php?page=cpt-projects' );
+		return '<strong><a href="' . add_query_arg( 'projects_post_id', $item['ID'], $url ) . '">' . $item['project'] . '</a></strong>';
 	}
 
 	/**
@@ -187,8 +188,8 @@ class Project_List_Table extends \WP_List_Table {
 					'project_stage'   => $project_data['project_type'] ? $project_data['project_stage'] : '',
 					'project_status'  => $project_data['project_status'],
 				);
-		endwhile;
-endif;
+			endwhile;
+		endif;
 
 		// Filters the data set.
 		if ( isset( $_REQUEST['project_status'] ) ) {

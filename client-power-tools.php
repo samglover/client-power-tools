@@ -4,7 +4,7 @@
  * Plugin Name: Client Power Tools
  * Plugin URI: https://clientpowertools.com
  * Description: Client Power Tools is an easy-to-use client dashboard, project management, and communication portal built for designers, developers, consultants, lawyers, and other professionals.
- * Version: 1.9
+ * Version: 1.9.1
  * Author: Sam Glover
  * Author URI: https://samglover.net
  * Text Domain: client-power-tools
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Constants
  */
-define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.9' );
+define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.9.1' );
 define( 'CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 
@@ -117,7 +117,10 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\cpt_register_admin_script
 function cpt_register_admin_scripts() {
 	// Only loads CPT admin styles and scripts on CPT admin pages.
 	global $pagenow;
-	$page = isset( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : '';
+	if ( ! isset( $_GET['page'] ) ) {
+		return;
+	}
+	$page = sanitize_key( $_GET['page'] );
 	if ( 'admin.php' !== $pagenow || ! str_starts_with( $page, 'cpt' ) ) {
 		return;
 	}

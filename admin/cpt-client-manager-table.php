@@ -53,12 +53,14 @@ class Client_Manager_List_Table extends \WP_List_Table {
 	 * Name Column Method
 	 */
 	function column_manager_name( $item ) {
+		$url = admin_url( '?page=cpt-managers' );
 		$actions = array(
 			'remove' => '<a href="' . add_query_arg(
 				array(
 					'user_id'    => $item['ID'],
 					'cpt_action' => 'cpt_remove_client_manager',
-				)
+				),
+				$url
 			) . '">Remove</a>',
 		);
 
@@ -177,7 +179,7 @@ class Client_Manager_List_Table extends \WP_List_Table {
 		/**
 		 * Query Client Managers
 		 */
-		$client_managers_query = new \WP_USER_QUERY(
+		$client_managers_query = new \WP_User_Query(
 			array(
 				'role'    => 'cpt-client-manager',
 				'orderby' => 'display_name',
