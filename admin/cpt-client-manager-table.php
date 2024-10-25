@@ -177,7 +177,7 @@ class Client_Manager_List_Table extends \WP_List_Table {
 		/**
 		 * Query Client Managers
 		 */
-		$client_managers_query = new \WP_USER_QUERY(
+		$client_managers_query = new \WP_User_Query(
 			array(
 				'role'    => 'cpt-client-manager',
 				'orderby' => 'display_name',

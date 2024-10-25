@@ -241,7 +241,7 @@ function cpt_get_managers_clients( $user_id ) {
 		'order'      => 'ASC',
 	);
 
-	$client_query = new \WP_USER_QUERY( $args );
+	$client_query = new \WP_User_Query( $args );
 	$clients      = $client_query->get_results();
 
 	if ( $clients ) {
