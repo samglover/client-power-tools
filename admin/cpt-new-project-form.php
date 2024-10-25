@@ -3,7 +3,7 @@
 
 	use Client_Power_Tools\Core\Common;
 
-	$user_id        = isset( $_REQUEST['user_id'] ) ? intval( sanitize_key( $_REQUEST['user_id'] ) ) : false;
+	$user_id        = isset( $_REQUEST['user_id'] ) ? sanitize_key( intval( $_REQUEST['user_id'] ) ) : false;
 	$client_ids     = Common\cpt_get_clients( array( 'fields' => 'ID' ) );
 	$projects_label = Common\cpt_get_projects_label();
 ?>
