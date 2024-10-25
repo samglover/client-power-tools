@@ -159,23 +159,23 @@ class Client_List_Table extends \WP_List_Table {
 		foreach ( $params as $key => $val ) {
 			$class      = '';
 			$val        = trim( $val );
-			$curr_param = urlencode( $val );
+			$curr_param = rawurlencode( $val );
 
 			if (
-				$current_status == $curr_param ||
-				( $curr_param == 'Mine' && $curr_mgr_param == $curr_user ) ||
-				( $curr_param == 'All' && ! isset( $_REQUEST['client_status'] ) && ! isset( $_REQUEST['client_manager'] ) )
+				$current_status === $curr_param ||
+				( 'Mine' === $curr_param && $curr_mgr_param === $curr_user ) ||
+				( 'All' === $curr_param && ! isset( $_REQUEST['client_status'] ) && ! isset( $_REQUEST['client_manager'] ) )
 			) {
 				$class = ' class="current"';
 			}
 
-			if ( $curr_param == 'All' ) {
+			if ( 'All' === $curr_param ) {
 				$link = '<a href="' . remove_query_arg( array( 'client_status', 'client_manager' ) ) . '"' . $class . '>' . $val . '</a>';
 			} else {
 				$link = '<a href="' . add_query_arg( 'client_status', $curr_param ) . '"' . $class . '>' . $val . '</a>';
 			}
 
-			if ( $curr_param == 'Mine' ) {
+			if ( 'Mine' === $curr_param ) {
 				$link = '<a href="' . add_query_arg( 'client_manager', $curr_user ) . '"' . $class . '>' . $val . '</a>';
 			}
 
