@@ -12,7 +12,7 @@ function cpt_project_types() {
 	?>
 		<div id="cpt-admin" class="wrap">
 			<div id="cpt-admin-header">
-				<?php echo file_get_contents( CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/cpt-logo.svg' ); ?>
+			<img class="cpt-logo" src="<?php echo esc_url( CLIENT_POWER_TOOLS_DIR_URL ); ?>assets/images/cpt-logo.png" alt="Client Power Tools" />
 				<div id="cpt-admin-page-title">
 					<h1 id="cpt-page-title">
 						<?php

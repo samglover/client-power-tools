@@ -29,7 +29,7 @@ function cpt_projects() {
 				</p>
 			<?php } ?>
 			<div id="cpt-admin-header">
-				<?php echo file_get_contents( CLIENT_POWER_TOOLS_DIR_PATH . 'assets/images/cpt-logo.svg' ); ?>
+			<img class="cpt-logo" src="<?php echo esc_url( CLIENT_POWER_TOOLS_DIR_URL ); ?>assets/images/cpt-logo.png" alt="Client Power Tools" />
 				<div id="cpt-admin-page-title">
 					<?php if ( ! isset( $_REQUEST['projects_post_id'] ) ) { ?>
 						<h1 id="cpt-page-title">
