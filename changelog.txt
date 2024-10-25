@@ -1,9 +1,9 @@
 # Changelog for Client Power Tools
 
-All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com).
+All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com) and uses [semantic versioning](https://semver.org/).
 
 
-### 1.9 - 2024-10-24
+### 1.9.0 - 2024-10-24
 
 #### Added
 - Installed Composer in order to use WordPress Coding Standards formatting aids.
@@ -14,8 +14,12 @@ All notable changes to this project will be documented in this file. The format 
 - Reformatted PHP according to the WordPress Coding Standards.
 - Switch the SVG logo used in the admin for a PNG to fix a Plugin Check alert.
 
+#### Removed
+- /includes
+- /includes/class/wp-list-table.php
+
 #### Fixed
-- Added escape functions for all output to resolve Plugin Check alerts.
+- Added escape functions for all output to resolve Plugin Check alerts. In many cases this resulted in minor changes to the output, some of which would impact existing translations. As a result this release merits a minor version increment to 1.9.0, but since there are no actual translations (that I am aware of, at least) I don't think it will impact any existing users.
 
 
 ### 1.8.6 - 2024-08-25
