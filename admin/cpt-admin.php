@@ -8,8 +8,7 @@ add_action( 'admin_init', __NAMESPACE__ . '\cpt_admin_actions' );
 function cpt_admin_actions() {
 	if (
 		! isset( $_REQUEST['action'] ) ||
-		! isset( $_REQUEST['page'] ) ||
-		! str_starts_with( sanitize_key( $_REQUEST['page'] ), 'cpt-' )
+		! isset( $_REQUEST['page'] )
 	) {
 		return;
 	}
@@ -23,9 +22,14 @@ function cpt_admin_actions() {
 	}
 
 	$page = sanitize_key( $_REQUEST['page'] );
+	if ( ! str_starts_with( $page, 'cpt-' ) ) {
+		return;
+	}
+
 	switch ( $page ) {
 		case 'cpt-project-types':
-			cpt_process_project_type_actions( sanitize_text_field( $_REQUEST['action'] ) );
+			$action = sanitize_key( $_REQUEST['action'] );
+			cpt_process_project_type_actions( $action );
 			break;
 		default:
 			exit( esc_html__( 'Unknown page.', 'client-power-tools' ) );
@@ -196,7 +200,10 @@ function cpt_menu_pages() {
 
 function cpt_is_cpt_admin_page() {
 	global $pagenow;
-	$page = isset( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : '';
+	if ( ! isset( $_GET['page'] ) ) {
+		return false;
+	}
+	$page = sanitize_key( $_GET['page'] );
 	if ( 'admin.php' === $pagenow && str_starts_with( $page, 'cpt' ) ) {
 		return true;
 	} else {
