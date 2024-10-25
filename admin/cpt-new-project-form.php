@@ -69,7 +69,12 @@
 	<div class="cpt-row">
 		<div class="form-field span-2">
 			<label for="project_type">Project Type</label>
-			<?php echo esc_html( cpt_get_project_type_select( 'project_type' ) ); ?>
+			<?php
+			$project_type_select = cpt_get_project_type_select( 'project_type' );
+			if ( $project_type_select ) {
+				echo esc_html( $project_type_select );
+			}
+			?>
 		</div>
 		<div class="form-field span-2">
 			<label for="project_stage">
@@ -78,7 +83,12 @@
 					printf( esc_html__( '%s Stage', 'client-power-tools' ), esc_html( $projects_label[0] ) );
 				?>
 			</label>
-			<?php echo esc_html( cpt_get_project_stage_select( '', 'project_stage' ) ); ?>
+			<?php
+			$project_stage_select = cpt_get_project_stage_select( '', 'project_stage' );
+			if ( $project_stage_select ) {
+				echo esc_html( $project_stage_select );
+			}
+			?>
 		</div>
 		<div class="form-field">
 			<label for="project_status">
@@ -87,7 +97,12 @@
 					printf( esc_html__( '%s Status', 'client-power-tools' ), esc_html( $projects_label[0] ) );
 				?>
 			</label>
-			<?php echo esc_html( cpt_get_status_select( 'cpt_project_statuses', 'project_status', 'cpt_default_project_status' ) ); ?>
+			<?php
+			$project_status_select = cpt_get_status_select( 'cpt_project_statuses', 'project_status', 'cpt_default_project_status' );
+			if ( $project_status_select ) {
+				echo esc_html( $project_status_select );
+			}
+			?>
 		</div>
 	</div>
 	<p class="submit">

@@ -96,8 +96,11 @@
 					?>
 			</label>
 			<?php
-				$project_type = get_post_meta( $projects_post_id, 'cpt_project_type', true );
-				echo esc_html( cpt_get_project_type_select( 'project_type', $project_type ) );
+			$project_type        = get_post_meta( $projects_post_id, 'cpt_project_type', true );
+			$project_type_select = cpt_get_project_type_select( 'project_type', $project_type );
+			if ( $project_type_select ) {
+				echo esc_html( $project_type_select );
+			}
 			?>
 		</div>
 		<div class="form-field span-2">
@@ -111,8 +114,11 @@
 					?>
 			</label>
 			<?php
-				$current_project_stage = get_post_meta( $projects_post_id, 'cpt_project_stage', true );
-				echo esc_html( cpt_get_project_stage_select( $projects_post_id, 'project_stage', $current_project_stage ) );
+			$current_project_stage = get_post_meta( $projects_post_id, 'cpt_project_stage', true );
+			$project_stage_select  = cpt_get_project_stage_select( $projects_post_id, 'project_stage', $current_project_stage );
+			if ( $project_stage_select ) {
+				echo esc_html( $project_stage_select );
+			}
 			?>
 		</div>
 		<div class="form-field">

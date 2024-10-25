@@ -122,13 +122,23 @@
 			<label for="client_manager">
 				<?php esc_html_e( 'Client Manager', 'client-power-tools' ); ?>
 			</label>
-			<?php echo esc_html( cpt_get_client_manager_select( '', $client_data['manager_id'] ) ); ?>
+			<?php
+			$client_manager_select = cpt_get_client_manager_select( '', $client_data['manager_id'] );
+			if ( $client_manager_select ) {
+				echo wp_kses_post( $client_manager_select );
+			}
+			?>
 		</div>
 		<div class="form-field">
 			<label for="client_status">
 				<?php esc_html_e( 'Client Status', 'client-power-tools' ); ?>
 			</label>
-			<?php echo esc_html( cpt_get_status_select( 'cpt_client_statuses', 'client_status', $client_data['status'] ) ); ?>
+			<?php
+			$cpt_status_select = cpt_get_status_select( 'cpt_client_statuses', 'client_status', $client_data['status'] );
+			if ( $cpt_status_select ) {
+				echo wp_kses_post( $cpt_status_select );
+			}
+			?>
 		</div>
 	</div>
 	<?php $custom_fields = Common\cpt_custom_client_fields(); ?>
