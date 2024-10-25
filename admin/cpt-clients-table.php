@@ -53,8 +53,9 @@ class Client_List_Table extends \WP_List_Table {
 	 */
 	function column_client_name( $item ) {
 		// Return the contents.
+		$url = admin_url( 'admin.php?page=cpt' );
 		return sprintf(
-			'<strong><a href="' . add_query_arg( 'user_id', $item['ID'] ) . '">%1$s</a></strong>%2$s',
+			'<strong><a href="' . add_query_arg( 'user_id', $item['ID'], $url ) . '">%1$s</a></strong>%2$s',
 			/* $1%s */ $item['client_name'],
 			/* $2%s */ $item['client_id'] ? ' <span style="color:silver">(' . $item['client_id'] . ')</span>' : '',
 		);
@@ -169,14 +170,15 @@ class Client_List_Table extends \WP_List_Table {
 				$class = ' class="current"';
 			}
 
+			$url = admin_url( 'admin.php?page=cpt' );
 			if ( 'All' === $curr_param ) {
-				$link = '<a href="' . remove_query_arg( array( 'client_status', 'client_manager' ) ) . '"' . $class . '>' . $val . '</a>';
+				$link = '<a href="' . remove_query_arg( array( 'client_status', 'client_manager' ), $url ) . '"' . $class . '>' . $val . '</a>';
 			} else {
-				$link = '<a href="' . add_query_arg( 'client_status', $curr_param ) . '"' . $class . '>' . $val . '</a>';
+				$link = '<a href="' . add_query_arg( 'client_status', $curr_param, $url ) . '"' . $class . '>' . $val . '</a>';
 			}
 
 			if ( 'Mine' === $curr_param ) {
-				$link = '<a href="' . add_query_arg( 'client_manager', $curr_user ) . '"' . $class . '>' . $val . '</a>';
+				$link = '<a href="' . add_query_arg( 'client_manager', $curr_user, $url ) . '"' . $class . '>' . $val . '</a>';
 			}
 
 			$views[ $curr_param ] = $link;

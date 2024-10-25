@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com) and uses [semantic versioning](https://semver.org/).
 
+### 1.9.1 - 2024-10-25
+
+#### Changed
+- References to WP_User_Query now use the correct case (WP_User_Query instead of WP_USER_QUERY).
+
+#### Fixed
+- Fixed potential cross-site scripting (XSS) vulnerability.
+
 
 ### 1.9.0 - 2024-10-24
 

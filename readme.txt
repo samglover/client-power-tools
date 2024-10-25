@@ -109,6 +109,15 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.9.1 - 2024-10-25
+
+#### Changed
+- References to WP_User_Query now use the correct case (WP_User_Query instead of WP_USER_QUERY).
+
+#### Fixed
+- Fixed potential cross-site scripting (XSS) vulnerability.
+
+
 ### 1.9.0 - 2024-10-24
 
 #### Added
