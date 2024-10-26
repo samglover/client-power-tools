@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com) and uses [semantic versioning](https://semver.org/).
 
+### 1.9.2 [pending]
+
+#### Fixed
+- Content added to the dashboard page in the WordPress editor no longer shows up on the Messages and Projects pages/tabs.
+
+
 ### 1.9.1 - 2024-10-25
 
 #### Changed

@@ -144,6 +144,14 @@ function cpt_client_dashboard( $content ) {
 		<?php
 	}
 
+	$dashboard = ob_get_clean();
+
+	if ( Common\cpt_is_client_dashboard( 'dashboard' ) ) {
+		$content = $dashboard . $content;
+	} else {
+		$content = $dashboard;
+	}
+
 	return $content;
 }
 
@@ -157,21 +165,23 @@ function cpt_nav() {
 		>
 			<ul class="cpt-tabs menu">
 				<li class="cpt-tab menu-item
-		<?php
-		if ( Common\cpt_is_client_dashboard( 'dashboard' ) && ! isset( $_REQUEST['tab'] ) ) {
-			echo ' current-menu-item';}
-		?>
+					<?php
+					if ( Common\cpt_is_client_dashboard( 'dashboard' ) && ! isset( $_REQUEST['tab'] ) ) {
+						echo ' current-menu-item';
+					}
+					?>
 				">
 					<a href="<?php echo esc_url( Common\cpt_get_client_dashboard_url() ); ?>">
-				<?php esc_html_e( 'Home', 'client-power-tools' ); ?>
+						<?php esc_html_e( 'Home', 'client-power-tools' ); ?>
 					</a>
 				</li>
 				<?php if ( get_option( 'cpt_module_messaging' ) ) { ?>
 					<li class="cpt-tab menu-item
-					<?php
-					if ( Common\cpt_is_client_dashboard( 'messages' ) ) {
-						echo ' current-menu-item';}
-					?>
+						<?php
+						if ( Common\cpt_is_client_dashboard( 'messages' ) ) {
+							echo ' current-menu-item';
+						}
+						?>
 					">
 						<a href="<?php echo esc_url( add_query_arg( 'tab', 'messages', Common\cpt_get_client_dashboard_url() ) ); ?>">
 							<?php esc_html_e( 'Messages', 'client-power-tools' ); ?>
@@ -180,75 +190,76 @@ function cpt_nav() {
 				<?php } ?>
 				<?php if ( get_option( 'cpt_module_projects' ) ) { ?>
 					<li class="cpt-tab menu-item
-							<?php
-							if ( Common\cpt_is_client_dashboard( 'projects' ) ) {
-								echo ' current-menu-item';}
-							?>
+						<?php
+						if ( Common\cpt_is_client_dashboard( 'projects' ) ) {
+							echo ' current-menu-item';
+						}
+						?>
 					">
 						<a href="<?php echo esc_url( add_query_arg( 'tab', 'projects', Common\cpt_get_client_dashboard_url() ) ); ?>">
 							<?php echo esc_html( Common\cpt_get_projects_label( 'plural' ) ); ?>
 						</a>
 					</li>
 				<?php } ?>
-						<?php if ( get_option( 'cpt_module_knowledge_base' ) ) { ?>
-							<?php
-							$kb_id           = get_option( 'cpt_knowledge_base_page_selection' );
-							$kb_children_ids = cpt_get_child_pages( $kb_id );
+				<?php if ( get_option( 'cpt_module_knowledge_base' ) ) { ?>
+					<?php
+					$kb_id           = get_option( 'cpt_knowledge_base_page_selection' );
+					$kb_children_ids = cpt_get_child_pages( $kb_id );
 
-							$kb_classes = 'cpt-tab menu-item';
-							if ( $kb_children_ids ) {
-								$kb_classes .= ' menu-item-has-children';
-							}
-							if ( Common\cpt_is_knowledge_base() ) {
-								$kb_classes .= ' current-menu-item';
-							}
-							?>
+					$kb_classes = 'cpt-tab menu-item';
+					if ( $kb_children_ids ) {
+						$kb_classes .= ' menu-item-has-children';
+					}
+					if ( Common\cpt_is_knowledge_base() ) {
+						$kb_classes .= ' current-menu-item';
+					}
+					?>
 					<li class="<?php echo esc_attr( $kb_classes ); ?>">
 						<a href="<?php echo esc_url( Common\cpt_get_knowledge_base_url() ); ?>">
 							<?php echo esc_html( get_the_title( $kb_id ) ); ?>
 						</a>
-							<?php
-							if ( $kb_children_ids ) {
-								echo wp_kses_post( cpt_get_submenu( $kb_id ) );}
-							?>
+						<?php
+						if ( $kb_children_ids ) {
+							echo wp_kses_post( cpt_get_submenu( $kb_id ) );}
+						?>
 					</li>
 				<?php } ?>
-						<?php
-						$addl_pages_ids = get_option( 'cpt_client_dashboard_addl_pages' ) ? explode( ',', get_option( 'cpt_client_dashboard_addl_pages' ) ) : false;
-						if ( $addl_pages_ids ) {
-							foreach ( $addl_pages_ids as $addl_page_id ) {
-								$addl_page_id           = intval( trim( $addl_page_id ) );
-								$addl_page_children_ids = cpt_get_child_pages( $addl_page_id );
-								$addl_page_classes      = 'cpt-tab menu-item';
-								if ( get_option( 'cpt_client_dashboard_addl_pages_children' ) && $addl_page_children_ids ) {
-									$addl_page_classes .= ' menu-item-has-children';
-								}
-								if ( $addl_page_id == get_the_ID() || in_array( $addl_page_id, get_post_ancestors( get_the_ID() ) ) ) {
-									$addl_page_classes .= ' current-menu-item';
-								}
-								?>
-								<li class="<?php echo esc_attr( $addl_page_classes ); ?>">
-									<a href="<?php echo esc_url( get_permalink( $addl_page_id ) ); ?>">
-										<?php echo esc_html( get_the_title( $addl_page_id ) ); ?>
-									</a>
-								<?php
-								if ( get_option( 'cpt_client_dashboard_addl_pages_children' ) && $addl_page_children_ids ) {
-									echo wp_kses_post( cpt_get_submenu( $addl_page_id ) );}
-								?>
-								</li>
-									<?php
-							}
+				<?php
+				$addl_pages_ids = get_option( 'cpt_client_dashboard_addl_pages' ) ? explode( ',', get_option( 'cpt_client_dashboard_addl_pages' ) ) : false;
+				if ( $addl_pages_ids ) {
+					foreach ( $addl_pages_ids as $addl_page_id ) {
+						$addl_page_id           = intval( trim( $addl_page_id ) );
+						$addl_page_children_ids = cpt_get_child_pages( $addl_page_id );
+						$addl_page_classes      = 'cpt-tab menu-item';
+						if ( get_option( 'cpt_client_dashboard_addl_pages_children' ) && $addl_page_children_ids ) {
+							$addl_page_classes .= ' menu-item-has-children';
+						}
+						if ( $addl_page_id == get_the_ID() || in_array( $addl_page_id, get_post_ancestors( get_the_ID() ) ) ) {
+							$addl_page_classes .= ' current-menu-item';
 						}
 						?>
+						<li class="<?php echo esc_attr( $addl_page_classes ); ?>">
+							<a href="<?php echo esc_url( get_permalink( $addl_page_id ) ); ?>">
+								<?php echo esc_html( get_the_title( $addl_page_id ) ); ?>
+							</a>
+							<?php
+							if ( get_option( 'cpt_client_dashboard_addl_pages_children' ) && $addl_page_children_ids ) {
+								echo wp_kses_post( cpt_get_submenu( $addl_page_id ) );}
+							?>
+						</li>
+						<?php
+					}
+				}
+				?>
 			</ul>
 		</nav>
-			<?php
+	<?php
 }
 
 
-		/**
-		 * Nav Submenus
-		 */
+/**
+ * Nav Submenus
+ */
 function cpt_get_child_pages( $page_id ) {
 	if ( ! $page_id ) {
 		return;
@@ -312,9 +323,9 @@ function cpt_get_submenu( $page_id ) {
 }
 
 
-		/**
-		 * Knowledge Base Breadcrumbs
-		 */
+/**
+ * Knowledge Base Breadcrumbs
+ */
 function cpt_breadcrumbs() {
 	if ( ! get_option( 'cpt_show_knowledge_base_breadcrumbs' ) ) {
 		return;
