@@ -144,6 +144,14 @@ function cpt_client_dashboard( $content ) {
 		<?php
 	}
 
+	$dashboard = ob_get_clean();
+
+	if ( Common\cpt_is_client_dashboard( 'dashboard' ) ) {
+		$content = $dashboard . $content;
+	} else {
+		$content = $dashboard;
+	}
+
 	return $content;
 }
 
