@@ -146,6 +146,17 @@ function cpt_menu_pages() {
 		__NAMESPACE__ . '\cpt_clients',
 	);
 
+	if ( get_option( 'cpt_module_messaging' ) ) {
+		add_submenu_page(
+			'cpt',
+			'Client Power Tools: Messages',
+			'Messages',
+			'cpt_view_clients',
+			'cpt-messages',
+			__NAMESPACE__ . '\cpt_admin_messages',
+		);
+	}
+
 	if ( get_option( 'cpt_module_projects' ) ) {
 		$projects_label = Common\cpt_get_projects_label();
 		add_submenu_page(
@@ -164,17 +175,6 @@ function cpt_menu_pages() {
 			'cpt_view_projects',
 			'cpt-project-types',
 			__NAMESPACE__ . '\cpt_project_types',
-		);
-	}
-
-	if ( get_option( 'cpt_module_messaging' ) ) {
-		add_submenu_page(
-			'cpt',
-			'Client Power Tools: Messages',
-			'Messages',
-			'cpt_view_clients',
-			'cpt-messages',
-			__NAMESPACE__ . '\cpt_admin_messages',
 		);
 	}
 
