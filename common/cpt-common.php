@@ -45,7 +45,20 @@ function cpt_is_client_dashboard( $tab = false ) {
 				}
 				break;
 			case 'projects':
-				if ( isset( $_REQUEST['tab'] ) && $_REQUEST['tab'] == 'projects' ) {
+				if (
+					isset( $_REQUEST['tab'] ) &&
+					'projects' === $_REQUEST['tab'] &&
+					! isset( $_REQUEST['projects_post_id'] )
+				) {
+					return true;
+				}
+				break;
+			case 'project':
+				if (
+					isset( $_REQUEST['tab'] ) &&
+					'projects' === $_REQUEST['tab'] &&
+					isset( $_REQUEST['projects_post_id'] )
+				) {
 					return true;
 				}
 				break;

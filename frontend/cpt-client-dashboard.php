@@ -79,8 +79,7 @@ function cpt_get_client_dashboard( $user_id = null ) {
 	}
 
 	// Outputs the Projects page.
-	if ( get_option( 'cpt_module_projects' ) && Common\cpt_is_client_dashboard( 'projects' ) ) {
-
+	if ( get_option( 'cpt_module_projects' ) ) {
 		// Outputs an individual project if a project post ID is specified.
 		// Otherwise, outputs the list of projects.
 		if ( isset( $_REQUEST['projects_post_id'] ) ) {
