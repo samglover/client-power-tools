@@ -34,11 +34,17 @@ function cpt_add_roles() {
 
 function cpt_is_client_dashboard( $tab = false ) {
 	global $wp_query;
-	if ( ! isset( $wp_query->post->ID ) ) {
+	if (
+		! isset( $wp_query->post->ID )
+	) {
 		return false;
 	}
 
-	$this_page_id        = $wp_query->post->ID;
+	$this_page_id = $wp_query->post->ID;
+	if ( ! is_page( $this_page_id ) ) {
+		return false;
+	}
+
 	$client_dashboard_id = intval( get_option( 'cpt_client_dashboard_page_selection' ) );
 
 	if ( $tab ) {
@@ -57,7 +63,7 @@ function cpt_is_client_dashboard( $tab = false ) {
 				if (
 					$request_tab &&
 					'projects' === $request_tab &&
-					! $projects_post_id 
+					! $projects_post_id
 				) {
 					return true;
 				}
