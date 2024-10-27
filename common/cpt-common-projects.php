@@ -87,9 +87,7 @@ function cpt_get_projects_list( $clients_user_id = null ) {
 							</h3>
 							<?php cpt_get_project_progress_bar( $projects_post_id ); ?>
 						</div>
-						<div class="cpt-project-meta">
-							<?php cpt_get_project_meta( $projects_post_id ); ?>
-						</div>
+						<?php cpt_get_project_meta( $projects_post_id ); ?>
 					</div>
 					<?php
 				endwhile;
@@ -128,17 +126,7 @@ function cpt_get_project( $projects_post_id ) {
 			?>
 		</a>
 	</p>
-	<?php if ( $project_data['project_status'] ) { ?>
-		<p class="cpt-project-status">
-			<?php
-			echo esc_html( $project_data['project_status'] );
-			if ( $project_data['project_type'] ) {
-				echo esc_html( $project_data['project_type'] );
-			}
-			echo esc_html( $projects_label[0] );
-			?>
-		</p>
-	<?php } ?>
+	<?php cpt_get_project_meta( $projects_post_id ); ?>
 	<h1 class="cpt-project-title">
 		<?php
 		echo esc_html( get_the_title( $projects_post_id ) );
@@ -229,13 +217,14 @@ function cpt_get_project_meta( $projects_post_id ) {
 	if ( ! $projects_post_id ) {
 		$projects_post_id = get_the_ID();
 	}
+
 	if ( ! $projects_post_id || ! cpt_is_project( $projects_post_id ) ) {
 		return;
 	}
 
 	$project_data = cpt_get_project_data( $projects_post_id );
 	?>
-		<div class="cpt-row">
+		<div class="cpt-project-meta cpt-row">
 			<?php
 			if ( $project_data['project_id'] ) {
 				?>

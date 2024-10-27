@@ -20,6 +20,9 @@ add_filter(
 		if ( Common\cpt_is_client_dashboard( 'projects' ) ) {
 			$body_classes[] = 'client-dashboard-projects';
 		}
+		if ( Common\cpt_is_client_dashboard( 'project' ) ) {
+			$body_classes[] = 'client-dashboard-project';
+		}
 		if ( Common\cpt_is_client_dashboard( 'knowledge base' ) ) {
 			$body_classes[] = 'client-dashboard-knowledge-base';
 		}

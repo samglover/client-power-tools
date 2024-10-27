@@ -135,3 +135,12 @@
     margin-top: 0;
   }
 }
+
+.client-dashboard-project {
+  .cpt-project-meta {
+    background-color: unset;
+    font-size: unset;
+    padding: 0;
+    margin: $spacing-md 0 $spacing-sm 0;
+  }
+}
