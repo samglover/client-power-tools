@@ -139,7 +139,7 @@ function cpt_get_project( $projects_post_id ) {
 			?>
 		</p>
 	<?php } ?>
-	<h2 class="cpt-project-title">
+	<h1 class="cpt-project-title">
 		<?php
 		echo esc_html( get_the_title( $projects_post_id ) );
 		if ( $project_data['project_id'] ) {
@@ -150,7 +150,7 @@ function cpt_get_project( $projects_post_id ) {
 			<?php
 		}
 		?>
-	</h2>
+	</h1>
 	<?php
 	cpt_get_project_progress_bar( $projects_post_id );
 }
