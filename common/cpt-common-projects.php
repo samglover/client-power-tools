@@ -47,7 +47,7 @@ function cpt_get_project_data( $projects_post_id ) {
 }
 
 
-function cpt_get_projects( $clients_user_id = null ) {
+function cpt_get_projects_list( $clients_user_id = null ) {
 	if ( ! $clients_user_id ) {
 		$clients_user_id = get_current_user_id();
 	}
@@ -109,6 +109,50 @@ function cpt_get_projects( $clients_user_id = null ) {
 			</p>
 		<?php
 	endif;
+}
+
+function cpt_get_project( $projects_post_id ) {
+	$projects_label   = cpt_get_projects_label();
+	$projects_post_id = sanitize_key( intval( $_REQUEST['projects_post_id'] ) );
+	$project_data     = cpt_get_project_data( $projects_post_id );
+	?>
+	<p>
+		<a href="<?php echo esc_url( remove_query_arg( 'projects_post_id' ) ); ?>">
+			&lt;
+			<?php
+				printf(
+					// translators: %s is the projects label.
+					esc_html__( 'Back to %s', 'client-power-tools' ),
+					esc_html( $projects_label[1] )
+				);
+			?>
+		</a>
+	</p>
+	<?php if ( $project_data['project_status'] ) { ?>
+		<p class="cpt-project-status">
+			<?php
+			echo esc_html( $project_data['project_status'] );
+			if ( $project_data['project_type'] ) {
+				echo esc_html( $project_data['project_type'] );
+			}
+			echo esc_html( $projects_label[0] );
+			?>
+		</p>
+	<?php } ?>
+	<h2 class="cpt-project-title">
+		<?php
+		echo esc_html( get_the_title( $projects_post_id ) );
+		if ( $project_data['project_id'] ) {
+			?>
+				<span style="color:silver">
+					(<?php echo esc_html( $project_data['project_id'] ); ?>)
+				</span>
+			<?php
+		}
+		?>
+	</h2>
+	<?php
+	cpt_get_project_progress_bar( $projects_post_id );
 }
 
 function cpt_get_project_progress_bar( $projects_post_id ) {

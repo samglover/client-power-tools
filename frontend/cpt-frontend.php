@@ -150,6 +150,14 @@ function cpt_client_dashboard_page_titles( $title, $post_id ) {
 	return get_post( get_option( 'cpt_client_dashboard_page_selection' ) )->post_title;
 }
 
+function cpt_the_title() {
+	?>
+		<h1 class="entry-title wp-block-post-title cpt-entry-title">
+			<?php echo esc_html( cpt_get_the_title() ); ?>
+		</h1>
+	<?php
+}
+
 function cpt_get_the_title() {
 	remove_filter( 'the_title', __NAMESPACE__ . '\cpt_client_dashboard_page_titles', 10, 2 );
 	if ( Common\cpt_is_client_dashboard( 'dashboard' ) ) {
