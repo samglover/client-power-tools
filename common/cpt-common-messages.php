@@ -46,11 +46,12 @@ function cpt_message_list( $clients_user_id ) {
 	if ( $cpt_messages->have_posts() ) :
 		while ( $cpt_messages->have_posts() ) :
 			$cpt_messages->the_post();
-			$message_id      = get_the_ID();
-			$message_classes = array( 'cpt-message', 'card' );
-			$message_meta    = '';
+			$message_id               = get_the_ID();
+			$message_classes          = array( 'cpt-message', 'card' );
+			$message_meta             = '';
+			$is_status_update_request = get_post_meta( $message_id, 'cpt_status_update_request' );
 
-			if ( get_post_meta( $message_id, 'cpt_status_update_request' ) ) {
+			if ( $is_status_update_request ) {
 				$message_classes[] = 'status-update-request';
 			}
 
@@ -84,8 +85,7 @@ function cpt_message_list( $clients_user_id ) {
 							<h3 class="cpt-message-title"><?php the_title(); ?></h3>
 						<?php } ?>
 						<?php
-						var_dump( get_post_meta( $message_id, 'cpt_status_update_request' ) );
-						if ( ! get_post_meta( $message_id, 'cpt_status_update_request' ) ) {
+						if ( ! $is_status_update_request ) {
 							the_content();
 						}
 						?>

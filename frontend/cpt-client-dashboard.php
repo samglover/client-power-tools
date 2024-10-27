@@ -15,6 +15,13 @@ function cpt_noindex_client_dashboard() {
 
 add_filter( 'the_content', __NAMESPACE__ . '\cpt_client_dashboard' );
 function cpt_client_dashboard( $content ) {
+	if (
+		! Common\cpt_is_client_dashboard() ||
+		'cpt_message' === get_post_type( get_the_ID() )
+	) {
+		return $content;
+	}
+
 	if ( has_shortcode( $content, 'client-dashboard' ) ) {
 		return $content;
 	}
@@ -33,10 +40,8 @@ function cpt_client_dashboard( $content ) {
 
 function cpt_get_client_dashboard( $user_id = null ) {
 	if (
-		! Common\cpt_is_client_dashboard() ||
 		! is_main_query() ||
-		! in_the_loop() ||
-		get_post_type( get_the_ID() ) === 'cpt_message'
+		! in_the_loop()
 	) {
 		return;
 	}
