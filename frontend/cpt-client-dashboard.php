@@ -26,7 +26,8 @@ function cpt_client_dashboard( $content ) {
 
 	if (
 		Common\cpt_is_client_dashboard( 'messages' ) ||
-		Common\cpt_is_client_dashboard( 'projects' )
+		Common\cpt_is_client_dashboard( 'projects' ) ||
+		Common\cpt_is_client_dashboard( 'project' )
 	) {
 		$content = $dashboard;
 	}
