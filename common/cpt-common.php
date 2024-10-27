@@ -42,10 +42,12 @@ function cpt_is_client_dashboard( $tab = false ) {
 	$client_dashboard_id = intval( get_option( 'cpt_client_dashboard_page_selection' ) );
 
 	if ( $tab ) {
+		$request_tab      = isset( $_REQUEST['tab'] ) ? sanitize_key( $_REQUEST['tab'] ) : false;
+		$projects_post_id = isset( $_REQUEST['projects_post_id'] ) ? intval( sanitize_key( $_REQUEST['projects_post_id'] ) ) : false;
 		switch ( $tab ) {
 			case 'dashboard':
 				if (
-					! isset( $_REQUEST['tab'] ) &&
+					! $request_tab &&
 					$this_page_id === $client_dashboard_id
 				) {
 					return true;
@@ -53,26 +55,26 @@ function cpt_is_client_dashboard( $tab = false ) {
 				break;
 			case 'projects':
 				if (
-					isset( $_REQUEST['tab'] ) &&
-					'projects' === $_REQUEST['tab'] &&
-					! isset( $_REQUEST['projects_post_id'] )
+					$request_tab &&
+					'projects' === $request_tab &&
+					! $projects_post_id
 				) {
 					return true;
 				}
 				break;
 			case 'project':
 				if (
-					isset( $_REQUEST['tab'] ) &&
-					'projects' === $_REQUEST['tab'] &&
-					isset( $_REQUEST['projects_post_id'] )
+					$request_tab &&
+					'projects' === $request_tab &&
+					$projects_post_id
 				) {
 					return true;
 				}
 				break;
 			case 'messages':
 				if (
-					isset( $_REQUEST['tab'] ) &&
-					'messages' === $_REQUEST['tab']
+					$request_tab &&
+					'messages' === $request_tab
 				) {
 					return true;
 				}
