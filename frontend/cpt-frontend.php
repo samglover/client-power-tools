@@ -151,8 +151,13 @@ function cpt_client_dashboard_page_titles( $title, $post_id ) {
 }
 
 function cpt_the_title() {
+	$classes = array(
+		'entry-title',
+		'wp-block-post-title',
+		'cpt-entry-title',
+	);
 	?>
-		<h1 class="entry-title wp-block-post-title cpt-entry-title">
+		<h1 class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 			<?php echo esc_html( cpt_get_the_title() ); ?>
 		</h1>
 	<?php
@@ -168,6 +173,9 @@ function cpt_get_the_title() {
 	}
 	if ( Common\cpt_is_client_dashboard( 'projects' ) ) {
 		return __( 'Your', 'client-power-tools' ) . ' ' . Common\cpt_get_projects_label( 'plural' );
+	}
+	if ( Common\cpt_is_client_dashboard( 'project' ) ) {
+		return;
 	}
 	return get_the_title();
 }
