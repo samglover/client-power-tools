@@ -41,9 +41,11 @@ function cpt_get_projects_list( $clients_user_id = null ) {
 	if ( ! $clients_user_id ) {
 		$clients_user_id = get_current_user_id();
 	}
+
 	if ( ! cpt_is_client( $clients_user_id ) ) {
 		return;
 	}
+
 	$projects_label = cpt_get_projects_label();
 	$projects       = new \WP_Query(
 		array(
@@ -96,6 +98,7 @@ function cpt_get_projects_list( $clients_user_id = null ) {
 				?>
 			</p>
 		<?php
+		wp_reset_postdata();
 	endif;
 }
 
