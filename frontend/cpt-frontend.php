@@ -179,9 +179,9 @@ function cpt_the_title() {
 	);
 	?>
 		<h2 class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
-				<?php echo esc_html( cpt_get_the_title() ); ?>
+			<?php echo esc_html( cpt_get_the_title() ); ?>
 		</h2>
-				<?php
+	<?php
 }
 
 function cpt_get_the_title() {
@@ -195,7 +195,7 @@ function cpt_get_the_title() {
 	if ( Common\cpt_is_client_dashboard( 'projects' ) ) {
 		return __( 'Your', 'client-power-tools' ) . ' ' . Common\cpt_get_projects_label( 'plural' );
 	}
-	if ( Common\cpt_is_client_dashboard( 'project' ) ) {
+	if ( Common\cpt_is_project() ) {
 		return;
 	}
 	return get_the_title();
