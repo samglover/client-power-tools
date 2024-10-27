@@ -127,7 +127,7 @@ function cpt_get_project( $projects_post_id ) {
 		</a>
 	</p>
 	<?php cpt_get_project_meta( $projects_post_id ); ?>
-	<h1 class="cpt-project-title">
+	<h2 class="cpt-project-title">
 		<?php
 		echo esc_html( get_the_title( $projects_post_id ) );
 		if ( $project_data['project_id'] ) {
@@ -138,7 +138,7 @@ function cpt_get_project( $projects_post_id ) {
 			<?php
 		}
 		?>
-	</h1>
+	</h2>
 	<?php
 	cpt_get_project_progress_bar( $projects_post_id );
 }
@@ -226,7 +226,10 @@ function cpt_get_project_meta( $projects_post_id ) {
 	?>
 		<div class="cpt-project-meta cpt-row">
 			<?php
-			if ( $project_data['project_id'] ) {
+			if (
+				! cpt_is_client_dashboard( 'project' ) &&
+				$project_data['project_id']
+			) {
 				?>
 						<div class="cpt-col cpt-project-id">
 							<span class="cpt-project-meta-label"><?php esc_html_e( 'ID', 'client-power-tools' ); ?></span>

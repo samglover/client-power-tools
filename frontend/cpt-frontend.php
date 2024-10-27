@@ -160,9 +160,9 @@ function cpt_the_title() {
 		'cpt-entry-title',
 	);
 	?>
-		<h1 class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+		<h2 class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 			<?php echo esc_html( cpt_get_the_title() ); ?>
-		</h1>
+		</h2>
 	<?php
 }
 
