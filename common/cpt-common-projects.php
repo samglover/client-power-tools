@@ -2,16 +2,6 @@
 
 namespace Client_Power_Tools\Core\Common;
 
-function cpt_is_project( $post_id ) {
-	if ( ! $post_id ) {
-		return false;
-	}
-	if ( get_post_type( $post_id ) === 'cpt_project' ) {
-		return true;
-	}
-}
-
-
 function cpt_get_projects_label( $n = null ) {
 	$projects_label = get_option( 'cpt_projects_label' );
 	foreach ( $projects_label as $key => $label ) {
@@ -51,9 +41,11 @@ function cpt_get_projects_list( $clients_user_id = null ) {
 	if ( ! $clients_user_id ) {
 		$clients_user_id = get_current_user_id();
 	}
+
 	if ( ! cpt_is_client( $clients_user_id ) ) {
 		return;
 	}
+
 	$projects_label = cpt_get_projects_label();
 	$projects       = new \WP_Query(
 		array(
@@ -106,6 +98,7 @@ function cpt_get_projects_list( $clients_user_id = null ) {
 				?>
 			</p>
 		<?php
+		wp_reset_postdata();
 	endif;
 }
 
@@ -227,7 +220,7 @@ function cpt_get_project_meta( $projects_post_id ) {
 		<div class="cpt-project-meta cpt-row">
 			<?php
 			if (
-				! cpt_is_client_dashboard( 'project' ) &&
+				! cpt_is_project() &&
 				$project_data['project_id']
 			) {
 				?>

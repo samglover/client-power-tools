@@ -3,7 +3,7 @@
 Contributors: samglover
 Tags: client management, project management, portal, restrict content, frontend login
 Requires at least: 5.5
-Tested up to: 6.6.1
+Tested up to: 6.6.2
 Requires PHP: 7.3.5
 Stable tag: trunk
 License: GPLv3
@@ -110,6 +110,15 @@ For more information on how to take advantage of the new and updated features, s
 
 
 == Changelog ==
+
+### 1.9.3 - 2024-10-27
+
+#### Changed
+- Reorganized and streamlined some code.
+
+#### Fixed
+- Fixed duplicate dashboard output and message output.
+
 
 ### 1.9.2 - 2024-10-27
 

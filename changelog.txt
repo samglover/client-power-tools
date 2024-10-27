@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com) and uses [semantic versioning](https://semver.org/).
 
+### 1.9.3 - 2024-10-27
+
+#### Changed
+- Reorganized and streamlined some code.
+
+#### Fixed
+- Fixed duplicate dashboard output and message output.
+
+
 ### 1.9.2 - 2024-10-27
 
 #### Added
