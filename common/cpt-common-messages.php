@@ -12,29 +12,21 @@ namespace Client_Power_Tools\Core\Common;
 function cpt_messages( $clients_user_id ) {
 	if (
 		! get_option( 'cpt_module_messaging' ) ||
-		! $clients_user_id ||
-		(
-			! cpt_is_client_dashboard( 'messages' ) &&
-			! is_admin()
-		)
+		! $clients_user_id
 	) {
 		return;
 	}
 
 	?>
 		<div class="cpt-messages-list">
-			<?php cpt_message_list( $clients_user_id ); ?>
+			<?php echo wp_kses_post( cpt_get_message_list( $clients_user_id ) ); ?>
 		</div>
 	<?php
 }
 
 
-function cpt_message_list( $clients_user_id ) {
-	if ( ! $clients_user_id ) {
-		return;
-	}
-
-	$paged = isset( $_GET['paged'] ) ? sanitize_key( intval( $_GET['paged'] ) ) : get_query_var( 'paged' );
+function cpt_get_message_list( $clients_user_id ) {
+	$paged = isset( $_GET['paged'] ) ? intval( sanitize_key( $_GET['paged'] ) ) : get_query_var( 'paged' );
 
 	$cpt_messages = new \WP_Query(
 		array(
@@ -46,9 +38,12 @@ function cpt_message_list( $clients_user_id ) {
 		)
 	);
 
+	ob_start();
+
 	if ( $cpt_messages->have_posts() ) :
 		while ( $cpt_messages->have_posts() ) :
 			$cpt_messages->the_post();
+			
 			$message_id               = get_the_ID();
 			$message_classes          = array( 'cpt-message', 'card' );
 			$message_meta             = '';
@@ -89,7 +84,7 @@ function cpt_message_list( $clients_user_id ) {
 						<?php } ?>
 						<?php
 						if ( ! $is_status_update_request ) {
-							the_content();
+							echo wp_kses_post( get_the_content() );
 						}
 						?>
 					</div>
@@ -113,8 +108,10 @@ function cpt_message_list( $clients_user_id ) {
 		?>
 			<p><?php esc_html_e( 'No messages found.', 'client-power-tools' ); ?></p>
 		<?php
+		wp_reset_postdata();
 	endif;
-	wp_reset_postdata();
+
+	return ob_get_clean();
 }
 
 
