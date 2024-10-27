@@ -11,9 +11,12 @@ namespace Client_Power_Tools\Core\Common;
 
 function cpt_messages( $clients_user_id ) {
 	if (
-		! get_option( 'cpt_module_messaging' )
-		|| ! $clients_user_id
-		|| ( ! cpt_is_client_dashboard( 'messages' ) && ! is_admin() )
+		! get_option( 'cpt_module_messaging' ) ||
+		! $clients_user_id ||
+		(
+			! cpt_is_client_dashboard( 'messages' ) &&
+			! is_admin()
+		)
 	) {
 		return;
 	}
@@ -49,7 +52,7 @@ function cpt_message_list( $clients_user_id ) {
 			$message_id               = get_the_ID();
 			$message_classes          = array( 'cpt-message', 'card' );
 			$message_meta             = '';
-			$is_status_update_request = get_post_meta( $message_id, 'cpt_status_update_request' );
+			$is_status_update_request = get_post_meta( $message_id, 'cpt_status_update_request', true );
 
 			if ( $is_status_update_request ) {
 				$message_classes[] = 'status-update-request';
