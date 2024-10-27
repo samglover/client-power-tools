@@ -40,7 +40,11 @@ function cpt_is_client_dashboard( $tab = false ) {
 	if ( $tab ) {
 		switch ( $tab ) {
 			case 'dashboard':
-				if ( ! isset( $_REQUEST['tab'] ) && $this_page_id && $this_page_id == $client_dashboard_id ) {
+				if (
+					! isset( $_REQUEST['tab'] ) &&
+					$this_page_id &&
+					$this_page_id === $client_dashboard_id
+				) {
 					return true;
 				}
 				break;
@@ -63,7 +67,10 @@ function cpt_is_client_dashboard( $tab = false ) {
 				}
 				break;
 			case 'messages':
-				if ( isset( $_REQUEST['tab'] ) && $_REQUEST['tab'] == 'messages' ) {
+				if (
+					isset( $_REQUEST['tab'] ) &&
+					'messages' === $_REQUEST['tab']
+				) {
 					return true;
 				}
 				break;
@@ -79,12 +86,14 @@ function cpt_is_client_dashboard( $tab = false ) {
 				break;
 		}
 	} elseif (
-			$this_page_id && $this_page_id == $client_dashboard_id
-			|| cpt_is_knowledge_base()
-			|| cpt_is_additional_page()
-		) {
-
-			return true;
+		$this_page_id &&
+		(
+			$this_page_id === $client_dashboard_id ||
+			cpt_is_knowledge_base() ||
+			cpt_is_additional_page()
+		)
+	) {
+		return true;
 	}
 	return false;
 }
