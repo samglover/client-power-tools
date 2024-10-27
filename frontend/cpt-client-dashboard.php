@@ -12,11 +12,12 @@ function cpt_noindex_client_dashboard() {
 	}
 }
 
-
 add_filter( 'the_content', __NAMESPACE__ . '\cpt_client_dashboard' );
 function cpt_client_dashboard( $content ) {
 	if (
 		! Common\cpt_is_client_dashboard() ||
+		! is_main_query() ||
+		! in_the_loop() ||
 		has_shortcode( $content, 'client-dashboard' )
 	) {
 		return $content;
@@ -27,7 +28,7 @@ function cpt_client_dashboard( $content ) {
 	if (
 		Common\cpt_is_client_dashboard( 'messages' ) ||
 		Common\cpt_is_client_dashboard( 'projects' ) ||
-		Common\cpt_is_client_dashboard( 'project' )
+		Common\cpt_is_project()
 	) {
 		$content = $dashboard;
 	}
@@ -37,8 +38,7 @@ function cpt_client_dashboard( $content ) {
 
 function cpt_get_client_dashboard( $user_id = null ) {
 	if (
-		! is_main_query() ||
-		! in_the_loop()
+		! Common\cpt_is_client_dashboard()
 	) {
 		return;
 	}
@@ -58,16 +58,19 @@ function cpt_get_client_dashboard( $user_id = null ) {
 		$user_id = get_current_user_id();
 	}
 
-	if ( ! Common\cpt_is_client( $user_id ) ) {
+	if (
+		! 0 === $user_id ||
+		! Common\cpt_is_client( $user_id )
+	) {
 		return '<p>' . __( 'Sorry, you don\'t have permission to view this page because your user account is missing the "Client" role.', 'client-power-tools' ) . '</p>';
 	}
 
 	// Logs the user's visit/last activity.
 	update_user_meta( $user_id, 'cpt_last_activity', time() );
 
-	ob_start();
-
 	$client_data = Common\cpt_get_client_data( $user_id );
+
+	ob_start();
 
 	cpt_nav();
 	cpt_breadcrumbs();
@@ -78,7 +81,8 @@ function cpt_get_client_dashboard( $user_id = null ) {
 	if ( Common\cpt_is_client_dashboard( 'dashboard' ) ) {
 		cpt_welcome_message( $client_data['first_name'] );
 
-		$dashboard_page_content = get_the_content( get_option( 'cpt_client_dashboard_page_selection' ) );
+		$dashboard_page_id      = intval( get_option( 'cpt_client_dashboard_page_selection' ) );
+		$dashboard_page_content = get_the_content( null, false, $dashboard_page_id );
 		if (
 			get_option( 'cpt_module_status_update_req_button' ) &&
 			! has_shortcode( $dashboard_page_content, 'status-update-request-button' )
@@ -87,25 +91,11 @@ function cpt_get_client_dashboard( $user_id = null ) {
 		}
 	}
 
-	// Outputs the Projects page.
-	if (
-		get_option( 'cpt_module_projects' ) &&
-		(
-			Common\cpt_is_client_dashboard( 'projects' ) ||
-			Common\cpt_is_client_dashboard( 'project' )
-		)
-	) {
-		// Outputs an individual project if a project post ID is specified.
-		// Otherwise, outputs the list of projects.
-		if ( isset( $_REQUEST['projects_post_id'] ) ) {
-			Common\cpt_get_project( intval( $_REQUEST['projects_post_id'] ) );
-		} else {
-			Common\cpt_get_projects_list();
-		}
-	}
-
 	// Outputs the Messages page.
-	if ( get_option( 'cpt_module_messaging' ) && Common\cpt_is_client_dashboard( 'messages' ) ) {
+	if (
+		get_option( 'cpt_module_messaging' ) &&
+		Common\cpt_is_client_dashboard( 'messages' )
+	) {
 		Common\cpt_messages( $user_id );
 		?>
 			<div class="form-wrap cpt-new-message-form">
@@ -113,6 +103,24 @@ function cpt_get_client_dashboard( $user_id = null ) {
 				<?php Common\cpt_new_message_form( $user_id ); ?>
 			</div>
 		<?php
+	}
+
+	// Outputs the Projects page.
+	if (
+		get_option( 'cpt_module_projects' ) &&
+		Common\cpt_is_client_dashboard( 'projects' )
+	) {
+		// Outputs an individual project if a project post ID is specified.
+		// Otherwise, outputs the list of projects.
+		$projects_post_id = isset( $_REQUEST['projects_post_id'] ) ? intval( sanitize_key( $_REQUEST['projects_post_id'] ) ) : false;
+		if (
+			$projects_post_id &&
+			Common\cpt_is_project( $projects_post_id )
+		) {
+			Common\cpt_get_project( $projects_post_id );
+		} else {
+			Common\cpt_get_projects_list();
+		}
 	}
 
 	return ob_get_clean();

@@ -10,22 +10,41 @@ use Client_Power_Tools\Core\Common;
 add_filter(
 	'body_class',
 	function ( $classes ) {
-		$body_classes = array( 'customize-cpt' );
-		if ( Common\cpt_is_client_dashboard() ) {
-			$body_classes[] = 'client-dashboard';
+		global $wp_query;
+		if (
+			! isset( $wp_query->post->ID )
+		) {
+			return $classes;
 		}
-		if ( Common\cpt_is_client_dashboard( 'messages' ) ) {
-			$body_classes[] = 'client-dashboard-messages';
+
+		$post_id = $wp_query->post->ID;
+		if ( ! Common\cpt_is_client_dashboard() ) {
+			return $classes;
 		}
-		if ( Common\cpt_is_client_dashboard( 'projects' ) ) {
-			$body_classes[] = 'client-dashboard-projects';
+
+		$body_classes = array(
+			'customize-cpt',
+			'client-dashboard',
+		);
+
+		if ( isset( $_REQUEST['tab'] ) ) {
+			$tab_slug = sanitize_key( $_REQUEST['tab'] );
+
+			if ( isset( $_REQUEST['projects_post_id'] ) ) {
+				$tab_slug = 'project';
+			}
+
+			if ( Common\cpt_is_client_dashboard( 'knowledge base' ) ) {
+				$tab_slug = 'knowledge-base';
+			}
+
+			if ( Common\cpt_is_client_dashboard( 'additional page' ) ) {
+				$tab_slug = 'additional-page';
+			}
+
+			$body_classes[] = 'client-dashboard-' . $tab_slug;
 		}
-		if ( Common\cpt_is_client_dashboard( 'project' ) ) {
-			$body_classes[] = 'client-dashboard-project';
-		}
-		if ( Common\cpt_is_client_dashboard( 'knowledge base' ) ) {
-			$body_classes[] = 'client-dashboard-knowledge-base';
-		}
+
 		return array_merge( $classes, $body_classes );
 	}
 );
@@ -54,7 +73,7 @@ function cpt_login() {
 					action="<?php echo esc_url( get_permalink() ); ?>" 
 					method="post"
 				>
-					<?php wp_nonce_field( 'cpt-login', 'cpt-login-nonce' ); ?>
+							<?php wp_nonce_field( 'cpt-login', 'cpt-login-nonce' ); ?>
 					<p id="cpt-login-email">
 						<label for="cpt-login-email-field">Email Address</label>
 						<input 
@@ -160,9 +179,9 @@ function cpt_the_title() {
 	);
 	?>
 		<h2 class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
-			<?php echo esc_html( cpt_get_the_title() ); ?>
+				<?php echo esc_html( cpt_get_the_title() ); ?>
 		</h2>
-	<?php
+				<?php
 }
 
 function cpt_get_the_title() {

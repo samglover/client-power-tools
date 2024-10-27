@@ -32,7 +32,7 @@ function cpt_add_roles() {
 	$admin->add_cap( 'cpt_manage_settings' );
 }
 
-function cpt_is_client_dashboard( $tab = false ) {
+function cpt_is_client_dashboard( $tab_slug = false ) {
 	global $wp_query;
 	if (
 		! isset( $wp_query->post->ID )
@@ -45,16 +45,16 @@ function cpt_is_client_dashboard( $tab = false ) {
 		return false;
 	}
 
-	$client_dashboard_id = intval( get_option( 'cpt_client_dashboard_page_selection' ) );
+	$dashboard_page_id = intval( get_option( 'cpt_client_dashboard_page_selection' ) );
 
-	if ( $tab ) {
+	if ( $tab_slug ) {
 		$request_tab      = isset( $_REQUEST['tab'] ) ? sanitize_key( $_REQUEST['tab'] ) : false;
 		$projects_post_id = isset( $_REQUEST['projects_post_id'] ) ? intval( sanitize_key( $_REQUEST['projects_post_id'] ) ) : false;
-		switch ( $tab ) {
+		switch ( $tab_slug ) {
 			case 'dashboard':
 				if (
 					! $request_tab &&
-					$this_page_id === $client_dashboard_id
+					$this_page_id === $dashboard_page_id
 				) {
 					return true;
 				}
@@ -62,17 +62,7 @@ function cpt_is_client_dashboard( $tab = false ) {
 			case 'projects':
 				if (
 					$request_tab &&
-					'projects' === $request_tab &&
-					! $projects_post_id
-				) {
-					return true;
-				}
-				break;
-			case 'project':
-				if (
-					$request_tab &&
-					'projects' === $request_tab &&
-					$projects_post_id
+					'projects' === $request_tab
 				) {
 					return true;
 				}
@@ -97,7 +87,7 @@ function cpt_is_client_dashboard( $tab = false ) {
 				break;
 		}
 	} elseif (
-		$this_page_id === $client_dashboard_id ||
+		$this_page_id === $dashboard_page_id ||
 		cpt_is_knowledge_base() ||
 		cpt_is_additional_page()
 	) {
@@ -107,12 +97,19 @@ function cpt_is_client_dashboard( $tab = false ) {
 }
 
 
-function cpt_is_project( $post_id ) {
+function cpt_is_project( $post_id = false ) {
+	if ( ! $post_id ) {
+		$post_id = get_the_ID();
+	}
+
 	if ( ! $post_id ) {
 		return false;
 	}
-	if ( get_post_type( $post_id ) === 'cpt_project' ) {
+
+	if ( 'cpt_project' === get_post_type( $post_id ) ) {
 		return true;
+	} else {
+		return false;
 	}
 }
 

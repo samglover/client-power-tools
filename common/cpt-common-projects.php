@@ -217,7 +217,7 @@ function cpt_get_project_meta( $projects_post_id ) {
 		<div class="cpt-project-meta cpt-row">
 			<?php
 			if (
-				! cpt_is_client_dashboard( 'project' ) &&
+				! cpt_is_project() &&
 				$project_data['project_id']
 			) {
 				?>
