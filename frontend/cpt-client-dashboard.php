@@ -12,8 +12,13 @@ function cpt_noindex_client_dashboard() {
 	}
 }
 
+
 add_filter( 'the_content', __NAMESPACE__ . '\cpt_client_dashboard' );
 function cpt_client_dashboard( $content ) {
+	if ( has_shortcode( $content, 'client-dashboard' ) ) {
+		return $content;
+	}
+
 	$dashboard = cpt_get_client_dashboard();
 
 	if ( Common\cpt_is_client_dashboard( 'dashboard' ) ) {
@@ -55,10 +60,12 @@ function cpt_get_client_dashboard( $user_id = null ) {
 		return '<p>' . __( 'Sorry, you don\'t have permission to view this page because your user account is missing the "Client" role.', 'client-power-tools' ) . '</p>';
 	}
 
-	$client_data = Common\cpt_get_client_data( $user_id );
-
 	// Logs the user's visit/last activity.
 	update_user_meta( $user_id, 'cpt_last_activity', time() );
+
+	ob_start();
+
+	$client_data = Common\cpt_get_client_data( $user_id );
 
 	cpt_nav();
 	cpt_breadcrumbs();
@@ -79,7 +86,13 @@ function cpt_get_client_dashboard( $user_id = null ) {
 	}
 
 	// Outputs the Projects page.
-	if ( get_option( 'cpt_module_projects' ) ) {
+	if (
+		get_option( 'cpt_module_projects' ) &&
+		(
+			Common\cpt_is_client_dashboard( 'projects' ) ||
+			Common\cpt_is_client_dashboard( 'project' )
+		)
+	) {
 		// Outputs an individual project if a project post ID is specified.
 		// Otherwise, outputs the list of projects.
 		if ( isset( $_REQUEST['projects_post_id'] ) ) {
@@ -99,6 +112,8 @@ function cpt_get_client_dashboard( $user_id = null ) {
 			</div>
 		<?php
 	}
+
+	return ob_get_clean();
 }
 
 
@@ -270,18 +285,18 @@ function cpt_get_submenu( $page_id ) {
 
 function cpt_welcome_message( $clients_first_name ) {
 	?>
-			<p>
-				<strong>
-					<?php
-						printf(
-							// translators: %s is the client's first name.
-							esc_html__( 'Welcome back, %s!', 'client-power-tools' ),
-							esc_html( $clients_first_name )
-						);
-					?>
-				</strong>
-			</p>
-		<?php
+	<p>
+		<strong>
+			<?php
+				printf(
+					// translators: %s is the client's first name.
+					esc_html__( 'Welcome back, %s!', 'client-power-tools' ),
+					esc_html( $clients_first_name )
+				);
+			?>
+		</strong>
+	</p>
+	<?php
 }
 
 /**
@@ -291,6 +306,7 @@ function cpt_breadcrumbs() {
 	if ( ! get_option( 'cpt_show_knowledge_base_breadcrumbs' ) ) {
 		return;
 	}
+
 	if ( ! Common\cpt_is_knowledge_base() && ! Common\cpt_is_additional_page() ) {
 		return;
 	}

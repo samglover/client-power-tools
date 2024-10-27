@@ -84,8 +84,10 @@ function cpt_message_list( $clients_user_id ) {
 							<h3 class="cpt-message-title"><?php the_title(); ?></h3>
 						<?php } ?>
 						<?php
+						var_dump( get_post_meta( $message_id, 'cpt_status_update_request' ) );
 						if ( ! get_post_meta( $message_id, 'cpt_status_update_request' ) ) {
-							the_content();}
+							the_content();
+						}
 						?>
 					</div>
 					<p class="cpt-message-meta"><?php echo wp_kses_post( $message_meta ); ?></p>
