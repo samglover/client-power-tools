@@ -17,24 +17,20 @@ add_filter( 'the_content', __NAMESPACE__ . '\cpt_client_dashboard' );
 function cpt_client_dashboard( $content ) {
 	if (
 		! Common\cpt_is_client_dashboard() ||
-		'cpt_message' === get_post_type( get_the_ID() )
+		has_shortcode( $content, 'client-dashboard' )
 	) {
-		return $content;
-	}
-
-	if ( has_shortcode( $content, 'client-dashboard' ) ) {
 		return $content;
 	}
 
 	$dashboard = cpt_get_client_dashboard();
 
-	if ( Common\cpt_is_client_dashboard( 'dashboard' ) ) {
-		$content = $dashboard . $content;
-	} else {
+	if (
+		Common\cpt_is_client_dashboard( 'messages' ) ||
+		Common\cpt_is_client_dashboard( 'projects' )
+	) {
 		$content = $dashboard;
 	}
-
-	return $content;
+	return $dashboard . $content;
 }
 
 

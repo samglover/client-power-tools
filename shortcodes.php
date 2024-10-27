@@ -17,5 +17,10 @@ function status_update_request_button_shortcode() {
 
 add_shortcode( 'client-dashboard', __NAMESPACE__ . '\client_dashboard_shortcode' );
 function client_dashboard_shortcode() {
+	if (
+		! Common\cpt_is_client_dashboard()
+	) {
+		return;
+	}
 	return Frontend\cpt_get_client_dashboard();
 }
