@@ -100,7 +100,9 @@ To add pages to your knowledge base, just go to the page you want to add (or cre
 
 == Upgrade Notice ==
 
-Version 1.9 addresses a number of output escaping issues identified by the WordPress Plugin Review Team's [Plugin Check plugin](https://wordpress.org/plugins/plugin-check/), as well as a potential cross-site-scripting (XSS) vulnerability.
+Version 1.9 includes a new \[client-dashboard] shortcode (in 1.9.2). This allows you to manually place the dashboard on the client dashboard page, which should help those experiencing wonky page layout issues with page builders.
+
+It also addresses a number of output escaping issues identified by the WordPress Plugin Review Team's [Plugin Check plugin](https://wordpress.org/plugins/plugin-check/), and a cross-site-scripting (XSS) vulnerability.
 
 As usual, there are also lots of smaller updates, improvements, and tweaks. See the changelog for details.
 
@@ -109,13 +111,26 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.9.2 - 2024-10-27
+
+#### Added
+- \[client-dashboard] shortcode allows the dashboard to be placed manually on the dashboard page.
+
+#### Changed
+- Abstracted several dashboard functions to make the code easier to follow and to make it easier to implement the new shortcode.
+
+#### Fixed
+- Content added to the dashboard page in the WordPress editor no longer shows up on the Messages and Projects pages/tabs.
+- Enforced strict type comparison and Yoda condition checks for the cpt_is_client_dashboard() and related functions.
+
+
 ### 1.9.1 - 2024-10-25
 
 #### Changed
 - References to WP_User_Query now use the correct case (WP_User_Query instead of WP_USER_QUERY).
 
 #### Fixed
-- Fixed potential cross-site scripting (XSS) vulnerability.
+- Fixed cross-site scripting (XSS) vulnerability.
 
 
 ### 1.9.0 - 2024-10-24
