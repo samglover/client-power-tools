@@ -149,7 +149,6 @@ function cpt_client_dashboard_page_titles( $title, $post_id ) {
 	) {
 		return $title;
 	}
-
 	return get_post( get_option( 'cpt_client_dashboard_page_selection' ) )->post_title;
 }
 
