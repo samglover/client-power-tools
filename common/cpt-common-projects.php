@@ -2,16 +2,6 @@
 
 namespace Client_Power_Tools\Core\Common;
 
-function cpt_is_project( $post_id ) {
-	if ( ! $post_id ) {
-		return false;
-	}
-	if ( get_post_type( $post_id ) === 'cpt_project' ) {
-		return true;
-	}
-}
-
-
 function cpt_get_projects_label( $n = null ) {
 	$projects_label = get_option( 'cpt_projects_label' );
 	foreach ( $projects_label as $key => $label ) {

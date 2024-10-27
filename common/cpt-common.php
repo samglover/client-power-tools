@@ -57,7 +57,7 @@ function cpt_is_client_dashboard( $tab = false ) {
 				if (
 					$request_tab &&
 					'projects' === $request_tab &&
-					! $projects_post_id
+					! $projects_post_id 
 				) {
 					return true;
 				}
@@ -98,6 +98,16 @@ function cpt_is_client_dashboard( $tab = false ) {
 		return true;
 	}
 	return false;
+}
+
+
+function cpt_is_project( $post_id ) {
+	if ( ! $post_id ) {
+		return false;
+	}
+	if ( get_post_type( $post_id ) === 'cpt_project' ) {
+		return true;
+	}
 }
 
 
