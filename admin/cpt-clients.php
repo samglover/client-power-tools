@@ -181,7 +181,7 @@ function cpt_get_client_profile( $clients_user_id ) {
 		?>
 			<section id="cpt-projects">
 				<h2 class="cpt-row"><?php echo esc_html( Common\cpt_get_projects_label( 'plural' ) ); ?></h2>
-				<?php Common\cpt_get_projects( $clients_user_id ); ?>
+				<?php Common\cpt_get_projects_list( $clients_user_id ); ?>
 			</section>
 		<?php
 	}
