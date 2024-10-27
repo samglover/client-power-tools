@@ -31,8 +31,10 @@ function cpt_client_dashboard( $content ) {
 		Common\cpt_is_project()
 	) {
 		$content = $dashboard;
+	} else {
+		$content = $dashboard . $content;
 	}
-	return $dashboard . $content;
+	return $content;
 }
 
 
@@ -81,11 +83,11 @@ function cpt_get_client_dashboard( $user_id = null ) {
 	if ( Common\cpt_is_client_dashboard( 'dashboard' ) ) {
 		cpt_welcome_message( $client_data['first_name'] );
 
-		$dashboard_page_id      = intval( get_option( 'cpt_client_dashboard_page_selection' ) );
-		$dashboard_page_content = get_the_content( null, false, $dashboard_page_id );
+		$dashboard_page_id = intval( get_option( 'cpt_client_dashboard_page_selection' ) );
+		$dashboard_content = get_the_content( null, false, $dashboard_page_id );
 		if (
 			get_option( 'cpt_module_status_update_req_button' ) &&
-			! has_shortcode( $dashboard_page_content, 'status-update-request-button' )
+			! has_shortcode( $dashboard_content, 'status-update-request-button' )
 		) {
 			Common\cpt_status_update_request_button( $user_id );
 		}
@@ -191,7 +193,8 @@ function cpt_nav() {
 						</a>
 						<?php
 						if ( $kb_children_ids ) {
-							echo wp_kses_post( cpt_get_submenu( $kb_id ) );}
+							cpt_submenu( $kb_id );
+						}
 						?>
 					</li>
 				<?php } ?>
@@ -215,7 +218,8 @@ function cpt_nav() {
 							</a>
 							<?php
 							if ( get_option( 'cpt_client_dashboard_addl_pages_children' ) && $addl_page_children_ids ) {
-								echo wp_kses_post( cpt_get_submenu( $addl_page_id ) );}
+								cpt_submenu( $addl_page_id );
+							}
 							?>
 						</li>
 						<?php
@@ -255,7 +259,7 @@ function cpt_get_child_pages( $page_id ) {
 	}
 }
 
-function cpt_get_submenu( $page_id ) {
+function cpt_submenu( $page_id ) {
 	if ( ! $page_id ) {
 		return;
 	}
@@ -265,32 +269,32 @@ function cpt_get_submenu( $page_id ) {
 		return;
 	}
 
-	ob_start();
 	?>
 		<ul class="sub-menu">
 			<?php foreach ( $child_pages as $id ) { ?>
 				<?php
-					$children = cpt_get_child_pages( $id );
-					$classes  = 'menu-item';
+				$children = cpt_get_child_pages( $id );
+				$classes  = array( 'menu-item' );
 				if ( get_the_ID() === $id ) {
-					$classes .= ' current-menu-item';
+					$classes[] = 'current-menu-item';
 				}
 				if ( $children ) {
-					$classes .= ' menu-item-has-children';
+					$classes[] = 'menu-item-has-children';
 				}
 				?>
-				<li class="<?php echo esc_attr( $classes ); ?>">
-					<a href="<?php echo esc_url( get_permalink( $id ) ); ?>"><?php echo esc_html( get_the_title( $id ) ); ?></a>
+				<li class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+					<a href="<?php echo esc_url( get_permalink( $id ) ); ?>">
+						<?php echo esc_html( get_the_title( $id ) ); ?>
+					</a>
 					<?php
 					if ( $children ) {
-						echo wp_kses_post( cpt_get_submenu( $id ) );
+						cpt_submenu( $id );
 					}
 					?>
 				</li>
 			<?php } ?>
 		</ul>
 	<?php
-	return ob_get_clean();
 }
 
 function cpt_welcome_message( $clients_first_name ) {
