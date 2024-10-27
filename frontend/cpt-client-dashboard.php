@@ -16,12 +16,30 @@ function cpt_noindex_client_dashboard() {
 add_filter( 'the_content', __NAMESPACE__ . '\cpt_client_dashboard' );
 function cpt_client_dashboard( $content ) {
 	if (
-		! Common\cpt_is_client_dashboard()
-		|| ! is_main_query()
-		|| ! in_the_loop()
-		|| get_post_type( get_the_ID() ) === 'cpt_message'
+		! Common\cpt_is_client_dashboard() ||
+		has_shortcode( $content, 'client-dashboard' )
 	) {
 		return $content;
+	}
+
+	$dashboard = cpt_get_client_dashboard();
+
+	if (
+		Common\cpt_is_client_dashboard( 'messages' ) ||
+		Common\cpt_is_client_dashboard( 'projects' )
+	) {
+		$content = $dashboard;
+	}
+	return $dashboard . $content;
+}
+
+
+function cpt_get_client_dashboard( $user_id = null ) {
+	if (
+		! is_main_query() ||
+		! in_the_loop()
+	) {
+		return;
 	}
 
 	if ( ! is_user_logged_in() ) {
@@ -35,124 +53,68 @@ function cpt_client_dashboard( $content ) {
 		) . '</p>';
 	}
 
-	$clients_user_id = get_current_user_id();
-	if ( ! Common\cpt_is_client( $clients_user_id ) ) {
+	if ( ! $user_id ) {
+		$user_id = get_current_user_id();
+	}
+
+	if ( ! Common\cpt_is_client( $user_id ) ) {
 		return '<p>' . __( 'Sorry, you don\'t have permission to view this page because your user account is missing the "Client" role.', 'client-power-tools' ) . '</p>';
 	}
 
-	/**
-	 * Client Dashboard Output
-	 */
+	// Logs the user's visit/last activity.
+	update_user_meta( $user_id, 'cpt_last_activity', time() );
+
 	ob_start();
 
-	// Logs the user's visit/last activity.
-	update_user_meta( $clients_user_id, 'cpt_last_activity', time() );
+	$client_data = Common\cpt_get_client_data( $user_id );
 
-	// The client dashboard navigation, title, and notices appear on all dashboard pages.
 	cpt_nav();
 	cpt_breadcrumbs();
-	?>
-		<h1 class="entry-title wp-block-post-title cpt-entry-title">
-			<?php echo esc_html( cpt_get_the_title() ); ?>
-		</h1>
-	<?php
+	cpt_the_title();
 	Common\cpt_get_notices();
 
-	// The welcome message and status update request button appear only on the dashboard Home page.
+	// Outputs the welcome message and the status update request button.
 	if ( Common\cpt_is_client_dashboard( 'dashboard' ) ) {
-		$client_data = Common\cpt_get_client_data( $clients_user_id );
-		?>
-			<p><strong>
-				<?php
-					printf(
-						// translators: %s is the client's first name.
-						esc_html__( 'Welcome back, %s!', 'client-power-tools' ),
-						esc_html( $client_data['first_name'] )
-					);
-				?>
-			</p></strong>
-		<?php
+		cpt_welcome_message( $client_data['first_name'] );
 
+		$dashboard_page_content = get_the_content( get_option( 'cpt_client_dashboard_page_selection' ) );
 		if (
 			get_option( 'cpt_module_status_update_req_button' ) &&
-			! has_shortcode( $content, 'status-update-request-button' )
-			) {
-			Common\cpt_status_update_request_button( $clients_user_id );
+			! has_shortcode( $dashboard_page_content, 'status-update-request-button' )
+		) {
+			Common\cpt_status_update_request_button( $user_id );
 		}
 	}
 
-	// Outputs the dashboard Projects page.
-	if ( get_option( 'cpt_module_projects' ) && Common\cpt_is_client_dashboard( 'projects' ) ) {
-		$projects_label = Common\cpt_get_projects_label();
-
+	// Outputs the Projects page.
+	if (
+		get_option( 'cpt_module_projects' ) &&
+		(
+			Common\cpt_is_client_dashboard( 'projects' ) ||
+			Common\cpt_is_client_dashboard( 'project' )
+		)
+	) {
 		// Outputs an individual project if a project post ID is specified.
 		// Otherwise, outputs the list of projects.
-		if ( ! isset( $_REQUEST['projects_post_id'] ) ) {
-			Common\cpt_get_projects();
+		if ( isset( $_REQUEST['projects_post_id'] ) ) {
+			Common\cpt_get_project( intval( $_REQUEST['projects_post_id'] ) );
 		} else {
-			$projects_post_id = sanitize_key( intval( $_REQUEST['projects_post_id'] ) );
-			$project_data     = Common\cpt_get_project_data( $projects_post_id );
-			?>
-			<p>
-				<a href="<?php echo esc_url( remove_query_arg( 'projects_post_id' ) ); ?>">
-					&lt;
-					<?php
-						printf(
-							// translators: %s is the projects label.
-							esc_html__( 'Back to %s', 'client-power-tools' ),
-							esc_html( $projects_label[1] )
-						);
-					?>
-				</a>
-			</p>
-			<?php if ( $project_data['project_status'] ) { ?>
-				<p class="cpt-project-status">
-					<?php
-					echo esc_html( $project_data['project_status'] );
-					if ( $project_data['project_type'] ) {
-						echo esc_html( $project_data['project_type'] );
-					}
-					echo esc_html( $projects_label[0] );
-					?>
-				</p>
-			<?php } ?>
-			<h2 class="cpt-project-title">
-				<?php
-				echo esc_html( get_the_title( $projects_post_id ) );
-				if ( $project_data['project_id'] ) {
-					?>
-						<span style="color:silver">
-							(<?php echo esc_html( $project_data['project_id'] ); ?>)
-						</span>
-					<?php
-				}
-				?>
-			</h2>
-			<?php
-			Common\cpt_get_project_progress_bar( $projects_post_id );
+			Common\cpt_get_projects_list();
 		}
 	}
 
-	// Outputs the Messages dashboard page.
+	// Outputs the Messages page.
 	if ( get_option( 'cpt_module_messaging' ) && Common\cpt_is_client_dashboard( 'messages' ) ) {
-		Common\cpt_messages( $clients_user_id );
+		Common\cpt_messages( $user_id );
 		?>
 			<div class="form-wrap cpt-new-message-form">
 				<h3><?php esc_html_e( 'New Message', 'client-power-tools' ); ?></h3>
-				<?php Common\cpt_new_message_form( $clients_user_id ); ?>
+				<?php Common\cpt_new_message_form( $user_id ); ?>
 			</div>
 		<?php
 	}
 
-	$dashboard = ob_get_clean();
-
-	if ( Common\cpt_is_client_dashboard( 'dashboard' ) ) {
-		$content = $dashboard . $content;
-	} else {
-		$content = $dashboard;
-	}
-
-	return $content;
+	return ob_get_clean();
 }
 
 
@@ -322,6 +284,21 @@ function cpt_get_submenu( $page_id ) {
 	return ob_get_clean();
 }
 
+function cpt_welcome_message( $clients_first_name ) {
+	?>
+	<p>
+		<strong>
+			<?php
+				printf(
+					// translators: %s is the client's first name.
+					esc_html__( 'Welcome back, %s!', 'client-power-tools' ),
+					esc_html( $clients_first_name )
+				);
+			?>
+		</strong>
+	</p>
+	<?php
+}
 
 /**
  * Knowledge Base Breadcrumbs
@@ -330,6 +307,7 @@ function cpt_breadcrumbs() {
 	if ( ! get_option( 'cpt_show_knowledge_base_breadcrumbs' ) ) {
 		return;
 	}
+
 	if ( ! Common\cpt_is_knowledge_base() && ! Common\cpt_is_additional_page() ) {
 		return;
 	}

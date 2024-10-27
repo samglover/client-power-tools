@@ -34,23 +34,46 @@ function cpt_add_roles() {
 
 function cpt_is_client_dashboard( $tab = false ) {
 	global $wp_query;
-	$this_page_id        = isset( $wp_query->post->ID ) ? $wp_query->post->ID : false;
-	$client_dashboard_id = get_option( 'cpt_client_dashboard_page_selection' );
+	if ( ! isset( $wp_query->post->ID ) ) {
+		return false;
+	}
+
+	$this_page_id        = $wp_query->post->ID;
+	$client_dashboard_id = intval( get_option( 'cpt_client_dashboard_page_selection' ) );
 
 	if ( $tab ) {
 		switch ( $tab ) {
 			case 'dashboard':
-				if ( ! isset( $_REQUEST['tab'] ) && $this_page_id && $this_page_id == $client_dashboard_id ) {
+				if (
+					! isset( $_REQUEST['tab'] ) &&
+					$this_page_id === $client_dashboard_id
+				) {
 					return true;
 				}
 				break;
 			case 'projects':
-				if ( isset( $_REQUEST['tab'] ) && $_REQUEST['tab'] == 'projects' ) {
+				if (
+					isset( $_REQUEST['tab'] ) &&
+					'projects' === $_REQUEST['tab'] &&
+					! isset( $_REQUEST['projects_post_id'] )
+				) {
+					return true;
+				}
+				break;
+			case 'project':
+				if (
+					isset( $_REQUEST['tab'] ) &&
+					'projects' === $_REQUEST['tab'] &&
+					isset( $_REQUEST['projects_post_id'] )
+				) {
 					return true;
 				}
 				break;
 			case 'messages':
-				if ( isset( $_REQUEST['tab'] ) && $_REQUEST['tab'] == 'messages' ) {
+				if (
+					isset( $_REQUEST['tab'] ) &&
+					'messages' === $_REQUEST['tab']
+				) {
 					return true;
 				}
 				break;
@@ -66,12 +89,11 @@ function cpt_is_client_dashboard( $tab = false ) {
 				break;
 		}
 	} elseif (
-			$this_page_id && $this_page_id == $client_dashboard_id
-			|| cpt_is_knowledge_base()
-			|| cpt_is_additional_page()
-		) {
-
-			return true;
+		$this_page_id === $client_dashboard_id ||
+		cpt_is_knowledge_base() ||
+		cpt_is_additional_page()
+	) {
+		return true;
 	}
 	return false;
 }
@@ -79,14 +101,21 @@ function cpt_is_client_dashboard( $tab = false ) {
 
 function cpt_is_knowledge_base() {
 	global $wp_query;
-	$this_page_id        = isset( $wp_query->post->ID ) ? $wp_query->post->ID : false;
-	$knowledge_base_id   = get_option( 'cpt_knowledge_base_page_selection' );
-	$this_page_ancestors = $this_page_id ? get_post_ancestors( $this_page_id ) : false;
-
-	if ( $this_page_id && $this_page_id == $knowledge_base_id ) {
-		return true;
+	if ( ! isset( $wp_query->post->ID ) ) {
+		return false;
 	}
-	if ( $this_page_ancestors && in_array( $knowledge_base_id, $this_page_ancestors ) ) {
+
+	$this_page_id        = $wp_query->post->ID;
+	$knowledge_base_id   = intval( get_option( 'cpt_knowledge_base_page_selection' ) );
+	$this_page_ancestors = get_post_ancestors( $this_page_id );
+
+	if (
+		$this_page_id === $knowledge_base_id ||
+		(
+			$this_page_ancestors &&
+			in_array( $knowledge_base_id, $this_page_ancestors, true )
+		)
+	) {
 		return true;
 	}
 	return false;
@@ -94,16 +123,21 @@ function cpt_is_knowledge_base() {
 
 function cpt_is_additional_page() {
 	global $wp_query;
-	$this_page_id     = isset( $wp_query->post->ID ) ? $wp_query->post->ID : false;
+	if ( ! isset( $wp_query->post->ID ) ) {
+		return false;
+	}
+
+	$this_page_id     = $wp_query->post->ID;
 	$addl_pages_array = get_option( 'cpt_client_dashboard_addl_pages' ) ? get_option( 'cpt_client_dashboard_addl_pages' ) : false;
+
 	if ( $addl_pages_array ) {
 		$is_addl_page     = false;
 		$addl_pages_array = explode( ',', $addl_pages_array );
 		foreach ( $addl_pages_array as $key => $page_id ) {
 			$page_id = intval( trim( $page_id ) );
 			if (
-				$page_id == $this_page_id ||
-				in_array( $page_id, get_post_ancestors( $this_page_id ) )
+				$page_id === $this_page_id ||
+				in_array( $page_id, get_post_ancestors( $this_page_id ), true )
 			) {
 				$is_addl_page = true;
 			}

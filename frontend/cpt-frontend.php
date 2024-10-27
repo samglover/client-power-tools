@@ -20,6 +20,9 @@ add_filter(
 		if ( Common\cpt_is_client_dashboard( 'projects' ) ) {
 			$body_classes[] = 'client-dashboard-projects';
 		}
+		if ( Common\cpt_is_client_dashboard( 'project' ) ) {
+			$body_classes[] = 'client-dashboard-project';
+		}
 		if ( Common\cpt_is_client_dashboard( 'knowledge base' ) ) {
 			$body_classes[] = 'client-dashboard-knowledge-base';
 		}
@@ -150,6 +153,19 @@ function cpt_client_dashboard_page_titles( $title, $post_id ) {
 	return get_post( get_option( 'cpt_client_dashboard_page_selection' ) )->post_title;
 }
 
+function cpt_the_title() {
+	$classes = array(
+		'entry-title',
+		'wp-block-post-title',
+		'cpt-entry-title',
+	);
+	?>
+		<h2 class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+			<?php echo esc_html( cpt_get_the_title() ); ?>
+		</h2>
+	<?php
+}
+
 function cpt_get_the_title() {
 	remove_filter( 'the_title', __NAMESPACE__ . '\cpt_client_dashboard_page_titles', 10, 2 );
 	if ( Common\cpt_is_client_dashboard( 'dashboard' ) ) {
@@ -160,6 +176,9 @@ function cpt_get_the_title() {
 	}
 	if ( Common\cpt_is_client_dashboard( 'projects' ) ) {
 		return __( 'Your', 'client-power-tools' ) . ' ' . Common\cpt_get_projects_label( 'plural' );
+	}
+	if ( Common\cpt_is_client_dashboard( 'project' ) ) {
+		return;
 	}
 	return get_the_title();
 }

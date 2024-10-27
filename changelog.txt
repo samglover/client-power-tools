@@ -2,10 +2,17 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com) and uses [semantic versioning](https://semver.org/).
 
-### 1.9.2 [pending]
+### 1.9.2 - 2024-10-27
+
+#### Added
+- \[client-dashboard] shortcode allows the dashboard to be placed manually on the dashboard page.
+
+#### Changed
+- Abstracted several dashboard functions to make the code easier to follow and to make it easier to implement the new shortcode.
 
 #### Fixed
 - Content added to the dashboard page in the WordPress editor no longer shows up on the Messages and Projects pages/tabs.
+- Enforced strict type comparison and Yoda condition checks for the cpt_is_client_dashboard() and related functions.
 
 
 ### 1.9.1 - 2024-10-25
