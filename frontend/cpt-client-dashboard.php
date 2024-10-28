@@ -134,7 +134,7 @@ function cpt_nav() {
 	?>
 		<nav 
 			id="cpt-nav" 
-			class="wp-block-group has-global-padding is-layout-constrained"
+			class="wp-block-group has-global-padding is-layout-constrained alignfull"
 		>
 			<ul class="cpt-tabs menu">
 				<li class="cpt-tab menu-item
