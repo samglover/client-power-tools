@@ -7,7 +7,7 @@
     background-color: White;
     border: $border;
     box-shadow: $box-shadow;
-    margin-bottom: $spacing-regular;
+    margin-bottom: $spacing-sm;
     padding: 0;
   }
 
@@ -38,7 +38,7 @@
 
   .cpt-message-content {
     font-size: 16px;
-    padding: $spacing-regular;
+    padding: $spacing-sm;
 
     & > *:first-child {
       margin-top: 0;
@@ -52,29 +52,29 @@
   .cpt-message-title {
     font-size: 20px;
     margin-top: 0;
-    margin-bottom: $spacing-regular;
+    margin-bottom: $spacing-sm;
   }
 
   .cpt-message-meta {
     background-color: $gray-wash;
     font-size: 12px;
     margin: 0;
-    padding: $spacing-sm $spacing-regular;
+    padding: $spacing-xs $spacing-sm;
   }
 }
 
 .cpt-new-message-form {
   background-color: $gray-wash;
-  padding: $spacing-regular;
+  padding: $spacing-sm;
 
   h3 {
     margin-top: 0;
-    margin-bottom: $spacing-regular;
+    margin-bottom: $spacing-sm;
   }
 
   .form-field {
     margin-top: 0;
-    margin-bottom: $spacing-regular;
+    margin-bottom: $spacing-sm;
 
     input:not([type="checkbox"]),
     select,

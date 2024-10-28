@@ -4,7 +4,7 @@ Contributors: samglover
 Tags: client management, project management, portal, restrict content, frontend login
 Requires at least: 5.5
 Tested up to: 6.6.2
-Requires PHP: 7.3.5
+Requires PHP: 7.4
 Stable tag: trunk
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -100,6 +100,8 @@ To add pages to your knowledge base, just go to the page you want to add (or cre
 
 == Upgrade Notice ==
 
+Version 1.10 adds default styles for the navigation menu. These should be overidden by themes that include styles for regular WordPress menus, and have low specificity so they are easy to override with custom CSS. (The default styles are not applied to the [Client Power Tools theme](https://github.com/samglover/cpt-theme).)
+
 Version 1.9 includes a new \[client-dashboard] shortcode (in 1.9.2). This allows you to manually place the dashboard on the client dashboard page, which should help those experiencing wonky page layout issues with page builders.
 
 It also addresses a number of output escaping issues identified by the WordPress Plugin Review Team's [Plugin Check plugin](https://wordpress.org/plugins/plugin-check/), and a cross-site-scripting (XSS) vulnerability.
@@ -110,6 +112,12 @@ For more information on how to take advantage of the new and updated features, s
 
 
 == Changelog ==
+
+### 1.10.0 - 2024-10-28
+
+#### Added
+- Default styles for the navigation menu. These should be overidden by themes that include styles for regular WordPress menus, and have low specificity so they are easy to override with custom CSS. (The default styles are not applied to the [Client Power Tools theme](https://github.com/samglover/cpt-theme).)
+
 
 ### 1.9.3 - 2024-10-27
 

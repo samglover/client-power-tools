@@ -15,14 +15,14 @@ body {
   animation: pulse_centered 150ms ease-in-out forwards;
   display: none;
   margin: 0 auto;
-  max-height: calc(100vh - $spacing-sm * 2 - var(--wp-admin--admin-bar--height));
-  max-width: calc(100vw - ($spacing-sm * 2));
+  max-height: calc(100vh - $spacing-xs * 2 - var(--wp-admin--admin-bar--height));
+  max-width: calc(100vw - ($spacing-xs * 2));
   overflow: auto;
   position: fixed;
-    top: calc($spacing-sm + var(--wp-admin--admin-bar--height));
+    top: calc($spacing-xs + var(--wp-admin--admin-bar--height));
     left: 50%;
   transform-origin: top center;
-  width: calc($breakpoint-sm - $spacing-sm * 2);
+  width: calc($breakpoint-sm - $spacing-xs * 2);
   z-index: 20;
 
   &.visible {
@@ -35,7 +35,7 @@ body {
 
   > h2 {
     margin-top: 0;
-    margin-bottom: $spacing-regular;
+    margin-bottom: $spacing-sm;
   }
 
   :not(.cpt-notice-message):last-child,
@@ -69,8 +69,8 @@ body {
   margin: 0;
   padding: 0;
   position: absolute;
-    right: $spacing-xs;
-    top: $spacing-xs;
+    right: $spacing-xxs;
+    top: $spacing-xxs;
   transform: unset;
   width: 1em;
 }
@@ -83,7 +83,7 @@ body {
 
   .description {
     font-size: 80%;
-    margin-bottom: $spacing-regular;
+    margin-bottom: $spacing-sm;
   }
 }
 

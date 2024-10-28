@@ -32,6 +32,7 @@ function cpt_add_roles() {
 	$admin->add_cap( 'cpt_manage_settings' );
 }
 
+
 function cpt_is_client_dashboard( $tab_slug = false ) {
 	global $wp_query;
 	if (
@@ -56,7 +57,7 @@ function cpt_is_client_dashboard( $tab_slug = false ) {
 					! $request_tab &&
 					$this_page_id === $dashboard_page_id
 				) {
-					return true;
+					return 'dashboard';
 				}
 				break;
 			case 'projects':
@@ -64,7 +65,7 @@ function cpt_is_client_dashboard( $tab_slug = false ) {
 					$request_tab &&
 					'projects' === $request_tab
 				) {
-					return true;
+					return 'projects';
 				}
 				break;
 			case 'messages':
@@ -72,26 +73,26 @@ function cpt_is_client_dashboard( $tab_slug = false ) {
 					$request_tab &&
 					'messages' === $request_tab
 				) {
-					return true;
+					return 'messages';
 				}
 				break;
 			case 'knowledge base':
 				if ( cpt_is_knowledge_base() ) {
-					return true;
+					return 'knowledge-base';
 				}
 				break;
 			case 'additional page' || 'additional pages':
 				if ( cpt_is_additional_page() ) {
-					return true;
+					return 'additional-pages';
 				}
 				break;
 		}
-	} elseif (
-		$this_page_id === $dashboard_page_id ||
-		cpt_is_knowledge_base() ||
-		cpt_is_additional_page()
-	) {
-		return true;
+	} elseif ( $this_page_id === $dashboard_page_id ) {
+		return 'dashboard';
+	} elseif ( cpt_is_knowledge_base() ) {
+		return 'knowledge-base';
+	} elseif ( cpt_is_additional_page() ) {
+		return 'additional-pages';
 	}
 	return false;
 }
@@ -135,6 +136,7 @@ function cpt_is_knowledge_base() {
 	}
 	return false;
 }
+
 
 function cpt_is_additional_page() {
 	global $wp_query;
