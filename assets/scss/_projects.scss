@@ -1,6 +1,6 @@
 .cpt-projects-list {
-  margin-top: $spacing-regular;
-  margin-bottom: $spacing-regular;
+  margin-top: $spacing-sm;
+  margin-bottom: $spacing-sm;
 
   .cpt-project {
     box-sizing: border-box;
@@ -9,7 +9,7 @@
       background-color: White;
       border: $border;
       box-shadow: $box-shadow;
-      margin-bottom: $spacing-regular;
+      margin-bottom: $spacing-sm;
       max-width: 100%;
       min-width: fit-content;
       padding: 0;
@@ -23,7 +23,7 @@
       font-size: 20px;
       font-weight: bold;
       margin-top: 0;
-      margin-bottom: $spacing-regular;
+      margin-bottom: $spacing-sm;
       text-transform: uppercase;
 
       a:not(:hover) {
@@ -34,7 +34,7 @@
   }
 
   .cpt-project-content {
-    padding: $spacing-regular;
+    padding: $spacing-sm;
     
     > :first-child {
       margin-top: 0;
@@ -47,8 +47,8 @@
 }
 
 .cpt-project-stage-progress {
-  margin-top: $spacing-regular;
-  margin-bottom: $spacing-regular;
+  margin-top: $spacing-sm;
+  margin-bottom: $spacing-sm;
 
   .cpt-stage-progress-container {
     background-color: LightGray;
@@ -109,7 +109,7 @@
   background-color: $gray-wash;
   font-size: 14px;
   line-height: $line-height-sm;
-  padding: $spacing-sm $spacing-regular;
+  padding: $spacing-xs $spacing-sm;
 
   .cpt-col {
     width: auto;
@@ -141,6 +141,6 @@
     background-color: unset;
     font-size: unset;
     padding: 0;
-    margin: $spacing-md 0 $spacing-sm 0;
+    margin: $spacing-sm 0 $spacing-xs 0;
   }
 }

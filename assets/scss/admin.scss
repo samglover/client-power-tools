@@ -62,7 +62,7 @@
 /* Forms */
 #cpt-admin {
   h2:not(:first-child) {
-    margin-top: $spacing-md;
+    margin-top: $spacing-sm;
   }
 
   button,
@@ -78,8 +78,8 @@
 
   .cpt-this-expands {
     background-color: $gray-wash;
-    margin: $spacing-regular 0;
-    padding: $spacing-regular;
+    margin: $spacing-sm 0;
+    padding: $spacing-sm;
   }
 
   .column-project_id {
@@ -104,7 +104,7 @@
 
     .form-field {
       margin-top: 0;
-      margin-bottom: $spacing-regular;
+      margin-bottom: $spacing-sm;
 
       input:not([type="checkbox"]),
       select,
@@ -124,7 +124,7 @@
 #cpt-delete-client-link {
   cursor: pointer;
   display: inline-block;
-  margin-top: $spacing-sm;
+  margin-top: $spacing-xs;
 
   &:not(:hover) {
     color: $light-text;
@@ -136,7 +136,7 @@
 }
 
 #cpt_delete_project_button {
-  margin-top: $spacing-sm;
+  margin-top: $spacing-xs;
 
   #submit {
     background: unset;
@@ -179,7 +179,7 @@
     box-sizing: border-box;
     grid-area: modal;
     margin: 3px;
-    padding: $spacing-md;
+    padding: $spacing-sm;
     position: relative;
   }
 
@@ -213,7 +213,7 @@
   transform-origin: top;
 
   td {
-    padding: $spacing-regular;
+    padding: $spacing-sm;
   }
 
   .submit {

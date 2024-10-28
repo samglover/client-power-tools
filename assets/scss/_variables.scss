@@ -17,12 +17,14 @@ $line-height-sm: 1.15;
 $line-height-normal: 1.5;
 
 // Spacing
-$spacing-xxs: 2.5px;
-$spacing-xs: 5px;
-$spacing-sm: 10px;
-$spacing-regular: 20px;
-$spacing-md: 30px;
-$spacing-lg: 40px;
+$spacing-tiny: calc(.5 * .4444rem); 
+$spacing-tiny: .4444rem;
+$spacing-xxs: .6667rem;
+$spacing-xs: 1rem;
+$spacing-sm: 1.5rem;
+$spacing-md: 2.25rem;
+$spacing-lg: 3.375rem;
+$spacing-xl: 5.0625rem;
 
 // Breakpoints
 $breakpoint-sm: 576px;
