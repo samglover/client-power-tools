@@ -32,6 +32,7 @@ function cpt_add_roles() {
 	$admin->add_cap( 'cpt_manage_settings' );
 }
 
+
 function cpt_is_client_dashboard( $tab_slug = false ) {
 	global $wp_query;
 	if (
@@ -135,6 +136,7 @@ function cpt_is_knowledge_base() {
 	}
 	return false;
 }
+
 
 function cpt_is_additional_page() {
 	global $wp_query;
