@@ -25,6 +25,13 @@ body {
   width: calc($breakpoint-sm - $spacing-xs * 2);
   z-index: 20;
 
+  &.cpt-modal {
+    background-color: Snow;
+    border: $border;
+    box-shadow: $box-shadow;
+    padding: $spacing-md;
+  }
+
   &.visible {
     display: block;
 
