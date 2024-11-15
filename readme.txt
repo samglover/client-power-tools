@@ -3,7 +3,7 @@
 Contributors: samglover
 Tags: client management, project management, portal, restrict content, frontend login
 Requires at least: 5.5
-Tested up to: 6.6.2
+Tested up to: 6.7
 Requires PHP: 7.4
 Stable tag: trunk
 License: GPLv3
@@ -112,6 +112,15 @@ For more information on how to take advantage of the new and updated features, s
 
 
 == Changelog ==
+
+### 1.10.1 - 2024-11-15
+
+#### Added
+- Default login modal styles.
+
+#### Changed
+- Added space between project type edit form fields
+
 
 ### 1.10.0 - 2024-10-28
 

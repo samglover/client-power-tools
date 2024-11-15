@@ -9,8 +9,8 @@ All notable changes to this project will be documented in this file. The format 
 - Default login modal styles.
 
 #### Changed
-- Added space between project type edit form fields
-.
+- Added space between project type edit form fields.
+
 
 ### 1.10.0 - 2024-10-28
 
