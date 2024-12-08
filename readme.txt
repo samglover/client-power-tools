@@ -3,7 +3,7 @@
 Contributors: samglover
 Tags: client management, project management, portal, restrict content, frontend login
 Requires at least: 5.5
-Tested up to: 6.7
+Tested up to: 6.7.1
 Requires PHP: 7.4
 Stable tag: trunk
 License: GPLv3
@@ -112,6 +112,12 @@ For more information on how to take advantage of the new and updated features, s
 
 
 == Changelog ==
+
+### 1.10.2 - 2024-12-08
+
+#### Added
+* The modal dismiss button now has a screen reader text element within it for improved accessibility.
+
 
 ### 1.10.1 - 2024-11-15
 

@@ -60,7 +60,9 @@ function cpt_login() {
 			id="cpt-login" 
 			class="cpt-modal card"
 		>
-			<button class="cpt-dismiss-button cpt-login-modal-dismiss"></button>
+			<button class="cpt-dismiss-button cpt-login-modal-dismiss">
+				<span class="screen-reader-text">Close</span>
+			</button>
 			<?php if ( ! is_user_logged_in() ) : ?>
 				<h2><?php esc_html_e( 'Client Login', 'client-power-tools' ); ?></h2>
 				<div 
