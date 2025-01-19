@@ -4,7 +4,7 @@
  * Plugin Name: Client Power Tools
  * Plugin URI: https://clientpowertools.com
  * Description: Client Power Tools is an easy-to-use client dashboard, project management, and communication portal built for designers, developers, consultants, lawyers, and other professionals.
- * Version: 1.10.2
+ * Version: 1.10.3
  * Author: Sam Glover
  * Author URI: https://samglover.net
  * Text Domain: client-power-tools
