@@ -25,6 +25,9 @@ if (params.has('cpt_login')) showLogin(); // Based on URL query parameters
 function showLogin(event) {
   if (event) event.preventDefault();
   loginModal.classList.add('visible');
+  loginModal.scrollIntoView({
+    behavior: 'smooth'
+  });
 }
 
 function closeLogin(event) {
@@ -83,7 +86,12 @@ if (passwordLink) passwordLink.addEventListener('click', function(event) {
 function displayNotices(response) {
   notices.classList.add('visible');
   if (response.success) notices.classList.add('notice-success');
-  if (!response.success) notices.classList.add('notice-error');
+  if (!response.success) {
+    notices.classList.add('notice-error', 'notice-fadeout');
+    notices.addEventListener('animationend', () => {
+      notices.classList.remove('notice-fadeout', 'visible');
+    })
+  }
   notices.innerHTML = '<p class="cpt-notice-message">' + response.data.message + '</p>';
 }
 

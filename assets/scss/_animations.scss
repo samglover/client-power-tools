@@ -23,3 +23,9 @@
   50% { transform: translateX(-50%) scale3d(1.1, 1.1, 1.1); }
   to { transform: translateX(-50%) scale3d(1, 1, 1); }
 }
+
+@keyframes notice_fadeout {
+  from { display: flex; opacity: 1; }
+  66.6666% { display: flex; opacity: 1; }
+  to { display: none; opacity: 0; }
+}

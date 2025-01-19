@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com) and uses [semantic versioning](https://semver.org/).
 
+
+### 1.10.3 - 2025-01-19
+
+#### Added
+* Modal pop-ups now scroll into view when triggered.
+* Error notices in the login modal now fade out after a short delay.
+
+#### Fixed
+* AJAX error was preventing the "login failed" notice when trying to log in with a non-user email address.
+
+
 ### 1.10.2 - 2024-12-08
 
 #### Added

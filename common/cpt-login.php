@@ -116,13 +116,13 @@ function check_password() {
 		wp_send_json_error( array( 'message' => __( 'Password is missing.', 'client-power-tools' ) ) );
 	}
 
-	$user     = is_email( sanitize_email( $_POST['email'] ) ) ? get_user_by( 'email', sanitize_email( $_POST['email'] ) ) : false;
-	$password = wp_check_password( $_POST['password'], $user->data->user_pass, $user->ID );
+	$user = get_user_by( 'email', sanitize_email( $_POST['email'] ) );
+	$password = $user ? wp_check_password( sanitize_text_field( $_POST['password'] ), $user->data->user_pass, $user->ID ) : false;
 	if ( ! $user || ! $password ) {
 		wp_send_json_error( array( 'message' => __( 'Login failed.', 'client-power-tools' ) ) );
 	}
 
 	wp_set_current_user( $user->ID );
 	wp_set_auth_cookie( $user->ID, true );
-	wp_send_json_success( array( 'message' => __( 'Logging you in …', 'client-power-tools' ) ) );
+	wp_send_json_success( array( 'message' => 'ECHO' . __( 'Logging you in …', 'client-power-tools' ) ) );
 }

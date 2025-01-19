@@ -14,6 +14,10 @@
 
   &.visible {
     display: flex;
+
+    &.notice-fadeout {
+      animation: notice_fadeout 1.5s ease-in-out forwards;
+    }
   }
 
   &::before {

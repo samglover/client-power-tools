@@ -113,10 +113,20 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.10.3 - 2025-01-19
+
+#### Added
+* Modal pop-ups now scroll into view when triggered.
+
+
 ### 1.10.2 - 2024-12-08
 
 #### Added
-* The modal dismiss button now has a screen reader text element within it for improved accessibility.
+* Modal pop-ups now scroll into view when triggered.
+* Error notices in the login modal now fade out after a short delay.
+
+#### Fixed
+* AJAX error was preventing the "login failed" notice when trying to log in with a non-user email address.
 
 
 ### 1.10.1 - 2024-11-15

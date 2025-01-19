@@ -75,7 +75,7 @@ function cpt_login() {
 					action="<?php echo esc_url( get_permalink() ); ?>" 
 					method="post"
 				>
-							<?php wp_nonce_field( 'cpt-login', 'cpt-login-nonce' ); ?>
+					<?php wp_nonce_field( 'cpt-login', 'cpt-login-nonce' ); ?>
 					<p id="cpt-login-email">
 						<label for="cpt-login-email-field">Email Address</label>
 						<input 

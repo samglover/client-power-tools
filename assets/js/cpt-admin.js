@@ -9,6 +9,9 @@ if (deleteClientLink) {
   deleteClientLink.addEventListener('click', function() {
     cptAdminModal.style.display = 'grid';
     adminModalScreen.style.display = 'block';
+    cptAdminModal.scrollIntoView({
+      behavior: 'smooth'
+    });
   });
 }
 
