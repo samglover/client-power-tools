@@ -1,13 +1,17 @@
 <?php
-
 /**
  * Plugin Name: Client Power Tools
- * Plugin URI: https://clientpowertools.com
+ * Plugin URI:  https://clientpowertools.com
  * Description: Client Power Tools is an easy-to-use client dashboard, project management, and communication portal built for designers, developers, consultants, lawyers, and other professionals.
- * Version: 1.10.3
- * Author: Sam Glover
- * Author URI: https://samglover.net
+ * Version:     1.10.3
+ * Author:      Sam Glover
+ * Author URI:  https://samglover.net
  * Text Domain: client-power-tools
+ *
+ * @file       client-power-tools.php
+ * @package    Client_Power_Tools
+ * @subpackage Core
+ * @since      1.0.0
  */
 
 namespace Client_Power_Tools\Core;
@@ -19,22 +23,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * Constants
- */
-define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.10.2' );
+/* Constants */
+define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.10.3' );
 define( 'CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 
 
-/**
- * Common
- */
+/* Common */
 require_once CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common.php';
 require_once CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-login.php';
 
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\cpt_register_common_scripts' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\cpt_register_common_scripts' );
+/**
+ * Enqueues common stylesheets and scripts.
+ */
 function cpt_register_common_scripts() {
 	wp_enqueue_style( 'cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/css/common.css', array(), CLIENT_POWER_TOOLS_PLUGIN_VERSION );
 	wp_enqueue_script( 'cpt-common', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-common.js', array( 'jquery' ), CLIENT_POWER_TOOLS_PLUGIN_VERSION, true );
@@ -50,15 +53,16 @@ if ( get_option( 'cpt_module_messaging' ) ) {
 	require_once CLIENT_POWER_TOOLS_DIR_PATH . 'common/cpt-common-messages.php';
 }
 
-/**
- * Frontend
- */
+/* Frontend */
 if ( ! is_admin() ) {
 	require_once CLIENT_POWER_TOOLS_DIR_PATH . 'shortcodes.php';
 	require_once CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-frontend.php';
 	require_once CLIENT_POWER_TOOLS_DIR_PATH . 'frontend/cpt-client-dashboard.php';
 
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\cpt_register_frontend_scripts' );
+	/**
+	 * Enqueues frontend stylesheets and scripts.
+	 */
 	function cpt_register_frontend_scripts() {
 		global $post; // For localizing cpt-login-modal.js.
 
@@ -79,9 +83,7 @@ if ( ! is_admin() ) {
 	}
 }
 
-/**
- * Admin
- */
+/* Admin */
 if ( is_admin() ) {
 	if ( ! class_exists( 'WP_List_Table' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php'; // Ensures the WP_List_Table class is available.
@@ -114,6 +116,9 @@ if ( is_admin() ) {
 }
 
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\cpt_register_admin_scripts' );
+/**
+ * Enqueues admin stylesheets and scripts.
+ */
 function cpt_register_admin_scripts() {
 	// Only loads CPT admin styles and scripts on CPT admin pages.
 	global $pagenow;
@@ -141,7 +146,12 @@ function cpt_register_admin_scripts() {
 }
 
 
-// Activation
+register_activation_hook( __FILE__, __NAMESPACE__ . '\cpt_activate' );
+/**
+ * Plugin activation tasks:
+ * 1. Checks for page selections and create them if necessary.
+ * 2. Checks for default options and adds them if necessary.
+ */
 function cpt_activate() {
 	set_transient( 'cpt_show_welcome_message', true, 86400 );
 
@@ -184,7 +194,7 @@ function cpt_activate() {
 	}
 
 	// Checks for default options and adds them if necessary.
-	$admin           = get_user_by_email( get_bloginfo( 'admin_email' ) );
+	$admin           = get_user_by( 'email', get_bloginfo( 'admin_email' ) );
 	$default_options = array(
 		'cpt_client_statuses'                 => 'Active' . "\n" . 'Potential' . "\n" . 'Inactive',
 		'cpt_default_client_status'           => 'Active',
@@ -207,7 +217,10 @@ function cpt_activate() {
 		}
 	}
 
-	// Register CPT Messages Custom Post Type
+	add_action( 'init', __NAMESPACE__ . '\cpt_message_post_type', 0 );
+	/**
+	 * Registers cpt_message custom post type.
+	 */
 	function cpt_message_post_type() {
 		$labels = array(
 			'name'                  => _x( 'Messages', 'Post Type General Name', 'client-power-tools' ),
@@ -273,20 +286,16 @@ function cpt_activate() {
 
 		register_post_type( 'cpt_message', $args );
 	}
-
-	add_action( 'init', __NAMESPACE__ . '\cpt_message_post_type', 0 );
-
-	// Clears the permalinks.
 	flush_rewrite_rules();
 }
 
-register_activation_hook( __FILE__, __NAMESPACE__ . '\cpt_activate' );
 
-
-// Register CPT Projects Custom Post Type
-// Uses user-defined labels so can't be in the activation hook, above.
 if ( get_option( 'cpt_module_projects' ) ) {
 	add_action( 'init', __NAMESPACE__ . '\cpt_project_post_type', 0 );
+	/**
+	 * Registers cpt_project custom post type.
+	 * Because this CPT uses user-defined labels it can't be in the activation hook, above.
+	 */
 	function cpt_project_post_type() {
 		$projects_label = Common\cpt_get_projects_label();
 
@@ -355,8 +364,11 @@ if ( get_option( 'cpt_module_projects' ) ) {
 		register_post_type( 'cpt_project', $args );
 	}
 
-	// Project Types
 	add_action( 'init', __NAMESPACE__ . '\register_project_type_custom_taxonomy', 0 );
+	/**
+	 * Registers cpt-project-type taxonomy for cpt_project posts.
+	 * Because this taxonomy uses user-defined labels it can't be in the activation hook, above.
+	 */
 	function register_project_type_custom_taxonomy() {
 		$projects_label = Common\cpt_get_projects_label();
 
