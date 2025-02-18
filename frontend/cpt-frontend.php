@@ -4,7 +4,7 @@
  *
  * @file       cpt-frontend.php
  * @package    Client_Power_Tools
- * @subpackage Frontend
+ * @subpackage Core\Frontend
  * @since      1.0.0
  */
 
