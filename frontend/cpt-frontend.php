@@ -238,7 +238,11 @@ function cpt_get_the_title() {
 }
 
 
-// @deprecated
+/**
+ * Tests to determine whether the client dashboard is being displayed.
+ *
+ * @deprecated
+ */
 function cpt_is_cpt() {
 	trigger_error( 'Function ' . __FUNCTION__ . ' is deprecated as of 1.7.6 and will be removed soon.', E_USER_DEPRECATED );
 	return Common\cpt_is_client_dashboard();

@@ -1,11 +1,21 @@
 <?php
+/**
+ * Outputs the client dashboard.
+ *
+ * @file       cpt-frontend.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Frontend
+ * @since      1.0.0
+ */
 
 namespace Client_Power_Tools\Core\Frontend;
 
 use Client_Power_Tools\Core\Common;
 
-// Noindexes the client dashboard because it's none of Google's business.
 add_action( 'wp_head', __NAMESPACE__ . '\cpt_noindex_client_dashboard' );
+/**
+ * Noindexes the client dashboard because it's none of Google's business.
+ */
 function cpt_noindex_client_dashboard() {
 	if ( Common\cpt_is_client_dashboard() ) {
 		echo '<meta name="robots" content="noindex" />';
@@ -13,6 +23,11 @@ function cpt_noindex_client_dashboard() {
 }
 
 add_filter( 'the_content', __NAMESPACE__ . '\cpt_client_dashboard' );
+/**
+ * Outputs the client dashboard.
+ *
+ * @param string $content Content of the post.
+ */
 function cpt_client_dashboard( $content ) {
 	if (
 		! Common\cpt_is_client_dashboard() ||
@@ -37,7 +52,12 @@ function cpt_client_dashboard( $content ) {
 	return $content;
 }
 
-
+/**
+ * Returns the client dashboard.
+ *
+ * @param int $user_id The ID of the user whose dashboard should be returned.
+ * @return string Client dashboard HTML.
+ */
 function cpt_get_client_dashboard( $user_id = null ) {
 	if (
 		! Common\cpt_is_client_dashboard()
@@ -128,7 +148,9 @@ function cpt_get_client_dashboard( $user_id = null ) {
 	return ob_get_clean();
 }
 
-
+/**
+ * Outputs the CPT nav menu.
+ */
 function cpt_nav() {
 	remove_filter( 'the_title', 'Client_Power_Tools\Core\Frontend\cpt_client_dashboard_page_titles', 10 );
 	?>
@@ -233,7 +255,10 @@ function cpt_nav() {
 
 
 /**
- * Nav Submenus
+ * Utility function that returns an array of child page IDs.
+ *
+ * @param int $page_id Possible parent page ID.
+ * @return array Child page IDs.
  */
 function cpt_get_child_pages( $page_id ) {
 	if ( ! $page_id ) {
@@ -259,6 +284,11 @@ function cpt_get_child_pages( $page_id ) {
 	}
 }
 
+/**
+ * Outputs submenus based on child pages for the nav menu.
+ *
+ * @param int $page_id ID of the parent page.
+ */
 function cpt_submenu( $page_id ) {
 	if ( ! $page_id ) {
 		return;
@@ -297,6 +327,11 @@ function cpt_submenu( $page_id ) {
 	<?php
 }
 
+/**
+ * Outputs a welcome message for returning clients.
+ *
+ * @param string $clients_first_name Client's first name.
+ */
 function cpt_welcome_message( $clients_first_name ) {
 	?>
 	<p>
@@ -314,7 +349,7 @@ function cpt_welcome_message( $clients_first_name ) {
 }
 
 /**
- * Knowledge Base Breadcrumbs
+ * Outputs breadcrumbs below the nav menu for knowledge base pages and additional pages.
  */
 function cpt_breadcrumbs() {
 	if ( ! get_option( 'cpt_show_knowledge_base_breadcrumbs' ) ) {
