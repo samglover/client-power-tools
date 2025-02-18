@@ -35,8 +35,7 @@ function status_update_request_button_shortcode() {
 
 add_shortcode( 'client-dashboard', __NAMESPACE__ . '\client_dashboard_shortcode' );
 /**
- * Shortcode for inserting the client dashboard on the client dashboard page.
- * Mostly intended for page builders that interfere with the output.
+ * Shortcode for inserting the client dashboard on the client dashboard page. Mostly intended for page builders that interfere with the output.
  *
  * @since 1.9.2
  * @return string Client dashboard HTML.

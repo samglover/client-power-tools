@@ -172,8 +172,7 @@ function cpt_login() {
 
 add_filter( 'the_title', __NAMESPACE__ . '\cpt_client_dashboard_page_titles', 10, 2 );
 /**
- * Replaces client dashboard page titles with the title of the client dashboard page.
- * Only works within the loop so it only replaces the title above the CPT nav menu.
+ * Replaces client dashboard page titles with the title of the client dashboard page. Only works within the loop so it only replaces the title above the CPT nav menu.
  *
  * @see cpt_the_title()
  * @see cpt_get_the_title()
