@@ -30,10 +30,10 @@ add_filter( 'the_content', __NAMESPACE__ . '\cpt_client_dashboard' );
  */
 function cpt_client_dashboard( $content ) {
 	if (
-		! Common\cpt_is_client_dashboard() ||
-		! is_main_query() ||
-		! in_the_loop() ||
-		has_shortcode( $content, 'client-dashboard' )
+		! Common\cpt_is_client_dashboard()
+		|| ! is_main_query()
+		|| ! in_the_loop()
+		|| has_shortcode( $content, 'client-dashboard' )
 	) {
 		return $content;
 	}
@@ -41,9 +41,9 @@ function cpt_client_dashboard( $content ) {
 	$dashboard = cpt_get_client_dashboard();
 
 	if (
-		Common\cpt_is_client_dashboard( 'messages' ) ||
-		Common\cpt_is_client_dashboard( 'projects' ) ||
-		Common\cpt_is_project()
+		Common\cpt_is_client_dashboard( 'messages' )
+		|| Common\cpt_is_client_dashboard( 'projects' )
+		|| Common\cpt_is_project()
 	) {
 		$content = $dashboard;
 	} else {
@@ -81,8 +81,8 @@ function cpt_get_client_dashboard( $user_id = null ) {
 	}
 
 	if (
-		! 0 === $user_id ||
-		! Common\cpt_is_client( $user_id )
+		! 0 === $user_id
+		|| ! Common\cpt_is_client( $user_id )
 	) {
 		return '<p>' . __( 'Sorry, you don\'t have permission to view this page because your user account is missing the "Client" role.', 'client-power-tools' ) . '</p>';
 	}
@@ -100,7 +100,7 @@ function cpt_get_client_dashboard( $user_id = null ) {
 	Common\cpt_get_notices();
 
 	// Outputs the welcome message and the status update request button.
-	if ( Common\cpt_is_client_dashboard( 'dashboard' ) ) {
+	if ( Common\cpt_is_client_dashboard( 'home' ) ) {
 		cpt_welcome_message( $client_data['first_name'] );
 
 		$dashboard_page_id = intval( get_option( 'cpt_client_dashboard_page_selection' ) );
@@ -115,8 +115,8 @@ function cpt_get_client_dashboard( $user_id = null ) {
 
 	// Outputs the Messages page.
 	if (
-		get_option( 'cpt_module_messaging' ) &&
-		Common\cpt_is_client_dashboard( 'messages' )
+		get_option( 'cpt_module_messaging' )
+		&& Common\cpt_is_client_dashboard( 'messages' )
 	) {
 		Common\cpt_messages( $user_id );
 		?>
@@ -129,8 +129,8 @@ function cpt_get_client_dashboard( $user_id = null ) {
 
 	// Outputs the Projects page.
 	if (
-		get_option( 'cpt_module_projects' ) &&
-		Common\cpt_is_client_dashboard( 'projects' )
+		get_option( 'cpt_module_projects' )
+		&& Common\cpt_is_client_dashboard( 'projects' )
 	) {
 		// Outputs an individual project if a project post ID is specified.
 		// Otherwise, outputs the list of projects.
@@ -161,7 +161,7 @@ function cpt_nav() {
 			<ul class="cpt-tabs menu">
 				<li class="cpt-tab menu-item
 					<?php
-					if ( Common\cpt_is_client_dashboard( 'dashboard' ) && ! isset( $_REQUEST['tab'] ) ) {
+					if ( Common\cpt_is_client_dashboard( 'home' ) && ! isset( $_REQUEST['tab'] ) ) {
 						echo ' current-menu-item';
 					}
 					?>

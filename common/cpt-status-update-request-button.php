@@ -1,65 +1,85 @@
 <?php
+/**
+ * Status update request button functions.
+ *
+ * @file       cpt-status-update-request-button.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Common
+ * @since      1.4.0
+ */
 
 namespace Client_Power_Tools\Core\Common;
 
 /**
- * This has to be loaded as a common file in order to use the admin-post action
- * hook. And it would probably be even more confusing to load it as a common
- * file but store it in the frontend directory/namespace. Even that sentence is
- * confusing.
+ * Outputs the status update request button.
+ *
+ * This is used by the `admin-post` action hook, so it must be loaded as a common function.
+ *
+ * @param int $user_id The client's user ID.
  */
 function cpt_status_update_request_button( $user_id ) {
 	if ( ! $user_id ) {
 		return;
 	}
 
-	// Return (i.e. don't output the button) if the client has clicked the button
-	// more recently than the request frequency option allows.
+	// Return (i.e. don't output the button) if the client has clicked the button more recently than the request frequency option allows.
 	$request_frequency       = get_option( 'cpt_status_update_req_freq' );
-	$days_since_last_request = cpt_days_since_last_request( $user_id );
-	$disabled                = false;
-	if ( ! is_null( $days_since_last_request ) && $days_since_last_request < $request_frequency ) {
-		$disabled = true;
+	$days_since_last_request = cpt_get_days_since_last_request( $user_id );
+
+	if (
+		$days_since_last_request
+		&& $days_since_last_request < $request_frequency
+	) {
+		$button_value = __( 'Status Update Requested', 'client-power-tools' );
+		$disabled     = true;
+	} else {
+		$button_value = __( 'Request Status Update', 'client-power-tools' );
+		$disabled     = false;
 	}
-	$button_value = $disabled ? __( 'Status Update Requested', 'client-power-tools' ) : __( 'Request Status Update', 'client-power-tools' );
 
 	?>
-		<div class="cpt-status-update-request">
-			<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST">
-				<?php wp_nonce_field( 'cpt_status_update_requested', 'cpt_status_update_request_nonce' ); ?>
+	<div class="cpt-status-update-request">
+		<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST">
+			<?php wp_nonce_field( 'cpt_status_update_requested', 'cpt_status_update_request_nonce' ); ?>
+			<input 
+				name="action" 
+				value="cpt_status_update_requested" 
+				type="hidden"
+			>
+			<input 
+				name="clients_user_id" 
+				value="<?php echo esc_attr( $user_id ); ?>" 
+				type="hidden"
+			>
+			<p class="submit">
 				<input 
-					name="action" 
-					value="cpt_status_update_requested" 
-					type="hidden"
+					name="cpt-status-update-request-button"
+					id="cpt-status-update-request-button"
+					class="button button-primary wp-element-button"
+					type="submit"
+					value="<?php echo esc_attr( $button_value ); ?>"
+					<?php if ( $disabled ) { ?>
+						disabled="true"
+					<?php } ?>
 				>
-				<input 
-					name="clients_user_id" 
-					value="<?php echo esc_attr( $user_id ); ?>" 
-					type="hidden"
-				>
-				<p class="submit">
-					<input 
-						name="cpt-status-update-request-button"
-						id="cpt-status-update-request-button"
-						class="button button-primary wp-element-button"
-						type="submit"
-						value="<?php echo esc_attr( $button_value ); ?>"
-						<?php if ( $disabled ) { ?>
-							disabled="true"
-						<?php } ?>
-					>
-				</p>
-			</form>
-		</div>
+			</p>
+		</form>
+	</div>
 	<?php
 }
 
 
-// Calculates the number of days since the client last clicked the status update request button.
-function cpt_days_since_last_request( $user_id ) {
+/**
+ * Calculates the number of days since the client last clicked the status update request button.
+ *
+ * @param int $user_id The client's user ID.
+ * @return int|bool The number of days or false.
+ */
+function cpt_get_days_since_last_request( $user_id ) {
 	if ( ! $user_id ) {
-		return;
+		return false;
 	}
+
 	$last_request_date      = null;
 	$status_update_requests = new \WP_Query(
 		array(
@@ -88,16 +108,32 @@ function cpt_days_since_last_request( $user_id ) {
 		endwhile;
 	endif;
 
-	$current_date            = new \DateTime( strtotime( date( get_option( 'Y-m-d' ) ) ) );
-	$days_since_last_request = $last_request_date ? $last_request_date->diff( $current_date )->days : null;
+	$current_date = new \DateTime( strtotime( gmdate( get_option( 'Y-m-d' ) ) ) );
+
+	if ( $last_request_date ) {
+		$days_since_last_request = $last_request_date->diff( $current_date )->days;
+	} else {
+		$days_since_last_request = false;
+	}
 
 	return $days_since_last_request;
 }
 
 add_action( 'admin_post_cpt_status_update_requested', __NAMESPACE__ . '\cpt_process_status_update_request' );
+/**
+ * Creates a new cpt_message post for the status update request and triggers the notification function.
+ *
+ * @see cpt_status_update_request_notification()
+ */
 function cpt_process_status_update_request() {
-	if ( isset( $_POST['cpt_status_update_request_nonce'] ) && wp_verify_nonce( $_POST['cpt_status_update_request_nonce'], 'cpt_status_update_requested' ) ) {
-		$clients_user_id = sanitize_key( intval( $_POST['clients_user_id'] ) );
+	if (
+		isset( $_POST['cpt_status_update_request_nonce'] )
+		&& wp_verify_nonce( sanitize_key( wp_unslash( $_POST['cpt_status_update_request_nonce'] ) ), 'cpt_status_update_requested' )
+		&& isset( $_POST['clients_user_id'] )
+		&& isset( $_POST['_wp_http_referer'] )
+	) {
+		$clients_user_id = intval( $_POST['clients_user_id'] );
+		$http_referrer   = sanitize_text_field( intval( $_POST['_wp_http_referer'] ) );
 
 		$status_update_request = array(
 			'post_title'   => __( 'STATUS UPDATE REQUESTED', 'client-power-tools' ),
@@ -115,7 +151,7 @@ function cpt_process_status_update_request() {
 
 		if ( is_wp_error( $post ) ) {
 			$result = sprintf(
-				// translators: %s is the error message.
+				// Translators: %s is the error message.
 				__( 'Your status update request could not be sent. Error message: %s', 'client-power-tools' ),
 				$post->get_error_message()
 			);
@@ -125,7 +161,7 @@ function cpt_process_status_update_request() {
 		}
 
 		set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
-		wp_redirect( $_POST['_wp_http_referer'] );
+		wp_safe_redirect( $http_referrer );
 		exit;
 	} else {
 		die();
@@ -133,8 +169,11 @@ function cpt_process_status_update_request() {
 }
 
 
-
-
+/**
+ * Sends an email notification to the client's manager.
+ *
+ * @param int $message_id The post ID of the status update request message.
+ */
 function cpt_status_update_request_notification( $message_id ) {
 	if ( ! $message_id ) {
 		return;
@@ -155,14 +194,14 @@ function cpt_status_update_request_notification( $message_id ) {
 		$headers[] = 'Cc: ' . $cc;
 	}
 	$subject = sprintf(
-		// translators: %1$s is the message subject. %2$s is the sender's name.
+		// Translators: %1$s is the message subject ("Status update requested"). %2$s is the sender's name.
 		__( '%1$s by %2$s', 'client-power-tools' ),
 		$msg_obj->post_title,
 		$from_name
 	);
 
 	$subject_html = sprintf(
-		// translators: %1$s is the message subject. %2$s is an HTML line break. %3$s is the sender's name.
+		// Translators: %1$s is the message subject. %2$s is an HTML line break. %3$s is the sender's name.
 		__( '%1$s%2$s by %3$s', 'client-power-tools' ),
 		$msg_obj->post_title,
 		'&nbsp;<br />',
@@ -173,7 +212,7 @@ function cpt_status_update_request_notification( $message_id ) {
 
 	if ( get_option( 'cpt_module_messaging' ) ) {
 		$button_txt = sprintf(
-			// translators: %s is the sender's name.
+			// Translators: %s is the sender's name.
 			__( 'Go to %s', 'client-power-tools' ),
 			$from_name
 		);
@@ -184,6 +223,5 @@ function cpt_status_update_request_notification( $message_id ) {
 	}
 
 	$message = cpt_get_email_card( $subject_html, $message, $button_txt, $profile_url );
-
 	wp_mail( $to, $subject, $message, $headers );
 }
