@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com) and uses [semantic versioning](https://semver.org/).
 
+### 1.10.4 - 2025-02-??
+
+#### Added
+* Sanitize $_POST variables in `/common/cpt-status-update-request-button.php`.
+
+#### Changed
+* Rename `cpt_days_since_last_request()` to `cpt_get_days_since_last_request()`, and now it returns false instead of null.
+* Clear location before reloading the page on successful login.
+* Refactor and simplify `cpt_is_client_dashboard()`.
+
 
 ### 1.10.3 - 2025-01-19
 
