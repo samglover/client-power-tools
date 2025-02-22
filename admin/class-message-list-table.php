@@ -1,15 +1,28 @@
 <?php
-
 /**
- * This is based on the Custom List Table Example plugin by Matt van Andel.
- * https://wordpress.org/plugins/custom-list-table-example/
+ * Message list table
+ *
+ * @file       class-message-list-table.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Admin
+ * @since      1.0.0
+ * @since      1.10.4 File renamed from cpt-admin-messages-table.php to class-message-list-table.php.
+ * @link       https://wordpress.org/plugins/custom-list-table-example/
  */
 
 namespace Client_Power_Tools\Core\Admin;
 
 use Client_Power_Tools\Core\Common;
 
+/**
+ * List of messages
+ *
+ * @see WP_List_Table
+ */
 class Message_List_Table extends \WP_List_Table {
+	/**
+	 * Construct
+	 */
 	function __construct() {
 		global $status, $page;
 		parent::__construct(
@@ -22,14 +35,14 @@ class Message_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Column Default
+	 * Column default
 	 *
-	 * @param array $item A singular item (one full row's worth of data)
-	 * @param array $column_name The name/slug of the column to be processed
-	 * @return string Text or HTML to be placed inside the column <td>
+	 * @param array $item A singular item (one full row's worth of data).
+	 * @param array $column_name The name/slug of the column to be processed.
+	 * @return string Text or HTML to be placed inside the column <td>.
 	 */
 	function column_default( $item, $column_name ) {
-		return;
+		return $item[ $column_name ];
 	}
 
 
@@ -37,8 +50,8 @@ class Message_List_Table extends \WP_List_Table {
 	 * Checkboxes
 	 *
 	 * @see WP_List_Table::::single_row_columns()
-	 * @param array $item A singular item (one full row's worth of data)
-	 * @return string Text to be placed inside the column <td>
+	 * @param array $item A singular item (one full row's worth of data).
+	 * @return string Text to be placed inside the column <td>.
 	 */
 	function column_cb( $item ) {
 		return sprintf(
@@ -50,7 +63,9 @@ class Message_List_Table extends \WP_List_Table {
 
 
 	/**
-	 * Client Column Method
+	 * Client column Method
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_client( $item ) {
 		// Return the contents.
@@ -62,7 +77,9 @@ class Message_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Sender Column Method
+	 * Sender column method
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_sender( $item ) {
 		return sprintf( $item['sender'] );
@@ -71,6 +88,8 @@ class Message_List_Table extends \WP_List_Table {
 
 	/**
 	 * Subject Column Method
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_subject( $item ) {
 		$clients_url = add_query_arg( 'user_id', $item['clients_user_id'], esc_url( admin_url( 'admin.php?page=cpt' ) ) );
@@ -86,7 +105,9 @@ class Message_List_Table extends \WP_List_Table {
 
 
 	/**
-	 * Date Column Method
+	 * Date column method
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_date( $item ) {
 		return sprintf( $item['date'] );
@@ -94,7 +115,7 @@ class Message_List_Table extends \WP_List_Table {
 
 
 	/**
-	 * Get Columns
+	 * Get columns
 	 *
 	 * @see WP_List_Table::::single_row_columns()
 	 * @return array An associative array containing column information:
@@ -102,7 +123,6 @@ class Message_List_Table extends \WP_List_Table {
 	 */
 	function get_columns() {
 		$columns = array(
-			// 'cb'      => '<input type="checkbox" />',
 			'client'  => 'Client',
 			'sender'  => 'Sender',
 			'subject' => 'Subject',
@@ -113,7 +133,7 @@ class Message_List_Table extends \WP_List_Table {
 
 
 	/**
-	 * Sortable Columns
+	 * Sortable columns
 	 */
 	function get_sortable_columns() {
 		return; // Remove this line to enable sortable columns.
@@ -125,7 +145,7 @@ class Message_List_Table extends \WP_List_Table {
 
 
 	/**
-	 * Bulk Actions
+	 * Bulk actions
 	 *
 	 * @return array An associative array containing all the bulk actions: 'slugs'=>'Visible Titles'
 	 */
@@ -137,7 +157,9 @@ class Message_List_Table extends \WP_List_Table {
 		return $actions;
 	}
 
-
+	/**
+	 * Process bulk actions
+	 */
 	function process_bulk_action() {
 		$action = $this->current_action();
 		switch ( $action ) {
@@ -146,32 +168,23 @@ class Message_List_Table extends \WP_List_Table {
 				break;
 			default:
 				return;
-				break;
 		}
 		return;
 	}
 
-
 	/**
-	 * Prepare Data for Display
+	 * Prepare data for display
 	 */
 	function prepare_items() {
-		/**
-		 * Column Headers
-		 */
-		$columns  = $this->get_columns();
-		$hidden   = array();
-		$sortable = $this->get_sortable_columns();
-
+		/* Column headers */
+		$columns               = $this->get_columns();
+		$hidden                = array();
+		$sortable              = $this->get_sortable_columns();
 		$this->_column_headers = array( $columns, $hidden, $sortable );
+
 		$this->process_bulk_action();
 
-		/**
-		 * Query Messages
-		 */
-		$data = array();
-
-		// Creates the data set.
+		$data         = array();
 		$cpt_messages = new \WP_Query(
 			array(
 				'post_type'      => 'cpt_message',
@@ -194,12 +207,10 @@ class Message_List_Table extends \WP_List_Table {
 					'subject'         => get_the_title() ? get_the_title() : '[Message from ' . get_the_author() . ']',
 					'date'            => get_the_date(),
 				);
-		endwhile;
-endif;
+			endwhile;
+		endif;
 
-		/**
-		 * Pagination
-		 */
+		/* Pagination */
 		$total_items  = count( $data );
 		$per_page     = 25;
 		$current_page = $this->get_pagenum();
@@ -213,10 +224,6 @@ endif;
 			)
 		);
 
-		/**
-		 * $this->items contains the data that will actually be displayed on the
-		 * current page.
-		 */
 		$this->items = $data;
 	}
 }

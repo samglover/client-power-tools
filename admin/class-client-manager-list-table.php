@@ -1,15 +1,28 @@
 <?php
-
 /**
- * This is based on the Custom List Table Example plugin by Matt van Andel.
- * https://wordpress.org/plugins/custom-list-table-example/
+ * Message list table
+ *
+ * @file       class-client-manager-list-table.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Admin
+ * @since      1.2.1
+ * @since      1.10.4 File renamed from cpt-client-manager-table.php to class-client-manager-list-table.php.
+ * @link       https://wordpress.org/plugins/custom-list-table-example/
  */
 
 namespace Client_Power_Tools\Core\Admin;
 
 use Client_Power_Tools\Core\Common;
 
+/**
+ * List of client managers
+ *
+ * @see WP_List_Table
+ */
 class Client_Manager_List_Table extends \WP_List_Table {
+	/**
+	 * Construct
+	 */
 	function __construct() {
 		global $page;
 
@@ -23,22 +36,22 @@ class Client_Manager_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Column Default
+	 * Column default
 	 *
-	 * @param array $item A singular item (one full row's worth of data)
-	 * @param array $column_name The name/slug of the column to be processed
-	 * @return string Text or HTML to be placed inside the column <td>
+	 * @param array $item A singular item (one full row's worth of data).
+	 * @param array $column_name The name/slug of the column to be processed.
+	 * @return string Text or HTML to be placed inside the column <td>.
 	 */
 	function column_default( $item, $column_name ) {
-		return;
+		return $item[ $column_name ];
 	}
 
 	/**
 	 * Checkboxes
 	 *
 	 * @see WP_List_Table::::single_row_columns()
-	 * @param array $item A singular item (one full row's worth of data)
-	 * @return string Text to be placed inside the column <td>
+	 * @param array $item A singular item (one full row's worth of data).
+	 * @return string Text to be placed inside the column <td>.
 	 */
 	function column_cb( $item ) {
 		return sprintf(
@@ -48,12 +61,13 @@ class Client_Manager_List_Table extends \WP_List_Table {
 		);
 	}
 
-
 	/**
-	 * Name Column Method
+	 * Manager name column method
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_manager_name( $item ) {
-		$url = admin_url( '?page=cpt-managers' );
+		$url     = admin_url( '?page=cpt-managers' );
 		$actions = array(
 			'remove' => '<a href="' . add_query_arg(
 				array(
@@ -64,7 +78,6 @@ class Client_Manager_List_Table extends \WP_List_Table {
 			) . '">Remove</a>',
 		);
 
-		// Return the contents.
 		return sprintf(
 			'<strong>%1$s</strong><br />%2$s',
 			/* $1%s */ $item['manager_name'],
@@ -72,9 +85,10 @@ class Client_Manager_List_Table extends \WP_List_Table {
 		);
 	}
 
-
 	/**
-	 * Clients Column Method
+	 * Clients column method
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_managers_clients( $item ) {
 		$managers_client_data = cpt_get_managers_clients( $item['ID'] );
@@ -98,9 +112,8 @@ class Client_Manager_List_Table extends \WP_List_Table {
 		}
 	}
 
-
 	/**
-	 * Get Columns
+	 * Get columns
 	 *
 	 * @see WP_List_Table::::single_row_columns()
 	 * @return array An associative array containing column information:
@@ -108,7 +121,6 @@ class Client_Manager_List_Table extends \WP_List_Table {
 	 */
 	function get_columns() {
 		$columns = array(
-			// 'cb'              => '<input type="checkbox" />',
 			'manager_name'     => 'Manager Name',
 			'managers_clients' => 'Clients',
 		);
@@ -116,9 +128,8 @@ class Client_Manager_List_Table extends \WP_List_Table {
 		return $columns;
 	}
 
-
 	/**
-	 * Sortable Columns
+	 * Sortable columns
 	 */
 	function get_sortable_columns() {
 		$sortable_columns = array(
@@ -128,57 +139,47 @@ class Client_Manager_List_Table extends \WP_List_Table {
 		return $sortable_columns;
 	}
 
-
 	/**
-	 * Bulk Actions
+	 * Bulk actions
 	 *
 	 * @return array An associative array containing all the bulk actions: 'slugs'=>'Visible Titles'
 	 */
 	function get_bulk_actions() {
 		return; // Remove this line to enable bulk actions.
-
 		$actions = array(
 			'remove' => 'remove',
 		);
-
 		return $actions;
 	}
 
-
 	function process_bulk_action() {
 		$action = $this->current_action();
-
 		switch ( $action ) {
 			case 'remove':
 				wp_die( 'Remove client manager permissions.' );
 				break;
-
 			default:
 				return;
-				break;
 		}
-
 		return;
 	}
 
-
 	/**
-	 * Prepare Data for Display
+	 * Prepare data for display
 	 */
 	function prepare_items() {
-		/**
-		 * Column Headers
-		 */
-		$columns  = $this->get_columns();
-		$hidden   = array();
-		$sortable = $this->get_sortable_columns();
-
+		/* Column headers */
+		$columns               = $this->get_columns();
+		$hidden                = array();
+		$sortable              = $this->get_sortable_columns();
 		$this->_column_headers = array( $columns, $hidden, $sortable );
+
 		$this->process_bulk_action();
 
 		/**
-		 * Query Client Managers
+		 * Query client managers
 		 */
+		$data                  = array();
 		$client_managers_query = new \WP_User_Query(
 			array(
 				'role'    => 'cpt-client-manager',
@@ -187,7 +188,6 @@ class Client_Manager_List_Table extends \WP_List_Table {
 			)
 		);
 		$client_managers       = $client_managers_query->get_results();
-		$data                  = array();
 
 		// Creates the data set.
 		if ( ! empty( $client_managers ) ) {
@@ -201,9 +201,19 @@ class Client_Manager_List_Table extends \WP_List_Table {
 		}
 
 		// Sorts the data set.
-		$orderby = isset( $_REQUEST['orderby'] ) ? sanitize_key( $_REQUEST['orderby'] ) : 'display_name';
-		$order   = isset( $_REQUEST['order'] ) ? sanitize_key( $_REQUEST['order'] ) : 'ASC';
-		$data    = wp_list_sort( $data, $orderby, $order );
+		if ( isset( $_REQUEST['orderby'] ) ) {
+			$orderby = sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) );
+		} else {
+			$orderby = 'display_name';
+		}
+
+		if ( isset( $_REQUEST['order'] ) ) {
+			$order = sanitize_text_field( wp_unslash( $_REQUEST['order'] ) );
+		} else {
+			$order = 'ASC';
+		}
+
+		$data = wp_list_sort( $data, $orderby, $order );
 
 		/**
 		 * Pagination
@@ -221,10 +231,6 @@ class Client_Manager_List_Table extends \WP_List_Table {
 			)
 		);
 
-		/**
-		 * $this->items contains the data that will actually be displayed on the
-		 * current page.
-		 */
 		$this->items = $data;
 	}
 }
