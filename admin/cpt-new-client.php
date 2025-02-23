@@ -54,7 +54,11 @@ function cpt_process_new_client() {
 	}
 
 	if ( is_wp_error( $new_client ) ) {
-		$result = 'Client could not be created. Error message: ' . $new_client->get_error_message();
+		$result = sprintf(
+			// Translators: %s is the error message.
+			__( 'Client could not be created. Error message: %s', 'client-power-tools' ),
+			$new_client->get_error_message()
+		);
 	} else {
 		$user_meta = Common\cpt_get_sanitized_usermeta_from_post();
 		foreach ( $user_meta as $meta_key => $meta_value ) {
