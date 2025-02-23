@@ -48,7 +48,7 @@ class Project_List_Table extends \WP_List_Table {
 	 * Checkboxes
 	 *
 	 * @see WP_List_Table::::single_row_columns()
-	 * @param array $item A singular item (one full row's worth of data)
+	 * @param array $item A singular item (one full row's worth of data).
 	 * @return string Text to be placed inside the column <td>
 	 */
 	function column_cb( $item ) {
@@ -118,7 +118,7 @@ class Project_List_Table extends \WP_List_Table {
 	 */
 	function get_views() {
 		$count_projects = wp_count_posts( $post_type = 'cpt_project' );
-		$current_status = isset( $_REQUEST['project_status'] ) ? sanitize_text_field( urldecode( $_REQUEST['project_status'] ) ) : 'all';
+		$current_status = isset( $_REQUEST['project_status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['project_status'] ) ) : 'all';
 		$views          = array();
 
 		$params = array( 'All' );
@@ -209,7 +209,7 @@ class Project_List_Table extends \WP_List_Table {
 
 		// Filters the data set.
 		if ( isset( $_REQUEST['project_status'] ) ) {
-			$project_status_filter = sanitize_text_field( urldecode( $_REQUEST['project_status'] ) );
+			$project_status_filter = sanitize_text_field( wp_unslash( $_REQUEST['project_status'] ) );
 			if ( $project_status_filter ) {
 				foreach ( $data as $i => $project ) {
 					if ( $project['project_status'] !== $project_status_filter ) {
