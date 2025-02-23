@@ -245,6 +245,112 @@ function cpt_get_client_profile_url( $clients_user_id ) {
 
 
 /**
+ * Gets the client user data keys for use with wp_insert_user() and wp_update_user().
+ *
+ * @since 1.10.4
+ * @return array User data keys.
+ */
+function cpt_get_client_userdata_keys() {
+	return array(
+		'ID',
+		'client_name',
+		'first_name',
+		'last_name',
+		'display_name',
+		'user_email',
+	);
+}
+
+/**
+ * Sanitizes user data from $_POST.
+ *
+ * @since 1.10.4
+ * @return array Sanitized user data.
+ */
+function cpt_get_sanitized_userdata_from_post() {
+	$data_keys          = cpt_get_client_userdata_keys();
+	$sanitized_userdata = array();
+
+	foreach ( $data_keys as $data_key ) {
+		if (
+			( 'user_email' !== $data_key && ! isset( $_POST[ $data_key ] ) )
+			|| ( 'user_email' === $data_key && ! isset( $_POST['email'] ) )
+		) {
+			continue;
+		}
+
+		switch ( $data_key ) {
+			case 'ID':
+				$sanitized_value = intval( wp_unslash( $_POST[ $data_key ] ) );
+				break;
+			case 'user_email':
+				// CPT uses 'email' in form fields.
+				$sanitized_value = sanitize_email( wp_unslash( $_POST['email'] ) );
+				break;
+			default:
+				$sanitized_value = sanitize_text_field( wp_unslash( $_POST[ $data_key ] ) );
+		}
+
+		$sanitized_userdata[ $data_key ] = $sanitized_value;
+	}
+
+	return $sanitized_userdata;
+}
+
+
+/**
+ * Gets the client user meta keys for use with update_user_meta().
+ *
+ * @since 1.10.4
+ * @return array User meta keys.
+ */
+function cpt_get_client_usermeta_keys() {
+	return array(
+		'client_id',
+		'client_name',
+		'email_ccs',
+		'client_manager',
+		'client_status',
+	);
+}
+
+/**
+ * Sanitizes user meta from $_POST.
+ *
+ * @since 1.10.4
+ * @return array Sanitized user meta.
+ */
+function cpt_get_sanitized_usermeta_from_post() {
+	$meta_keys          = cpt_get_client_usermeta_keys();
+	$sanitized_usermeta = array();
+
+	foreach ( $meta_keys as $meta_key ) {
+		if ( ! isset( $_POST[ $meta_key ] ) ) {
+			continue;
+		}
+
+		switch ( $meta_key ) {
+			case 'client_id':
+			case 'client_manager':
+				$sanitized_value = intval( wp_unslash( $_POST[ $meta_key ] ) );
+				break;
+			case 'email_ccs':
+				$sanitized_textarea = sanitize_textarea_field( wp_unslash( $_POST[ $meta_key ] ) );
+				$array_of_emails    = cpt_cleanse_array_of_emails( explode( PHP_EOL, $sanitized_textarea ) );
+				$sanitized_value    = implode( PHP_EOL, $array_of_emails );
+				break;
+			default:
+				$sanitized_value = sanitize_text_field( wp_unslash( $_POST[ $meta_key ] ) );
+		}
+
+		$sanitized_usermeta[ 'cpt_' . $meta_key ] = $sanitized_value;
+	}
+
+	return $sanitized_usermeta;
+}
+
+
+/**
  * Gets the URL of the client dashboard page.
  *
  * @return url
@@ -312,6 +418,42 @@ function cpt_get_display_name( $user_id ) {
  */
 function cpt_custom_client_fields() {
 	return apply_filters( 'cpt_custom_fields', array() );
+}
+
+
+/**
+ * Sanitizes custom fields from $_POST.
+ *
+ * @since 1.10.4
+ * @return array Sanitized fields.
+ */
+function cpt_get_sanitized_custom_fields_from_post() {
+	$custom_fields = cpt_custom_client_fields();
+
+	if ( ! $custom_fields ) {
+		return false;
+	}
+
+	foreach ( $custom_fields as $field ) {
+		if ( ! isset( $_POST[ $field['id'] ] ) ) {
+			continue;
+		}
+
+		switch ( $field['type'] ) {
+			case 'email':
+				$sanitized_value = sanitize_email( wp_unslash( $_POST[ $field['id'] ] ) );
+				break;
+			case 'url':
+				$sanitized_value = sanitize_url( wp_unslash( $_POST[ $field['id'] ] ) );
+				break;
+			default:
+				$sanitized_value = sanitize_text_field( wp_unslash( $_POST[ $field['id'] ] ) );
+		}
+
+		$sanitized_custom_fields[ $field['id'] ] = $sanitized_value;
+	}
+
+	return $sanitized_custom_fields;
 }
 
 
@@ -482,74 +624,74 @@ function cpt_get_notices() {
 /**
  * Sanitizes an array of emails.
  *
- * @param array $array The array to be cleansed.
+ * @param array $array_of_emails The array to be cleansed.
  * @return array Cleansed array of emails.
  */
-function cpt_cleanse_array_of_emails( $array ) {
-	if ( ! $array || ! is_array( $array ) ) {
+function cpt_cleanse_array_of_emails( $array_of_emails ) {
+	if ( ! $array_of_emails || ! is_array( $array_of_emails ) ) {
 		return;
 	}
-	foreach ( $array as $key => $val ) {
+	foreach ( $array_of_emails as $key => $val ) {
 		if ( empty( trim( $val ) ) ) {
-			unset( $array[ $key ] );
+			unset( $array_of_emails[ $key ] );
 		} else {
-			$array[ $key ] = sanitize_email( trim( $val ) );
+			$array_of_emails[ $key ] = sanitize_email( trim( $val ) );
 		}
 	}
-	return $array;
+	return $array_of_emails;
 }
 
 
 /**
  * Sanitizes an array of strings.
  *
- * @param array $array The array to be cleansed.
+ * @param array $array_of_strings The array to be cleansed.
  * @return array Cleansed array of strings.
  */
-function cpt_cleanse_array_of_strings( $array ) {
-	if ( ! $array || ! is_array( $array ) ) {
+function cpt_cleanse_array_of_strings( $array_of_strings ) {
+	if ( ! $array_of_strings || ! is_array( $array_of_strings ) ) {
 		return;
 	}
-	foreach ( $array as $key => $val ) {
+	foreach ( $array_of_strings as $key => $val ) {
 		if ( empty( trim( $val ) ) ) {
-			unset( $array[ $key ] );
+			unset( $array_of_strings[ $key ] );
 		} else {
-			$array[ $key ] = sanitize_text_field( trim( $val ) );
+			$array_of_strings[ $key ] = sanitize_text_field( trim( $val ) );
 		}
 	}
-	return $array;
+	return $array_of_strings;
 }
 
 
 /**
  * Converts an array to a comma-separated inline list. Uses the serial comma.
  *
- * @param array $array The array to be converted.
+ * @param array $array_of_items The array to be converted.
  * @return string Comma-separated list.
  */
-function cpt_array_to_strlist( $array ) {
-	if ( ! $array || ! is_array( $array ) ) {
+function cpt_array_to_strlist( $array_of_items ) {
+	if ( ! $array_of_items || ! is_array( $array_of_items ) ) {
 		return;
 	}
 
 	$list = '';
-	switch ( count( $array ) ) {
+	switch ( count( $array_of_items ) ) {
 		case 0:
 			return false;
 		case 1:
-			return trim( $array[0] );
+			return trim( $array_of_items[0] );
 		case 2:
-			return trim( $array[0] ) . ' ' . __( 'and' ) . ' ' . $array[1];
-		case ( count( $array ) >= 3 ):
-			foreach ( $array as $key => $val ) {
+			return trim( $array_of_items[0] ) . ' ' . __( 'and' ) . ' ' . $array_of_items[1];
+		case ( count( $array_of_items ) >= 3 ):
+			foreach ( $array_of_items as $key => $val ) {
 				$list .= trim( $val );
-				if ( $key < count( $array ) - 2 ) {
+				if ( $key < count( $array_of_items ) - 2 ) {
 					$list .= ', ';
-				} elseif ( $key < count( $array ) - 1 ) {
+				} elseif ( $key < count( $array_of_items ) - 1 ) {
 					$list .= ', and ';
 				}
 			}
 	}
 
-	return $list;
+	return $array_of_items;
 }
