@@ -134,7 +134,7 @@ function cpt_get_client_dashboard( $user_id = null ) {
 	) {
 		// Outputs an individual project if a project post ID is specified.
 		// Otherwise, outputs the list of projects.
-		$projects_post_id = isset( $_REQUEST['projects_post_id'] ) ? intval( sanitize_key( $_REQUEST['projects_post_id'] ) ) : false;
+		$projects_post_id = isset( $_REQUEST['projects_post_id'] ) ? intval( wp_unslash( $_REQUEST['projects_post_id'] ) ) : false;
 		if (
 			$projects_post_id &&
 			Common\cpt_is_project( $projects_post_id )
