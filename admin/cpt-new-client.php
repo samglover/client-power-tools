@@ -1,59 +1,70 @@
 <?php
+/**
+ * New client
+ *
+ * @file       cpt-new-client.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Admin
+ * @since      1.0.0
+ */
 
 namespace Client_Power_Tools\Core\Admin;
 
 use Client_Power_Tools\Core\Common;
 
 add_action( 'admin_post_cpt_new_client_added', __NAMESPACE__ . '\cpt_process_new_client' );
+/**
+ * Process new client
+ */
 function cpt_process_new_client() {
-	if ( ! isset( $_POST['cpt_new_client_nonce'] ) || ! wp_verify_nonce( $_POST['cpt_new_client_nonce'], 'cpt_new_client_added' ) ) {
-		exit( 'Invalid nonce.' );
+	if (
+		! isset( $_POST['cpt_new_client_nonce'] )
+		|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['cpt_new_client_nonce'] ) ), 'cpt_new_client_added' )
+	) {
+		exit( esc_html__( 'Invalid nonce.', 'client-power-tools' ) );
 	}
 
-	$first_name         = sanitize_text_field( $_POST['first_name'] );
-	$last_name          = sanitize_text_field( $_POST['last_name'] );
-	$email              = sanitize_email( $_POST['email'] );
+	if (
+		! isset( $_POST['first_name'] )
+		|| ! isset( $_POST['last_name'] )
+		|| ! isset( $_POST['email'] )
+	) {
+		exit( esc_html__( 'Missing required fields', 'client-power-tools' ) );
+	}
+
 	$existing_client_id = email_exists( $email );
+	$user_data          = Common\cpt_get_sanitized_userdata_from_post();
 
 	if ( ! $existing_client_id ) {
-		$new_client = wp_insert_user(
+		$user_data  = array_merge(
+			$user_data,
 			array(
-				'first_name'           => $first_name,
-				'last_name'            => $last_name,
-				'display_name'         => $first_name . ' ' . $last_name,
-				'user_nicename'        => wp_generate_password( 12, false ),
-				'user_email'           => $email,
-				'user_login'           => sanitize_user( $email ),
+				'user_login'           => $user_data['user_email'],
 				'user_pass'            => wp_hash_password( wp_generate_password( 32, true ) ),
 				'role'                 => 'cpt-client',
 				'show_admin_bar_front' => 'false',
 			)
 		);
+		$new_client = wp_insert_user( $user_data );
 	} else {
-		$new_client = wp_update_user(
-			array(
-				'ID'         => $existing_client_id,
-				'first_name' => $first_name,
-				'last_name'  => $last_name,
-			)
-		);
-		$user       = new \WP_User( $new_client );
+		$user_data['ID'] = $existing_client_id;
+		$new_client      = wp_update_user( $user_data );
+		$user            = new \WP_User( $new_client );
 		$user->add_role( 'cpt-client' );
 	}
 
 	if ( is_wp_error( $new_client ) ) {
 		$result = 'Client could not be created. Error message: ' . $new_client->get_error_message();
 	} else {
-		update_user_meta( $new_client, 'cpt_client_id', sanitize_text_field( $_POST['client_id'] ) );
-		update_user_meta( $new_client, 'cpt_client_name', sanitize_text_field( $_POST['client_name'] ) );
-		update_user_meta( $new_client, 'cpt_email_ccs', sanitize_textarea_field( $_POST['email_ccs'] ) );
-		update_user_meta( $new_client, 'cpt_client_manager', sanitize_text_field( $_POST['client_manager'] ) );
-		update_user_meta( $new_client, 'cpt_client_status', sanitize_text_field( $_POST['client_status'] ) );
+		$user_meta = Common\cpt_get_sanitized_usermeta_from_post();
+		foreach ( $user_meta as $meta_key => $meta_value ) {
+			update_user_meta( $new_client, $meta_key, $meta_value );
+		}
 
-		$custom_fields = Common\cpt_custom_client_fields();
+		$custom_fields = Common\cpt_get_sanitized_custom_fields_from_post();
 		if ( $custom_fields ) {
-			foreach ( $custom_fields as $field ) {
-				update_user_meta( $new_client, $field['id'], sanitize_text_field( $_POST[ $field['id'] ] ) );
+			foreach ( $custom_fields as $field_key => $field_value ) {
+				update_user_meta( $new_client, $field_key, $field_value );
 			}
 		}
 
@@ -61,18 +72,28 @@ function cpt_process_new_client() {
 			cpt_new_client_email( $new_client );
 		}
 		$client_profile_url = Common\cpt_get_client_profile_url( $new_client );
-		$result             = 'Client created. <a href="' . $client_profile_url . '">View ' . Common\cpt_get_client_name( $new_client ) . '\'s profile</a>.';
+		$result             = sprintf(
+			// Translators: %1$s is an HTML `<a>` tag. %2$s is the client's name. %3$s is the closing `</a>` tag.
+			wp_kses_post( 'Client created. %1$sView %2$s\'s profile%3$s.', 'client-power-tools' ),
+			/* %1$s */ '<a href="' . $client_profile_url . '">',
+			/* %2$s */ Common\cpt_get_client_name( $new_client ),
+			/* %3$s */ '</a>'
+		);
 	}
 
 	set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
-	wp_redirect( $_POST['_wp_http_referer'] );
+	wp_safe_redirect( wp_get_referer() );
 	exit;
 }
 
-
+/**
+ * Assembles the new client notification email.
+ *
+ * @param int $clients_user_id Client's user ID.
+ */
 function cpt_new_client_email( $clients_user_id ) {
 	if ( ! $clients_user_id ) {
-		exit( 'Missing client\'s user ID.' );
+		exit( esc_html__( 'Missing client\'s user ID.', 'client-power-tools' ) );
 	}
 
 	$user        = get_userdata( $clients_user_id );
