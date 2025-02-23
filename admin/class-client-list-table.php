@@ -1,15 +1,27 @@
 <?php
-
 /**
- * This is based on the Custom List Table Example plugin by Matt van Andel.
- * https://wordpress.org/plugins/custom-list-table-example/
+ * Project list table
+ *
+ * @file       class-client-list-table.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Admin
+ * @since      1.0.0
+ * @since      1.10.4 File renamed from cpt-clients-table.php to class-client-list-table.php.
  */
 
 namespace Client_Power_Tools\Core\Admin;
 
 use Client_Power_Tools\Core\Common;
 
+/**
+ * List of clients
+ *
+ * @see WP_List_Table
+ */
 class Client_List_Table extends \WP_List_Table {
+	/**
+	 * Construct
+	 */
 	function __construct() {
 		global $status, $page;
 
@@ -23,11 +35,11 @@ class Client_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Column Default
+	 * Column default
 	 *
-	 * @param array $item A singular item (one full row's worth of data)
-	 * @param array $column_name The name/slug of the column to be processed
-	 * @return string Text or HTML to be placed inside the column <td>
+	 * @param array $item A singular item (one full row's worth of data).
+	 * @param array $column_name The name/slug of the column to be processed.
+	 * @return string Text or HTML to be placed inside the column <td>.
 	 */
 	function column_default( $item, $column_name ) {
 		return $item[ $column_name ];
@@ -37,8 +49,8 @@ class Client_List_Table extends \WP_List_Table {
 	 * Checkboxes
 	 *
 	 * @see WP_List_Table::::single_row_columns()
-	 * @param array $item A singular item (one full row's worth of data)
-	 * @return string Text to be placed inside the column <td>
+	 * @param array $item A singular item (one full row's worth of data).
+	 * @return string Text to be placed inside the column <td>.
 	 */
 	function column_cb( $item ) {
 		return sprintf(
@@ -49,7 +61,9 @@ class Client_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Client Column Method
+	 * Client column method
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_client_name( $item ) {
 		// Return the contents.
@@ -62,7 +76,9 @@ class Client_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Client Messages Method
+	 * Client messages method
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_client_messages( $item ) {
 		if ( $item['msg_count'] ) {
@@ -71,7 +87,9 @@ class Client_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Client Projects Method
+	 * Client projects method
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_client_projects( $item ) {
 		if ( $item['project_count'] ) {
@@ -80,14 +98,18 @@ class Client_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Client Status Method
+	 * Client status method
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_client_status( $item ) {
 		return sprintf( $item['client_status'] );
 	}
 
 	/**
-	 * Client Manager Method
+	 * Client manager method
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_client_manager( $item ) {
 		if ( $item['client_manager'] ) {
@@ -95,6 +117,11 @@ class Client_List_Table extends \WP_List_Table {
 		}
 	}
 
+	/**
+	 * Column last activity
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
+	 */
 	function column_last_activity( $item ) {
 		if ( $item['last_activity'] ) {
 			$current_timestamp = time();
@@ -103,7 +130,7 @@ class Client_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Get Columns
+	 * Get columns
 	 *
 	 * @see WP_List_Table::::single_row_columns()
 	 * @return array An associative array containing column information:
@@ -119,8 +146,9 @@ class Client_List_Table extends \WP_List_Table {
 			'last_activity'   => 'Last Activity',
 		);
 
-		// Remove columns for disabled modules. (It's easier to remove columns add
-		// them in the correct order.)
+		/*
+		 * Remove columns for disabled modules. (It's easier to remove columns than add them in the correct order.)
+		 */
 		if ( ! get_option( 'cpt_module_messaging' ) ) {
 			unset( $columns['client_messages'] );
 		}
@@ -132,7 +160,7 @@ class Client_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Sortable Columns
+	 * Sortable columns
 	 */
 	function get_sortable_columns() {
 		$sortable_columns = array(
@@ -143,12 +171,14 @@ class Client_List_Table extends \WP_List_Table {
 		return $sortable_columns;
 	}
 
-
+	/**
+	 * Get views
+	 */
 	function get_views() {
 		$params         = explode( "\n", get_option( 'cpt_client_statuses' ) );
-		$current_status = isset( $_REQUEST['client_status'] ) ? sanitize_text_field( urldecode( $_REQUEST['client_status'] ) ) : 'all';
+		$current_status = isset( $_REQUEST['client_status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['client_status'] ) ) : 'all';
 		$curr_user      = Common\cpt_get_display_name( get_current_user_id() );
-		$curr_mgr_param = isset( $_REQUEST['client_manager'] ) ? sanitize_text_field( urldecode( $_REQUEST['client_manager'] ) ) : '';
+		$curr_mgr_param = isset( $_REQUEST['client_manager'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['client_manager'] ) ) : '';
 		$views          = array();
 		$client_ids     = Common\cpt_get_clients( array( 'fields' => 'ID' ) );
 
@@ -163,9 +193,16 @@ class Client_List_Table extends \WP_List_Table {
 			$curr_param = rawurlencode( $val );
 
 			if (
-				$current_status === $curr_param ||
-				( 'Mine' === $curr_param && $curr_mgr_param === $curr_user ) ||
-				( 'All' === $curr_param && ! isset( $_REQUEST['client_status'] ) && ! isset( $_REQUEST['client_manager'] ) )
+				$current_status === $curr_param
+				|| (
+					'Mine' === $curr_param
+					&& $curr_mgr_param === $curr_user
+				)
+				|| (
+					'All' === $curr_param
+					&& ! isset( $_REQUEST['client_status'] )
+					&& ! isset( $_REQUEST['client_manager'] )
+				)
 			) {
 				$class = ' class="current"';
 			}
@@ -188,22 +225,17 @@ class Client_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Prepare Data for Display
+	 * Prepare data for display
 	 */
 	function prepare_items() {
-		/**
-		 * Column Headers
-		 */
-		$columns  = $this->get_columns();
-		$hidden   = array();
-		$sortable = $this->get_sortable_columns();
-
+		/* Column headers */
+		$columns               = $this->get_columns();
+		$hidden                = array();
+		$sortable              = $this->get_sortable_columns();
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
-		$clients = Common\cpt_get_clients();
 		$data    = array();
-
-		// Creates the data set.
+		$clients = Common\cpt_get_clients();
 		if ( ! empty( $clients ) ) {
 			foreach ( $clients as $client ) {
 				$cpt_messages = new \WP_Query(
@@ -230,7 +262,7 @@ class Client_List_Table extends \WP_List_Table {
 
 				if ( $manager_data ) {
 					// Checks for clients whose manager is no longer assigned that role.
-					if ( ! in_array( 'cpt-client-manager', $manager_data->roles ) ) {
+					if ( ! in_array( 'cpt-client-manager', $manager_data->roles, true ) ) {
 						$manager_name = '<span style="color: silver;">Unassigned</span>';
 					} else {
 						$manager_name = trim( Common\cpt_get_display_name( $manager_data->ID ) );
@@ -255,7 +287,7 @@ class Client_List_Table extends \WP_List_Table {
 
 		// Filters the data set.
 		if ( isset( $_REQUEST['client_status'] ) ) {
-			$client_status_filter = sanitize_text_field( urldecode( $_REQUEST['client_status'] ) );
+			$client_status_filter = sanitize_text_field( wp_unslash( $_REQUEST['client_status'] ) );
 			if ( $client_status_filter ) {
 				foreach ( $data as $i => $client ) {
 					if ( $client['client_status'] !== $client_status_filter ) {
@@ -266,7 +298,7 @@ class Client_List_Table extends \WP_List_Table {
 		}
 
 		if ( isset( $_REQUEST['client_manager'] ) ) {
-			$client_status_filter = sanitize_text_field( urldecode( $_REQUEST['client_manager'] ) );
+			$client_status_filter = sanitize_text_field( wp_unslash( $_REQUEST['client_manager'] ) );
 			if ( $client_status_filter ) {
 				foreach ( $data as $i => $client ) {
 					if ( $client['client_manager'] !== $client_status_filter ) {
@@ -277,13 +309,21 @@ class Client_List_Table extends \WP_List_Table {
 		}
 
 		// Sorts the data set.
-		$orderby = isset( $_REQUEST['orderby'] ) ? sanitize_key( $_REQUEST['orderby'] ) : 'client_name';
-		$order   = isset( $_REQUEST['order'] ) ? sanitize_key( $_REQUEST['order'] ) : 'ASC';
-		$data    = wp_list_sort( $data, $orderby, $order );
+		if ( isset( $_REQUEST['orderby'] ) ) {
+			$orderby = sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) );
+		} else {
+			$orderby = 'client_name';
+		}
 
-		/**
-		 * Pagination
-		 */
+		if ( isset( $_REQUEST['order'] ) ) {
+			$order = sanitize_text_field( wp_unslash( $_REQUEST['order'] ) );
+		} else {
+			$order = 'ASC';
+		}
+
+		$data = wp_list_sort( $data, $orderby, $order );
+
+		/* Pagination */
 		$total_items  = count( $data );
 		$per_page     = 25;
 		$current_page = $this->get_pagenum();
@@ -296,10 +336,6 @@ class Client_List_Table extends \WP_List_Table {
 			)
 		);
 
-		/**
-		 * $this->items contains the data that will actually be displayed on the
-		 * current page.
-		 */
 		$this->items = $data;
 	}
 }
