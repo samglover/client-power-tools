@@ -72,6 +72,8 @@ function cpt_is_client_dashboard( $page_slug = false ) {
 		$dashboard_page = 'knowlege-base';
 	} elseif ( cpt_is_additional_page() ) {
 		$dashboard_page = 'additional-pages';
+	} else {
+		return false;
 	}
 
 	if (
@@ -671,7 +673,7 @@ function cpt_cleanse_array_of_strings( $array_of_strings ) {
  */
 function cpt_array_to_strlist( $array_of_items ) {
 	if ( ! $array_of_items || ! is_array( $array_of_items ) ) {
-		return;
+		return $array_of_items;
 	}
 
 	$list = '';
@@ -693,5 +695,5 @@ function cpt_array_to_strlist( $array_of_items ) {
 			}
 	}
 
-	return $array_of_items;
+	return $list;
 }
