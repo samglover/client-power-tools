@@ -1,7 +1,16 @@
 <?php
-	namespace Client_Power_Tools\Core\Admin;
+/**
+ * Edit project type form
+ *
+ * @file       cpt-edit-project-type-form.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Admin
+ * @since      1.7.0
+ */
 
-	use Client_Power_Tools\Core\Common;
+namespace Client_Power_Tools\Core\Admin;
+
+use Client_Power_Tools\Core\Common;
 ?>
 
 <form id="cpt-edit-rows" method="GET">
@@ -12,9 +21,9 @@
 					<p class="cpt-section-header">
 						<?php
 						printf(
-							// Translators: %s is the project type label.
+							// Translators: %s is the singular project label.
 							esc_html__( 'Edit %s Type', 'client-power-tools' ),
-							esc_html( Common\cpt_get_projects_label( 'singular' ) )
+							esc_html( $projects_label[0] )
 						);
 						?>
 					</p>
@@ -27,7 +36,7 @@
 						<label for="edit_project_type">
 							<?php
 							printf(
-								// Translators: %s is the project type label.
+								// Translators: %s is the singular project label.
 								esc_html__( '%s Type', 'client-power-tools' ),
 								esc_html( $projects_label[0] )
 							);
@@ -46,7 +55,7 @@
 						<label for="edit_project_type_stages">
 							<?php
 							printf(
-								// Translators: %s is the project type label.
+								// Translators: %s is the singular project label.
 								esc_html__( '%s Type Stages', 'client-power-tools' ),
 								esc_html( $projects_label[0] )
 							);
@@ -62,7 +71,7 @@
 						<p class="description">
 							<?php
 							printf(
-								// Translators: %s is the project type label.
+								// Translators: %s is the singular project label.
 								esc_html__( 'Enter one stage per line. These stages will only apply to this %s type.', 'client-power-tools' ),
 								esc_html( strtolower( $projects_label[0] ) )
 							);
@@ -70,11 +79,14 @@
 						</p>
 					</div>
 					<div class="submit cpt-row gap-sm">
-						<input name="submit" id="submit" class="button button-primary wp-element-button" type="submit" value="<?php esc_attr_e( 'Save', 'client-power-tools' ); ?>">
-						<button 
-							id="edit-cancel" 
-							class="button button-secondary wp-element-button"
+						<input 
+							name="submit" 
+							id="submit" 
+							class="button button-primary wp-element-button" 
+							type="submit" 
+							value="<?php esc_attr_e( 'Save', 'client-power-tools' ); ?>"
 						>
+						<button id="edit-cancel" class="button button-secondary wp-element-button">
 							<?php esc_html_e( 'Cancel', 'client-power-tools' ); ?>
 						</button>
 					</div>

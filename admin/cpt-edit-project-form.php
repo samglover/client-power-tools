@@ -1,10 +1,19 @@
 <?php
-	namespace Client_Power_Tools\Core\Admin;
+/**
+ * Edit project form
+ *
+ * @file       cpt-edit-project-form.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Admin
+ * @since      1.6.5
+ */
 
-	use Client_Power_Tools\Core\Common;
+namespace Client_Power_Tools\Core\Admin;
 
-	$client_ids     = Common\cpt_get_clients( array( 'fields' => 'ID' ) );
-	$projects_label = Common\cpt_get_projects_label();
+use Client_Power_Tools\Core\Common;
+
+$client_ids     = Common\cpt_get_clients( array( 'fields' => 'ID' ) );
+$projects_label = Common\cpt_get_projects_label();
 ?>
 
 <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST">
@@ -48,7 +57,7 @@
 			<label for="project_id">
 				<?php
 					printf(
-						// translators: %s is the projects label.
+						// Translators: %s is the singular project label.
 						esc_html__( '%s ID', 'client-power-tools' ),
 						esc_html( $projects_label[0] )
 					);
@@ -67,7 +76,7 @@
 			<label for="project_name">
 				<?php
 					printf(
-						// translators: %s is the projects label.
+						// Translators: %s is the singular project label.
 						esc_html__( '%s Name', 'client-power-tools' ),
 						esc_html( $projects_label[0] )
 					);
@@ -89,7 +98,7 @@
 			<label for="project_type">
 				<?php
 					printf(
-						// translators: %s is the projects label.
+						// Translators: %s is the singular project label.
 						esc_html__( '%s Type', 'client-power-tools' ),
 						esc_html( $projects_label[0] )
 					);
@@ -107,7 +116,7 @@
 			<label for="project_stage">
 				<?php
 					printf(
-						// translators: %s is the projects label.
+						// Translators: %s is the singular project label.
 						esc_html__( '%s Stage', 'client-power-tools' ),
 						esc_html( $projects_label[0] )
 					);
@@ -125,7 +134,7 @@
 			<label for="project_status">
 				<?php
 					printf(
-						// translators: %s is the projects label.
+						// Translators: %s is the singular project label.
 						esc_html__( '%s Status', 'client-power-tools' ),
 						esc_html( $projects_label[0] )
 					);
@@ -142,12 +151,12 @@
 			type="submit" 
 			value="
 				<?php
-					printf(
-						// translators: %s is the projects label.
-						esc_html__( 'Update %s', 'client-power-tools' ),
-						esc_html( $projects_label[0] )
-					);
-					?>
+				printf(
+					// Translators: %s is the singular project label.
+					esc_html__( 'Update %s', 'client-power-tools' ),
+					esc_html( $projects_label[0] )
+				);
+				?>
 			"
 		>
 	</p>

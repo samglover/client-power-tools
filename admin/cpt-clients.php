@@ -13,7 +13,6 @@ function cpt_clients() {
 			<?php if ( isset( $_REQUEST['user_id'] ) ) { ?>
 				<p>
 					<a href="<?php echo esc_url( remove_query_arg( 'user_id' ) ); ?>">
-						&lt;
 						<?php esc_html_e( 'Back to Clients', 'client-power-tools' ); ?>
 					</a>
 				</p>

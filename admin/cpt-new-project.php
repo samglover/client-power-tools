@@ -32,6 +32,6 @@ function cpt_process_new_project() {
 	}
 
 	set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
-	wp_redirect( $_POST['_wp_http_referer'] );
+	wp_safe_redirect( wp_get_referer() );
 	exit;
 }

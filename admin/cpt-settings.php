@@ -236,9 +236,9 @@ function cpt_client_statuses() {
 			name="cpt_client_statuses" 
 			class="small-text" 
 			rows="5"
-		><?php echo esc_html( $statuses ); ?></textarea>
+		><?php echo esc_textarea( $statuses ); ?></textarea>
 		<p class="description">
-			<?php esc_html_e( 'Enter one status per line.', 'client-power-tools' ); ?>
+			<?php echo esc_textarea( 'Enter one status per line.', 'client-power-tools' ); ?>
 		</p>
 	<?php
 }
@@ -318,7 +318,7 @@ function cpt_new_client_email_message_body() {
 			name="cpt_new_client_email_message_body" 
 			class="large-text" 
 			rows="5"
-		><?php echo esc_html( get_option( 'cpt_new_client_email_message_body' ) ); ?></textarea>
+		><?php echo esc_textarea( get_option( 'cpt_new_client_email_message_body' ) ); ?></textarea>
 		<p class="description">
 			<?php esc_html_e( 'New users will be sent their username and an account activation link along with any additional message you choose to add here.', 'client-power-tools' ); ?>
 		</p>
@@ -667,7 +667,7 @@ if ( get_option( 'cpt_module_projects' ) ) {
 				name="cpt_project_statuses" 
 				class="small-text" 
 				rows="5"
-			><?php echo esc_html( $statuses ); ?></textarea>
+			><?php echo esc_textarea( $statuses ); ?></textarea>
 			<p class="description">
 				<?php esc_html_e( 'Enter one status per line. Statuses apply to all project types.', 'client-power-tools' ); ?>
 			</p>

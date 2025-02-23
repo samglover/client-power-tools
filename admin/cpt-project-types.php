@@ -111,7 +111,7 @@ function cpt_process_new_project_type() {
 	}
 
 	set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
-	wp_redirect( $_POST['_wp_http_referer'] );
+	wp_safe_redirect( wp_get_referer() );
 	exit;
 }
 
@@ -154,7 +154,7 @@ function cpt_process_edit_project_type() {
 	}
 
 	set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
-	wp_redirect( $_POST['_wp_http_referer'] );
+	wp_safe_redirect( wp_get_referer() );
 	exit;
 }
 
