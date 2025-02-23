@@ -32,10 +32,10 @@ function cpt_process_new_client() {
 		exit( esc_html__( 'Missing required fields', 'client-power-tools' ) );
 	}
 
-	$existing_client_id = email_exists( $email );
-	$user_data          = Common\cpt_get_sanitized_userdata_from_post();
+	$existing_id = email_exists( sanitize_email( wp_unslash( $_POST['email'] ) ) );
+	$user_data   = Common\cpt_get_sanitized_userdata_from_post();
 
-	if ( ! $existing_client_id ) {
+	if ( ! $existing_id ) {
 		$user_data  = array_merge(
 			$user_data,
 			array(
@@ -47,7 +47,7 @@ function cpt_process_new_client() {
 		);
 		$new_client = wp_insert_user( $user_data );
 	} else {
-		$user_data['ID'] = $existing_client_id;
+		$user_data['ID'] = $existing_id;
 		$new_client      = wp_update_user( $user_data );
 		$user            = new \WP_User( $new_client );
 		$user->add_role( 'cpt-client' );
@@ -72,7 +72,7 @@ function cpt_process_new_client() {
 			}
 		}
 
-		if ( ! $existing_client_id ) {
+		if ( ! $existing_id ) {
 			cpt_new_client_email( $new_client );
 		}
 		$client_profile_url = Common\cpt_get_client_profile_url( $new_client );
