@@ -27,33 +27,21 @@ function cpt_body_classes( $classes ) {
 		return $classes;
 	}
 
-	$post_id = $wp_query->post->ID;
 	if ( ! Common\cpt_is_client_dashboard() ) {
 		return $classes;
 	}
 
+	$post_id      = $wp_query->post->ID;
 	$body_classes = array(
 		'customize-cpt',
 		'client-dashboard',
 	);
 
-	if ( isset( $_REQUEST['tab'] ) ) {
-		$tab_slug = sanitize_key( $_REQUEST['tab'] );
-
-		if ( isset( $_REQUEST['projects_post_id'] ) ) {
-			$tab_slug = 'project';
-		}
-
-		if ( Common\cpt_is_client_dashboard( 'knowledge-base' ) ) {
-			$tab_slug = 'knowledge-base';
-		}
-
-		if ( Common\cpt_is_client_dashboard( 'additional-pages' ) ) {
-			$tab_slug = 'additional-page';
-		}
-
-		$body_classes[] = 'client-dashboard-' . $tab_slug;
+	if ( isset( $_REQUEST['projects_post_id'] ) ) {
+		$body_classes[] = 'is-singular-project';
 	}
+
+	$body_classes[] = 'client-dashboard-' . Common\cpt_is_client_dashboard();
 
 	return array_merge( $classes, $body_classes );
 }
