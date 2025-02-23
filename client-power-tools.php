@@ -3,7 +3,7 @@
  * Plugin Name: Client Power Tools
  * Plugin URI:  https://clientpowertools.com
  * Description: Client Power Tools is an easy-to-use client dashboard, project management, and communication portal built for designers, developers, consultants, lawyers, and other professionals.
- * Version:     1.10.3
+ * Version:     1.10.4
  * Author:      Sam Glover
  * Author URI:  https://samglover.net
  * Text Domain: client-power-tools
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /* Constants */
-define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.10.3' );
+define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.10.4' );
 define( 'CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 
@@ -88,10 +88,10 @@ if ( is_admin() ) {
 	if ( ! class_exists( 'WP_List_Table' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php'; // Ensures the WP_List_Table class is available.
 	}
-	require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-clients-table.php';
 
 	require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-admin.php';
 	require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-clients.php';
+	require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/class-client-list-table.php';
 	require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-client.php';
 	require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-client.php';
 
@@ -105,11 +105,11 @@ if ( is_admin() ) {
 
 	if ( get_option( 'cpt_module_projects' ) ) {
 		require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-projects.php';
+		require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/class-project-list-table.php';
 		require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-project-types.php';
+		require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/class-project-types-list-table.php';
 		require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project.php';
 		require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-project.php';
-		require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/class-project-list-table.php';
-		require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/class-project-types-list-table.php';
 	}
 
 	require_once CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-settings.php';
