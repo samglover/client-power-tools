@@ -5,12 +5,26 @@ All notable changes to this project will be documented in this file. The format 
 ### 1.10.4 - 2025-02-??
 
 #### Added
-* Sanitize $_POST variables in `/common/cpt-status-update-request-button.php`.
+* PHP documentation according to the WordPress Coding Standards.
+* New functions in /common/cpt-common.php for retrieving and sanitizing user data and user meta from $_POST:
+  * cpt_get_client_userdata_keys()
+  * cpt_get_sanitized_userdata_from_post()
+  * cpt_get_client_usermeta_keys()
+  * cpt_get_sanitized_usermeta_from_post()
+* Sanitize $_POST variables in /common/cpt-status-update-request-button.php.
 
 #### Changed
-* Rename `cpt_days_since_last_request()` to `cpt_get_days_since_last_request()`, and now it returns false instead of null.
+* Tidied up in general while adding documentation.
+* Rename cpt_days_since_last_request() to cpt_get_days_since_last_request(), and now it returns false instead of null.
 * Clear location before reloading the page on successful login.
-* Refactor and simplify `cpt_is_client_dashboard()`.
+* Refactor and simplify cpt_is_client_dashboard() function.
+* Rename files according to WP Coding Standards:
+  * cpt-clients-table.php -> class-client-list-table.php
+  * cpt-projects-table.php -> class-project-list-table.php
+  * cpt-admin-messages-table.php -> class-project-list-table.php
+  * cpt-project-types-table.php -> class-project-types-list-table.php
+  * cpt-client-manager-table.php -> class-client-manager-list-table.php
+* Replace wp_redirect( $_POST['_wp_http_referer'] ); with wp_safe_redirect( wp_get_referer() ); throughout.
 
 
 ### 1.10.3 - 2025-01-19
