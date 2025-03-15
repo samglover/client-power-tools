@@ -162,11 +162,13 @@ function cpt_new_message_form( $clients_user_id ) {
 					>
 					<p class="description">
 						<?php
-							printf(
+						echo esc_html(
+							sprintf(
 								// Translators: %s is the current user's display name.
-								esc_html__( 'If you leave this field empty the subject line will be "New message from %s".', 'client-power-tools' ),
-								esc_html( cpt_get_display_name( get_current_user_id() ) )
-							);
+								__( 'If you leave this field empty the subject line will be "New message from %s".', 'client-power-tools' ),
+								cpt_get_display_name( get_current_user_id() )
+							)
+						);
 						?>
 					</p>
 				</div>
@@ -217,14 +219,14 @@ function cpt_new_message_form( $clients_user_id ) {
 								</fieldset>
 								<p class="description">
 									<?php
-										printf(
-											wp_kses_post(
-												// translators: %1$s and %2$s are strong tags.
-												__( 'To add or remove emails, use the %1$sEdit Client%2$s button, above.', 'client-power-tools' )
-											),
+									echo wp_kses_post(
+										sprintf(
+											// Translators: %1$s and %2$s are `<strong>` tags.
+											__( 'To add or remove emails, use the %1$sEdit Client%2$s button, above.', 'client-power-tools' ),
 											'<strong>',
 											'</strong>'
-										);
+										),
+									);
 									?>
 								</p>
 							</div>
@@ -324,7 +326,10 @@ function cpt_process_new_message() {
 		 * pretty much impossible to guess.
 		 */
 		if ( is_admin() && isset( $_POST['email_ccs'] ) ) {
-			$email_ccs = implode( "\n", cpt_cleanse_array_of_emails( sanitize_text_field( wp_unslash( $_POST['email_ccs'] ) ) ) );
+			$email_ccs = sanitize_text_field( wp_unslash( $_POST['email_ccs'] ) );
+			if ( is_array( $email_ccs ) ) {
+				$email_ccs = implode( "\n", cpt_cleanse_array_of_emails( $email_ccs ) );
+			}
 		}
 
 		$new_message = array(

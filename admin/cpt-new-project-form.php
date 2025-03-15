@@ -88,8 +88,13 @@ $projects_label = Common\cpt_get_projects_label();
 		<div class="form-field span-2">
 			<label for="project_stage">
 				<?php
-					// Translators: %s is the singular project label.
-					printf( esc_html__( '%s Stage', 'client-power-tools' ), esc_html( $projects_label[0] ) );
+				echo esc_html(
+					sprintf(
+						// Translators: %s is the singular project label.
+						__( '%s Stage', 'client-power-tools' ),
+						$projects_label[0]
+					)
+				);
 				?>
 			</label>
 			<?php
@@ -102,8 +107,13 @@ $projects_label = Common\cpt_get_projects_label();
 		<div class="form-field">
 			<label for="project_status">
 				<?php
-					// Translators: %s is the singular project label.
-					printf( esc_html__( '%s Status', 'client-power-tools' ), esc_html( $projects_label[0] ) );
+				echo esc_html(
+					sprintf(
+						// Translators: %s is the singular project label.
+						__( '%s Status', 'client-power-tools' ),
+						esc_html( $projects_label[0] )
+					)
+				);
 				?>
 			</label>
 			<?php

@@ -56,12 +56,14 @@ $projects_label = Common\cpt_get_projects_label();
 		<div class="form-field">
 			<label for="project_id">
 				<?php
-					printf(
+				echo esc_html(
+					sprintf(
 						// Translators: %s is the singular project label.
-						esc_html__( '%s ID', 'client-power-tools' ),
-						esc_html( $projects_label[0] )
-					);
-					?>
+						__( '%s ID', 'client-power-tools' ),
+						$projects_label[0]
+					)
+				);
+				?>
 			</label>
 			<input 
 				name="project_id" 
@@ -75,12 +77,14 @@ $projects_label = Common\cpt_get_projects_label();
 		<div class="form-field span-3 form-required">
 			<label for="project_name">
 				<?php
-					printf(
+				echo esc_html(
+					sprintf(
 						// Translators: %s is the singular project label.
-						esc_html__( '%s Name', 'client-power-tools' ),
-						esc_html( $projects_label[0] )
-					);
-					?>
+						__( '%s Name', 'client-power-tools' ),
+						$projects_label[0]
+					)
+				);
+				?>
 				<small class="required">(<?php esc_html_e( 'required', 'client-power-tools' ); ?>)</small>
 			</label>
 			<input 
@@ -97,12 +101,14 @@ $projects_label = Common\cpt_get_projects_label();
 		<div class="form-field span-2">
 			<label for="project_type">
 				<?php
-					printf(
+				echo esc_html(
+					sprintf(
 						// Translators: %s is the singular project label.
-						esc_html__( '%s Type', 'client-power-tools' ),
-						esc_html( $projects_label[0] )
-					);
-					?>
+						__( '%s Type', 'client-power-tools' ),
+						$projects_label[0]
+					)
+				);
+				?>
 			</label>
 			<?php
 			$project_type        = get_post_meta( $projects_post_id, 'cpt_project_type', true );
@@ -115,12 +121,14 @@ $projects_label = Common\cpt_get_projects_label();
 		<div class="form-field span-2">
 			<label for="project_stage">
 				<?php
-					printf(
+				echo esc_html(
+					sprintf(
 						// Translators: %s is the singular project label.
-						esc_html__( '%s Stage', 'client-power-tools' ),
-						esc_html( $projects_label[0] )
-					);
-					?>
+						__( '%s Stage', 'client-power-tools' ),
+						$projects_label[0]
+					)
+				);
+				?>
 			</label>
 			<?php
 			$current_project_stage = get_post_meta( $projects_post_id, 'cpt_project_stage', true );
@@ -133,12 +141,14 @@ $projects_label = Common\cpt_get_projects_label();
 		<div class="form-field">
 			<label for="project_status">
 				<?php
-					printf(
+				echo esc_html(
+					sprintf(
 						// Translators: %s is the singular project label.
-						esc_html__( '%s Status', 'client-power-tools' ),
-						esc_html( $projects_label[0] )
-					);
-					?>
+						__( '%s Status', 'client-power-tools' ),
+						$projects_label[0]
+					)
+				);
+				?>
 			</label>
 			<?php echo esc_html( cpt_get_status_select( 'cpt_project_statuses', 'project_status', 'cpt_default_project_status' ) ); ?>
 		</div>
@@ -151,10 +161,12 @@ $projects_label = Common\cpt_get_projects_label();
 			type="submit" 
 			value="
 				<?php
-				printf(
-					// Translators: %s is the singular project label.
-					esc_html__( 'Update %s', 'client-power-tools' ),
-					esc_html( $projects_label[0] )
+				echo esc_html(
+					sprintf(
+						// Translators: %s is the singular project label.
+						__( 'Update %s', 'client-power-tools' ),
+						$projects_label[0]
+					)
 				);
 				?>
 			"

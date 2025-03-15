@@ -75,24 +75,18 @@ function cpt_delete_client_modal( $clients_user_id ) {
 				<h2 style="color: red;"><?php esc_html_e( 'WARNING' ); ?></h2>
 				<p>
 					<?php
-					printf(
-						wp_kses_post(
-							// Translators: %1$s and %2$s are opening and closing `<strong>` tags.
-							__( '%1$sDeleting a client is permanent.%2$s There is no undo. Make sure you have a backup!', 'client-power-tools' )
-						),
-						/* %1$s */ '<strong>',
-						/* %2$s */ '</strong>'
+					echo wp_kses_post(
+						sprintf(
+							// Translators: %1$s and %2$s are `<strong>` tags.
+							__( '%1$sDeleting a client is permanent.%2$s There is no undo. Make sure you have a backup!', 'client-power-tools' ),
+							'<strong>',
+							'</strong>'
+						)
 					);
 					?>
 				</p>
 				<p>
-					<?php
-					printf(
-						wp_kses_post(
-							__( 'Deleting a client will also remove the associated user account, client messages, projects, and other client information.', 'client-power-tools' )
-						)
-					);
-					?>
+					<?php esc_html_e( 'Deleting a client will also remove the associated user account, client messages, projects, and other client information.', 'client-power-tools' ); ?>
 				</p>
 				<?php cpt_delete_client_button( $clients_user_id ); ?>
 				<button class="button wp-element-button cpt-cancel-delete-client">

@@ -67,12 +67,10 @@ function cpt_get_client_dashboard( $user_id = null ) {
 
 	if ( ! is_user_logged_in() ) {
 		return '<p>' . sprintf(
-			wp_kses_post(
-				// translators: %1$s and %2$s are <a> tags for the login link.
-				__( 'Please %1$slog in%2$s to view the client dashboard.', 'client-power-tools' )
-			),
-			/* %1$s */ '<a class="cpt-login-link" href="#">',
-			/* %2$s */ '</a>'
+			// Translators: %1$s and %2$s are `<a>` tags for the login link.
+			__( 'Please %1$slog in%2$s to view the client dashboard.', 'client-power-tools' ),
+			'<a class="cpt-login-link" href="#">',
+			'</a>'
 		) . '</p>';
 	}
 
@@ -337,11 +335,13 @@ function cpt_welcome_message( $clients_first_name ) {
 	<p>
 		<strong>
 			<?php
-				printf(
-					// translators: %s is the client's first name.
-					esc_html__( 'Welcome back, %s!', 'client-power-tools' ),
-					esc_html( $clients_first_name )
-				);
+			echo esc_html(
+				sprintf(
+					// Translators: %s is the client's first name.
+					__( 'Welcome back, %s!', 'client-power-tools' ),
+					$clients_first_name
+				)
+			);
 			?>
 		</strong>
 	</p>

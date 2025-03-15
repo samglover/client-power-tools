@@ -144,8 +144,8 @@ function check_login_code() {
 						'message' => sprintf(
 							// Translators: %1$s is the number of tries. %2$s is the number of tries allowed.
 							__( '%1$s of %2$s tries. Login failed.', 'client-power-tools' ),
-							/* %1$s */ $tries,
-							/* %2$s */ $tries_allowed
+							$tries,
+							$tries_allowed
 						),
 						'tries'   => $tries,
 					)

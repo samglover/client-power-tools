@@ -34,11 +34,13 @@ function cpt_projects() {
 			<p>
 				<a href="<?php echo esc_url( remove_query_arg( 'projects_post_id' ) ); ?>">
 					<?php
-						printf(
+					echo esc_html(
+						sprintf(
 							// Translators: %s is the plural projects label.
-							esc_html__( 'Back to %s', 'client-power-tools' ),
-							esc_html( $projects_label[1] )
-						);
+							__( 'Back to %s', 'client-power-tools' ),
+							$projects_label[1]
+						)
+					);
 					?>
 				</a>
 			</p>
@@ -67,10 +69,12 @@ function cpt_projects() {
 						if ( $project_id ) {
 							echo esc_html( $project_data['project_name'] );
 						} else {
-							printf(
-								// Translators: %s is the plural projects label.
-								esc_html__( 'Error: No such %s.', 'client-power-tools' ),
-								esc_html( strtolower( $projects_label[0] ) )
+							echo esc_html(
+								sprintf(
+									// Translators: %s is the plural projects label.
+									__( 'Error: No such %s.', 'client-power-tools' ),
+									strtolower( $projects_label[0] )
+								)
 							);
 						}
 						?>
@@ -102,22 +106,26 @@ function cpt_projects() {
 					?>
 					<button class="button wp-element-button cpt-click-to-expand">
 						<?php
-							printf(
+						echo esc_html(
+							sprintf(
 								// Translators: %s is the singular project label.
-								esc_html__( 'Add a %s', 'client-power-tools' ),
-								esc_html( $projects_label[0] )
-							);
+								__( 'Add a %s', 'client-power-tools' ),
+								$projects_label[0]
+							)
+						);
 						?>
 					</button>
 					<div class="cpt-this-expands">
 						<div class="form-wrap form-wrap-new_project">
 							<h2>
 								<?php
-									printf(
+								echo esc_html(
+									sprintf(
 										// Translators: %s is the singular project label.
-										esc_html__( 'Add a %s', 'client-power-tools' ),
-										esc_html( $projects_label[0] )
-									);
+										__( 'Add a %s', 'client-power-tools' ),
+										$projects_label[0]
+									)
+								);
 								?>
 							</h2>
 							<?php include CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'; ?>
@@ -128,11 +136,13 @@ function cpt_projects() {
 					?>
 					<p>
 						<?php
+						echo esc_html(
 							sprintf(
 								// Translators: %s is the singular project label.
-								esc_html__( 'In order to create a %s you must add a client.', 'client-power-tools' ),
-								esc_html( strtolower( $projects_label[0] ) )
+								__( 'In order to create a %s you must add a client.', 'client-power-tools' ),
+								strtolower( $projects_label[0] )
 							)
+						);
 						?>
 					</p>
 					<?php

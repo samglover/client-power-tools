@@ -29,8 +29,8 @@ function cpt_project_types() {
 				<div id="cpt-admin-page-title">
 					<h1 id="cpt-page-title">
 						<?php
-						esc_html(
-							printf(
+						echo esc_html(
+							sprintf(
 								// Translators: %s is the singular project label.
 								__( '%s Types', 'client-power-tools' ),
 								$projects_label[0]
@@ -48,8 +48,8 @@ function cpt_project_types() {
 						<div class="form-wrap">
 							<h2>
 								<?php
-								esc_html(
-									printf(
+								echo esc_html(
+									sprintf(
 										// Translators: %s is the singular project label.
 										__( 'Add New %s Type', 'client-power-tools' ),
 										$projects_label[0]
@@ -127,12 +127,10 @@ function cpt_process_new_project_type() {
 		);
 
 		if ( is_wp_error( $new_project_type_stages ) ) {
-			$result .= esc_html(
-				sprintf(
-					// Translators: %s is the error message.
-					__( 'Stages could not be added. Error message: %s', 'client-power-tools' ),
-					$new_project_type_stages->get_error_message()
-				)
+			$result .= sprintf(
+				// Translators: %s is the error message.
+				__( 'Stages could not be added. Error message: %s', 'client-power-tools' ),
+				$new_project_type_stages->get_error_message()
 			);
 		}
 	}
@@ -168,21 +166,17 @@ function cpt_process_edit_project_type() {
 	);
 
 	if ( is_wp_error( $update_project_type ) ) {
-		$result = esc_html(
-			sprintf(
-				// Translators: %1$s is the singular project label. %2$s is the error message.
-				__( '%1$s type could not be updated. Error message: %2$s', 'client-power-tools' ),
-				Common\cpt_get_projects_label( 'singular' ),
-				$new_project_type->get_error_message()
-			)
+		$result = sprintf(
+			// Translators: %1$s is the singular project label. %2$s is the error message.
+			__( '%1$s type could not be updated. Error message: %2$s', 'client-power-tools' ),
+			Common\cpt_get_projects_label( 'singular' ),
+			$new_project_type->get_error_message()
 		);
 	} else {
-		$result = esc_html(
-			sprintf(
-				// Translators: %s is the singular project label.
-				__( '%s type updated.', 'client-power-tools' ),
-				Common\cpt_get_projects_label( 'singular' )
-			)
+		$result = sprintf(
+			// Translators: %s is the singular project label.
+			__( '%s type updated.', 'client-power-tools' ),
+			Common\cpt_get_projects_label( 'singular' )
 		);
 		$project_type_stages = update_term_meta(
 			$project_type_id,
@@ -191,12 +185,10 @@ function cpt_process_edit_project_type() {
 		);
 
 		if ( is_wp_error( $project_type_stages ) ) {
-			$result .= esc_html(
-				sprintf(
-					// Translators: %s is the error message.
-					__( 'Stages could not be updated. Error message: %s', 'client-power-tools' ),
-					$new_project_type_stages->get_error_message()
-				)
+			$result .= sprintf(
+				// Translators: %s is the error message.
+				__( 'Stages could not be updated. Error message: %s', 'client-power-tools' ),
+				$new_project_type_stages->get_error_message()
 			);
 		}
 	}
@@ -232,19 +224,17 @@ function cpt_process_project_type_actions( $action ) {
 			$term_id      = intval( wp_unslash( $_REQUEST['project_type_term_id'] ) );
 			$term_deleted = wp_delete_term( $term_id, 'cpt-project-type' );
 			if ( is_wp_error( $term_deleted ) ) {
-				$result .= esc_html(
-					sprintf(
-						// Translators: 1 is the singular project label, 2 is the error message.
-						__( '%1$s type could not be deleted. Error message: %2$s', 'client-power-tools' ),
-						Common\cpt_get_projects_label( 'singular' ),
-						$term_deleted->get_error_message()
-					)
+				$result .= sprintf(
+					// Translators: %1$s is the singular project label, %2$s is the error message.
+					__( '%1$s type could not be deleted. Error message: %2$s', 'client-power-tools' ),
+					Common\cpt_get_projects_label( 'singular' ),
+					$term_deleted->get_error_message()
 				);
 			} else {
 				$result = sprintf(
 					// Translators: %s is the singular project label.
-					esc_html__( '%s type deleted.', 'client-power-tools' ),
-					esc_html( Common\cpt_get_projects_label( 'singular' ) )
+					__( '%s type deleted.', 'client-power-tools' ),
+					Common\cpt_get_projects_label( 'singular' )
 				);
 			}
 			set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );

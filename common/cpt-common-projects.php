@@ -125,10 +125,12 @@ function cpt_get_projects_list( $clients_user_id = null ) {
 		?>
 		<p>
 			<?php
-			printf(
-				// Translators: %s is the plural projects label.
-				esc_html__( 'No %s found.', 'client-power-tools' ),
-				esc_html( strtolower( $projects_label[1] ) )
+			echo esc_html(
+				sprintf(
+					// Translators: %s is the plural projects label.
+					__( 'No %s found.', 'client-power-tools' ),
+					strtolower( $projects_label[1] )
+				)
 			);
 			?>
 		</p>
@@ -161,11 +163,13 @@ function cpt_get_project( $projects_post_id ) {
 		<a href="<?php echo esc_url( remove_query_arg( 'projects_post_id' ) ); ?>">
 			&lt;
 			<?php
-				printf(
+			echo esc_html(
+				sprintf(
 					// Translators: %s is the plural projects label.
-					esc_html__( 'Back to %s', 'client-power-tools' ),
-					esc_html( $projects_label[1] )
-				);
+					__( 'Back to %s', 'client-power-tools' ),
+					$projects_label[1]
+				)
+			);
 			?>
 		</a>
 	</p>

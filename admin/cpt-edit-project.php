@@ -98,12 +98,10 @@ function cpt_process_project_update() {
 
 	$result = 'Project updated.';
 	if ( is_wp_error( $update_project ) ) {
-		$result = esc_html(
-			sprintf(
-				// Translators: %s is the error message.
-				'Project could not be updated. Error message: %s',
-				$update_project->get_error_message()
-			)
+		$result = sprintf(
+			// Translators: %s is the error message.
+			'Project could not be updated. Error message: %s',
+			$update_project->get_error_message()
 		);
 	}
 	set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
@@ -145,13 +143,13 @@ function cpt_delete_project_button( $projects_post_id ) {
 			type="submit" 
 			value="
 			<?php
-				echo esc_attr(
-					sprintf(
-						// Translators: %s is the singular project label.
-						__( 'Delete this %s', 'client-power-tools' ),
-						Common\cpt_get_projects_label( 'singular' )
-					)
-				);
+			echo esc_attr(
+				sprintf(
+					// Translators: %s is the singular project label.
+					__( 'Delete this %s', 'client-power-tools' ),
+					Common\cpt_get_projects_label( 'singular' )
+				)
+			);
 			?>
 			"
 		>
@@ -180,20 +178,16 @@ function cpt_process_delete_project() {
 	$projects_label   = Common\cpt_get_projects_label( 'singular' );
 
 	if ( $project_deleted ) {
-		$result = wp_kses_post(
-			sprintf(
+		$result = sprintf(
 			// Translators: %s is the singular project label.
-				__( '%s moved to the trash.', 'client-power-tools' ),
-				$projects_label
-			)
+			__( '%s moved to the trash.', 'client-power-tools' ),
+			$projects_label
 		) . cpt_undelete_project_button( $projects_post_id );
 	} else {
-		$result = esc_html(
-			sprintf(
-				// Translators: %s is the singular project label.
-				__( '%s could not be moved to the trash.', 'client-power-tools' ),
-				$projects_label
-			)
+		$result = sprintf(
+			// Translators: %s is the singular project label.
+			__( '%s could not be moved to the trash.', 'client-power-tools' ),
+			$projects_label
 		);
 	}
 
@@ -270,20 +264,16 @@ function cpt_process_undelete_project() {
 	$projects_label    = Common\cpt_get_projects_label( 'singular' );
 
 	if ( ! is_wp_error( $project_undeleted ) ) {
-		$result = esc_html(
-			sprintf(
-				// Translators: %s is the singular project label.
-				__( '%s restored.', 'client-power-tools' ),
-				$projects_label
-			)
+		$result = sprintf(
+			// Translators: %s is the singular project label.
+			__( '%s restored.', 'client-power-tools' ),
+			$projects_label
 		);
 	} else {
-		$result = esc_html(
-			sprintf(
-				// Translators: %s is the singular project label.
-				__( '%s could not be restored.', 'client-power-tools' ),
-				$projects_label
-			)
+		$result = sprintf(
+			// Translators: %s is the singular project label.
+			__( '%s could not be restored.', 'client-power-tools' ),
+			$projects_label
 		);
 	}
 
@@ -354,20 +344,16 @@ function cpt_process_permadelete_project() {
 	$projects_label   = Common\cpt_get_projects_label( 'singular' );
 
 	if ( true === $project_deleted ) {
-		$result = esc_html(
-			sprintf(
-				// Translators: %s is the singular project label.
-				__( '%s deleted.', 'client-power-tools' ),
-				$projects_label
-			)
+		$result = sprintf(
+			// Translators: %s is the singular project label.
+			__( '%s deleted.', 'client-power-tools' ),
+			$projects_label
 		);
 	} else {
-		$result = esc_html(
-			sprintf(
-				// Translators: %s is the singular project label.
-				__( '%s could not be deleted.', 'client-power-tools' ),
-				$projects_label
-			)
+		$result = sprintf(
+			// Translators: %s is the singular project label.
+			__( '%s could not be deleted.', 'client-power-tools' ),
+			$projects_label
 		);
 	}
 

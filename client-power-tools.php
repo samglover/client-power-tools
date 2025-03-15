@@ -174,14 +174,14 @@ function cpt_activate() {
 					<div class="cpt-notice notice notice-error is-dismissible">
 						<p>
 							<?php
-								printf(
-									wp_kses_post(
-										// Translators: %1$s and %2$s are HTML <a> tags for a link to the settings page.
-										__( 'Something went wrong when creating pages. Please select a page from the %1$sSettings page%2$s.', 'client-power-tools' )
-									),
-									/* %1$s */ '<a href="' . esc_url( add_query_arg( 'cpt', 'cpt-settings', admin_url( 'admin.php' ) ) ) . '">',
-									/* %2$s */ '</a>'
-								);
+							echo wp_kses_post(
+								sprintf(
+									// Translators: %1$s and %2$s are `<a>` tags that link to the settings page.
+									__( 'Something went wrong when creating pages. Please select a page from the %1$sSettings page%2$s.', 'client-power-tools' ),
+									'<a href="' . esc_url( add_query_arg( 'cpt', 'cpt-settings', admin_url( 'admin.php' ) ) ) . '">',
+									'</a>'
+								)
+							);
 							?>
 						</p>
 						<p>Error message: <?php echo esc_html( $post->get_error_message() ); ?></p>

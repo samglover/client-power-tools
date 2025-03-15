@@ -59,14 +59,14 @@ function cpt_security_warning() {
 		<div class="cpt-notice notice notice-warning">
 			<p>
 				<?php
-					printf(
-						wp_kses_post(
-							// Translators: %1$s and %2$s are HTML <a> tags for a link to the Client Power Tools website for additional information about this warning.
-							__( 'It doesn\'t look like your website is using SSL (HTTPS). Before using Client Power Tools with your clients, it\'s a good idea to get an SSL certificate for your website and consider additional security measures. %1$sLearn more.%2$s', 'client-power-tools' )
-						),
-						/* %1$s */ '<a href="https://clientpowertools.com/security/?utm_source=cpt_user&utm_medium=cpt_ssl_warning" target="_blank">',
-						/* %2$s */ '</a>'
-					);
+				echo wp_kses_post(
+					sprintf(
+						// Translators: %1$s and %2$s are `<a>` tags for a link to the Client Power Tools website for additional information about this warning.
+						__( 'It doesn\'t look like your website is using SSL (HTTPS). Before using Client Power Tools with your clients, it\'s a good idea to get an SSL certificate for your website and consider additional security measures. %1$sLearn more.%2$s', 'client-power-tools' ),
+						'<a href="https://clientpowertools.com/security/?utm_source=cpt_user&utm_medium=cpt_ssl_warning" target="_blank">',
+						'</a>'
+					)
+				);
 				?>
 			</p>
 		</div>
@@ -87,51 +87,51 @@ function cpt_welcome_message() {
 				<h2><?php esc_html_e( 'Welcome to Client Power Tools!', 'client-power-tools' ); ?></h2>
 				<p style="font-size: 125%;">
 					<?php
-						printf(
-							wp_kses_post(
-								// Translators: %1$s and %2$s are HTML <a> tags for a link to the main Client Power Tools admin page.
-								__( 'You can view and manage your clients here, in the WordPress dashboard. You can add your first client on the %1$sClients page%2$s (if you are an admin).', 'client-power-tools' )
-							),
-							/* %1$s */ '<a href="' . esc_url( add_query_arg( 'page', 'cpt', admin_url( 'admin.php' ) ) ) . '" target="_blank">',
-							/* %2$s */ '</a>'
-						);
+					echo wp_kses_post(
+						sprintf(
+							// Translators: %1$s and %2$s are `<a>` tags for a link to the main Client Power Tools admin page.
+							__( 'You can view and manage your clients here, in the WordPress dashboard. You can add your first client on the %1$sClients page%2$s (if you are an admin).', 'client-power-tools' ),
+							'<a href="' . esc_url( add_query_arg( 'page', 'cpt', admin_url( 'admin.php' ) ) ) . '" target="_blank">',
+							'</a>'
+						)
+					);
 					?>
 				</p>
 				<p style="font-size: 125%;">
 					<?php
-						printf(
-							wp_kses_post(
-								// Translators: %1$s and %2$s are HTML <a> tags for a link to the frontend client dashboard.
-								__( 'Your clients can access their dashboard by visiting %1$sthis page%2$s on the front end of your website (clients don\'t have access to the WordPress admin dashboard). You\'ll probably want to add that page to your navigation menu to make it easy for your clients to find.', 'client-power-tools' )
-							),
-							/* %1$s */ '<a href="' . esc_url( Common\cpt_get_client_dashboard_url() ) . '" target="_blank">',
-							/* %2$s */ '</a>'
-						);
+					echo wp_kses_post(
+						sprintf(
+							// Translators: %1$s and %2$s are `<a>` tags for a link to the frontend client dashboard.
+							__( 'Your clients can access their dashboard by visiting %1$sthis page%2$s on the front end of your website (clients don\'t have access to the WordPress admin dashboard). You\'ll probably want to add that page to your navigation menu to make it easy for your clients to find.', 'client-power-tools' ),
+							'<a href="' . esc_url( Common\cpt_get_client_dashboard_url() ) . '" target="_blank">',
+							'</a>'
+						)
+					);
 					?>
 				</p>
 				<p style="font-size: 125%;">
 					<?php
-						printf(
-							wp_kses_post(
-								// Translators: %1$s is an HTML link to the Client Power Tools website. %2$s and %3$s are HTML <a> tags for a link to the WordPress.org support forum.
-								__( 'You can find options and customizations in the settings, and you can find additional documentation at %1$s. If you need help, please use the %2$sWordPress.org support forum%3$s.', 'client-power-tools' )
-							),
-							/* %1$s */ '<a href="https://clientpowertools.com/documentation/" target="_blank">clientpowertools.com</a>',
-							/* %2$s */ '<a href="https://wordpress.org/support/plugin/client-power-tools/" target="_blank">',
-							/* %3$s */ '</a>'
-						);
+					echo wp_kses_post(
+						sprintf(
+							// Translators: %1$s is a link to the Client Power Tools website. %2$s and %3$s are `<a>` tags for a link to the WordPress.org support forum.
+							__( 'You can find options and customizations in the settings, and you can find additional documentation at %1$s. If you need help, please use the %2$sWordPress.org support forum%3$s.', 'client-power-tools' ),
+							'<a href="https://clientpowertools.com/documentation/" target="_blank">clientpowertools.com</a>',
+							'<a href="https://wordpress.org/support/plugin/client-power-tools/" target="_blank">',
+							'</a>'
+						)
+					);
 					?>
 				</p>
 				<p style="font-size: 125%;">
 					<?php
-						printf(
-							wp_kses_post(
-								// Translators: %1$s and %2$s are HTML <a> tags for a link to the frontend client dashboard.
-								__( 'Please %1$sleave a review on WordPress.org%2$s!', 'client-power-tools' )
-							),
-							/* %1$s */ '<a href="https://wordpress.org/plugins/client-power-tools/#reviews" target="_blank">',
-							/* %2$s */ '</a>'
-						);
+					echo wp_kses_post(
+						sprintf(
+							// Translators: %1$s and %2$s are `<a>` tags for a link to the frontend client dashboard.
+							__( 'Please %1$sleave a review on WordPress.org%2$s!', 'client-power-tools' ),
+							'<a href="https://wordpress.org/plugins/client-power-tools/#reviews" target="_blank">',
+							'</a>'
+						)
+					);
 					?>
 				</p>
 				<p style="font-size: 125%;"><?php esc_html_e( '—Sam', 'client-power-tools' ); ?></p>

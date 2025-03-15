@@ -22,12 +22,14 @@ namespace Client_Power_Tools\Core\Admin;
 	<div class="form-field form-required term-name-wrap">
 		<label for="project_type">
 			<?php
-				printf(
+			echo esc_html(
+				sprintf(
 					// Translators: %s is the singular project label.
-					esc_html__( '%s Type', 'client-power-tools' ),
-					esc_html( $projects_label[0] )
-				);
-				?>
+					__( '%s Type', 'client-power-tools' ),
+					$projects_label[0]
+				)
+			);
+			?>
 			<small class="required">(<?php esc_html_e( 'required', 'client-power-tools' ); ?>)</small>
 		</label>
 		<input 
@@ -41,15 +43,25 @@ namespace Client_Power_Tools\Core\Admin;
 	<div class="form-field">
 		<label for="project_type_stages">
 			<?php
-				// Translators: %s is the singular project label.
-				printf( esc_html__( '%s Type Stages', 'client-power-tools' ), esc_html( $projects_label[0] ) );
+			echo esc_html(
+				sprintf(
+					// Translators: %s is the singular project label.
+					__( '%s Type Stages', 'client-power-tools' ),
+					$projects_label[0]
+				)
+			);
 			?>
 		</label>
 		<textarea name="project_type_stages" class="small-text" rows="5" placeholder="Stage One&#10;Stage Two&#10;Stage Three&#10;&hellip;"></textarea>
 		<p class="description">
 			<?php
-				// Translators: %s is the singular project label.
-				printf( esc_html__( 'Enter one stage per line. These stages will only apply to this %s type.', 'client-power-tools' ), esc_html( strtolower( $projects_label[0] ) ) );
+			echo esc_html(
+				sprintf(
+					// Translators: %s is the singular project label.
+					__( 'Enter one stage per line. These stages will only apply to this %s type.', 'client-power-tools' ),
+					strtolower( $projects_label[0] )
+				)
+			);
 			?>
 		</p>
 	</div>
@@ -61,8 +73,13 @@ namespace Client_Power_Tools\Core\Admin;
 			type="submit" 
 			value="
 				<?php
-				// Translators: %s is the singular project label.
-				printf( esc_html__( 'Add %s Type', 'client-power-tools' ), esc_html( $projects_label[0] ) );
+				echo esc_html(
+					sprintf(
+						// Translators: %s is the singular project label.
+						__( 'Add %s Type', 'client-power-tools' ),
+						esc_html( $projects_label[0] )
+					)
+				);
 				?>
 			"
 		>

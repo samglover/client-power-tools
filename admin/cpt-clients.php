@@ -142,11 +142,13 @@ function cpt_get_client_profile( $clients_user_id ) {
 			<?php if ( get_option( 'cpt_module_projects' ) ) { ?>
 				<button class="button wp-element-button cpt-click-to-expand">
 					<?php
-						printf(
+					echo esc_html(
+						sprintf(
 							// Translators: %s is the singular project label.
-							esc_html__( 'Add a %s', 'client-power-tools' ),
-							esc_html( Common\cpt_get_projects_label( 'singular' ) )
-						);
+							__( 'Add a %s', 'client-power-tools' ),
+							Common\cpt_get_projects_label( 'singular' )
+						)
+					);
 					?>
 				</button>
 			<?php } ?>
@@ -164,11 +166,13 @@ function cpt_get_client_profile( $clients_user_id ) {
 						<?php include CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-client-form.php'; ?>
 						<span id="cpt-delete-client-link">
 							<?php
-								printf(
-									// Ttranslators: %s is the client's name.
-									esc_html__( 'Delete %s', 'client-power-tools' ),
-									esc_html( $client_name )
-								);
+							echo esc_html(
+								sprintf(
+									// Translators: %s is the client's name.
+									__( 'Delete %s', 'client-power-tools' ),
+									$client_names
+								)
+							);
 							?>
 						</span>
 						<?php cpt_delete_client_modal( $clients_user_id ); ?>
@@ -180,11 +184,13 @@ function cpt_get_client_profile( $clients_user_id ) {
 					<div class="form-wrap form-wrap-new_project">
 						<h2>
 							<?php
-								printf(
+							echo esc_html(
+								sprintf(
 									// Translators: %s is the singular project label.
-									esc_html__( 'Add a %s', 'client-power-tools' ),
-									esc_html( Common\cpt_get_projects_label( 'singular' ) )
-								);
+									__( 'Add a %s', 'client-power-tools' ),
+									Common\cpt_get_projects_label( 'singular' )
+								)
+							);
 							?>
 						</h2>
 						<?php include CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'; ?>

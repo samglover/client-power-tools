@@ -77,11 +77,11 @@ function cpt_process_new_client() {
 		}
 		$client_profile_url = Common\cpt_get_client_profile_url( $new_client );
 		$result             = sprintf(
-			// Translators: %1$s is an HTML `<a>` tag. %2$s is the client's name. %3$s is the closing `</a>` tag.
-			wp_kses_post( 'Client created. %1$sView %2$s\'s profile%3$s.', 'client-power-tools' ),
-			/* %1$s */ '<a href="' . $client_profile_url . '">',
-			/* %2$s */ Common\cpt_get_client_name( $new_client ),
-			/* %3$s */ '</a>'
+			// Translators: %1$s is an `<a>` tag that links to the client's profile URL. %2$s is the client's name. %3$s is the closing `</a>` tag.
+			__( 'Client created. %1$sView %2$s\'s profile%3$s.', 'client-power-tools' ),
+			'<a href="' . esc_url( $client_profile_url ) . '">',
+			Common\cpt_get_client_name( $new_client ),
+			'</a>'
 		);
 	}
 

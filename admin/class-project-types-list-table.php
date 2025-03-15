@@ -89,7 +89,11 @@ class Project_Types_List_Table extends \WP_List_Table {
 	 */
 	function get_columns() {
 		$columns = array(
-			'project_type'        => sprintf( __( '%s Type', 'client-power-tools' ), Common\cpt_get_projects_label( 'singular' ) ),
+			'project_type'        => sprintf(
+				// Translators: %s is the singular project label.
+				__( '%s Type', 'client-power-tools' ),
+				Common\cpt_get_projects_label( 'singular' )
+			),
 			'project_type_stages' => __( 'Stages', 'client-power-tools' ),
 			'project_count'       => __( 'Count', 'client-power-tools' ),
 		);
@@ -122,7 +126,11 @@ class Project_Types_List_Table extends \WP_List_Table {
 			return '';
 		}
 		$actions = array(
-			'Edit'   => sprintf( '<button type="button" class="button-link cpt-edit-link" aria-label="%s" aria-expanded="false">%s</button>', $item['project_type'], __( 'Edit', 'client-power-tools' ) ),
+			'Edit'   => sprintf(
+				'<button type="button" class="button-link cpt-edit-link" aria-label="%s" aria-expanded="false">%s</button>',
+				$item['project_type'],
+				__( 'Edit', 'client-power-tools' )
+			),
 			'Delete' => '<a href="' . wp_nonce_url( '?page=cpt-project-types&action=delete&project_type_term_id=' . $item['ID'] ) . '">' . __( 'Delete', 'client-power-tools' ) . '</a>',
 		);
 		return $this->row_actions( $actions );

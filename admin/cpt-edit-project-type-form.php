@@ -20,10 +20,12 @@ use Client_Power_Tools\Core\Common;
 				<td colspan="3">
 					<p class="cpt-section-header">
 						<?php
-						printf(
-							// Translators: %s is the singular project label.
-							esc_html__( 'Edit %s Type', 'client-power-tools' ),
-							esc_html( $projects_label[0] )
+						echo esc_html(
+							sprintf(
+								// Translators: %s is the singular project label.
+								__( 'Edit %s Type', 'client-power-tools' ),
+								$projects_label[0]
+							)
 						);
 						?>
 					</p>
@@ -35,10 +37,12 @@ use Client_Power_Tools\Core\Common;
 					<div class="form-field form-required term-name-wrap">
 						<label for="edit_project_type">
 							<?php
-							printf(
-								// Translators: %s is the singular project label.
-								esc_html__( '%s Type', 'client-power-tools' ),
-								esc_html( $projects_label[0] )
+							echo esc_html(
+								sprintf(
+									// Translators: %s is the singular project label.
+									__( '%s Type', 'client-power-tools' ),
+									$projects_label[0]
+								)
 							);
 							?>
 							<small>(<?php esc_html_e( 'required', 'client-power-tools' ); ?>)</small>	
@@ -54,10 +58,12 @@ use Client_Power_Tools\Core\Common;
 					<div class="form-field">
 						<label for="edit_project_type_stages">
 							<?php
-							printf(
-								// Translators: %s is the singular project label.
-								esc_html__( '%s Type Stages', 'client-power-tools' ),
-								esc_html( $projects_label[0] )
+							echo esc_html(
+								sprintf(
+									// Translators: %s is the singular project label.
+									__( '%s Type Stages', 'client-power-tools' ),
+									$projects_label[0]
+								)
 							);
 							?>
 						</label>
@@ -70,10 +76,12 @@ use Client_Power_Tools\Core\Common;
 						></textarea>
 						<p class="description">
 							<?php
-							printf(
-								// Translators: %s is the singular project label.
-								esc_html__( 'Enter one stage per line. These stages will only apply to this %s type.', 'client-power-tools' ),
-								esc_html( strtolower( $projects_label[0] ) )
+							echo esc_html(
+								sprintf(
+									// Translators: %s is the singular project label.
+									__( 'Enter one stage per line. These stages will only apply to this %s type.', 'client-power-tools' ),
+									strtolower( $projects_label[0] )
+								)
 							);
 							?>
 						</p>

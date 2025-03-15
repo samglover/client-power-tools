@@ -40,23 +40,19 @@ function cpt_process_new_project() {
 	);
 
 	if ( is_wp_error( $new_project ) ) {
-		$result = esc_html(
-			sprintf(
-				'Project could not be created. Error message: %s',
-				$new_client->get_error_message()
-			)
+		$result = sprintf(
+			'Project could not be created. Error message: %s',
+			$new_client->get_error_message()
 		);
 	} else {
-		$project_label = Common\cpt_get_projects_label();
-		$result        = esc_html(
-			sprintf(
-				// Translators: %1$s is the singular project label. %2$s and %4$s are HTML `<a>` tags that link to the project page. %3$s is the lower-case project label.
-				__( '%1$s created. %2$sView %3$s%4$s.', 'client-power-tools' ),
-				/* %1$s */ $project_label,
-				/* %2$s */ '<a href="' . get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id=' . $new_project . '">',
-				/* %3$s */ strtolower( $project_label ),
-				/* %4$s */ '</a>'
-			)
+		$project_label = Common\cpt_get_projects_label( 'singular' );
+		$result        = sprintf(
+			// Translators: %1$s is the singular project label. %2$s and %4$s are `<a>` tags that link to the project page. %3$s is the lower-case singular project label.
+			__( '%1$s created. %2$sView %3$s%4$s.', 'client-power-tools' ),
+			$project_label,
+			'<a href="' . get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id=' . $new_project . '">',
+			strtolower( $project_label ),
+			'</a>'
 		);
 	}
 
