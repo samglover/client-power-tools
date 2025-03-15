@@ -170,7 +170,7 @@ function cpt_get_client_profile( $clients_user_id ) {
 								sprintf(
 									// Translators: %s is the client's name.
 									__( 'Delete %s', 'client-power-tools' ),
-									$client_names
+									$client_name
 								)
 							);
 							?>
