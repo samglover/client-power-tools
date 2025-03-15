@@ -120,6 +120,12 @@ function cpt_delete_project_button( $projects_post_id ) {
 		return;
 	}
 
+	$delete_this_label = sprintf(
+		// Translators: %s is the singular project label.
+		__( 'Delete this %s', 'client-power-tools' ),
+		Common\cpt_get_projects_label( 'singular' )
+	);
+
 	?>
 	<form 
 		id="cpt_delete_project_button" 
@@ -141,17 +147,7 @@ function cpt_delete_project_button( $projects_post_id ) {
 			name="submit" 
 			id="submit" 
 			type="submit" 
-			value="
-			<?php
-			echo esc_attr(
-				sprintf(
-					// Translators: %s is the singular project label.
-					__( 'Delete this %s', 'client-power-tools' ),
-					Common\cpt_get_projects_label( 'singular' )
-				)
-			);
-			?>
-			"
+			value="<?php echo esc_attr( $delete_this_label ); ?>"
 		>
 	</form>
 	<?php
