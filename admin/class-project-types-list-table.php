@@ -119,13 +119,17 @@ class Project_Types_List_Table extends \WP_List_Table {
 	 * @param string $primary Primary column name.
 	 */
 	function handle_row_actions( $item, $column_name, $primary ) {
-		if ( $primary !== $column_name ) {
+		if (
+			$primary !== $column_name
+			|| ! current_user_can( 'cpt_manage_projects' )
+		) {
 			return '';
 		}
 
-		if ( ! current_user_can( 'cpt_manage_projects' ) ) {
-			return '';
-		}
+		$delete_url = wp_nonce_url(
+			'?page=cpt-project-types&action=cpt_delete_project_type&project_type_id=' . $item['ID'],
+			'cpt_delete_project_type'
+		);
 
 		$actions = array(
 			'Edit'   => sprintf(
@@ -133,7 +137,7 @@ class Project_Types_List_Table extends \WP_List_Table {
 				$item['project_type'],
 				__( 'Edit', 'client-power-tools' )
 			),
-			'Delete' => '<a href="' . wp_nonce_url( '?page=cpt-project-types&action=delete&project_type_term_id=' . $item['ID'] ) . '">' . __( 'Delete', 'client-power-tools' ) . '</a>',
+			'Delete' => '<a href="' . $delete_url . '">' . __( 'Delete', 'client-power-tools' ) . '</a>',
 		);
 
 		return $this->row_actions( $actions );
