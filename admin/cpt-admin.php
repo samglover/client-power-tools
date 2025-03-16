@@ -12,42 +12,6 @@ namespace Client_Power_Tools\Core\Admin;
 
 use Client_Power_Tools\Core\Common;
 
-add_action( 'admin_init', __NAMESPACE__ . '\cpt_admin_actions' );
-/**
- * Admin actions
- */
-function cpt_admin_actions() {
-	if (
-		! isset( $_REQUEST['action'] ) ||
-		! isset( $_REQUEST['page'] )
-	) {
-		return;
-	}
-
-	if ( ! isset( $_REQUEST['_wpnonce'] ) ) {
-		exit( esc_html__( 'Missing nonce.', 'client-power-tools' ) );
-	}
-
-	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) ) ) {
-		exit( esc_html__( 'Invalid nonce.', 'client-power-tools' ) );
-	}
-
-	$page = sanitize_text_field( wp_unslash( $_REQUEST['page'] ) );
-	if ( ! str_starts_with( $page, 'cpt-' ) ) {
-		return;
-	}
-
-	switch ( $page ) {
-		case 'cpt-project-types':
-			$action = sanitize_key( $_REQUEST['action'] );
-			cpt_process_project_type_actions( $action );
-			break;
-		default:
-			exit( esc_html__( 'Unknown page.', 'client-power-tools' ) );
-	}
-}
-
-
 add_action( 'admin_notices', __NAMESPACE__ . '\cpt_security_warning', 1 );
 /**
  * Security warning for websites that are not using SSL (HTTPS).
