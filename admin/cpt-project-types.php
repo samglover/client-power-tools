@@ -15,8 +15,6 @@ use Client_Power_Tools\Core\Common;
 add_action( 'admin_init', __NAMESPACE__ . '\cpt_process_project_type_actions' );
 /**
  * Process project type actions.
- *
- * @param string $action The action slug.
  */
 function cpt_process_project_type_actions() {
 	if (
@@ -46,15 +44,13 @@ function cpt_process_project_type_actions() {
 		exit( esc_html__( 'Invalid nonce.', 'client-power-tools' ) );
 	}
 
-	$result = '';
-
 	switch ( $action ) {
 		case 'cpt_delete_project_type':
 			$project_type_id      = intval( wp_unslash( $_REQUEST['project_type_id'] ) );
 			$project_type_deleted = wp_delete_term( $project_type_id, 'cpt-project-type' );
 
 			if ( is_wp_error( $project_type_deleted ) ) {
-				$result .= sprintf(
+				$result = sprintf(
 					// Translators: %1$s is the singular project label, %2$s is the error message.
 					__( '%1$s type could not be deleted. Error message: %2$s', 'client-power-tools' ),
 					Common\cpt_get_projects_label( 'singular' ),
@@ -67,8 +63,15 @@ function cpt_process_project_type_actions() {
 					Common\cpt_get_projects_label( 'singular' )
 				);
 			}
-			set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
+
 			break;
+
+		default:
+			$result = __( 'Invalid action.', 'client-power-tools' );
+	}
+
+	if ( $result ) {
+		set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
 	}
 
 	$redirect = wp_safe_redirect( get_admin_url( null, 'admin.php?page=' . $page ) );
