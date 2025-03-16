@@ -1,7 +1,16 @@
 <?php
-	namespace Client_Power_Tools\Core\Admin;
+/**
+ * Edit client form
+ *
+ * @file       cpt-edit-client-form.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Admin
+ * @since      1.4.11
+ */
 
-	use Client_Power_Tools\Core\Common;
+namespace Client_Power_Tools\Core\Admin;
+
+use Client_Power_Tools\Core\Common;
 ?>
 
 <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST" autocapitalize="none" autocorrect="off" autocomplete="off">
@@ -104,11 +113,11 @@
 				<?php esc_html_e( 'Email Addresses to CC When Sending Messages', 'client-power-tools' ); ?>
 			</label>
 			<textarea 
-				name="email_ccs" 
+				name="email_ccs"
 				id="email_ccs" 
 				class="regular-text" 
 				rows="3" type="text"
-			><?php echo esc_html( $client_data['email_ccs'] ); ?></textarea>
+			><?php echo esc_textarea( $client_data['email_ccs'] ); ?></textarea>
 			<p class="description"><?php esc_html_e( 'Enter one email address per line.', 'client-power-tools' ); ?></p>
 		</div>
 	</div>

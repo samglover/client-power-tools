@@ -1,10 +1,27 @@
 <?php
+/**
+ * Project list table
+ *
+ * @file       class-project-list-table.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Admin
+ * @since      1.6.5
+ * @since      1.10.4 File renamed from cpt-projects-table.php to class-project-list-table.php.
+ */
 
 namespace Client_Power_Tools\Core\Admin;
 
 use Client_Power_Tools\Core\Common;
 
+/**
+ * List of projects
+ *
+ * @see WP_List_Table
+ */
 class Project_List_Table extends \WP_List_Table {
+	/**
+	 * Construct
+	 */
 	function __construct() {
 		global $status, $page;
 		parent::__construct(
@@ -17,11 +34,11 @@ class Project_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Column Default
+	 * Column default
 	 *
-	 * @param array $item A singular item (one full row's worth of data)
-	 * @param array $column_name The name/slug of the column to be processed
-	 * @return string Text or HTML to be placed inside the column <td>
+	 * @param array $item A singular item (one full row's worth of data).
+	 * @param array $column_name The name/slug of the column to be processed.
+	 * @return string Text or HTML to be placed inside the column <td>.
 	 */
 	function column_default( $item, $column_name ) {
 		return $item[ $column_name ];
@@ -31,7 +48,7 @@ class Project_List_Table extends \WP_List_Table {
 	 * Checkboxes
 	 *
 	 * @see WP_List_Table::::single_row_columns()
-	 * @param array $item A singular item (one full row's worth of data)
+	 * @param array $item A singular item (one full row's worth of data).
 	 * @return string Text to be placed inside the column <td>
 	 */
 	function column_cb( $item ) {
@@ -43,7 +60,9 @@ class Project_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Project Column Method
+	 * Project column method
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_project( $item ) {
 		$url = admin_url( 'admin.php?page=cpt-projects' );
@@ -51,7 +70,9 @@ class Project_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Client Column Method
+	 * Client column method
+	 *
+	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_client_name( $item ) {
 		return sprintf(
@@ -61,9 +82,8 @@ class Project_List_Table extends \WP_List_Table {
 		);
 	}
 
-
 	/**
-	 * Get Columns
+	 * Get columns
 	 *
 	 * @see WP_List_Table::::single_row_columns()
 	 * @return array An associative array containing column information:
@@ -83,22 +103,22 @@ class Project_List_Table extends \WP_List_Table {
 
 
 	/**
-	 * Sortable Columns
+	 * Sortable columns
 	 */
 	function get_sortable_columns() {
 		$sortable_columns = array(
 			'project'    => array( 'title', true ),
 			'project_id' => array( 'project_id', true ),
-			// 'project_type' => ['project_type', true],
-			// 'client_name' => ['client_name', false],
 		);
 		return $sortable_columns;
 	}
 
-
+	/**
+	 * Get views
+	 */
 	function get_views() {
 		$count_projects = wp_count_posts( $post_type = 'cpt_project' );
-		$current_status = isset( $_REQUEST['project_status'] ) ? sanitize_text_field( urldecode( $_REQUEST['project_status'] ) ) : 'all';
+		$current_status = isset( $_REQUEST['project_status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['project_status'] ) ) : 'all';
 		$views          = array();
 
 		$params = array( 'All' );
@@ -146,32 +166,28 @@ class Project_List_Table extends \WP_List_Table {
 
 
 	/**
-	 * Prepare Data for Display
+	 * Prepare data for display
 	 */
 	function prepare_items() {
-		/**
-		 * Column Headers
-		 */
-		$columns  = $this->get_columns();
-		$hidden   = array();
-		$sortable = $this->get_sortable_columns();
-
+		/* Column headers */
+		$columns               = $this->get_columns();
+		$hidden                = array();
+		$sortable              = $this->get_sortable_columns();
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
-		/**
-		 * Query Projects
-		 */
 		$args = array(
 			'orderby'        => isset( $_REQUEST['orderby'] ) ? sanitize_key( $_REQUEST['orderby'] ) : 'title',
 			'order'          => isset( $_REQUEST['order'] ) ? sanitize_key( $_REQUEST['order'] ) : 'ASC',
 			'post_type'      => 'cpt_project',
 			'posts_per_page' => -1,
 		);
+
 		if ( isset( $_REQUEST['post_status'] ) ) {
 			$args['post_status'] = sanitize_key( $_REQUEST['post_status'] );
 		}
-		$projects = new \WP_Query( $args );
+
 		$data     = array();
+		$projects = new \WP_Query( $args );
 
 		if ( $projects->have_posts() ) :
 			while ( $projects->have_posts() ) :
@@ -193,7 +209,7 @@ class Project_List_Table extends \WP_List_Table {
 
 		// Filters the data set.
 		if ( isset( $_REQUEST['project_status'] ) ) {
-			$project_status_filter = sanitize_text_field( urldecode( $_REQUEST['project_status'] ) );
+			$project_status_filter = sanitize_text_field( wp_unslash( $_REQUEST['project_status'] ) );
 			if ( $project_status_filter ) {
 				foreach ( $data as $i => $project ) {
 					if ( $project['project_status'] !== $project_status_filter ) {
@@ -204,13 +220,21 @@ class Project_List_Table extends \WP_List_Table {
 		}
 
 		// Sorts the data set.
-		$orderby = isset( $_REQUEST['orderby'] ) ? sanitize_key( $_REQUEST['orderby'] ) : 'project_id';
-		$order   = isset( $_REQUEST['order'] ) ? sanitize_key( $_REQUEST['order'] ) : 'ASC';
-		$data    = wp_list_sort( $data, $orderby, $order );
+		if ( isset( $_REQUEST['orderby'] ) ) {
+			$orderby = sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) );
+		} else {
+			$orderby = 'project_id';
+		}
 
-		/**
-		 * Pagination
-		 */
+		if ( isset( $_REQUEST['order'] ) ) {
+			$order = sanitize_text_field( wp_unslash( $_REQUEST['order'] ) );
+		} else {
+			$order = 'ASC';
+		}
+
+		$data = wp_list_sort( $data, $orderby, $order );
+
+		/* Pagination */
 		$total_items  = count( $data );
 		$per_page     = 25;
 		$current_page = $this->get_pagenum();
@@ -224,10 +248,6 @@ class Project_List_Table extends \WP_List_Table {
 			)
 		);
 
-		/**
-		 * $this->items contains the data that will actually be displayed on the
-		 * current page.
-		 */
 		$this->items = $data;
 	}
 }

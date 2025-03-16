@@ -1,10 +1,21 @@
 <?php
+/**
+ * Client Power Tools settings page
+ *
+ * @file       cpt-settings.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Admin
+ * @since      1.0.0
+ */
 
 namespace Client_Power_Tools\Core\Admin;
 
 use Client_Power_Tools\Core\Common;
 use Client_Power_Tools\Core\Frontend;
 
+/**
+ * Adds the Clients / Settings options page
+ */
 function cpt_settings() {
 	if ( ! current_user_can( 'cpt_manage_settings' ) ) {
 		wp_die(
@@ -24,11 +35,18 @@ function cpt_settings() {
 			</div>
 			<hr class="wp-header-end">
 
-			<?php if ( isset( $_REQUEST['settings-updated'] ) && $_REQUEST['settings-updated'] == true ) { ?>
+			<?php
+			if (
+				isset( $_REQUEST['settings-updated'] )
+				&& true === $_REQUEST['settings-updated']
+			) {
+				?>
 				<div class="cpt-notice notice notice-success is-dismissible">
 					<p><?php esc_html_e( 'Settings updated!', 'client-power-tools' ); ?></p>
 				</div>
-			<?php } ?>
+				<?php
+			}
+			?>
 
 			<form method="POST" action="options.php">
 				<?php settings_fields( 'cpt-settings' ); ?>
@@ -40,8 +58,10 @@ function cpt_settings() {
 }
 
 
-// Client Dashboard
 add_action( 'admin_init', __NAMESPACE__ . '\cpt_general_settings_init' );
+/**
+ * Adds the General Settings section and fields.
+ */
 function cpt_general_settings_init() {
 	add_settings_section(
 		'cpt-general-settings',
@@ -106,10 +126,15 @@ function cpt_general_settings_init() {
 }
 
 
+/**
+ * Outputs the General Settings header (empty).
+ */
 function cpt_general_settings_section() {
 }
 
-
+/**
+ * Client Dashboard Page
+ */
 function cpt_client_dashboard_page_selection() {
 	$page_query = new \WP_Query(
 		array(
@@ -123,19 +148,18 @@ function cpt_client_dashboard_page_selection() {
 		?>
 			<select name="cpt_client_dashboard_page_selection">
 				<?php $selected = get_option( 'cpt_client_dashboard_page_selection' ); ?>
-
-				<?php
-				while ( $page_query->have_posts() ) :
+				<?php while ( $page_query->have_posts() ) : ?>
+					<?php
 					$page_query->the_post();
+					$page_id = get_the_ID();
 					?>
-					<?php $page_id = get_the_ID(); ?>
 					<option 
 						value="<?php echo esc_attr( $page_id ); ?>"
 						<?php selected( $selected, $page_id ); ?>
 					>
 						<?php the_title(); ?>
 					</option>
-				<?php endwhile; ?>
+					<?php endwhile; ?>
 			</select>
 
 			<p class="description">
@@ -155,6 +179,9 @@ function cpt_client_dashboard_page_selection() {
 	endif;
 }
 
+/**
+ * Additional Pages
+ */
 function cpt_client_dashboard_addl_pages() {
 	?>
 		<input 
@@ -169,6 +196,9 @@ function cpt_client_dashboard_addl_pages() {
 	<?php
 }
 
+/**
+ * Include Child Pages?
+ */
 function cpt_client_dashboard_addl_pages_children() {
 	?>
 		<fieldset>
@@ -180,11 +210,16 @@ function cpt_client_dashboard_addl_pages_children() {
 	<?php
 }
 
+/**
+ * Default Client Manager
+ */
 function cpt_default_client_manager() {
 	echo esc_html( cpt_get_client_manager_select( 'cpt_default_client_manager', get_option( 'cpt_default_client_manager' ) ) );
 }
 
-
+/**
+ * Client Statuses
+ */
 function cpt_client_statuses() {
 	$statuses_array = explode( "\n", get_option( 'cpt_client_statuses' ) );
 	ob_start();
@@ -201,23 +236,25 @@ function cpt_client_statuses() {
 			name="cpt_client_statuses" 
 			class="small-text" 
 			rows="5"
-		><?php echo esc_html( $statuses ); ?></textarea>
+		><?php echo esc_textarea( $statuses ); ?></textarea>
 		<p class="description">
-			<?php esc_html_e( 'Enter one status per line.', 'client-power-tools' ); ?>
+			<?php echo esc_textarea( 'Enter one status per line.', 'client-power-tools' ); ?>
 		</p>
 	<?php
 }
 
-
+/**
+ * Default New Client Status
+ */
 function cpt_default_client_status() {
 	echo esc_html( cpt_get_status_select( 'cpt_client_statuses', 'cpt_default_client_status' ) );
 }
 
 
-/**
- * New Client Email Settings
- */
 add_action( 'admin_init', __NAMESPACE__ . '\cpt_new_client_email_settings_init' );
+/**
+ * Adds the Client Account Activation Email section and fields.
+ */
 function cpt_new_client_email_settings_init() {
 	add_settings_section(
 		'cpt-new-client-email-settings',
@@ -245,7 +282,9 @@ function cpt_new_client_email_settings_init() {
 	);
 }
 
-
+/**
+ * Outputs the Client Account Activation Email header.
+ */
 function cpt_new_client_email_section() {
 	?>
 		<p>
@@ -254,6 +293,9 @@ function cpt_new_client_email_section() {
 	<?php
 }
 
+/**
+ * Subject Line
+ */
 function cpt_new_client_email_subject_line() {
 	?>
 		<input 
@@ -267,22 +309,26 @@ function cpt_new_client_email_subject_line() {
 	<?php
 }
 
+/**
+ * Message Body
+ */
 function cpt_new_client_email_message_body() {
 	?>
 		<textarea 
 			name="cpt_new_client_email_message_body" 
 			class="large-text" 
 			rows="5"
-		><?php echo esc_html( get_option( 'cpt_new_client_email_message_body' ) ); ?></textarea>
+		><?php echo esc_textarea( get_option( 'cpt_new_client_email_message_body' ) ); ?></textarea>
 		<p class="description">
 			<?php esc_html_e( 'New users will be sent their username and an account activation link along with any additional message you choose to add here.', 'client-power-tools' ); ?>
 		</p>
 	<?php
 }
 
-
-// Status Update Request Button settings
 add_action( 'admin_init', __NAMESPACE__ . '\cpt_status_update_request_button_settings_init' );
+/**
+ * Adds the Status Update Request Button section and fields.
+ */
 function cpt_status_update_request_button_settings_init() {
 	add_settings_section(
 		'cpt-status-update-request-button-settings',
@@ -321,11 +367,16 @@ function cpt_status_update_request_button_settings_init() {
 	}
 }
 
-
+/**
+ * Outputs the Status Update Request Button header.
+ */
 function cpt_status_update_request_button_section() {
 	esc_html_e( 'The status update request button makes it easy for clients to prompt you for a status update—but only as frequently as you specify.', 'client-power-tools' );
 }
 
+/**
+ * Enable [the status update request button]
+ */
 function cpt_module_status_update_req_button() {
 	?>
 		<fieldset>
@@ -343,6 +394,9 @@ function cpt_module_status_update_req_button() {
 	<?php
 }
 
+/**
+ * Status Update Request Frequency
+ */
 function cpt_status_update_req_freq() {
 	?>
 		<input 
@@ -355,19 +409,22 @@ function cpt_status_update_req_freq() {
 		> <?php esc_html_e( 'days', 'client-power-tools' ); ?>
 		<p class="description">
 			<?php
-				printf(
-					wp_kses_post(
-						// Translators: %1$s and %2$s are <strong> tags.
-						esc_html__( 'Enter how frequently you want to allow your clients to request a status update using the %1$sRequest Status Update%2$s button on their client dashboard.', 'client-power-tools' )
-					),
-					/* %1$s */ '<strong>',
-					/* %2$s */ '</strong>'
+				echo wp_kses_post(
+					sprintf(
+						// Translators: %1$s and %2$s are `<strong>` tags.
+						__( 'Enter how frequently you want to allow your clients to request a status update using the %1$sRequest Status Update%2$s button on their client dashboard.', 'client-power-tools' ),
+						'<strong>',
+						'</strong>'
+					)
 				);
 			?>
 		</p>
 	<?php
 }
 
+/**
+ * Additional Status Update Request Notification Email
+ */
 function cpt_status_update_req_notice_email() {
 	?>
 		<input 
@@ -382,11 +439,10 @@ function cpt_status_update_req_notice_email() {
 	<?php
 }
 
-
-/**
- * Client Messages Settings
- */
 add_action( 'admin_init', __NAMESPACE__ . '\cpt_client_messaging_settings_init' );
+/**
+ * Adds the Client Messages section and fields.
+ */
 function cpt_client_messaging_settings_init() {
 	add_settings_section(
 		'cpt-client-messaging-settings',
@@ -416,12 +472,16 @@ function cpt_client_messaging_settings_init() {
 	}
 }
 
-
+/**
+ * Outputs the Messages section header.
+ */
 function cpt_client_messaging_section() {
 	esc_html_e( 'Messages lets you keep all your client communications in one place so nothing gets lost. You can customize whether clients receive a notice of new messages or the full message.', 'client-power-tools' );
 }
 
-
+/**
+ * Enable [messages]
+ */
 function cpt_module_messaging() {
 	?>
 		<fieldset>
@@ -439,7 +499,9 @@ function cpt_module_messaging() {
 	<?php
 }
 
-
+/**
+ * Email Notification Content
+ */
 function cpt_send_message_content() {
 	$send_message_content = get_option( 'cpt_send_message_content' );
 	?>
@@ -461,11 +523,10 @@ function cpt_send_message_content() {
 	<?php
 }
 
-
-/**
- * Projects/Matters
- */
 add_action( 'admin_init', __NAMESPACE__ . '\cpt_projects_settings_init' );
+/**
+ * Adds the Projects & Stages section and fields.
+ */
 function cpt_projects_settings_init() {
 	add_settings_section(
 		'cpt-projects-settings',
@@ -474,7 +535,6 @@ function cpt_projects_settings_init() {
 		'cpt-settings',
 	);
 
-	// Enable Projects
 	register_setting( 'cpt-settings', 'cpt_module_projects', 'absint' );
 	add_settings_field(
 		'cpt_module_projects',
@@ -523,11 +583,16 @@ function cpt_projects_settings_init() {
 	}
 }
 
-
+/**
+ * Outputs the Projects & Stages section header.
+ */
 function cpt_projects_section() {
 	esc_html_e( 'Projects can be assigned to clients, and each client may have multiple projects. You can create multiple project types, and give each project type a set of stages.', 'client-power-tools' );
 }
 
+/**
+ * Enable [projects]
+ */
 function cpt_module_projects() {
 	?>
 		<fieldset>
@@ -546,6 +611,9 @@ function cpt_module_projects() {
 }
 
 if ( get_option( 'cpt_module_projects' ) ) {
+	/**
+	 * Projects Label
+	 */
 	function cpt_projects_label() {
 		?>
 			<p class="description">
@@ -580,7 +648,9 @@ if ( get_option( 'cpt_module_projects' ) ) {
 		<?php
 	}
 
-
+	/**
+	 * Project Statuses
+	 */
 	function cpt_project_statuses() {
 		$statuses_array = explode( "\n", get_option( 'cpt_project_statuses' ) );
 		ob_start();
@@ -597,27 +667,32 @@ if ( get_option( 'cpt_module_projects' ) ) {
 				name="cpt_project_statuses" 
 				class="small-text" 
 				rows="5"
-			><?php echo esc_html( $statuses ); ?></textarea>
+			><?php echo esc_textarea( $statuses ); ?></textarea>
 			<p class="description">
 				<?php esc_html_e( 'Enter one status per line. Statuses apply to all project types.', 'client-power-tools' ); ?>
 			</p>
 		<?php
 	}
 
-
+	/**
+	 * Default Project Status
+	 */
 	function cpt_default_project_status() {
 		echo esc_html( cpt_get_status_select( 'cpt_project_statuses', 'cpt_default_project_status' ) );
 	}
 
+	/**
+	 * Default Project Type
+	 */
 	function cpt_default_project_type() {
 		echo esc_html( cpt_get_project_type_select( 'cpt_default_project_type' ) );
 	}
 }
 
-/**
- * Knowledge Base
- */
 add_action( 'admin_init', __NAMESPACE__ . '\cpt_knowledge_base_settings_init' );
+/**
+ * Adds the Knowledge Base section and fields.
+ */
 function cpt_knowledge_base_settings_init() {
 	add_settings_section(
 		'cpt-knowledge-base-settings',
@@ -656,12 +731,16 @@ function cpt_knowledge_base_settings_init() {
 	}
 }
 
-
+/**
+ * Outputs the Knowledge Base section header.
+ */
 function cpt_knowledge_base_section() {
 	esc_html_e( 'The knowledge base is a restricted page you can use to share information and resources with your clients.', 'client-power-tools' );
 }
 
-
+/**
+ * Enable [knowledge base]
+ */
 function cpt_module_knowledge_base() {
 	?>
 		<fieldset>
@@ -679,6 +758,9 @@ function cpt_module_knowledge_base() {
 	<?php
 }
 
+/**
+ * Breadcrumbs
+ */
 function cpt_show_knowledge_base_breadcrumbs() {
 	?>
 		<fieldset>
@@ -696,7 +778,9 @@ function cpt_show_knowledge_base_breadcrumbs() {
 	<?php
 }
 
-
+/**
+ * Knowledge Base Page
+ */
 function cpt_knowledge_base_page_selection() {
 	$page_query = new \WP_Query(
 		array(

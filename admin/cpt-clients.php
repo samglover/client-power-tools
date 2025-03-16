@@ -1,9 +1,20 @@
 <?php
+/**
+ * Admin clients page
+ *
+ * @file       cpt-clients.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Admin
+ * @since      1.0.0
+ */
 
 namespace Client_Power_Tools\Core\Admin;
 
 use Client_Power_Tools\Core\Common;
 
+/**
+ * Outputs the clients page
+ */
 function cpt_clients() {
 	if ( ! current_user_can( 'cpt_view_clients' ) ) {
 		wp_die( '<p>' . esc_html__( 'Sorry, you are not allowed to access this page.', 'client-power-tools' ) . '</p>', 403 );
@@ -13,13 +24,12 @@ function cpt_clients() {
 			<?php if ( isset( $_REQUEST['user_id'] ) ) { ?>
 				<p>
 					<a href="<?php echo esc_url( remove_query_arg( 'user_id' ) ); ?>">
-						&lt;
 						<?php esc_html_e( 'Back to Clients', 'client-power-tools' ); ?>
 					</a>
 				</p>
 			<?php } ?>
 			<header id="cpt-admin-header">
-			<img class="cpt-logo" src="<?php echo esc_url( CLIENT_POWER_TOOLS_DIR_URL ); ?>assets/images/cpt-logo.png" alt="Client Power Tools" />
+				<img class="cpt-logo" src="<?php echo esc_url( CLIENT_POWER_TOOLS_DIR_URL ); ?>assets/images/cpt-logo.png" alt="Client Power Tools" />
 				<div id="cpt-admin-page-title">
 					<?php if ( ! isset( $_REQUEST['user_id'] ) ) { ?>
 						<h1 id="cpt-page-title">
@@ -50,7 +60,12 @@ function cpt_clients() {
 								<span style="color:silver">(<?php echo esc_html( $client_id ); ?>)</span>
 							<?php } ?>
 						</h1>
-						<?php if ( isset( $client_data['manager_id'] ) && ! empty( $client_data['manager_id'] ) ) { ?>
+						<?php
+						if (
+							isset( $client_data['manager_id'] )
+							&& ! empty( $client_data['manager_id'] )
+						) {
+							?>
 							<p id="cpt-client-manager">
 								<?php
 								if ( get_current_user_id() === $client_data['manager_id'] ) {
@@ -60,7 +75,9 @@ function cpt_clients() {
 								}
 								?>
 							</p>
-						<?php } ?>
+							<?php
+						}
+						?>
 					<?php } ?>
 				</div>
 			</header>
@@ -89,7 +106,9 @@ function cpt_clients() {
 	<?php
 }
 
-
+/**
+ * Outputs the list of clients.
+ */
 function cpt_client_list() {
 	$client_list = new Client_List_Table();
 	$client_list->prepare_items();
@@ -101,11 +120,16 @@ function cpt_client_list() {
 	<?php
 }
 
-
+/**
+ * Outputs a client's profile page.
+ *
+ * @param int $clients_user_id Client's user ID.
+ */
 function cpt_get_client_profile( $clients_user_id ) {
 	if ( ! $clients_user_id ) {
 		return;
 	}
+
 	$client_data = Common\cpt_get_client_data( $clients_user_id );
 	$client_name = Common\cpt_get_client_name( $clients_user_id );
 	?>
@@ -118,11 +142,13 @@ function cpt_get_client_profile( $clients_user_id ) {
 			<?php if ( get_option( 'cpt_module_projects' ) ) { ?>
 				<button class="button wp-element-button cpt-click-to-expand">
 					<?php
-						printf(
-							// translators: %s is the projects label.
-							esc_html__( 'Add a %s', 'client-power-tools' ),
-							esc_html( Common\cpt_get_projects_label( 'singular' ) )
-						);
+					echo esc_html(
+						sprintf(
+							// Translators: %s is the singular project label.
+							__( 'Add a %s', 'client-power-tools' ),
+							Common\cpt_get_projects_label( 'singular' )
+						)
+					);
 					?>
 				</button>
 			<?php } ?>
@@ -140,11 +166,13 @@ function cpt_get_client_profile( $clients_user_id ) {
 						<?php include CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-edit-client-form.php'; ?>
 						<span id="cpt-delete-client-link">
 							<?php
-								printf(
-									// translators: %s is the client's name.
-									esc_html__( 'Delete %s', 'client-power-tools' ),
-									esc_html( $client_name )
-								);
+							echo esc_html(
+								sprintf(
+									// Translators: %s is the client's name.
+									__( 'Delete %s', 'client-power-tools' ),
+									$client_name
+								)
+							);
 							?>
 						</span>
 						<?php cpt_delete_client_modal( $clients_user_id ); ?>
@@ -156,11 +184,13 @@ function cpt_get_client_profile( $clients_user_id ) {
 					<div class="form-wrap form-wrap-new_project">
 						<h2>
 							<?php
-								printf(
-									// translators: %s is the projects label.
-									esc_html__( 'Add a %s', 'client-power-tools' ),
-									esc_html( Common\cpt_get_projects_label( 'singular' ) )
-								);
+							echo esc_html(
+								sprintf(
+									// Translators: %s is the singular project label.
+									__( 'Add a %s', 'client-power-tools' ),
+									Common\cpt_get_projects_label( 'singular' )
+								)
+							);
 							?>
 						</h2>
 						<?php include CLIENT_POWER_TOOLS_DIR_PATH . 'admin/cpt-new-project-form.php'; ?>

@@ -1,10 +1,21 @@
 <?php
+/**
+ * Admin functions
+ *
+ * @file       cpt-admin.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Admin
+ * @since      1.0.0
+ */
 
 namespace Client_Power_Tools\Core\Admin;
 
 use Client_Power_Tools\Core\Common;
 
 add_action( 'admin_init', __NAMESPACE__ . '\cpt_admin_actions' );
+/**
+ * Admin actions
+ */
 function cpt_admin_actions() {
 	if (
 		! isset( $_REQUEST['action'] ) ||
@@ -13,15 +24,15 @@ function cpt_admin_actions() {
 		return;
 	}
 
-	if ( ! $_REQUEST['_wpnonce'] ) {
+	if ( ! isset( $_REQUEST['_wpnonce'] ) ) {
 		exit( esc_html__( 'Missing nonce.', 'client-power-tools' ) );
 	}
 
-	if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'] ) ) {
+	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) ) ) {
 		exit( esc_html__( 'Invalid nonce.', 'client-power-tools' ) );
 	}
 
-	$page = sanitize_key( $_REQUEST['page'] );
+	$page = sanitize_text_field( wp_unslash( $_REQUEST['page'] ) );
 	if ( ! str_starts_with( $page, 'cpt-' ) ) {
 		return;
 	}
@@ -38,6 +49,9 @@ function cpt_admin_actions() {
 
 
 add_action( 'admin_notices', __NAMESPACE__ . '\cpt_security_warning', 1 );
+/**
+ * Security warning for websites that are not using SSL (HTTPS).
+ */
 function cpt_security_warning() {
 	global $pagenow;
 	if ( ! is_ssl() && cpt_is_cpt_admin_page() ) {
@@ -45,14 +59,14 @@ function cpt_security_warning() {
 		<div class="cpt-notice notice notice-warning">
 			<p>
 				<?php
-					printf(
-						wp_kses_post(
-							// Translators: %1$s and %2$s are HTML <a> tags for a link to the Client Power Tools website for additional information about this warning.
-							__( 'It doesn\'t look like your website is using SSL (HTTPS). Before using Client Power Tools with your clients, it\'s a good idea to get an SSL certificate for your website and consider additional security measures. %1$sLearn more.%2$s', 'client-power-tools' )
-						),
-						/* %1$s */ '<a href="https://clientpowertools.com/security/?utm_source=cpt_user&utm_medium=cpt_ssl_warning" target="_blank">',
-						/* %2$s */ '</a>'
-					);
+				echo wp_kses_post(
+					sprintf(
+						// Translators: %1$s and %2$s are `<a>` tags for a link to the Client Power Tools website for additional information about this warning.
+						__( 'It doesn\'t look like your website is using SSL (HTTPS). Before using Client Power Tools with your clients, it\'s a good idea to get an SSL certificate for your website and consider additional security measures. %1$sLearn more.%2$s', 'client-power-tools' ),
+						'<a href="https://clientpowertools.com/security/?utm_source=cpt_user&utm_medium=cpt_ssl_warning" target="_blank">',
+						'</a>'
+					)
+				);
 				?>
 			</p>
 		</div>
@@ -62,6 +76,9 @@ function cpt_security_warning() {
 
 
 add_action( 'admin_notices', __NAMESPACE__ . '\cpt_welcome_message' );
+/**
+ * Welcome message (dismissible)
+ */
 function cpt_welcome_message() {
 	global $pagenow;
 	if ( cpt_is_cpt_admin_page() && get_transient( 'cpt_show_welcome_message' ) ) {
@@ -70,51 +87,51 @@ function cpt_welcome_message() {
 				<h2><?php esc_html_e( 'Welcome to Client Power Tools!', 'client-power-tools' ); ?></h2>
 				<p style="font-size: 125%;">
 					<?php
-						printf(
-							wp_kses_post(
-								// Translators: %1$s and %2$s are HTML <a> tags for a link to the main Client Power Tools admin page.
-								__( 'You can view and manage your clients here, in the WordPress dashboard. You can add your first client on the %1$sClients page%2$s (if you are an admin).', 'client-power-tools' )
-							),
-							/* %1$s */ '<a href="' . esc_url( add_query_arg( 'page', 'cpt', admin_url( 'admin.php' ) ) ) . '" target="_blank">',
-							/* %2$s */ '</a>'
-						);
+					echo wp_kses_post(
+						sprintf(
+							// Translators: %1$s and %2$s are `<a>` tags for a link to the main Client Power Tools admin page.
+							__( 'You can view and manage your clients here, in the WordPress dashboard. You can add your first client on the %1$sClients page%2$s (if you are an admin).', 'client-power-tools' ),
+							'<a href="' . esc_url( add_query_arg( 'page', 'cpt', admin_url( 'admin.php' ) ) ) . '" target="_blank">',
+							'</a>'
+						)
+					);
 					?>
 				</p>
 				<p style="font-size: 125%;">
 					<?php
-						printf(
-							wp_kses_post(
-								// Translators: %1$s and %2$s are HTML <a> tags for a link to the frontend client dashboard.
-								__( 'Your clients can access their dashboard by visiting %1$sthis page%2$s on the front end of your website (clients don\'t have access to the WordPress admin dashboard). You\'ll probably want to add that page to your navigation menu to make it easy for your clients to find.', 'client-power-tools' )
-							),
-							/* %1$s */ '<a href="' . esc_url( Common\cpt_get_client_dashboard_url() ) . '" target="_blank">',
-							/* %2$s */ '</a>'
-						);
+					echo wp_kses_post(
+						sprintf(
+							// Translators: %1$s and %2$s are `<a>` tags for a link to the frontend client dashboard.
+							__( 'Your clients can access their dashboard by visiting %1$sthis page%2$s on the front end of your website (clients don\'t have access to the WordPress admin dashboard). You\'ll probably want to add that page to your navigation menu to make it easy for your clients to find.', 'client-power-tools' ),
+							'<a href="' . esc_url( Common\cpt_get_client_dashboard_url() ) . '" target="_blank">',
+							'</a>'
+						)
+					);
 					?>
 				</p>
 				<p style="font-size: 125%;">
 					<?php
-						printf(
-							wp_kses_post(
-								// Translators: %1$s is an HTML link to the Client Power Tools website. %2$s and %3$s are HTML <a> tags for a link to the WordPress.org support forum.
-								__( 'You can find options and customizations in the settings, and you can find additional documentation at %1$s. If you need help, please use the %2$sWordPress.org support forum%3$s.', 'client-power-tools' )
-							),
-							/* %1$s */ '<a href="https://clientpowertools.com/documentation/" target="_blank">clientpowertools.com</a>',
-							/* %2$s */ '<a href="https://wordpress.org/support/plugin/client-power-tools/" target="_blank">',
-							/* %3$s */ '</a>'
-						);
+					echo wp_kses_post(
+						sprintf(
+							// Translators: %1$s is a link to the Client Power Tools website. %2$s and %3$s are `<a>` tags for a link to the WordPress.org support forum.
+							__( 'You can find options and customizations in the settings, and you can find additional documentation at %1$s. If you need help, please use the %2$sWordPress.org support forum%3$s.', 'client-power-tools' ),
+							'<a href="https://clientpowertools.com/documentation/" target="_blank">clientpowertools.com</a>',
+							'<a href="https://wordpress.org/support/plugin/client-power-tools/" target="_blank">',
+							'</a>'
+						)
+					);
 					?>
 				</p>
 				<p style="font-size: 125%;">
 					<?php
-						printf(
-							wp_kses_post(
-								// Translators: %1$s and %2$s are HTML <a> tags for a link to the frontend client dashboard.
-								__( 'Please %1$sleave a review on WordPress.org%2$s!', 'client-power-tools' )
-							),
-							/* %1$s */ '<a href="https://wordpress.org/plugins/client-power-tools/#reviews" target="_blank">',
-							/* %2$s */ '</a>'
-						);
+					echo wp_kses_post(
+						sprintf(
+							// Translators: %1$s and %2$s are `<a>` tags for a link to the frontend client dashboard.
+							__( 'Please %1$sleave a review on WordPress.org%2$s!', 'client-power-tools' ),
+							'<a href="https://wordpress.org/plugins/client-power-tools/#reviews" target="_blank">',
+							'</a>'
+						)
+					);
 					?>
 				</p>
 				<p style="font-size: 125%;"><?php esc_html_e( '—Sam', 'client-power-tools' ); ?></p>
@@ -126,6 +143,9 @@ function cpt_welcome_message() {
 
 
 add_action( 'admin_menu', __NAMESPACE__ . '\cpt_menu_pages' );
+/**
+ * Adds the admin menu pages.
+ */
 function cpt_menu_pages() {
 	add_menu_page(
 		'Client Power Tools',
@@ -198,6 +218,9 @@ function cpt_menu_pages() {
 }
 
 
+/**
+ * Utility function for checking to see if the current page is a CPT page.
+ */
 function cpt_is_cpt_admin_page() {
 	global $pagenow;
 	if ( ! isset( $_GET['page'] ) ) {
@@ -212,10 +235,13 @@ function cpt_is_cpt_admin_page() {
 }
 
 
-function cpt_get_client_manager_select( $name = null, $selected = null ) {
-	if ( ! $name ) {
-		$name = 'client_manager';
-	}
+/**
+ * Gets the client manager select drop-down.
+ *
+ * @param string $name Optional The field name property. Default is 'client_manager'.
+ * @param int    $selected User ID of the client's manager.
+ */
+function cpt_get_client_manager_select( $name = 'client_manager', $selected = null ) {
 	if ( ! $selected ) {
 		$selected = get_option( 'cpt_default_client_manager' );
 	}
@@ -258,7 +284,13 @@ function cpt_get_client_manager_select( $name = null, $selected = null ) {
 	}
 }
 
-
+/**
+ * Get status select drop-down
+ *
+ * @param string $option Option slug.
+ * @param string $name Field name.
+ * @param string $selected Optional. Selected option slug.
+ */
 function cpt_get_status_select( $option = null, $name = null, $selected = null ) {
 	if ( ! $option || ! $name ) {
 		return;
@@ -288,6 +320,11 @@ function cpt_get_status_select( $option = null, $name = null, $selected = null )
 }
 
 add_action( 'wp_mail_failed', __NAMESPACE__ . '\cpt_show_wp_mail_errors', 10, 1 );
+/**
+ * Outputs email sending errors.
+ *
+ * @param object $wp_error A WP_Error object with the PHPMailerPHPMailerException message, and an array containing the mail recipient, subject, message, headers, and attachments.
+ */
 function cpt_show_wp_mail_errors( $wp_error ) {
 	?>
 		<pre>

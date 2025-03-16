@@ -1,18 +1,26 @@
 <?php
+/**
+ * Client dashboard messages
+ *
+ * @file       cpt-common-messages.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Common
+ * @since      1.6.5
+ */
 
 namespace Client_Power_Tools\Core\Common;
 
-/*
- * This has to be loaded as a common file in order to use the admin-post action
- * hook. And it would probably be even more confusing to load it as a common
- * file but store it in the frontend directory/namespace. Even that sentence is
- * confusing.
+/**
+ * Outputs the message list.
+ *
+ * This is used by the `admin-post` action hook, so it must be loaded as a common function.
+ *
+ * @param int $clients_user_id Client's user ID.
  */
-
 function cpt_messages( $clients_user_id ) {
 	if (
-		! get_option( 'cpt_module_messaging' ) ||
-		! $clients_user_id
+		! get_option( 'cpt_module_messaging' )
+		|| ! $clients_user_id
 	) {
 		return;
 	}
@@ -25,8 +33,13 @@ function cpt_messages( $clients_user_id ) {
 }
 
 
+/**
+ * Returns the message list.
+ *
+ * @param int $clients_user_id Client's user ID.
+ */
 function cpt_get_message_list( $clients_user_id ) {
-	$paged = isset( $_GET['paged'] ) ? intval( sanitize_key( $_GET['paged'] ) ) : get_query_var( 'paged' );
+	$paged = isset( $_GET['paged'] ) ? intval( sanitize_text_field( wp_unslash( $_GET['paged'] ) ) ) : get_query_var( 'paged' );
 
 	$cpt_messages = new \WP_Query(
 		array(
@@ -43,7 +56,7 @@ function cpt_get_message_list( $clients_user_id ) {
 	if ( $cpt_messages->have_posts() ) :
 		while ( $cpt_messages->have_posts() ) :
 			$cpt_messages->the_post();
-			
+
 			$message_id               = get_the_ID();
 			$message_classes          = array( 'cpt-message', 'card' );
 			$message_meta             = '';
@@ -114,7 +127,11 @@ function cpt_get_message_list( $clients_user_id ) {
 	return ob_get_clean();
 }
 
-
+/**
+ * Outputs the new-message form.
+ *
+ * @param int $clients_user_id Client's user ID.
+ */
 function cpt_new_message_form( $clients_user_id ) {
 	?>
 		<form 
@@ -145,11 +162,13 @@ function cpt_new_message_form( $clients_user_id ) {
 					>
 					<p class="description">
 						<?php
-							printf(
-								// translators: %s is the current user's display name.
-								esc_html__( 'If you leave this field empty the subject line will be "New message from %s".', 'client-power-tools' ),
-								esc_html( cpt_get_display_name( get_current_user_id() ) )
-							);
+						echo esc_html(
+							sprintf(
+								// Translators: %s is the current user's display name.
+								__( 'If you leave this field empty the subject line will be "New message from %s".', 'client-power-tools' ),
+								cpt_get_display_name( get_current_user_id() )
+							)
+						);
 						?>
 					</p>
 				</div>
@@ -200,14 +219,14 @@ function cpt_new_message_form( $clients_user_id ) {
 								</fieldset>
 								<p class="description">
 									<?php
-										printf(
-											wp_kses_post(
-												// translators: %1$s and %2$s are strong tags.
-												__( 'To add or remove emails, use the %1$sEdit Client%2$s button, above.', 'client-power-tools' )
-											),
+									echo wp_kses_post(
+										sprintf(
+											// Translators: %1$s and %2$s are `<strong>` tags.
+											__( 'To add or remove emails, use the %1$sEdit Client%2$s button, above.', 'client-power-tools' ),
 											'<strong>',
 											'</strong>'
-										);
+										),
+									);
 									?>
 								</p>
 							</div>
@@ -262,35 +281,55 @@ function cpt_new_message_form( $clients_user_id ) {
 
 
 add_action( 'admin_post_cpt_new_message_added', __NAMESPACE__ . '\cpt_process_new_message' );
+/**
+ * Processes new messages on submission.
+ */
 function cpt_process_new_message() {
-	if ( isset( $_POST['cpt_new_message_nonce'] ) && wp_verify_nonce( $_POST['cpt_new_message_nonce'], 'cpt_new_message_added' ) ) {
-		$post_title      = wp_strip_all_tags( sanitize_text_field( $_POST['subject_line'] ) );
-		$post_content    = wp_kses_post( $_POST['message'] );
-		$clients_user_id = sanitize_key( intval( $_POST['clients_user_id'] ) );
+	if (
+		isset( $_POST['cpt_new_message_nonce'] )
+		&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['cpt_new_message_nonce'] ) ), 'cpt_new_message_added' )
+		&& isset( $_POST['subject_line'] )
+		&& isset( $_POST['message'] )
+		&& isset( $_POST['clients_user_id'] )
+		&& isset( $_POST['_wp_http_referer'] )
+	) {
+		$post_title      = wp_strip_all_tags( sanitize_text_field( wp_unslash( $_POST['subject_line'] ) ) );
+		$post_content    = wp_kses_post( wp_unslash( $_POST['message'] ) );
+		$clients_user_id = intval( wp_unslash( $_POST['clients_user_id'] ) );
 		$client_data     = cpt_get_client_data( $clients_user_id );
+		$http_referrer   = sanitize_text_field( intval( $_POST['_wp_http_referer'] ) );
 
 		// Figures out whether to send the full content of this message.
 		$send_msg_content_default = get_option( 'cpt_send_message_content' );
 
 		if ( ! $send_msg_content_default ) {
-			if ( isset( $_POST['send_message_content'] ) && $_POST['send_message_content'] === 1 ) {
+			if (
+				isset( $_POST['send_message_content'] )
+				&& 1 === $_POST['send_message_content']
+			) {
 				$send_this_msg_content = true;
 			} else {
 				$send_this_msg_content = false;
 			}
-		} elseif ( isset( $_POST['send_notification_only'] ) && $_POST['send_notification_only'] === 1 ) {
-				$send_this_msg_content = false;
+		} elseif (
+			isset( $_POST['send_notification_only'] )
+			&& 1 === $_POST['send_notification_only']
+		) {
+			$send_this_msg_content = false;
 		} else {
 			$send_this_msg_content = true;
 		}
 
-		/**
+		/*
 		 * Note. When creating a new message, for the post slug we generate an md5
 		 * hash from the timestamp plus a random integer, making the message URL
 		 * pretty much impossible to guess.
 		 */
 		if ( is_admin() && isset( $_POST['email_ccs'] ) ) {
-			$email_ccs = implode( "\n", cpt_cleanse_array_of_emails( $_POST['email_ccs'] ) );
+			$email_ccs = sanitize_text_field( wp_unslash( $_POST['email_ccs'] ) );
+			if ( is_array( $email_ccs ) ) {
+				$email_ccs = implode( "\n", cpt_cleanse_array_of_emails( $email_ccs ) );
+			}
 		}
 
 		$new_message = array(
@@ -302,7 +341,7 @@ function cpt_process_new_message() {
 			'meta_input'   => array(
 				'cpt_clients_user_id'      => $clients_user_id,
 				'cpt_send_message_content' => $send_this_msg_content,
-				'cpt_email_to'             => isset( $_POST['email_to'] ) ? $_POST['email_to'] : false,
+				'cpt_email_to'             => isset( $_POST['email_to'] ) ? sanitize_text_field( wp_unslash( $_POST['email_to'] ) ) : false,
 				'cpt_email_ccs'            => isset( $email_ccs ) ? $email_ccs : false,
 			),
 		);
@@ -311,7 +350,7 @@ function cpt_process_new_message() {
 
 		if ( is_wp_error( $post ) ) {
 			$result = sprintf(
-				// translators: %s is the error message.
+				// Translators: %s is the error message.
 				__( 'Message could not be sent. Error message: %s', 'client-power-tools' ),
 				$post->get_error_message()
 			);
@@ -321,7 +360,7 @@ function cpt_process_new_message() {
 		}
 
 		set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
-		wp_redirect( $_POST['_wp_http_referer'] );
+		wp_safe_redirect( sanitize_text_field( wp_unslash( $_POST['_wp_http_referer'] ) ) );
 		exit;
 	} else {
 		die();
@@ -329,6 +368,11 @@ function cpt_process_new_message() {
 }
 
 
+/**
+ * Sends an email notification to the recipient.
+ *
+ * @param int $message_id The post ID of the message.
+ */
 function cpt_message_notification( $message_id ) {
 	if ( ! $message_id ) {
 		return;
@@ -356,7 +400,7 @@ function cpt_message_notification( $message_id ) {
 		$subject = $msg_obj->post_title;
 	} else {
 		$subject = sprintf(
-			// translators: %s is the sender's name.
+			// Translators: %s is the sender's name.
 			__( 'You have a new message from %s', 'client-power-tools' ),
 			$from_name
 		);

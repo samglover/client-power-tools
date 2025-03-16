@@ -1,9 +1,20 @@
 <?php
+/**
+ * Admin messages page
+ *
+ * @file       cpt-admin-messages.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Admin
+ * @since      1.0.0
+ */
 
 namespace Client_Power_Tools\Core\Admin;
 
 use Client_Power_Tools\Core\Includes;
 
+/**
+ * Outputs the messages page
+ */
 function cpt_admin_messages() {
 	?>
 		<div 
@@ -27,6 +38,9 @@ function cpt_admin_messages() {
 	<?php
 }
 
+/**
+ * Outputs the list of messages.
+ */
 function cpt_get_message_list() {
 	$message_list = new Message_List_Table();
 	$message_list->prepare_items();
@@ -38,6 +52,13 @@ function cpt_get_message_list() {
 	<?php
 }
 
+/**
+ * Gets the page number of the message list on which a given message appears.
+ *
+ * @param int $clients_user_id Client's user ID.
+ * @param int $message_id ID of the message to check.
+ * @return int Page number.
+ */
 function cpt_get_message_pagenum( $clients_user_id, $message_id ) {
 	if ( ! $clients_user_id || ! $message_id ) {
 		return;

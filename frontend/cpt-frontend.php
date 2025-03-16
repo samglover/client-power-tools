@@ -1,59 +1,56 @@
 <?php
+/**
+ * Frontend functions.
+ *
+ * @file       cpt-frontend.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Frontend
+ * @since      1.0.0
+ */
 
 namespace Client_Power_Tools\Core\Frontend;
 
 use Client_Power_Tools\Core\Common;
 
+add_filter( 'body_class', __NAMESPACE__ . '\cpt_body_classes' );
 /**
- * Adds a body class for overriding CPT styles.
+ * Adds body classes to CPT pages, including .customize-cpt for overriding default CPT styles.
+ *
+ * @param array $classes An array of body classes.
+ * @return array A modified array of body classes.
  */
-add_filter(
-	'body_class',
-	function ( $classes ) {
-		global $wp_query;
-		if (
-			! isset( $wp_query->post->ID )
-		) {
-			return $classes;
-		}
-
-		$post_id = $wp_query->post->ID;
-		if ( ! Common\cpt_is_client_dashboard() ) {
-			return $classes;
-		}
-
-		$body_classes = array(
-			'customize-cpt',
-			'client-dashboard',
-		);
-
-		if ( isset( $_REQUEST['tab'] ) ) {
-			$tab_slug = sanitize_key( $_REQUEST['tab'] );
-
-			if ( isset( $_REQUEST['projects_post_id'] ) ) {
-				$tab_slug = 'project';
-			}
-
-			if ( Common\cpt_is_client_dashboard( 'knowledge base' ) ) {
-				$tab_slug = 'knowledge-base';
-			}
-
-			if ( Common\cpt_is_client_dashboard( 'additional page' ) ) {
-				$tab_slug = 'additional-page';
-			}
-
-			$body_classes[] = 'client-dashboard-' . $tab_slug;
-		}
-
-		return array_merge( $classes, $body_classes );
+function cpt_body_classes( $classes ) {
+	global $wp_query;
+	if (
+		! isset( $wp_query->post->ID )
+	) {
+		return $classes;
 	}
-);
+
+	if ( ! Common\cpt_is_client_dashboard() ) {
+		return $classes;
+	}
+
+	$post_id      = $wp_query->post->ID;
+	$body_classes = array(
+		'customize-cpt',
+		'client-dashboard',
+	);
+
+	if ( isset( $_REQUEST['projects_post_id'] ) ) {
+		$body_classes[] = 'is-singular-project';
+	}
+
+	$body_classes[] = 'client-dashboard-' . Common\cpt_is_client_dashboard();
+
+	return array_merge( $classes, $body_classes );
+}
 
 
+add_action( 'wp_footer', __NAMESPACE__ . '\cpt_login' );
 /**
  * Loads the login modal in the footer.
  */
-add_action( 'wp_footer', __NAMESPACE__ . '\cpt_login' );
 function cpt_login() {
 	?>
 		<div 
@@ -162,7 +159,15 @@ function cpt_login() {
 
 
 add_filter( 'the_title', __NAMESPACE__ . '\cpt_client_dashboard_page_titles', 10, 2 );
-function cpt_client_dashboard_page_titles( $title, $post_id ) {
+/**
+ * Replaces client dashboard page titles with the title of the client dashboard page. Only works within the loop so it only replaces the title above the CPT nav menu.
+ *
+ * @see cpt_the_title()
+ * @see cpt_get_the_title()
+ * @param string $title The post title.
+ * @return string The client dashboard page title.
+ */
+function cpt_client_dashboard_page_titles( $title ) {
 	if (
 		! is_main_query()
 		|| ! in_the_loop()
@@ -170,9 +175,17 @@ function cpt_client_dashboard_page_titles( $title, $post_id ) {
 	) {
 		return $title;
 	}
-	return get_post( get_option( 'cpt_client_dashboard_page_selection' ) )->post_title;
+
+	$client_dashboard_page_title = get_post( get_option( 'cpt_client_dashboard_page_selection' ) )->post_title;
+	return $client_dashboard_page_title;
 }
 
+/**
+ * Outputs the title of the client dashboard page beneath the CPT nav menu.
+ *
+ * @see cpt_client_dashboard_page_titles()
+ * @see cpt_get_the_title()
+ */
 function cpt_the_title() {
 	$classes = array(
 		'entry-title',
@@ -186,9 +199,17 @@ function cpt_the_title() {
 	<?php
 }
 
+/**
+ * Modifies the title of the home, messages, and projects tabs/pages.
+ *
+ * @see cpt_client_dashboard_page_titles()
+ * @see cpt_the_title()
+ *
+ * @return string The modified title.
+ */
 function cpt_get_the_title() {
 	remove_filter( 'the_title', __NAMESPACE__ . '\cpt_client_dashboard_page_titles', 10, 2 );
-	if ( Common\cpt_is_client_dashboard( 'dashboard' ) ) {
+	if ( Common\cpt_is_client_dashboard( 'home' ) ) {
 		return __( 'Your Home', 'client-power-tools' );
 	}
 	if ( Common\cpt_is_client_dashboard( 'messages' ) ) {
@@ -204,7 +225,11 @@ function cpt_get_the_title() {
 }
 
 
-// @deprecated
+/**
+ * Tests to determine whether the client dashboard is being displayed.
+ *
+ * @deprecated
+ */
 function cpt_is_cpt() {
 	trigger_error( 'Function ' . __FUNCTION__ . ' is deprecated as of 1.7.6 and will be removed soon.', E_USER_DEPRECATED );
 	return Common\cpt_is_client_dashboard();

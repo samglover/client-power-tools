@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com) and uses [semantic versioning](https://semver.org/).
 
+### 1.10.4 - 2025-02-??
+
+#### Added
+* PHP documentation according to the WordPress Coding Standards.
+* New functions in /common/cpt-common.php for retrieving and sanitizing user data and user meta from $_POST:
+  * cpt_get_client_userdata_keys()
+  * cpt_get_sanitized_userdata_from_post()
+  * cpt_get_client_usermeta_keys()
+  * cpt_get_sanitized_usermeta_from_post()
+* Sanitize $_POST variables in /common/cpt-status-update-request-button.php.
+
+#### Changed
+* Tidied up in general while adding documentation.
+* Rename cpt_days_since_last_request() to cpt_get_days_since_last_request(), and now it returns false instead of null.
+* Clear location before reloading the page on successful login.
+* Refactor and simplify cpt_is_client_dashboard() function.
+* Rename files according to WP Coding Standards:
+  * cpt-clients-table.php -> class-client-list-table.php
+  * cpt-projects-table.php -> class-project-list-table.php
+  * cpt-admin-messages-table.php -> class-project-list-table.php
+  * cpt-project-types-table.php -> class-project-types-list-table.php
+  * cpt-client-manager-table.php -> class-client-manager-list-table.php
+* Replace wp_redirect( $_POST['_wp_http_referer'] ); with wp_safe_redirect( wp_get_referer() ); throughout.
+
 
 ### 1.10.3 - 2025-01-19
 
@@ -139,7 +163,7 @@ All notable changes to this project will be documented in this file. The format 
 - Don't show recipients if they weren't stored when sending the message.
 
 
-### 1.8 - 2023-10-13
+### 1.8.0 - 2023-10-13
 
 #### Added
 - Separate client name and primary contact name.
@@ -222,7 +246,7 @@ All notable changes to this project will be documented in this file. The format 
 - Updated readme.txt.
 
 
-### 1.7 - 2023-05-08
+### 1.7.0 - 2023-05-08
 
 #### Added
 - NEW MODULE: Projects & Stages! Organize your client projects and assign stages to different project types.
@@ -281,7 +305,7 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed a bug that displayed the CPT nav menu twice on additional pages on some sites.
 
 
-### 1.6 - 2022-12-10
+### 1.6.0 - 2022-12-10
 
 #### Added
 - It's now possible to add pages to the client dashboard navigation. Additional pages will be restricted to logged-in clients.
@@ -330,7 +354,7 @@ All notable changes to this project will be documented in this file. The format 
 - The navigation tabs now fold up nicely at narrow widths.
 
 
-### 1.5 - 2022-11-03
+### 1.5.0 - 2022-11-03
 
 #### Added
 - IMPORTANT: Passwordless login. The default frontend login process is now passwordless. Instead of entering a username and password, clients request a login code by email. (Username and password is still available.)
@@ -371,7 +395,7 @@ All notable changes to this project will be documented in this file. The format 
 - Expanders in the admin now work as expected.
 
 
-### 1.4.8/9 - 2022-03-14
+### 1.4.8 & 1.4.9 - 2022-03-14
 
 #### Changed
 - Moved CSS, JS, and image files to /assets.
@@ -436,7 +460,7 @@ All notable changes to this project will be documented in this file. The format 
 - Added a wrapper for the status request update button.
 
 
-### 1.4 - 2021-01-12
+### 1.4.0 - 2021-01-12
 
 #### Added
 - NEW MODULE: Knowledge Base! The knowledge base is a restricted page you can use to share information and resources with your clients. Add as many sub-pages as you like; they will be nicely organized in an index for your clients.
@@ -460,7 +484,7 @@ All notable changes to this project will be documented in this file. The format 
 - Only show the SSL warning on CPT admin pages.
 
 
-### 1.3 - 2020-11-24
+### 1.3.0 - 2020-11-24
 
 #### Added
 - Client managers can now be added and removed from the new **Managers** submenu, and are also shown in the client list and client profile. As you can when adding a client, you can add a new or existing WordPress user.
@@ -484,7 +508,7 @@ All notable changes to this project will be documented in this file. The format 
 - Adding an existing user as a client now works as it should.
 
 
-### 1.2 - 2020-10-23
+### 1.2.0 - 2020-10-23
 
 #### Added
 - Setting to disable the status request button entirely.
@@ -495,7 +519,7 @@ All notable changes to this project will be documented in this file. The format 
 - Creating a new client with an existing user's email address now adds the Client role to the existing user instead of returning an error.
 
 
-### 1.1 - 2020-10-20
+### 1.1.0 - 2020-10-20
 
 #### Added
 - Delete a client from the client's profile page, under **Edit Client**.
@@ -543,7 +567,7 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed set/change password key sanitization.
 
 
-### 1.0 - 2020-10-02
+### 1.0.0 - 2020-10-02
 
 #### Added
 - Added some frontend form styles for greater compatibility with different themes.
@@ -554,7 +578,7 @@ All notable changes to this project will be documented in this file. The format 
 - Data sanitization and validation.
 
 
-### 0.1 (Beta) - 2020-09-23
+### 0.1.0 (Beta) - 2020-09-23
 
 #### Added
 - Everything.

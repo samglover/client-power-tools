@@ -1,12 +1,19 @@
 <?php
+/**
+ * Common functions
+ *
+ * @file       cpt-common.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Common
+ * @since      1.0.0
+ */
 
 namespace Client_Power_Tools\Core\Common;
 
-/**
- * Adds the Client and Client Manager user roles and capabilities, and assigns
- * all CPT capabilities to admins.
- */
 add_action( 'init', __NAMESPACE__ . '\cpt_add_roles' );
+/**
+ * Adds the Client and Client Manager user roles and capabilities and assigns all CPT capabilities to admins.
+ */
 function cpt_add_roles() {
 	add_role(
 		'cpt-client',
@@ -33,78 +40,66 @@ function cpt_add_roles() {
 }
 
 
-function cpt_is_client_dashboard( $tab_slug = false ) {
+/**
+ * Checks to see whether the current page/page is part of the client dashboard.
+ *
+ * @param string|bool $page_slug Optional. Dashboard page to check. Possible values:
+ * - 'home'
+ * - 'messages'
+ * - 'projects'
+ * - 'knowledge-base'
+ * - 'additional-pages'
+ * Default is false.
+ * @since 1.10.4 Refactored
+ * @return string|bool If $page_slug is specified, returns true or false. Otherwise returns the dashboard page slug (same options as $page_slug, above) if true.
+ */
+function cpt_is_client_dashboard( $page_slug = false ) {
 	global $wp_query;
-	if (
-		! isset( $wp_query->post->ID )
-	) {
+	if ( ! isset( $wp_query->post->ID ) ) {
 		return false;
 	}
 
-	$this_page_id = $wp_query->post->ID;
-	if ( ! is_page( $this_page_id ) ) {
-		return false;
-	}
-
+	$this_page_id      = $wp_query->post->ID;
 	$dashboard_page_id = intval( get_option( 'cpt_client_dashboard_page_selection' ) );
 
-	if ( $tab_slug ) {
-		$request_tab      = isset( $_REQUEST['tab'] ) ? sanitize_key( $_REQUEST['tab'] ) : false;
-		$projects_post_id = isset( $_REQUEST['projects_post_id'] ) ? intval( sanitize_key( $_REQUEST['projects_post_id'] ) ) : false;
-		switch ( $tab_slug ) {
-			case 'dashboard':
-				if (
-					! $request_tab &&
-					$this_page_id === $dashboard_page_id
-				) {
-					return 'dashboard';
-				}
-				break;
-			case 'projects':
-				if (
-					$request_tab &&
-					'projects' === $request_tab
-				) {
-					return 'projects';
-				}
-				break;
-			case 'messages':
-				if (
-					$request_tab &&
-					'messages' === $request_tab
-				) {
-					return 'messages';
-				}
-				break;
-			case 'knowledge base':
-				if ( cpt_is_knowledge_base() ) {
-					return 'knowledge-base';
-				}
-				break;
-			case 'additional page' || 'additional pages':
-				if ( cpt_is_additional_page() ) {
-					return 'additional-pages';
-				}
-				break;
+	if ( $this_page_id === $dashboard_page_id ) {
+		if ( isset( $_REQUEST['tab'] ) ) {
+			$dashboard_page = sanitize_text_field( wp_unslash( $_REQUEST['tab'] ) );
+		} else {
+			$dashboard_page = 'home';
 		}
-	} elseif ( $this_page_id === $dashboard_page_id ) {
-		return 'dashboard';
 	} elseif ( cpt_is_knowledge_base() ) {
-		return 'knowledge-base';
+		$dashboard_page = 'knowlege-base';
 	} elseif ( cpt_is_additional_page() ) {
-		return 'additional-pages';
+		$dashboard_page = 'additional-pages';
+	} else {
+		return false;
 	}
+
+	if (
+		$page_slug
+		&& $page_slug === $dashboard_page
+	) {
+		return true;
+	} elseif ( ! $page_slug ) {
+		return $dashboard_page;
+	}
+
 	return false;
 }
 
-
+/**
+ * Checks to see whether the current post is a project.
+ *
+ * @param int $post_id Optional. ID of the post to check. Default is the current post ID.
+ * @return bool
+ */
 function cpt_is_project( $post_id = false ) {
 	if ( ! $post_id ) {
 		$post_id = get_the_ID();
-	}
-
-	if ( ! $post_id ) {
-		return false;
+		if ( ! $post_id ) {
+			return false;
+		}
 	}
 
 	if ( 'cpt_project' === get_post_type( $post_id ) ) {
@@ -114,7 +109,11 @@ function cpt_is_project( $post_id = false ) {
 	}
 }
 
-
+/**
+ * Checks to see whether the current post is a knowledge base page or descendant.
+ *
+ * @return bool
+ */
 function cpt_is_knowledge_base() {
 	global $wp_query;
 	if ( ! isset( $wp_query->post->ID ) ) {
@@ -126,67 +125,11 @@ function cpt_is_knowledge_base() {
 	$this_page_ancestors = get_post_ancestors( $this_page_id );
 
 	if (
-		$this_page_id === $knowledge_base_id ||
-		(
-			$this_page_ancestors &&
-			in_array( $knowledge_base_id, $this_page_ancestors, true )
+		$this_page_id === $knowledge_base_id
+		|| (
+			$this_page_ancestors
+			&& in_array( $knowledge_base_id, $this_page_ancestors, true )
 		)
-	) {
-		return true;
-	}
-	return false;
-}
-
-
-function cpt_is_additional_page() {
-	global $wp_query;
-	if ( ! isset( $wp_query->post->ID ) ) {
-		return false;
-	}
-
-	$this_page_id     = $wp_query->post->ID;
-	$addl_pages_array = get_option( 'cpt_client_dashboard_addl_pages' ) ? get_option( 'cpt_client_dashboard_addl_pages' ) : false;
-
-	if ( $addl_pages_array ) {
-		$is_addl_page     = false;
-		$addl_pages_array = explode( ',', $addl_pages_array );
-		foreach ( $addl_pages_array as $key => $page_id ) {
-			$page_id = intval( trim( $page_id ) );
-			if (
-				$page_id === $this_page_id ||
-				in_array( $page_id, get_post_ancestors( $this_page_id ), true )
-			) {
-				$is_addl_page = true;
-			}
-		}
-		if ( $is_addl_page ) {
-			return true;
-		}
-	}
-	return false;
-}
-
-
-/**
- * Checks to see whether the current user is a client. Returns true if the current
- * user has the cpt-client role, false if not.
- *
- * If no user ID is provided, checks to see whether the current user is logged-in with the
- * cpt-client role.
- */
-function cpt_is_client( $user_id = null ) {
-	if ( ! $user_id && ! is_user_logged_in() ) {
-		return false;
-	}
-	if ( ! $user_id ) {
-		$user_id = get_current_user_id();
-	}
-	$user = get_userdata( $user_id );
-
-	if (
-		$user &&
-		$user->roles &&
-		in_array( 'cpt-client', $user->roles )
 	) {
 		return true;
 	} else {
@@ -195,11 +138,93 @@ function cpt_is_client( $user_id = null ) {
 }
 
 
+/**
+ * Checks to see whether the current post is an additional page or descendant.
+ *
+ * @return bool
+ */
+function cpt_is_additional_page() {
+	global $wp_query;
+	if ( ! isset( $wp_query->post->ID ) ) {
+		return false;
+	}
+
+	$this_page_id     = $wp_query->post->ID;
+	$addl_pages_array = get_option( 'cpt_client_dashboard_addl_pages' );
+
+	if ( ! $addl_pages_array ) {
+		return false;
+	}
+
+	$addl_pages_array = explode( ',', $addl_pages_array );
+	foreach ( $addl_pages_array as $page_id ) {
+		$page_id = intval( trim( $page_id ) );
+
+		if (
+			$page_id === $this_page_id
+			|| in_array( $page_id, get_post_ancestors( $this_page_id ), true )
+		) {
+			return true;
+		}
+	}
+}
+
+
+/**
+ * Checks to see whether the current user is a client.
+ *
+ * @param int|bool $user_id Optional. ID of the user to check. Default is false.
+ * @return bool
+ */
+function cpt_is_client( $user_id = false ) {
+	if ( ! $user_id && ! is_user_logged_in() ) {
+		return false;
+	}
+	if ( ! $user_id ) {
+		$user_id = get_current_user_id();
+		if ( ! $user_id ) {
+			return false;
+		}
+	}
+
+	$user = get_userdata( $user_id );
+
+	if (
+		$user &&
+		$user->roles &&
+		in_array( 'cpt-client', $user->roles, true )
+	) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+
+/**
+ * Gets clients
+ *
+ * @see get_users()
+ * @param array $args Optional. Arguments to retrieve users.
+ * @return array List of clients.
+ */
 function cpt_get_clients( $args = array() ) {
+	if ( isset( $_REQUEST['orderby'] ) ) {
+		$orderby = sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) );
+	} else {
+		$orderby = 'display_name';
+	}
+
+	if ( isset( $_REQUEST['order'] ) ) {
+		$order = sanitize_text_field( wp_unslash( $_REQUEST['order'] ) );
+	} else {
+		$order = 'ASC';
+	}
+
 	$client_query_args = array(
 		'role'    => 'cpt-client',
-		'orderby' => isset( $_REQUEST['orderby'] ) ? sanitize_key( $_REQUEST['orderby'] ) : 'display_name',
-		'order'   => isset( $_REQUEST['order'] ) ? sanitize_key( $_REQUEST['order'] ) : 'ASC',
+		'orderby' => $orderby,
+		'order'   => $order,
 	);
 	$client_query_args = array_merge( $client_query_args, $args );
 	$clients           = get_users( $client_query_args );
@@ -207,6 +232,12 @@ function cpt_get_clients( $args = array() ) {
 }
 
 
+/**
+ * Gets a client's profile URL.
+ *
+ * @param int $clients_user_id User ID of the client to check.
+ * @return url|void
+ */
 function cpt_get_client_profile_url( $clients_user_id ) {
 	if ( ! $clients_user_id ) {
 		return;
@@ -215,19 +246,140 @@ function cpt_get_client_profile_url( $clients_user_id ) {
 }
 
 
+/**
+ * Gets the client user data keys for use with wp_insert_user() and wp_update_user().
+ *
+ * @since 1.10.4
+ * @return array User data keys.
+ */
+function cpt_get_client_userdata_keys() {
+	return array(
+		'ID',
+		'client_name',
+		'first_name',
+		'last_name',
+		'display_name',
+		'user_email',
+	);
+}
+
+/**
+ * Sanitizes user data from $_POST.
+ *
+ * @since 1.10.4
+ * @return array Sanitized user data.
+ */
+function cpt_get_sanitized_userdata_from_post() {
+	$data_keys          = cpt_get_client_userdata_keys();
+	$sanitized_userdata = array();
+
+	foreach ( $data_keys as $data_key ) {
+		if (
+			( 'user_email' !== $data_key && ! isset( $_POST[ $data_key ] ) )
+			|| ( 'user_email' === $data_key && ! isset( $_POST['email'] ) )
+		) {
+			continue;
+		}
+
+		switch ( $data_key ) {
+			case 'ID':
+				$sanitized_value = intval( wp_unslash( $_POST[ $data_key ] ) );
+				break;
+			case 'user_email':
+				// CPT uses 'email' in form fields.
+				$sanitized_value = sanitize_email( wp_unslash( $_POST['email'] ) );
+				break;
+			default:
+				$sanitized_value = sanitize_text_field( wp_unslash( $_POST[ $data_key ] ) );
+		}
+
+		$sanitized_userdata[ $data_key ] = $sanitized_value;
+	}
+
+	return $sanitized_userdata;
+}
+
+
+/**
+ * Gets the client user meta keys for use with update_user_meta().
+ *
+ * @since 1.10.4
+ * @return array User meta keys.
+ */
+function cpt_get_client_usermeta_keys() {
+	return array(
+		'client_id',
+		'client_name',
+		'email_ccs',
+		'client_manager',
+		'client_status',
+	);
+}
+
+/**
+ * Sanitizes user meta from $_POST.
+ *
+ * @since 1.10.4
+ * @return array Sanitized user meta.
+ */
+function cpt_get_sanitized_usermeta_from_post() {
+	$meta_keys          = cpt_get_client_usermeta_keys();
+	$sanitized_usermeta = array();
+
+	foreach ( $meta_keys as $meta_key ) {
+		if ( ! isset( $_POST[ $meta_key ] ) ) {
+			continue;
+		}
+
+		switch ( $meta_key ) {
+			case 'client_id':
+			case 'client_manager':
+				$sanitized_value = intval( wp_unslash( $_POST[ $meta_key ] ) );
+				break;
+			case 'email_ccs':
+				$sanitized_textarea = sanitize_textarea_field( wp_unslash( $_POST[ $meta_key ] ) );
+				$array_of_emails    = cpt_cleanse_array_of_emails( explode( PHP_EOL, $sanitized_textarea ) );
+				$sanitized_value    = implode( PHP_EOL, $array_of_emails );
+				break;
+			default:
+				$sanitized_value = sanitize_text_field( wp_unslash( $_POST[ $meta_key ] ) );
+		}
+
+		$sanitized_usermeta[ 'cpt_' . $meta_key ] = $sanitized_value;
+	}
+
+	return $sanitized_usermeta;
+}
+
+
+/**
+ * Gets the URL of the client dashboard page.
+ *
+ * @return url
+ */
 function cpt_get_client_dashboard_url() {
 	$page_id = get_option( 'cpt_client_dashboard_page_selection' );
 	return get_permalink( $page_id );
 }
 
 
+/**
+ * Gets the URL of the knowledge base page.
+ *
+ * @return url
+ */
 function cpt_get_knowledge_base_url() {
 	$page_id = get_option( 'cpt_knowledge_base_page_selection' );
 	return get_permalink( $page_id );
 }
 
 
-// Requires the primary contact's user ID because the client object IS the primary contact.
+/**
+ * Gets a client's name. Uses the cpt_client_name field if set. Otherwise, gets the name from cpt_get_display_name().
+ *
+ * @param int $user_id Client's user ID.
+ * @return string Client's full name.
+ */
 function cpt_get_client_name( $user_id ) {
 	if ( ! $user_id ) {
 		return;
@@ -240,6 +392,12 @@ function cpt_get_client_name( $user_id ) {
 }
 
 
+/**
+ * Gets a user's display name, which is either first name + last name or the user's display name.
+ *
+ * @param int $user_id Client's user ID.
+ * @return string Client's display name.
+ */
 function cpt_get_display_name( $user_id ) {
 	if ( ! $user_id ) {
 		return;
@@ -257,19 +415,64 @@ function cpt_get_display_name( $user_id ) {
 }
 
 
+/**
+ * Filter hook for custom client fields.
+ */
 function cpt_custom_client_fields() {
 	return apply_filters( 'cpt_custom_fields', array() );
 }
 
 
-// Returns an array with the user's details.
+/**
+ * Sanitizes custom fields from $_POST.
+ *
+ * @since 1.10.4
+ * @return array Sanitized fields.
+ */
+function cpt_get_sanitized_custom_fields_from_post() {
+	$custom_fields = cpt_custom_client_fields();
+
+	if ( ! $custom_fields ) {
+		return false;
+	}
+
+	foreach ( $custom_fields as $field ) {
+		if ( ! isset( $_POST[ $field['id'] ] ) ) {
+			continue;
+		}
+
+		switch ( $field['type'] ) {
+			case 'email':
+				$sanitized_value = sanitize_email( wp_unslash( $_POST[ $field['id'] ] ) );
+				break;
+			case 'url':
+				$sanitized_value = sanitize_url( wp_unslash( $_POST[ $field['id'] ] ) );
+				break;
+			default:
+				$sanitized_value = sanitize_text_field( wp_unslash( $_POST[ $field['id'] ] ) );
+		}
+
+		$sanitized_custom_fields[ $field['id'] ] = $sanitized_value;
+	}
+
+	return $sanitized_custom_fields;
+}
+
+
+/**
+ * Gets a client's data.
+ *
+ * @param int $clients_user_id The client's user ID.
+ * @return array Client details.
+ */
 function cpt_get_client_data( $clients_user_id ) {
-	if ( ! $clients_user_id ) {
+	if (
+		! $clients_user_id
+		|| ! cpt_is_client( $clients_user_id )
+	) {
 		return;
 	}
-	if ( ! cpt_is_client( $clients_user_id ) ) {
-		return;
-	}
+
 	$userdata    = get_userdata( $clients_user_id );
 	$client_data = array(
 		'user_id'       => $clients_user_id,
@@ -290,28 +493,54 @@ function cpt_get_client_data( $clients_user_id ) {
 			$client_data[ $field['id'] ] = get_user_meta( $clients_user_id, $field['id'], true );
 		}
 	}
+
 	return $client_data;
 }
 
 
+/**
+ * Gets a client manager ID from a client's ID.
+ *
+ * @param int $clients_user_id Client's user ID.
+ * @return int|bool Client manager's ID on success. False on failure.
+ */
 function cpt_get_client_manager_id( $clients_user_id ) {
 	if ( ! $clients_user_id ) {
 		return;
 	}
+
 	$client_manager = get_user_meta( $clients_user_id, 'cpt_client_manager', true );
+
 	return $client_manager ? $client_manager : false;
 }
 
 
+/**
+ * Gets a client manager's email from a client's ID.
+ *
+ * @param int $clients_user_id Client's user ID.
+ * @return stromg|bool Client manager's email on success. False on failure.
+ */
 function cpt_get_client_manager_email( $clients_user_id ) {
 	if ( ! $clients_user_id ) {
 		return;
 	}
+
 	$userdata = get_userdata( get_user_meta( $clients_user_id, 'cpt_client_manager', true ) );
+
 	return isset( $userdata->user_email ) ? $userdata->user_email : false;
 }
 
 
+/**
+ * Gets the email "card" HTML.
+ *
+ * @param string $title The card title.
+ * @param string $content The card content HTML.
+ * @param string $button_txt Button text label.
+ * @param string $button_url Button URL.
+ * @return string Email card HTML.
+ */
 function cpt_get_email_card(
 	$title = null,
 	$content = null,
@@ -323,39 +552,47 @@ function cpt_get_email_card(
 	$button_style = 'background-color: #eee; border: 1px solid #ddd; box-sizing: border-box; display: block; margin: 0; padding: 1em; width: 100%; text-align: center;';
 
 	ob_start();
+
 	?>
-			<div class="cpt-card" align="left" style="<?php echo esc_attr( $card_style ); ?>">
-				<?php if ( ! empty( $title ) ) { ?>
-					<h2 style="<?php echo esc_attr( $h2_style ); ?>"><?php echo esc_html( $title ); ?></h2>
-				<?php } ?>
-				<?php
-				if ( ! empty( $content ) ) {
-					echo wp_kses_post( $content );}
-				?>
-				<?php if ( ! empty( $button_url ) ) { ?>
-					<a 
-						class="button" 
-						href="<?php echo esc_url( $button_url ); ?>" 
-						style="<?php echo esc_attr( $button_style ); ?>"
-					>
-						<?php echo esc_html( $button_txt ); ?>
-					</a>
-				<?php } ?>
-			</div>
+	<div 
+		class="cpt-card" 
+		align="left" 
+		style="<?php echo esc_attr( $card_style ); ?>"
+	>
+		<?php if ( ! empty( $title ) ) { ?>
+			<h2 style="<?php echo esc_attr( $h2_style ); ?>">
+				<?php echo esc_html( $title ); ?>
+			</h2>
+		<?php } ?>
 		<?php
-		return ob_get_clean();
+		if ( ! empty( $content ) ) {
+			echo wp_kses_post( $content );
+		}
+		?>
+		<?php if ( ! empty( $button_url ) ) { ?>
+			<a 
+				class="button" 
+				href="<?php echo esc_url( $button_url ); ?>" 
+				style="<?php echo esc_attr( $button_style ); ?>"
+			>
+				<?php echo esc_html( $button_txt ); ?>
+			</a>
+		<?php } ?>
+	</div>
+	<?php
+
+	return ob_get_clean();
 }
 
 
-/**
- * Checks for a transient with the results of an action, and if one exists,
- * outputs a notice. In the admin, this is a standard WordPress admin notice. On
- * the front end, this is a modal.
- */
 add_action( 'admin_notices', __NAMESPACE__ . '\cpt_get_notices' );
+/**
+ * Checks for a transient with the results of an action. If one exists, outputs a notice. In the admin the output is a standard WordPress admin notice. On the front end, the output is a modal.
+ */
 function cpt_get_notices() {
 	$transient = 'cpt_notice_for_user_' . get_current_user_id();
 	$notice    = get_transient( $transient );
+
 	if ( ! $notice ) {
 		return;
 	}
@@ -372,69 +609,91 @@ function cpt_get_notices() {
 		$classes[] = 'visible';
 	}
 	$classes[] = is_wp_error( $notice ) ? 'notice-error' : 'notice-success';
+
 	?>
-		<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
-			<?php if ( ! is_admin() ) { ?>
-				<button class="cpt-dismiss-button cpt-notice-dismiss"></button>
-			<?php } ?>
-			<p class="cpt-notice-message"><?php echo wp_kses_post( $notice ); ?></p>
-		</div>
+	<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+		<?php if ( ! is_admin() ) { ?>
+			<button class="cpt-dismiss-button cpt-notice-dismiss"></button>
+		<?php } ?>
+		<p class="cpt-notice-message"><?php echo wp_kses_post( $notice ); ?></p>
+	</div>
 	<?php
+
 	delete_transient( $transient );
 }
 
 
-function cpt_cleanse_array_of_emails( $array ) {
-	if ( ! $array || ! is_array( $array ) ) {
+/**
+ * Sanitizes an array of emails.
+ *
+ * @param array $array_of_emails The array to be cleansed.
+ * @return array Cleansed array of emails.
+ */
+function cpt_cleanse_array_of_emails( $array_of_emails ) {
+	if ( ! $array_of_emails || ! is_array( $array_of_emails ) ) {
 		return;
 	}
-	foreach ( $array as $key => $val ) {
+	foreach ( $array_of_emails as $key => $val ) {
 		if ( empty( trim( $val ) ) ) {
-			unset( $array[ $key ] );
+			unset( $array_of_emails[ $key ] );
 		} else {
-			$array[ $key ] = sanitize_email( trim( $val ) );
+			$array_of_emails[ $key ] = sanitize_email( trim( $val ) );
 		}
 	}
-	return $array;
+	return $array_of_emails;
 }
 
 
-function cpt_cleanse_array_of_strings( $array ) {
-	if ( ! $array || ! is_array( $array ) ) {
+/**
+ * Sanitizes an array of strings.
+ *
+ * @param array $array_of_strings The array to be cleansed.
+ * @return array Cleansed array of strings.
+ */
+function cpt_cleanse_array_of_strings( $array_of_strings ) {
+	if ( ! $array_of_strings || ! is_array( $array_of_strings ) ) {
 		return;
 	}
-	foreach ( $array as $key => $val ) {
+	foreach ( $array_of_strings as $key => $val ) {
 		if ( empty( trim( $val ) ) ) {
-			unset( $array[ $key ] );
+			unset( $array_of_strings[ $key ] );
 		} else {
-			$array[ $key ] = sanitize_text_field( trim( $val ) );
+			$array_of_strings[ $key ] = sanitize_text_field( trim( $val ) );
 		}
 	}
-	return $array;
+	return $array_of_strings;
 }
 
 
-function cpt_array_to_strlist( $array ) {
-	if ( ! $array || ! is_array( $array ) ) {
-		return;
+/**
+ * Converts an array to a comma-separated inline list. Uses the serial comma.
+ *
+ * @param array $array_of_items The array to be converted.
+ * @return string Comma-separated list.
+ */
+function cpt_array_to_strlist( $array_of_items ) {
+	if ( ! $array_of_items || ! is_array( $array_of_items ) ) {
+		return $array_of_items;
 	}
+
 	$list = '';
-	switch ( count( $array ) ) {
+	switch ( count( $array_of_items ) ) {
 		case 0:
 			return false;
 		case 1:
-			return trim( $array[0] );
+			return trim( $array_of_items[0] );
 		case 2:
-			return trim( $array[0] ) . ' ' . __( 'and' ) . ' ' . $array[1];
-		case ( count( $array ) >= 3 ):
-			foreach ( $array as $key => $val ) {
+			return trim( $array_of_items[0] ) . ' ' . __( 'and' ) . ' ' . $array_of_items[1];
+		case ( count( $array_of_items ) >= 3 ):
+			foreach ( $array_of_items as $key => $val ) {
 				$list .= trim( $val );
-				if ( $key < count( $array ) - 2 ) {
+				if ( $key < count( $array_of_items ) - 2 ) {
 					$list .= ', ';
-				} elseif ( $key < count( $array ) - 1 ) {
+				} elseif ( $key < count( $array_of_items ) - 1 ) {
 					$list .= ', and ';
 				}
 			}
 	}
+
 	return $list;
 }

@@ -1,11 +1,20 @@
 <?php
-	namespace Client_Power_Tools\Core\Admin;
+/**
+ * New project form
+ *
+ * @file       cpt-new-project-form.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Admin
+ * @since      1.6.5
+ */
 
-	use Client_Power_Tools\Core\Common;
+namespace Client_Power_Tools\Core\Admin;
 
-	$user_id        = isset( $_REQUEST['user_id'] ) ? sanitize_key( intval( $_REQUEST['user_id'] ) ) : false;
-	$client_ids     = Common\cpt_get_clients( array( 'fields' => 'ID' ) );
-	$projects_label = Common\cpt_get_projects_label();
+use Client_Power_Tools\Core\Common;
+
+$user_id        = isset( $_REQUEST['user_id'] ) ? intval( wp_unslash( $_REQUEST['user_id'] ) ) : false;
+$client_ids     = Common\cpt_get_clients( array( 'fields' => 'ID' ) );
+$projects_label = Common\cpt_get_projects_label();
 ?>
 
 <form 
@@ -79,8 +88,13 @@
 		<div class="form-field span-2">
 			<label for="project_stage">
 				<?php
-					// Translators: %s is the project label.
-					printf( esc_html__( '%s Stage', 'client-power-tools' ), esc_html( $projects_label[0] ) );
+				echo esc_html(
+					sprintf(
+						// Translators: %s is the singular project label.
+						__( '%s Stage', 'client-power-tools' ),
+						$projects_label[0]
+					)
+				);
 				?>
 			</label>
 			<?php
@@ -93,8 +107,13 @@
 		<div class="form-field">
 			<label for="project_status">
 				<?php
-					// Translators: %s is the project label.
-					printf( esc_html__( '%s Status', 'client-power-tools' ), esc_html( $projects_label[0] ) );
+				echo esc_html(
+					sprintf(
+						// Translators: %s is the singular project label.
+						__( '%s Status', 'client-power-tools' ),
+						esc_html( $projects_label[0] )
+					)
+				);
 				?>
 			</label>
 			<?php

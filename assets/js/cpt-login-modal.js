@@ -33,7 +33,16 @@ function showLogin(event) {
 function closeLogin(event) {
   if (event) event.preventDefault();
   loginModal.classList.remove('visible');
+  clearLocation();
+}
 
+
+/**
+ * Removes the `cpt_login` and `user` parameters from the browser URL.
+ * 
+ * @since 1.10.4
+ */
+function clearLocation() {
   params.delete('cpt_login');
   params.delete('user');
 
@@ -143,6 +152,7 @@ function checkLoginCode(event) {
     // beforeSend: function() {},
     success: function(response) {
       // console.debug(response);
+      clearLocation();
       displayNotices(response);
       if (response.success || response.data.tries >= 3) location.reload();
     },
@@ -167,6 +177,7 @@ function checkPassword(event) {
     success: function(response) {
       // console.debug(response);
       displayNotices(response);
+      clearLocation();
       if (response.success) location.reload();
     },
     failure: function(error) {

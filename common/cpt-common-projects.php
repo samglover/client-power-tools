@@ -1,7 +1,21 @@
 <?php
+/**
+ * Client dashboard projects
+ *
+ * @file       cpt-common-projects.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Common
+ * @since      1.6.5
+ */
 
 namespace Client_Power_Tools\Core\Common;
 
+/**
+ * Gets the user-defined label for projects.
+ *
+ * @param string $n Optional. Can be 'singular' or 'plural' to retrieve a single label instead of an array.
+ * @return array|string Default is an array with singular and plural labels. Optionally can be either, as a string.
+ */
 function cpt_get_projects_label( $n = null ) {
 	$projects_label = get_option( 'cpt_projects_label' );
 	foreach ( $projects_label as $key => $label ) {
@@ -18,10 +32,17 @@ function cpt_get_projects_label( $n = null ) {
 }
 
 
+/**
+ * Gets project data.
+ *
+ * @param int $projects_post_id Project post ID.
+ * @return array Project data.
+ */
 function cpt_get_project_data( $projects_post_id ) {
 	if ( ! $projects_post_id ) {
 		return;
 	}
+
 	$term_obj     = get_term( get_post_meta( $projects_post_id, 'cpt_project_type', true ) );
 	$project_data = array(
 		'projects_post_id' => $projects_post_id,
@@ -37,13 +58,30 @@ function cpt_get_project_data( $projects_post_id ) {
 }
 
 
+/**
+ * Gets projects based on the client's user ID.
+ *
+ * @param int $clients_user_id Client's user ID.
+ * @return array Array of project post objects.
+ */
 function cpt_get_projects_list( $clients_user_id = null ) {
 	if ( ! $clients_user_id ) {
 		$clients_user_id = get_current_user_id();
+		if ( ! cpt_is_client( $clients_user_id ) ) {
+			return;
+		}
 	}
 
-	if ( ! cpt_is_client( $clients_user_id ) ) {
-		return;
+	if ( isset( $_REQUEST['orderby'] ) ) {
+		$orderby = sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) );
+	} else {
+		$orderby = 'project';
+	}
+
+	if ( isset( $_REQUEST['order'] ) ) {
+		$order = sanitize_text_field( wp_unslash( $_REQUEST['order'] ) );
+	} else {
+		$order = 'ASC';
 	}
 
 	$projects_label = cpt_get_projects_label();
@@ -51,71 +89,87 @@ function cpt_get_projects_list( $clients_user_id = null ) {
 		array(
 			'meta_key'       => 'cpt_client_id',
 			'meta_value'     => $clients_user_id,
-			'orderby'        => isset( $_REQUEST['orderby'] ) ? sanitize_key( $_REQUEST['orderby'] ) : 'project',
-			'order'          => isset( $_REQUEST['order'] ) ? sanitize_key( $_REQUEST['order'] ) : 'ASC',
+			'orderby'        => $orderby,
+			'order'          => $order,
 			'post_type'      => 'cpt_project',
 			'posts_per_page' => -1,
 		)
 	);
+
 	if ( $projects->have_posts() ) :
 		?>
-			<section class="cpt-projects-list">
+		<section class="cpt-projects-list">
+			<?php while ( $projects->have_posts() ) : ?>
 				<?php
-				while ( $projects->have_posts() ) :
-					$projects->the_post();
-					$projects_post_id = get_the_ID();
-					?>
-					<div class="cpt-project card">
-						<div class="cpt-project-content">
-							<h3 class="cpt-project-title">
-								<?php
-								if ( is_admin() ) {
-									$project_url = get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id=' . $projects_post_id;
-								} else {
-									$project_url = cpt_get_client_dashboard_url() . '?tab=projects&projects_post_id=' . $projects_post_id;
-								}
-								?>
-								<a href="<?php echo esc_url( $project_url ); ?>"><?php the_title(); ?></a>
-							</h3>
-							<?php cpt_get_project_progress_bar( $projects_post_id ); ?>
-						</div>
-						<?php cpt_get_project_meta( $projects_post_id ); ?>
-					</div>
-					<?php
-				endwhile;
+				$projects->the_post();
+				$projects_post_id = get_the_ID();
+				if ( is_admin() ) {
+					$project_url = get_admin_url() . 'admin.php?page=cpt-projects&projects_post_id=' . $projects_post_id;
+				} else {
+					$project_url = cpt_get_client_dashboard_url() . '?tab=projects&projects_post_id=' . $projects_post_id;
+				}
 				?>
-			</section>
+				<div class="cpt-project card">
+					<div class="cpt-project-content">
+						<h3 class="cpt-project-title">
+							<a href="<?php echo esc_url( $project_url ); ?>"><?php the_title(); ?></a>
+						</h3>
+						<?php cpt_get_project_progress_bar( $projects_post_id ); ?>
+					</div>
+					<?php cpt_get_project_meta( $projects_post_id ); ?>
+				</div>
+			<?php endwhile; ?>
+		</section>
 		<?php
 	else :
 		?>
-			<p>
-				<?php
-					printf(
-						// translators: %s is the projects label.
-						esc_html__( 'No %s found.', 'client-power-tools' ),
-						esc_html( strtolower( $projects_label[1] ) )
-					);
-				?>
-			</p>
+		<p>
+			<?php
+			echo esc_html(
+				sprintf(
+					// Translators: %s is the plural projects label.
+					__( 'No %s found.', 'client-power-tools' ),
+					strtolower( $projects_label[1] )
+				)
+			);
+			?>
+		</p>
 		<?php
 		wp_reset_postdata();
 	endif;
 }
 
+
+/**
+ * Outputs a project card.
+ *
+ * @param int $projects_post_id Project post ID.
+ */
 function cpt_get_project( $projects_post_id ) {
-	$projects_label   = cpt_get_projects_label();
-	$projects_post_id = sanitize_key( intval( $_REQUEST['projects_post_id'] ) );
+	if ( ! $projects_post_id && ! isset( $_REQUEST['projects_post_id'] ) ) {
+		return;
+	}
+
+	if ( isset( $_REQUEST['projects_post_id'] ) ) {
+		$projects_post_id = intval( wp_unslash( $_REQUEST['projects_post_id'] ) );
+	}
+
+	$projects_post_id = $projects_post_id;
 	$project_data     = cpt_get_project_data( $projects_post_id );
+	$projects_label   = cpt_get_projects_label();
+
 	?>
 	<p>
 		<a href="<?php echo esc_url( remove_query_arg( 'projects_post_id' ) ); ?>">
 			&lt;
 			<?php
-				printf(
-					// translators: %s is the projects label.
-					esc_html__( 'Back to %s', 'client-power-tools' ),
-					esc_html( $projects_label[1] )
-				);
+			echo esc_html(
+				sprintf(
+					// Translators: %s is the plural projects label.
+					__( 'Back to %s', 'client-power-tools' ),
+					$projects_label[1]
+				)
+			);
 			?>
 		</a>
 	</p>
@@ -136,12 +190,18 @@ function cpt_get_project( $projects_post_id ) {
 	cpt_get_project_progress_bar( $projects_post_id );
 }
 
+
+/**
+ * Outputs project progress bar.
+ *
+ * @param int $projects_post_id Project post ID.
+ */
 function cpt_get_project_progress_bar( $projects_post_id ) {
 	if ( ! $projects_post_id ) {
 		$projects_post_id = get_the_ID();
-	}
-	if ( ! $projects_post_id ) {
-		return;
+		if ( ! $projects_post_id ) {
+			return;
+		}
 	}
 
 	$project_type   = get_term( get_post_meta( $projects_post_id, 'cpt_project_type', true ) );
@@ -206,13 +266,17 @@ function cpt_get_project_progress_bar( $projects_post_id ) {
 	}
 }
 
+/**
+ * Outputs project meta.
+ *
+ * @param int $projects_post_id Project post ID.
+ */
 function cpt_get_project_meta( $projects_post_id ) {
 	if ( ! $projects_post_id ) {
 		$projects_post_id = get_the_ID();
-	}
-
-	if ( ! $projects_post_id || ! cpt_is_project( $projects_post_id ) ) {
-		return;
+		if ( ! $projects_post_id || ! cpt_is_project( $projects_post_id ) ) {
+			return;
+		}
 	}
 
 	$project_data = cpt_get_project_data( $projects_post_id );
@@ -253,11 +317,20 @@ function cpt_get_project_meta( $projects_post_id ) {
 
 add_action( 'wp_ajax_cpt_update_stage_select', __NAMESPACE__ . '\cpt_update_stage_select' );
 add_action( 'wp_ajax_nopriv_cpt_update_stage_select', __NAMESPACE__ . '\cpt_update_stage_select' );
+/**
+ * Outputs the project stage select drop-down.
+ */
 function cpt_update_stage_select() {
-	if ( ! isset( $_POST['_ajax_nonce'] ) || ! wp_verify_nonce( $_POST['_ajax_nonce'], 'update-stages-nonce' ) ) {
-		exit( 'Invalid nonce.' );
+	if ( ! isset( $_POST['_ajax_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_ajax_nonce'] ) ), 'update-stages-nonce' ) ) {
+		exit( esc_html__( 'Invalid nonce.', 'client-power-tools' ) );
 	}
-	$project_type = $_POST['project_type'];
+
+	if ( isset( $_POST['project_type'] ) ) {
+		$project_type = sanitize_text_field( wp_unslash( $_POST['project_type'] ) );
+	} else {
+		exit( esc_html__( 'Missing project type', 'client-power-tools' ) );
+	}
+
 	$stages_array = explode( "\n", sanitize_textarea_field( get_term_meta( $project_type, 'cpt_project_type_stages', true ) ) );
 	foreach ( $stages_array as $key => $val ) {
 		$stages_array[ $key ] = trim( $val );

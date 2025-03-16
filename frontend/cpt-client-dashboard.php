@@ -1,11 +1,21 @@
 <?php
+/**
+ * Outputs the client dashboard.
+ *
+ * @file       cpt-frontend.php
+ * @package    Client_Power_Tools
+ * @subpackage Core\Frontend
+ * @since      1.0.0
+ */
 
 namespace Client_Power_Tools\Core\Frontend;
 
 use Client_Power_Tools\Core\Common;
 
-// Noindexes the client dashboard because it's none of Google's business.
 add_action( 'wp_head', __NAMESPACE__ . '\cpt_noindex_client_dashboard' );
+/**
+ * Noindexes the client dashboard because it's none of Google's business.
+ */
 function cpt_noindex_client_dashboard() {
 	if ( Common\cpt_is_client_dashboard() ) {
 		echo '<meta name="robots" content="noindex" />';
@@ -13,12 +23,17 @@ function cpt_noindex_client_dashboard() {
 }
 
 add_filter( 'the_content', __NAMESPACE__ . '\cpt_client_dashboard' );
+/**
+ * Outputs the client dashboard.
+ *
+ * @param string $content Content of the post.
+ */
 function cpt_client_dashboard( $content ) {
 	if (
-		! Common\cpt_is_client_dashboard() ||
-		! is_main_query() ||
-		! in_the_loop() ||
-		has_shortcode( $content, 'client-dashboard' )
+		! Common\cpt_is_client_dashboard()
+		|| ! is_main_query()
+		|| ! in_the_loop()
+		|| has_shortcode( $content, 'client-dashboard' )
 	) {
 		return $content;
 	}
@@ -26,9 +41,9 @@ function cpt_client_dashboard( $content ) {
 	$dashboard = cpt_get_client_dashboard();
 
 	if (
-		Common\cpt_is_client_dashboard( 'messages' ) ||
-		Common\cpt_is_client_dashboard( 'projects' ) ||
-		Common\cpt_is_project()
+		Common\cpt_is_client_dashboard( 'messages' )
+		|| Common\cpt_is_client_dashboard( 'projects' )
+		|| Common\cpt_is_project()
 	) {
 		$content = $dashboard;
 	} else {
@@ -37,7 +52,12 @@ function cpt_client_dashboard( $content ) {
 	return $content;
 }
 
-
+/**
+ * Returns the client dashboard.
+ *
+ * @param int $user_id The ID of the user whose dashboard should be returned.
+ * @return string Client dashboard HTML.
+ */
 function cpt_get_client_dashboard( $user_id = null ) {
 	if (
 		! Common\cpt_is_client_dashboard()
@@ -47,12 +67,10 @@ function cpt_get_client_dashboard( $user_id = null ) {
 
 	if ( ! is_user_logged_in() ) {
 		return '<p>' . sprintf(
-			wp_kses_post(
-				// translators: %1$s and %2$s are <a> tags for the login link.
-				__( 'Please %1$slog in%2$s to view the client dashboard.', 'client-power-tools' )
-			),
-			/* %1$s */ '<a class="cpt-login-link" href="#">',
-			/* %2$s */ '</a>'
+			// Translators: %1$s and %2$s are `<a>` tags for the login link.
+			__( 'Please %1$slog in%2$s to view the client dashboard.', 'client-power-tools' ),
+			'<a class="cpt-login-link" href="#">',
+			'</a>'
 		) . '</p>';
 	}
 
@@ -61,8 +79,8 @@ function cpt_get_client_dashboard( $user_id = null ) {
 	}
 
 	if (
-		! 0 === $user_id ||
-		! Common\cpt_is_client( $user_id )
+		! 0 === $user_id
+		|| ! Common\cpt_is_client( $user_id )
 	) {
 		return '<p>' . __( 'Sorry, you don\'t have permission to view this page because your user account is missing the "Client" role.', 'client-power-tools' ) . '</p>';
 	}
@@ -80,7 +98,7 @@ function cpt_get_client_dashboard( $user_id = null ) {
 	Common\cpt_get_notices();
 
 	// Outputs the welcome message and the status update request button.
-	if ( Common\cpt_is_client_dashboard( 'dashboard' ) ) {
+	if ( Common\cpt_is_client_dashboard( 'home' ) ) {
 		cpt_welcome_message( $client_data['first_name'] );
 
 		$dashboard_page_id = intval( get_option( 'cpt_client_dashboard_page_selection' ) );
@@ -95,8 +113,8 @@ function cpt_get_client_dashboard( $user_id = null ) {
 
 	// Outputs the Messages page.
 	if (
-		get_option( 'cpt_module_messaging' ) &&
-		Common\cpt_is_client_dashboard( 'messages' )
+		get_option( 'cpt_module_messaging' )
+		&& Common\cpt_is_client_dashboard( 'messages' )
 	) {
 		Common\cpt_messages( $user_id );
 		?>
@@ -109,12 +127,12 @@ function cpt_get_client_dashboard( $user_id = null ) {
 
 	// Outputs the Projects page.
 	if (
-		get_option( 'cpt_module_projects' ) &&
-		Common\cpt_is_client_dashboard( 'projects' )
+		get_option( 'cpt_module_projects' )
+		&& Common\cpt_is_client_dashboard( 'projects' )
 	) {
 		// Outputs an individual project if a project post ID is specified.
 		// Otherwise, outputs the list of projects.
-		$projects_post_id = isset( $_REQUEST['projects_post_id'] ) ? intval( sanitize_key( $_REQUEST['projects_post_id'] ) ) : false;
+		$projects_post_id = isset( $_REQUEST['projects_post_id'] ) ? intval( wp_unslash( $_REQUEST['projects_post_id'] ) ) : false;
 		if (
 			$projects_post_id &&
 			Common\cpt_is_project( $projects_post_id )
@@ -128,7 +146,9 @@ function cpt_get_client_dashboard( $user_id = null ) {
 	return ob_get_clean();
 }
 
-
+/**
+ * Outputs the CPT nav menu.
+ */
 function cpt_nav() {
 	remove_filter( 'the_title', 'Client_Power_Tools\Core\Frontend\cpt_client_dashboard_page_titles', 10 );
 	?>
@@ -139,7 +159,7 @@ function cpt_nav() {
 			<ul class="cpt-tabs menu">
 				<li class="cpt-tab menu-item
 					<?php
-					if ( Common\cpt_is_client_dashboard( 'dashboard' ) && ! isset( $_REQUEST['tab'] ) ) {
+					if ( Common\cpt_is_client_dashboard( 'home' ) && ! isset( $_REQUEST['tab'] ) ) {
 						echo ' current-menu-item';
 					}
 					?>
@@ -233,7 +253,10 @@ function cpt_nav() {
 
 
 /**
- * Nav Submenus
+ * Utility function that returns an array of child page IDs.
+ *
+ * @param int $page_id Possible parent page ID.
+ * @return array Child page IDs.
  */
 function cpt_get_child_pages( $page_id ) {
 	if ( ! $page_id ) {
@@ -259,6 +282,11 @@ function cpt_get_child_pages( $page_id ) {
 	}
 }
 
+/**
+ * Outputs submenus based on child pages for the nav menu.
+ *
+ * @param int $page_id ID of the parent page.
+ */
 function cpt_submenu( $page_id ) {
 	if ( ! $page_id ) {
 		return;
@@ -297,16 +325,23 @@ function cpt_submenu( $page_id ) {
 	<?php
 }
 
+/**
+ * Outputs a welcome message for returning clients.
+ *
+ * @param string $clients_first_name Client's first name.
+ */
 function cpt_welcome_message( $clients_first_name ) {
 	?>
 	<p>
 		<strong>
 			<?php
-				printf(
-					// translators: %s is the client's first name.
-					esc_html__( 'Welcome back, %s!', 'client-power-tools' ),
-					esc_html( $clients_first_name )
-				);
+			echo esc_html(
+				sprintf(
+					// Translators: %s is the client's first name.
+					__( 'Welcome back, %s!', 'client-power-tools' ),
+					$clients_first_name
+				)
+			);
 			?>
 		</strong>
 	</p>
@@ -314,7 +349,7 @@ function cpt_welcome_message( $clients_first_name ) {
 }
 
 /**
- * Knowledge Base Breadcrumbs
+ * Outputs breadcrumbs below the nav menu for knowledge base pages and additional pages.
  */
 function cpt_breadcrumbs() {
 	if ( ! get_option( 'cpt_show_knowledge_base_breadcrumbs' ) ) {
