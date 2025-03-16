@@ -67,15 +67,13 @@ class Client_Manager_List_Table extends \WP_List_Table {
 	 * @param array $item A singular item (one full row's worth of data).
 	 */
 	function column_manager_name( $item ) {
-		$url     = admin_url( '?page=cpt-managers' );
+		$remove_url = wp_nonce_url(
+			'?page=cpt-managers&action=cpt_remove_client_manager&manager_id=' . $item['ID'],
+			'cpt_remove_client_manager'
+		);
+
 		$actions = array(
-			'remove' => '<a href="' . add_query_arg(
-				array(
-					'user_id'    => $item['ID'],
-					'cpt_action' => 'cpt_remove_client_manager',
-				),
-				$url
-			) . '">Remove</a>',
+			'remove' => '<a href="' . $remove_url . '">Remove</a>',
 		);
 
 		return sprintf(

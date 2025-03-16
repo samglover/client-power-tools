@@ -12,6 +12,71 @@ namespace Client_Power_Tools\Core\Admin;
 
 use Client_Power_Tools\Core\Common;
 
+add_action( 'admin_init', __NAMESPACE__ . '\cpt_process_client_manager_actions' );
+/**
+ * Process client manager actions.
+ */
+function cpt_process_client_manager_actions() {
+	if (
+		! isset( $_REQUEST['page'] )
+		|| ! isset( $_REQUEST['action'] )
+		|| (
+			isset( $_REQUEST['page'] )
+			&& 'cpt-managers' !== sanitize_text_field( wp_unslash( $_REQUEST['page'] ) )
+		)
+	) {
+		return;
+	}
+
+	$action = sanitize_key( wp_unslash( $_REQUEST['action'] ) );
+	$page   = sanitize_key( wp_unslash( $_REQUEST['page'] ) );
+
+	if ( ! isset( $_REQUEST['_wpnonce'] ) ) {
+		exit( esc_html__( 'Missing nonce.', 'client-power-tools' ) );
+	}
+
+	if (
+		! wp_verify_nonce(
+			sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ),
+			$action
+		)
+	) {
+		exit( esc_html__( 'Invalid nonce.', 'client-power-tools' ) );
+	}
+
+	switch ( $action ) {
+		case 'cpt_remove_client_manager':
+			$manager_id = intval( wp_unslash( $_REQUEST['manager_id'] ) );
+			$manager    = new \WP_User( $manager_id );
+
+			$manager->remove_role( 'cpt-client-manager' );
+
+			$manager_roles = get_userdata( $manager_id )->roles;
+
+			if ( ! in_array( 'cpt-client-manager', $manager_roles, true ) ) {
+				$result = sprintf(
+					// Translators: %s is the client manager's name.
+					__( '%s is no longer a client manager.', 'client-power-tools' ),
+					Common\cpt_get_client_name( $manager_id )
+				);
+			} else {
+				$result = __( 'Client manager could not be removed.', 'client-power-tools' );
+			}
+
+			break;
+
+		default:
+			$result = __( 'Invalid action.', 'client-power-tools' );
+	}
+
+	if ( $result ) {
+		set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
+	}
+
+	$redirect = wp_safe_redirect( get_admin_url( null, 'admin.php?page=' . $page ) );
+	exit;
+}
+
 /**
  * Outputs the client managers page
  */
@@ -21,16 +86,6 @@ function cpt_client_managers() {
 			'<p>' . esc_html__( 'Sorry, you are not allowed to access this page.' ) . '</p>',
 			403
 		);
-	}
-
-	if ( isset( $_REQUEST['cpt_action'] ) && isset( $_REQUEST['user_id'] ) ) {
-		$action_user_id = intval( wp_unslash( $_REQUEST['user_id'] ) );
-		$action         = sanitize_text_field( wp_unslash( $_REQUEST['cpt_action'] ) );
-		switch ( $action ) {
-			case 'cpt_remove_client_manager':
-				cpt_remove_client_manager( $action_user_id );
-				break;
-		}
 	}
 
 	Common\cpt_get_notices(
@@ -280,22 +335,4 @@ function cpt_get_managers_clients( $user_id ) {
 	} else {
 		return;
 	}
-}
-
-/**
- * Removes the cpt-client-manager role from a user (without deleting the user).
- *
- * @param int $user_id Client manager's user ID.
- */
-function cpt_remove_client_manager( $user_id ) {
-	if ( ! $user_id ) {
-		return;
-	}
-
-	$user = new \WP_User( $user_id );
-	$user->remove_role( 'cpt-client-manager' );
-
-	$result = __( 'Client manager removed.', 'client-power-tools' );
-
-	set_transient( 'cpt_notice_for_user_' . get_current_user_id(), $result, 15 );
 }
