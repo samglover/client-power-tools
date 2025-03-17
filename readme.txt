@@ -100,9 +100,11 @@ To add pages to your knowledge base, just go to the page you want to add (or cre
 
 == Upgrade Notice ==
 
-Version 1.10 adds default styles for the navigation menu. These should be overidden by themes that include styles for regular WordPress menus, and have low specificity so they are easy to override with custom CSS. (The default styles are not applied to the [Client Power Tools theme](https://github.com/samglover/cpt-theme).)
+Version 1.11.0 is a thorough refactor to comply with WordPress PHP coding and documentation standards, improve data sanitization and escaping, and fix a couple of bugs.
 
-Version 1.9 includes a new \[client-dashboard] shortcode (in 1.9.2). This allows you to manually place the dashboard on the client dashboard page, which should help those experiencing wonky page layout issues with page builders.
+Version 1.10.0 adds default styles for the navigation menu. These should be overidden by themes that include styles for regular WordPress menus, and have low specificity so they are easy to override with custom CSS. (The default styles are not applied to the [Client Power Tools theme](https://github.com/samglover/cpt-theme).)
+
+Version 1.9.0 includes a new \[client-dashboard] shortcode (in 1.9.2). This allows you to manually place the dashboard on the client dashboard page, which should help those experiencing wonky page layout issues with page builders.
 
 It also addresses a number of output escaping issues identified by the WordPress Plugin Review Team's [Plugin Check plugin](https://wordpress.org/plugins/plugin-check/), and a cross-site-scripting (XSS) vulnerability.
 
@@ -112,6 +114,35 @@ For more information on how to take advantage of the new and updated features, s
 
 
 == Changelog ==
+
+### 1.11.0 - 2025-03-16
+
+#### Added
+- PHP documentation according to the WordPress Coding Standards
+- New functions in /common/cpt-common.php for retrieving and sanitizing user data and user meta from `$_POST`:
+  - `cpt_get_client_userdata_keys()`
+  - `cpt_get_sanitized_userdata_from_post()`
+  - `cpt_get_client_usermeta_keys()`
+  - `cpt_get_sanitized_usermeta_from_post()`
+- Sanitize `$_POST` variables in /common/cpt-status-update-request-button.php
+
+#### Changed
+- Tidied up in general while adding documentation
+- Rename `cpt_days_since_last_request()` to `cpt_get_days_since_last_request()`, and now it returns false instead of null
+- Clear location before reloading the page on successful login
+- Refactor and simplify `cpt_is_client_dashboard()` function
+- Rename files according to WP Coding Standards:
+  - cpt-clients-table.php -> class-client-list-table.php
+  - cpt-projects-table.php -> class-project-list-table.php
+  - cpt-admin-messages-table.php -> class-project-list-table.php
+  - cpt-project-types-table.php -> class-project-types-list-table.php
+- Replace `wp_redirect( $_POST['_wp_http_referer'] )` with `wp_safe_redirect( wp_get_referer() )` throughout
+- Refactor deleting a project type
+
+#### Removed
+- `cpt_admin_actions()` because it wasn't actually doing anything
+- `cpt_remove_client_manager()` because it was simple enough to handle in `cpt_process_client_manager_actions()`
+
 
 ### 1.10.3 - 2025-01-19
 
