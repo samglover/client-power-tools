@@ -71,7 +71,7 @@ class Client_List_Table extends \WP_List_Table {
 		return sprintf(
 			'<strong><a href="' . add_query_arg( 'user_id', $item['ID'], $url ) . '">%1$s</a></strong>%2$s',
 			/* $1%s */ $item['client_name'],
-			/* $2%s */ $item['client_id'] ? ' <span style="color:silver">(' . $item['client_id'] . ')</span>' : '',
+			/* $2%s */ $item['client_id'] ? ' <span style="color:silver">(' . $item['client_id'] . ')</span>' : ''
 		);
 	}
 
