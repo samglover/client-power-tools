@@ -1,0 +1,1374 @@
+# Copyright (C) 2025 Sam Glover
+# This file is distributed under the same license as the Client Power Tools plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Client Power Tools 1.11.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/client-power-tools\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-03-17T20:19:44+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: client-power-tools\n"
+
+#. Plugin Name of the plugin
+#: client-power-tools.php
+#: admin/cpt-admin-messages.php:31
+#: client-power-tools.php:344
+msgid "Client Power Tools"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: client-power-tools.php
+msgid "https://clientpowertools.com"
+msgstr ""
+
+#. Description of the plugin
+#: client-power-tools.php
+msgid "Client Power Tools is an easy-to-use client dashboard, project management, and communication portal built for designers, developers, consultants, lawyers, and other professionals."
+msgstr ""
+
+#. Author of the plugin
+#: client-power-tools.php
+msgid "Sam Glover"
+msgstr ""
+
+#. Author URI of the plugin
+#: client-power-tools.php
+msgid "https://samglover.net"
+msgstr ""
+
+#: admin/class-client-list-table.php:128
+msgid "ago"
+msgstr ""
+
+#: admin/class-project-list-table.php:94
+#: common/cpt-common-projects.php:292
+msgid "ID"
+msgstr ""
+
+#: admin/class-project-list-table.php:96
+#: admin/cpt-clients.php:74
+#: admin/cpt-edit-project-form.php:34
+msgid "Client"
+msgstr ""
+
+#: admin/class-project-list-table.php:97
+#: client-power-tools.php:380
+#: client-power-tools.php:381
+#: client-power-tools.php:382
+#: client-power-tools.php:383
+#: client-power-tools.php:384
+#: client-power-tools.php:385
+#: common/cpt-common-projects.php:300
+msgid "Type"
+msgstr ""
+
+#: admin/class-project-list-table.php:98
+msgid "Stage"
+msgstr ""
+
+#: admin/class-project-list-table.php:99
+#: common/cpt-common-projects.php:308
+msgid "Status"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/class-project-types-list-table.php:94
+#: admin/cpt-edit-project-form.php:107
+#: admin/cpt-edit-project-type-form.php:43
+#: admin/cpt-new-project-type-form.php:28
+msgid "%s Type"
+msgstr ""
+
+#: admin/class-project-types-list-table.php:97
+msgid "Stages"
+msgstr ""
+
+#: admin/class-project-types-list-table.php:98
+msgid "Count"
+msgstr ""
+
+#: admin/class-project-types-list-table.php:138
+#: client-power-tools.php:314
+#: client-power-tools.php:384
+msgid "Edit"
+msgstr ""
+
+#: admin/class-project-types-list-table.php:140
+#: admin/cpt-edit-client.php:112
+msgid "Delete"
+msgstr ""
+
+#: admin/cpt-admin-messages.php:28
+#: admin/cpt-clients.php:221
+#: admin/cpt-settings.php:449
+#: client-power-tools.php:228
+#: frontend/cpt-client-dashboard.php:180
+msgid "Messages"
+msgstr ""
+
+#. Translators: %1$s and %2$s are `<a>` tags for a link to the Client Power Tools website for additional information about this warning.
+#: admin/cpt-admin.php:29
+msgid "It doesn't look like your website is using SSL (HTTPS). Before using Client Power Tools with your clients, it's a good idea to get an SSL certificate for your website and consider additional security measures. %1$sLearn more.%2$s"
+msgstr ""
+
+#: admin/cpt-admin.php:51
+msgid "Welcome to Client Power Tools!"
+msgstr ""
+
+#. Translators: %1$s and %2$s are `<a>` tags for a link to the main Client Power Tools admin page.
+#: admin/cpt-admin.php:57
+msgid "You can view and manage your clients here, in the WordPress dashboard. You can add your first client on the %1$sClients page%2$s (if you are an admin)."
+msgstr ""
+
+#. Translators: %1$s and %2$s are `<a>` tags for a link to the frontend client dashboard.
+#: admin/cpt-admin.php:69
+msgid "Your clients can access their dashboard by visiting %1$sthis page%2$s on the front end of your website (clients don't have access to the WordPress admin dashboard). You'll probably want to add that page to your navigation menu to make it easy for your clients to find."
+msgstr ""
+
+#. Translators: %1$s is a link to the Client Power Tools website. %2$s and %3$s are `<a>` tags for a link to the WordPress.org support forum.
+#: admin/cpt-admin.php:81
+msgid "You can find options and customizations in the settings, and you can find additional documentation at %1$s. If you need help, please use the %2$sWordPress.org support forum%3$s."
+msgstr ""
+
+#. Translators: %1$s and %2$s are `<a>` tags for a link to the frontend client dashboard.
+#: admin/cpt-admin.php:94
+msgid "Please %1$sleave a review on WordPress.org%2$s!"
+msgstr ""
+
+#: admin/cpt-admin.php:101
+msgid "—Sam"
+msgstr ""
+
+#: admin/cpt-admin.php:229
+msgid "Unassigned"
+msgstr ""
+
+#: admin/cpt-admin.php:244
+msgid "Add a client manager."
+msgstr ""
+
+#: admin/cpt-client-managers.php:35
+#: admin/cpt-project-types.php:35
+msgid "Missing nonce."
+msgstr ""
+
+#: admin/cpt-client-managers.php:44
+#: admin/cpt-client-managers.php:222
+#: admin/cpt-edit-client.php:24
+#: admin/cpt-edit-client.php:152
+#: admin/cpt-edit-project.php:81
+#: admin/cpt-edit-project.php:165
+#: admin/cpt-edit-project.php:246
+#: admin/cpt-edit-project.php:331
+#: admin/cpt-new-client.php:24
+#: admin/cpt-project-types.php:44
+#: admin/cpt-project-types.php:167
+#: admin/cpt-project-types.php:219
+#: common/cpt-common-projects.php:325
+#: common/cpt-login.php:91
+#: common/cpt-login.php:165
+#: common/cpt-login.php:179
+msgid "Invalid nonce."
+msgstr ""
+
+#. Translators: %s is the client manager's name.
+#: admin/cpt-client-managers.php:59
+msgid "%s is no longer a client manager."
+msgstr ""
+
+#: admin/cpt-client-managers.php:63
+msgid "Client manager could not be removed."
+msgstr ""
+
+#: admin/cpt-client-managers.php:69
+#: admin/cpt-project-types.php:70
+msgid "Invalid action."
+msgstr ""
+
+#: admin/cpt-client-managers.php:149
+#: admin/cpt-client-managers.php:166
+#: admin/cpt-client-managers.php:183
+#: admin/cpt-edit-client-form.php:63
+#: admin/cpt-edit-client-form.php:77
+#: admin/cpt-edit-client-form.php:93
+#: admin/cpt-edit-client-form.php:161
+#: admin/cpt-edit-project-form.php:35
+#: admin/cpt-edit-project-form.php:88
+#: admin/cpt-edit-project-type-form.php:48
+#: admin/cpt-new-client-form.php:36
+#: admin/cpt-new-client-form.php:49
+#: admin/cpt-new-client-form.php:64
+#: admin/cpt-new-client-form.php:116
+#: admin/cpt-new-project-form.php:32
+#: admin/cpt-new-project-form.php:67
+#: admin/cpt-new-project-type-form.php:33
+msgid "required"
+msgstr ""
+
+#. Translators: %s is the error message.
+#: admin/cpt-client-managers.php:249
+msgid "Client manager could not be added. Error message: %s"
+msgstr ""
+
+#: admin/cpt-client-managers.php:281
+msgid "Your client manager account has been created. Please set your password."
+msgstr ""
+
+#: admin/cpt-client-managers.php:284
+msgid "Your username is your email address:"
+msgstr ""
+
+#: admin/cpt-client-managers.php:286
+msgid "You will need to activate your account and set a password in order to access your clients."
+msgstr ""
+
+#: admin/cpt-client-managers.php:288
+msgid "Activate Your Account"
+msgstr ""
+
+#: admin/cpt-clients.php:20
+#: admin/cpt-settings.php:22
+msgid "Sorry, you are not allowed to access this page."
+msgstr ""
+
+#: admin/cpt-clients.php:27
+msgid "Back to Clients"
+msgstr ""
+
+#: admin/cpt-clients.php:36
+msgid "Clients"
+msgstr ""
+
+#: admin/cpt-clients.php:56
+msgid "Error: No such client."
+msgstr ""
+
+#: admin/cpt-clients.php:72
+#: admin/cpt-projects.php:91
+msgid "Your Client"
+msgstr ""
+
+#: admin/cpt-clients.php:94
+msgid "Add a Client"
+msgstr ""
+
+#: admin/cpt-clients.php:139
+msgid "Edit Client"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-clients.php:148
+#: admin/cpt-clients.php:190
+#: admin/cpt-projects.php:112
+#: admin/cpt-projects.php:125
+msgid "Add a %s"
+msgstr ""
+
+#: admin/cpt-clients.php:157
+#: admin/cpt-clients.php:203
+#: client-power-tools.php:236
+#: frontend/cpt-client-dashboard.php:122
+msgid "New Message"
+msgstr ""
+
+#: admin/cpt-clients.php:165
+msgid "Edit This Client"
+msgstr ""
+
+#. Translators: %s is the client's name.
+#: admin/cpt-clients.php:172
+msgid "Delete %s"
+msgstr ""
+
+#: admin/cpt-edit-client-form.php:31
+#: admin/cpt-new-client-form.php:21
+msgid "Client ID"
+msgstr ""
+
+#: admin/cpt-edit-client-form.php:43
+#: admin/cpt-new-client-form.php:25
+msgid "Client Name"
+msgstr ""
+
+#: admin/cpt-edit-client-form.php:56
+#: admin/cpt-new-client-form.php:30
+msgid "Primary Contact"
+msgstr ""
+
+#: admin/cpt-edit-client-form.php:62
+#: admin/cpt-new-client-form.php:35
+msgid "First Name"
+msgstr ""
+
+#: admin/cpt-edit-client-form.php:76
+#: admin/cpt-new-client-form.php:48
+msgid "Last Name"
+msgstr ""
+
+#: admin/cpt-edit-client-form.php:92
+#: admin/cpt-new-client-form.php:63
+msgid "Email Address"
+msgstr ""
+
+#: admin/cpt-edit-client-form.php:107
+#: admin/cpt-new-client-form.php:76
+msgid "Additional Contacts"
+msgstr ""
+
+#: admin/cpt-edit-client-form.php:113
+#: admin/cpt-new-client-form.php:80
+msgid "Email Addresses to CC When Sending Messages"
+msgstr ""
+
+#: admin/cpt-edit-client-form.php:121
+#: admin/cpt-new-client-form.php:82
+msgid "Enter one email address per line."
+msgstr ""
+
+#: admin/cpt-edit-client-form.php:126
+#: admin/cpt-new-client-form.php:86
+msgid "Client Details"
+msgstr ""
+
+#: admin/cpt-edit-client-form.php:132
+#: admin/cpt-new-client-form.php:90
+msgid "Client Manager"
+msgstr ""
+
+#: admin/cpt-edit-client-form.php:143
+#: admin/cpt-new-client-form.php:99
+msgid "Client Status"
+msgstr ""
+
+#: admin/cpt-edit-client-form.php:190
+msgid "Update Client"
+msgstr ""
+
+#: admin/cpt-edit-client.php:28
+msgid "Missing client ID"
+msgstr ""
+
+#: admin/cpt-edit-client.php:55
+msgid "Client updated."
+msgstr ""
+
+#. Translators: %1$s and %2$s are `<strong>` tags.
+#: admin/cpt-edit-client.php:81
+msgid "%1$sDeleting a client is permanent.%2$s There is no undo. Make sure you have a backup!"
+msgstr ""
+
+#: admin/cpt-edit-client.php:89
+msgid "Deleting a client will also remove the associated user account, client messages, projects, and other client information."
+msgstr ""
+
+#: admin/cpt-edit-client.php:93
+#: admin/cpt-edit-project-type-form.php:98
+msgid "Cancel"
+msgstr ""
+
+#: admin/cpt-edit-client.php:156
+msgid "Missing client ID."
+msgstr ""
+
+#. Translators: %s is the client's name.
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-client.php:204
+#: admin/cpt-edit-project.php:345
+msgid "%s deleted."
+msgstr ""
+
+#: admin/cpt-edit-client.php:208
+msgid "Client could not be deleted."
+msgstr ""
+
+#: admin/cpt-edit-client.php:214
+msgid "Not all messages could be deleted."
+msgstr ""
+
+#: admin/cpt-edit-client.php:221
+msgid "Not all projects could be deleted."
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project-form.php:62
+msgid "%s ID"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project-form.php:83
+msgid "%s Name"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project-form.php:127
+#: admin/cpt-new-project-form.php:94
+msgid "%s Stage"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project-form.php:147
+#: admin/cpt-new-project-form.php:113
+msgid "%s Status"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project-form.php:167
+msgid "Update %s"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project-type-form.php:26
+msgid "Edit %s Type"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project-type-form.php:64
+#: admin/cpt-new-project-type-form.php:49
+msgid "%s Type Stages"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project-type-form.php:82
+#: admin/cpt-new-project-type-form.php:61
+msgid "Enter one stage per line. These stages will only apply to this %s type."
+msgstr ""
+
+#: admin/cpt-edit-project-type-form.php:95
+msgid "Save"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project.php:35
+msgid "Edit %s"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project.php:48
+msgid "Edit This %s"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project.php:125
+msgid "Delete this %s"
+msgstr ""
+
+#: admin/cpt-edit-project.php:169
+#: admin/cpt-edit-project.php:250
+msgid "Missing project ID"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project.php:179
+msgid "%s moved to the trash."
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project.php:185
+msgid "%s could not be moved to the trash."
+msgstr ""
+
+#: admin/cpt-edit-project.php:229
+msgid "Restore"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project.php:265
+msgid "%s restored."
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project.php:271
+msgid "%s could not be restored."
+msgstr ""
+
+#: admin/cpt-edit-project.php:314
+msgid "Delete Permanently"
+msgstr ""
+
+#: admin/cpt-edit-project.php:335
+msgid "Missing project ID."
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-edit-project.php:351
+msgid "%s could not be deleted."
+msgstr ""
+
+#: admin/cpt-new-client-form.php:136
+msgid "Add Client"
+msgstr ""
+
+#: admin/cpt-new-client.php:32
+msgid "Missing required fields"
+msgstr ""
+
+#. Translators: %s is the error message.
+#: admin/cpt-new-client.php:59
+msgid "Client could not be created. Error message: %s"
+msgstr ""
+
+#. Translators: %1$s is an `<a>` tag that links to the client's profile URL. %2$s is the client's name. %3$s is the closing `</a>` tag.
+#: admin/cpt-new-client.php:81
+msgid "Client created. %1$sView %2$s's profile%3$s."
+msgstr ""
+
+#: admin/cpt-new-client.php:100
+msgid "Missing client's user ID."
+msgstr ""
+
+#: admin/cpt-new-client.php:112
+msgid "Your Client Account Has Been Created"
+msgstr ""
+
+#: admin/cpt-new-client.php:113
+msgid "Use your email address to access your client dashboard:"
+msgstr ""
+
+#: admin/cpt-new-client.php:114
+msgid "Visit Your Client Dashboard"
+msgstr ""
+
+#: admin/cpt-new-project-form.php:40
+msgid "Select client."
+msgstr ""
+
+#: admin/cpt-new-project-form.php:133
+msgid "Add"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-new-project-type-form.php:79
+msgid "Add %s Type"
+msgstr ""
+
+#. Translators: %1$s is the singular project label. %2$s and %4$s are `<a>` tags that link to the project page. %3$s is the lower-case singular project label.
+#: admin/cpt-new-project.php:51
+msgid "%1$s created. %2$sView %3$s%4$s."
+msgstr ""
+
+#. Translators: %1$s is the singular project label, %2$s is the error message.
+#: admin/cpt-project-types.php:55
+msgid "%1$s type could not be deleted. Error message: %2$s"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-project-types.php:62
+msgid "%s type deleted."
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-project-types.php:101
+msgid "%s Types"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-project-types.php:120
+msgid "Add New %s Type"
+msgstr ""
+
+#. Translators: %1$s is the singular project label. %2$s is the error message.
+#: admin/cpt-project-types.php:178
+msgid "%1$s type could not be created. Error message: %2$s"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-project-types.php:185
+msgid "%s type created."
+msgstr ""
+
+#. Translators: %s is the error message.
+#: admin/cpt-project-types.php:198
+msgid "Stages could not be added. Error message: %s"
+msgstr ""
+
+#. Translators: %1$s is the singular project label. %2$s is the error message.
+#: admin/cpt-project-types.php:237
+msgid "%1$s type could not be updated. Error message: %2$s"
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-project-types.php:244
+msgid "%s type updated."
+msgstr ""
+
+#. Translators: %s is the error message.
+#: admin/cpt-project-types.php:256
+msgid "Stages could not be updated. Error message: %s"
+msgstr ""
+
+#. Translators: %s is the plural projects label.
+#: admin/cpt-projects.php:40
+#: common/cpt-common-projects.php:169
+msgid "Back to %s"
+msgstr ""
+
+#. Translators: %s is the plural projects label.
+#: admin/cpt-projects.php:75
+msgid "Error: No such %s."
+msgstr ""
+
+#. Translators: %s is the singular project label.
+#: admin/cpt-projects.php:142
+msgid "In order to create a %s you must add a client."
+msgstr ""
+
+#: admin/cpt-projects.php:269
+#: assets/js/cpt-stages.js:44
+msgid "Select another project type."
+msgstr ""
+
+#: admin/cpt-settings.php:32
+msgid "Settings"
+msgstr ""
+
+#: admin/cpt-settings.php:45
+msgid "Settings updated!"
+msgstr ""
+
+#: admin/cpt-settings.php:54
+msgid "Save Settings"
+msgstr ""
+
+#: admin/cpt-settings.php:68
+msgid "General Settings"
+msgstr ""
+
+#: admin/cpt-settings.php:76
+msgid "Client Dashboard Page"
+msgstr ""
+
+#: admin/cpt-settings.php:85
+msgid "Additional Pages"
+msgstr ""
+
+#: admin/cpt-settings.php:94
+msgid "Include Child Pages?"
+msgstr ""
+
+#: admin/cpt-settings.php:103
+msgid "Default Client Manager"
+msgstr ""
+
+#: admin/cpt-settings.php:112
+msgid "Client Statuses"
+msgstr ""
+
+#: admin/cpt-settings.php:121
+msgid "Default New Client Status"
+msgstr ""
+
+#: admin/cpt-settings.php:166
+msgid "When clients visit this page they will be prompted to log in to view their client dashboard."
+msgstr ""
+
+#: admin/cpt-settings.php:171
+msgid "Visit the client dashboard."
+msgstr ""
+
+#: admin/cpt-settings.php:177
+msgid "Sorry, you don't have any published pages."
+msgstr ""
+
+#: admin/cpt-settings.php:194
+msgid "Add page IDs separated by commas. Adding a page will restrict that page to logged-in clients."
+msgstr ""
+
+#: admin/cpt-settings.php:207
+msgid "Include a drop-down menu with descendants of the additional pages listed above (if any)."
+msgstr ""
+
+#: admin/cpt-settings.php:261
+msgid "Client Account Activation Email"
+msgstr ""
+
+#: admin/cpt-settings.php:269
+#: common/cpt-common-messages.php:155
+msgid "Subject Line"
+msgstr ""
+
+#: admin/cpt-settings.php:269
+#: admin/cpt-settings.php:353
+msgid "(required)"
+msgstr ""
+
+#: admin/cpt-settings.php:278
+msgid "Message Body"
+msgstr ""
+
+#: admin/cpt-settings.php:278
+#: admin/cpt-settings.php:362
+msgid "(optional)"
+msgstr ""
+
+#: admin/cpt-settings.php:291
+msgid "Newly added clients will receive an email notification from their client manager with an account activation link. You can customize the subject line or add a message to the body of the email."
+msgstr ""
+
+#: admin/cpt-settings.php:323
+msgid "New users will be sent their username and an account activation link along with any additional message you choose to add here."
+msgstr ""
+
+#: admin/cpt-settings.php:335
+msgid "Status Update Request Button"
+msgstr ""
+
+#: admin/cpt-settings.php:343
+#: admin/cpt-settings.php:457
+#: admin/cpt-settings.php:541
+#: admin/cpt-settings.php:707
+msgid "Enable"
+msgstr ""
+
+#: admin/cpt-settings.php:353
+msgid "Status Update Request Frequency"
+msgstr ""
+
+#: admin/cpt-settings.php:362
+msgid "Additional Status Update Request Notification Email"
+msgstr ""
+
+#: admin/cpt-settings.php:374
+msgid "The status update request button makes it easy for clients to prompt you for a status update—but only as frequently as you specify."
+msgstr ""
+
+#: admin/cpt-settings.php:391
+msgid "Enable the status update request button."
+msgstr ""
+
+#: admin/cpt-settings.php:409
+msgid "days"
+msgstr ""
+
+#. Translators: %1$s and %2$s are `<strong>` tags.
+#: admin/cpt-settings.php:415
+msgid "Enter how frequently you want to allow your clients to request a status update using the %1$sRequest Status Update%2$s button on their client dashboard."
+msgstr ""
+
+#: admin/cpt-settings.php:437
+msgid "Status update request notifications are sent to the assigned client manager. This address will be CC'd."
+msgstr ""
+
+#: admin/cpt-settings.php:467
+msgid "Email Notification Content"
+msgstr ""
+
+#: admin/cpt-settings.php:479
+msgid "Messages lets you keep all your client communications in one place so nothing gets lost. You can customize whether clients receive a notice of new messages or the full message."
+msgstr ""
+
+#: admin/cpt-settings.php:496
+msgid "Enable messaging."
+msgstr ""
+
+#: admin/cpt-settings.php:517
+#: common/cpt-common-messages.php:243
+msgid "Send message content."
+msgstr ""
+
+#: admin/cpt-settings.php:519
+msgid "If checked, the client will receive the full content of messages by email instead of a notification with a prompt to log into their client portal. This is less secure."
+msgstr ""
+
+#: admin/cpt-settings.php:533
+msgid "Projects & Stages"
+msgstr ""
+
+#: admin/cpt-settings.php:551
+msgid "Projects Label"
+msgstr ""
+
+#: admin/cpt-settings.php:560
+msgid "Project Statuses"
+msgstr ""
+
+#: admin/cpt-settings.php:569
+msgid "Default Project Status"
+msgstr ""
+
+#: admin/cpt-settings.php:578
+msgid "Default Project Type"
+msgstr ""
+
+#: admin/cpt-settings.php:590
+msgid "Projects can be assigned to clients, and each client may have multiple projects. You can create multiple project types, and give each project type a set of stages."
+msgstr ""
+
+#: admin/cpt-settings.php:607
+msgid "Enable projects."
+msgstr ""
+
+#: admin/cpt-settings.php:620
+msgid "What do you want to call your projects? This label will be used everywhere other than this settings page."
+msgstr ""
+
+#: admin/cpt-settings.php:631
+msgid "Singular"
+msgstr ""
+
+#: admin/cpt-settings.php:643
+msgid "Plural"
+msgstr ""
+
+#: admin/cpt-settings.php:672
+msgid "Enter one status per line. Statuses apply to all project types."
+msgstr ""
+
+#: admin/cpt-settings.php:699
+#: client-power-tools.php:161
+msgid "Knowledge Base"
+msgstr ""
+
+#: admin/cpt-settings.php:716
+msgid "Breadcrumbs"
+msgstr ""
+
+#: admin/cpt-settings.php:726
+msgid "Knowledge Base Page"
+msgstr ""
+
+#: admin/cpt-settings.php:738
+msgid "The knowledge base is a restricted page you can use to share information and resources with your clients."
+msgstr ""
+
+#: admin/cpt-settings.php:755
+msgid "Enable knowledge base."
+msgstr ""
+
+#: admin/cpt-settings.php:775
+msgid "Show breadcrumb navigation within the knowledge base and additional pages."
+msgstr ""
+
+#: admin/cpt-settings.php:813
+msgid "This page and its child pages will be restricted to clients."
+msgstr ""
+
+#: admin/cpt-settings.php:818
+msgid "Visit the knowledge base."
+msgstr ""
+
+#: client-power-tools.php:160
+msgid "Client Dashboard"
+msgstr ""
+
+#. Translators: %1$s and %2$s are `<a>` tags that link to the settings page.
+#: client-power-tools.php:180
+msgid "Something went wrong when creating pages. Please select a page from the %1$sSettings page%2$s."
+msgstr ""
+
+#: client-power-tools.php:201
+msgid "Your client account has been created!"
+msgstr ""
+
+#: client-power-tools.php:226
+msgctxt "Post Type General Name"
+msgid "Messages"
+msgstr ""
+
+#: client-power-tools.php:227
+msgctxt "Post Type Singular Name"
+msgid "Message"
+msgstr ""
+
+#: client-power-tools.php:229
+#: client-power-tools.php:266
+#: common/cpt-common-messages.php:179
+msgid "Message"
+msgstr ""
+
+#: client-power-tools.php:230
+msgid "Message Archives"
+msgstr ""
+
+#: client-power-tools.php:231
+msgid "Message Attributes"
+msgstr ""
+
+#: client-power-tools.php:232
+msgid "Parent Message:"
+msgstr ""
+
+#: client-power-tools.php:233
+msgid "All Messages"
+msgstr ""
+
+#: client-power-tools.php:234
+msgid "Add New Message"
+msgstr ""
+
+#: client-power-tools.php:235
+#: client-power-tools.php:311
+#: client-power-tools.php:312
+#: client-power-tools.php:383
+msgid "Add New"
+msgstr ""
+
+#: client-power-tools.php:237
+msgid "Edit Message"
+msgstr ""
+
+#: client-power-tools.php:238
+msgid "Update Message"
+msgstr ""
+
+#: client-power-tools.php:239
+msgid "View Message"
+msgstr ""
+
+#: client-power-tools.php:240
+msgid "View Messages"
+msgstr ""
+
+#: client-power-tools.php:241
+msgid "Search Messages"
+msgstr ""
+
+#: client-power-tools.php:242
+msgid "Message Not found"
+msgstr ""
+
+#: client-power-tools.php:243
+#: client-power-tools.php:320
+msgid "Not found in Trash"
+msgstr ""
+
+#: client-power-tools.php:244
+#: client-power-tools.php:321
+msgid "Featured Image"
+msgstr ""
+
+#: client-power-tools.php:245
+#: client-power-tools.php:322
+msgid "Set featured image"
+msgstr ""
+
+#: client-power-tools.php:246
+#: client-power-tools.php:323
+msgid "Remove featured image"
+msgstr ""
+
+#: client-power-tools.php:247
+#: client-power-tools.php:324
+msgid "Use as featured image"
+msgstr ""
+
+#: client-power-tools.php:248
+msgid "Insert into message"
+msgstr ""
+
+#: client-power-tools.php:249
+msgid "Uploaded to this message"
+msgstr ""
+
+#: client-power-tools.php:250
+msgid "Messages list"
+msgstr ""
+
+#: client-power-tools.php:251
+msgid "Messages list navigation"
+msgstr ""
+
+#: client-power-tools.php:252
+msgid "Filter messages list"
+msgstr ""
+
+#: client-power-tools.php:267
+msgid "Client Power Tools messages"
+msgstr ""
+
+#: client-power-tools.php:307
+msgid "Archives"
+msgstr ""
+
+#: client-power-tools.php:308
+msgid "Attributes"
+msgstr ""
+
+#: client-power-tools.php:309
+#: client-power-tools.php:380
+msgid "Parent"
+msgstr ""
+
+#: client-power-tools.php:310
+#: client-power-tools.php:379
+#: client-power-tools.php:381
+msgid "All"
+msgstr ""
+
+#: client-power-tools.php:313
+#: client-power-tools.php:382
+msgid "New"
+msgstr ""
+
+#: client-power-tools.php:315
+#: client-power-tools.php:385
+msgid "Update"
+msgstr ""
+
+#: client-power-tools.php:316
+#: client-power-tools.php:317
+msgid "View"
+msgstr ""
+
+#: client-power-tools.php:318
+msgid "Search "
+msgstr ""
+
+#: client-power-tools.php:319
+msgid "not found"
+msgstr ""
+
+#: client-power-tools.php:325
+msgid "Insert into"
+msgstr ""
+
+#: client-power-tools.php:326
+msgid "Uploaded to this"
+msgstr ""
+
+#: client-power-tools.php:327
+#: client-power-tools.php:329
+msgid "list"
+msgstr ""
+
+#: client-power-tools.php:328
+msgid "list navigation"
+msgstr ""
+
+#: client-power-tools.php:329
+msgid "Filter"
+msgstr ""
+
+#: client-power-tools.php:376
+msgctxt "Taxonomy General Name"
+msgid "Types"
+msgstr ""
+
+#: client-power-tools.php:377
+msgctxt "Taxonomy Singular Name"
+msgid "Type"
+msgstr ""
+
+#: client-power-tools.php:378
+#: client-power-tools.php:379
+#: client-power-tools.php:390
+#: client-power-tools.php:391
+msgid "Types"
+msgstr ""
+
+#: client-power-tools.php:386
+msgid "Type Item"
+msgstr ""
+
+#: client-power-tools.php:387
+msgid "Separate"
+msgstr ""
+
+#: client-power-tools.php:387
+msgid "types with commas"
+msgstr ""
+
+#: client-power-tools.php:388
+msgid "Add or remove"
+msgstr ""
+
+#: client-power-tools.php:388
+#: client-power-tools.php:393
+msgid "types"
+msgstr ""
+
+#: client-power-tools.php:389
+msgid "Choose from the most used"
+msgstr ""
+
+#: client-power-tools.php:390
+msgid "Popular"
+msgstr ""
+
+#: client-power-tools.php:391
+msgid "Search"
+msgstr ""
+
+#: client-power-tools.php:392
+msgid "Not Found"
+msgstr ""
+
+#: client-power-tools.php:393
+msgid "No"
+msgstr ""
+
+#: client-power-tools.php:394
+msgid "types list"
+msgstr ""
+
+#: client-power-tools.php:395
+msgid "types list navigation"
+msgstr ""
+
+#: common/cpt-common-messages.php:71
+msgid "Sent by you "
+msgstr ""
+
+#: common/cpt-common-messages.php:74
+msgid "Sent by "
+msgstr ""
+
+#: common/cpt-common-messages.php:77
+msgid "on"
+msgstr ""
+
+#: common/cpt-common-messages.php:77
+msgid "at"
+msgstr ""
+
+#: common/cpt-common-messages.php:83
+msgid "Sent to"
+msgstr ""
+
+#: common/cpt-common-messages.php:86
+msgid "CCed to"
+msgstr ""
+
+#: common/cpt-common-messages.php:122
+msgid "No messages found."
+msgstr ""
+
+#. Translators: %s is the current user's display name.
+#: common/cpt-common-messages.php:168
+msgid "If you leave this field empty the subject line will be \"New message from %s\"."
+msgstr ""
+
+#. Translators: %1$s and %2$s are `<strong>` tags.
+#: common/cpt-common-messages.php:225
+msgid "To add or remove emails, use the %1$sEdit Client%2$s button, above."
+msgstr ""
+
+#: common/cpt-common-messages.php:246
+msgid "If checked, the client will receive the actual message by email instead of a notification with a prompt to log into their client portal. This is less secure."
+msgstr ""
+
+#: common/cpt-common-messages.php:251
+msgid "Send notification only."
+msgstr ""
+
+#: common/cpt-common-messages.php:254
+msgid "If checked, the client will receive an email letting them know they have a message, but they will have to log into their client dashboard to view the body of the message. This is more secure."
+msgstr ""
+
+#: common/cpt-common-messages.php:268
+msgid "Send Message"
+msgstr ""
+
+#. Translators: %s is the error message.
+#: common/cpt-common-messages.php:354
+msgid "Message could not be sent. Error message: %s"
+msgstr ""
+
+#: common/cpt-common-messages.php:359
+msgid "Message sent!"
+msgstr ""
+
+#. Translators: %s is the sender's name.
+#: common/cpt-common-messages.php:404
+msgid "You have a new message from %s"
+msgstr ""
+
+#: common/cpt-common-messages.php:412
+msgid "To read your message, please visit your client dashboard."
+msgstr ""
+
+#: common/cpt-common-messages.php:414
+msgid "To read this message, please view the client page."
+msgstr ""
+
+#: common/cpt-common-messages.php:425
+msgid "Go to Message"
+msgstr ""
+
+#. Translators: %s is the plural projects label.
+#: common/cpt-common-projects.php:131
+msgid "No %s found."
+msgstr ""
+
+#: common/cpt-common-projects.php:229
+msgid "Progress"
+msgstr ""
+
+#: common/cpt-common-projects.php:331
+msgid "Missing project type"
+msgstr ""
+
+#: common/cpt-login.php:32
+#: common/cpt-login.php:112
+#: common/cpt-login.php:192
+msgid "Email address is missing."
+msgstr ""
+
+#: common/cpt-login.php:36
+#: common/cpt-login.php:116
+#: common/cpt-login.php:196
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: common/cpt-login.php:41
+msgid "No user with that email address."
+msgstr ""
+
+#: common/cpt-login.php:45
+msgid "Login Code"
+msgstr ""
+
+#: common/cpt-login.php:63
+msgid "Here is the login code you requested"
+msgstr ""
+
+#: common/cpt-login.php:74
+msgid "Go to Login"
+msgstr ""
+
+#. Translators: %s is the email address entered into the login form.
+#: common/cpt-login.php:82
+msgid "Login code sent to %s. If you don't see it in your inbox, remember to check your spam folder just in case! The code will remain valid for 10 minutes."
+msgstr ""
+
+#: common/cpt-login.php:121
+#: common/cpt-login.php:214
+msgid "User does not exist."
+msgstr ""
+
+#: common/cpt-login.php:127
+msgid "Code is missing."
+msgstr ""
+
+#: common/cpt-login.php:136
+msgid "Missing transient."
+msgstr ""
+
+#. Translators: %1$s is the number of tries. %2$s is the number of tries allowed.
+#: common/cpt-login.php:146
+msgid "%1$s of %2$s tries. Login failed."
+msgstr ""
+
+#: common/cpt-login.php:156
+msgid "Too many tries. Login failed."
+msgstr ""
+
+#: common/cpt-login.php:163
+#: common/cpt-login.php:224
+msgid "Logging you in …"
+msgstr ""
+
+#: common/cpt-login.php:209
+msgid "Password is missing."
+msgstr ""
+
+#: common/cpt-login.php:219
+msgid "Login failed."
+msgstr ""
+
+#: common/cpt-status-update-request-button.php:33
+msgid "Status Update Requested"
+msgstr ""
+
+#: common/cpt-status-update-request-button.php:36
+msgid "Request Status Update"
+msgstr ""
+
+#: common/cpt-status-update-request-button.php:139
+msgid "STATUS UPDATE REQUESTED"
+msgstr ""
+
+#: common/cpt-status-update-request-button.php:140
+msgid "The client would like a status update."
+msgstr ""
+
+#. Translators: %s is the error message.
+#: common/cpt-status-update-request-button.php:155
+msgid "Your status update request could not be sent. Error message: %s"
+msgstr ""
+
+#: common/cpt-status-update-request-button.php:160
+msgid "Status update requested!"
+msgstr ""
+
+#. Translators: %1$s is the message subject ("Status update requested"). %2$s is the sender's name.
+#: common/cpt-status-update-request-button.php:198
+msgid "%1$s by %2$s"
+msgstr ""
+
+#. Translators: %1$s is the message subject. %2$s is an HTML line break. %3$s is the sender's name.
+#: common/cpt-status-update-request-button.php:205
+msgid "%1$s%2$s by %3$s"
+msgstr ""
+
+#: common/cpt-status-update-request-button.php:211
+msgid "Please give them an update."
+msgstr ""
+
+#. Translators: %s is the sender's name.
+#: common/cpt-status-update-request-button.php:216
+msgid "Go to %s"
+msgstr ""
+
+#. Translators: %1$s and %2$s are `<a>` tags for the login link.
+#: frontend/cpt-client-dashboard.php:71
+msgid "Please %1$slog in%2$s to view the client dashboard."
+msgstr ""
+
+#: frontend/cpt-client-dashboard.php:85
+msgid "Sorry, you don't have permission to view this page because your user account is missing the \"Client\" role."
+msgstr ""
+
+#: frontend/cpt-client-dashboard.php:168
+msgid "Home"
+msgstr ""
+
+#. Translators: %s is the client's first name.
+#: frontend/cpt-client-dashboard.php:341
+msgid "Welcome back, %s!"
+msgstr ""
+
+#: frontend/cpt-frontend.php:64
+msgid "Client Login"
+msgstr ""
+
+#: frontend/cpt-frontend.php:90
+#: frontend/cpt-frontend.php:138
+msgid "Send Code"
+msgstr ""
+
+#: frontend/cpt-frontend.php:105
+msgid "Log In"
+msgstr ""
+
+#: frontend/cpt-frontend.php:123
+msgid "Get a login code by email."
+msgstr ""
+
+#: frontend/cpt-frontend.php:129
+msgid "Use a password instead."
+msgstr ""
+
+#: frontend/cpt-frontend.php:143
+msgid "Log Out?"
+msgstr ""
+
+#: frontend/cpt-frontend.php:151
+msgid "Log Out"
+msgstr ""
+
+#: frontend/cpt-frontend.php:213
+msgid "Your Home"
+msgstr ""
+
+#: frontend/cpt-frontend.php:216
+msgid "Your Messages"
+msgstr ""
+
+#: frontend/cpt-frontend.php:219
+msgid "Your"
+msgstr ""
