@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 // Stops the page from scrolling behind modals.
 body {
   &:has(#cpt-login.visible) {

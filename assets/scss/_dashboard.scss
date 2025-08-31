@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 .cpt-error,
 .cpt-success {
   background-color: $gray-wash;
