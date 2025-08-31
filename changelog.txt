@@ -2,11 +2,18 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com) and uses [semantic versioning](https://semver.org/).
 
+
+### 1.11.2
+
+#### Changed
+- Migrated `@import` SCSS rules to `@use`
+
+
 ### 1.11.1 - 2025-03-17
 
 #### Added
 -  POT file for localization
--  
+
 
 ### 1.11.0 - 2025-03-16
 

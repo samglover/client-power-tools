@@ -1,8 +1,6 @@
-@import 'variables';
+@use 'animations';
+@use 'layout';
+@use 'utility';
 
-@import 'animations';
-@import 'layout';
-@import 'utility';
-
-@import 'projects';
-@import 'messages';
+@use 'projects';
+@use 'messages';

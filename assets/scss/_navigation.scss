@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 .client-dashboard {
   .page-header {
     margin-bottom: $spacing-xs;

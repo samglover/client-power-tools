@@ -1,7 +1,5 @@
-@import 'variables';
+@use 'dashboard';
+@use 'navigation';
 
-@import 'dashboard';
-@import 'navigation';
-
-@import 'notices';
-@import 'login';
+@use 'notices';
+@use 'login';
