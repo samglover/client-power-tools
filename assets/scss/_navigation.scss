@@ -32,6 +32,8 @@ body:not(.cpt-theme) {
       }
   
       .menu-item {
+        margin: 0;
+
         a {
           &:not(:hover) {
             text-decoration: none;
@@ -78,6 +80,7 @@ body:not(.cpt-theme) {
           box-shadow: $box-shadow;
           display: none;
           list-style: none;
+          margin: 0;
           max-width: 24ch;
           padding: $spacing-xs;
           position: absolute;
