@@ -3,7 +3,7 @@
  * Plugin Name: Client Power Tools
  * Plugin URI:  https://clientpowertools.com
  * Description: Client Power Tools is an easy-to-use client dashboard, project management, and communication portal built for designers, developers, consultants, lawyers, and other professionals.
- * Version:     1.11.2
+ * Version:     1.11.3
  * Author:      Sam Glover
  * Author URI:  https://samglover.net
  * Text Domain: client-power-tools
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /* Constants */
-define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.11.2' );
+define( 'CLIENT_POWER_TOOLS_PLUGIN_VERSION', '1.11.3' );
 define( 'CLIENT_POWER_TOOLS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CLIENT_POWER_TOOLS_DIR_URL', plugin_dir_url( __FILE__ ) );
 
@@ -79,7 +79,8 @@ if ( ! is_admin() ) {
 			)
 		);
 		wp_enqueue_script( 'cpt-login-modal' );
-		wp_enqueue_script( 'cpt-notices', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-notices.js', array( 'jquery' ), CLIENT_POWER_TOOLS_PLUGIN_VERSION, true );
+		wp_enqueue_script( 'cpt-notices', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-notices.js', array(), CLIENT_POWER_TOOLS_PLUGIN_VERSION, true );
+		wp_enqueue_script( 'cpt-prevent-offscreen-submenus', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-prevent-offscreen-submenus.js', array(), CLIENT_POWER_TOOLS_PLUGIN_VERSION, true );
 	}
 }
 

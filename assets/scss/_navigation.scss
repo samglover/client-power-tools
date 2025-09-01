@@ -22,7 +22,6 @@ body:not(.cpt-theme) {
     .menu {
       display: flex;
       gap: $spacing-xxs $spacing-xs;
-      flex-wrap: wrap;
       list-style: none;
       margin: 0 auto;
       padding: 0;
@@ -32,6 +31,8 @@ body:not(.cpt-theme) {
       }
   
       .menu-item {
+        margin: 0;
+
         a {
           &:not(:hover) {
             text-decoration: none;
@@ -51,11 +52,15 @@ body:not(.cpt-theme) {
         position: relative;
   
         &::after {
-          content: '\0002B'; // "+"
+          background-image: url(../images/close-dark.svg);
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: 50%;
+          content: '';
           display: inline-grid;
-          height: .9em;
+          height: calc(.9em - 2 * $border-width);;
           place-content: center;
-          width: .9em;
+          width: calc(.9em - 2 * $border-width);;
         }
   
         &:hover,
@@ -78,7 +83,8 @@ body:not(.cpt-theme) {
           box-shadow: $box-shadow;
           display: none;
           list-style: none;
-          max-width: 24ch;
+          margin: 0;
+          max-width: 230px;
           padding: $spacing-xs;
           position: absolute;
             top: 100%;
@@ -92,6 +98,12 @@ body:not(.cpt-theme) {
             max-width: calc(100vw - ($spacing-xs * 2));
             width: calc(100vw - ($spacing-xs * 2));
           }
+        }
+
+        &.align-submenu-right > .sub-menu {
+          animation: growDown 150ms ease-in-out forwards;
+          right: 0;
+          left: unset;
         }
       }
     }
