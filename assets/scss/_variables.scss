@@ -9,7 +9,8 @@ $blue-highlighter: rgba(135, 206, 250, .2);
 $gray-wash: rgba(0, 0, 0, .1);
 $black-wash: rgba(255, 255, 255, 0.5);
 
-$border: 1px solid LightSlateGray;
+$border-width: 1px;
+$border: $border-width solid LightSlateGray;
 $box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 
 // Line Height

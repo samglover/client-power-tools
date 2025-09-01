@@ -53,11 +53,15 @@ body:not(.cpt-theme) {
         position: relative;
   
         &::after {
-          content: '\0002B'; // "+"
+          background-image: url(../images/close-dark.svg);
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: 50%;
+          content: '';
           display: inline-grid;
-          height: .9em;
+          height: calc(.9em - 2 * $border-width);;
           place-content: center;
-          width: .9em;
+          width: calc(.9em - 2 * $border-width);;
         }
   
         &:hover,
