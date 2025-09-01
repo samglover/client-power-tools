@@ -71,7 +71,7 @@ class Client_List_Table extends \WP_List_Table {
 		return sprintf(
 			'<strong><a href="' . add_query_arg( 'user_id', $item['ID'], $url ) . '">%1$s</a></strong>%2$s',
 			/* $1%s */ $item['client_name'],
-			/* $2%s */ $item['client_id'] ? ' <span style="color:silver">(' . $item['client_id'] . ')</span>' : ''
+			/* $2%s */ $item['client_id'] ? '<br><span style="color:silver">(' . $item['client_id'] . ')</span>' : ''
 		);
 	}
 
@@ -337,5 +337,28 @@ class Client_List_Table extends \WP_List_Table {
 		);
 
 		$this->items = $data;
+	}
+
+	/**
+	 * Generate the table row for a single item
+	 *
+	 * @param array $item The current item.
+	 */
+	public function single_row( $item ) {
+		$row_classes = array( 'client-row' );
+
+		/* Adds client status */
+		if ( isset( $item['client_status'] ) ) {
+			$row_classes[] = 'client-status-' . sanitize_html_class( strtolower( $item['client_status'] ) );
+		}
+
+		/* Add class to unassigned clients */
+		if ( isset( $item['client_manager'] ) && strpos( $item['client_manager'], 'Unassigned' ) !== false ) {
+			$row_classes[] = 'client-unassigned';
+		}
+
+		echo '<tr class="' . esc_attr( implode( ' ', $row_classes ) ) . '">';
+		$this->single_row_columns( $item );
+		echo '</tr>';
 	}
 }
