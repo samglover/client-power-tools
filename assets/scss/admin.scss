@@ -225,3 +225,11 @@
     padding: 0;
   }
 }
+
+#client-list {
+  > .subsubsub:not(:has(.Inactive .current)) ~ table {
+    .client-row.client-status-inactive {
+      opacity: .5;
+    }
+  }
+}
