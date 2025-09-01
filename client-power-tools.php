@@ -80,6 +80,7 @@ if ( ! is_admin() ) {
 		);
 		wp_enqueue_script( 'cpt-login-modal' );
 		wp_enqueue_script( 'cpt-notices', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-notices.js', array( 'jquery' ), CLIENT_POWER_TOOLS_PLUGIN_VERSION, true );
+		wp_enqueue_script( 'cpt-prevent-offscreen-submenus', CLIENT_POWER_TOOLS_DIR_URL . 'assets/js/cpt-prevent-offscreen-submenus.js', array(), CLIENT_POWER_TOOLS_PLUGIN_VERSION, true );
 	}
 }
 
