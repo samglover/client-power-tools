@@ -115,6 +115,29 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.11.3 - 2025-09-01
+
+#### Added
+- New `/assets/js/cpt-prevent-offscreen-submenus.js` prevents submenus from appearing offscreen
+
+#### Changed
+- Inactive clients are now dimmed in the admin client list. [See note.](https://github.com/samglover/client-power-tools/pull/87)
+- Margins removed from menu items and sub-menus by default to help with theme compatibility
+- Drop-down menus updated with improvements from `cpt-theme`: [samglover/cpt-theme@aaf14d1](https://github.com/samglover/cpt-theme/commit/aaf14d172983e220f9034f55f5d1bedcd8cff622) & [samglover/cpt-theme@9c6d62a](https://github.com/samglover/cpt-theme/commit/9c6d62a787cb7f4acc58c09e62b066a54f1e3f92)
+
+
+### 1.11.2 - 2025-08-31
+
+#### Changed
+- Migrated `@import` SCSS rules to `@use`
+
+
+### 1.11.1 - 2025-03-17
+
+#### Added
+-  POT file for localization
+
+
 ### 1.11.0 - 2025-03-16
 
 #### Added
