@@ -30,10 +30,10 @@ function cpt_status_update_request_button( $user_id ) {
 		$days_since_last_request
 		&& $days_since_last_request < $request_frequency
 	) {
-		$button_value = __( 'Status Update Requested', 'client-power-tools' );
+		$button_value = __( 'Status update requested', 'client-power-tools' );
 		$disabled     = true;
 	} else {
-		$button_value = __( 'Request Status Update', 'client-power-tools' );
+		$button_value = __( 'Request status update', 'client-power-tools' );
 		$disabled     = false;
 	}
 

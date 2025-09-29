@@ -1271,11 +1271,11 @@ msgid "Login failed."
 msgstr ""
 
 #: common/cpt-status-update-request-button.php:33
-msgid "Status Update Requested"
+msgid "Status update requested"
 msgstr ""
 
 #: common/cpt-status-update-request-button.php:36
-msgid "Request Status Update"
+msgid "Request status update"
 msgstr ""
 
 #: common/cpt-status-update-request-button.php:139
