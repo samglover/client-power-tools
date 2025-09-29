@@ -412,7 +412,7 @@ function cpt_status_update_req_freq() {
 				echo wp_kses_post(
 					sprintf(
 						// Translators: %1$s and %2$s are `<strong>` tags.
-						__( 'Enter how frequently you want to allow your clients to request a status update using the %1$sRequest Status Update%2$s button on their client dashboard.', 'client-power-tools' ),
+						__( 'Enter how frequently you want to allow your clients to request a status update using the %1$sRequest status update%2$s button on their client dashboard.', 'client-power-tools' ),
 						'<strong>',
 						'</strong>'
 					)

@@ -115,6 +115,12 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.11.4 - 2025-09-29
+
+#### Changed
+- Convert status update request button label to sentence case
+
+
 ### 1.11.3 - 2025-09-01
 
 #### Added
