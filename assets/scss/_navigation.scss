@@ -52,7 +52,7 @@ body:not(.cpt-theme) {
         position: relative;
   
         &::after {
-          background-image: url(../images/close-dark.svg);
+          background-image: url(../images/close-opaque.svg);
           background-position: center;
           background-repeat: no-repeat;
           background-size: 50%;
