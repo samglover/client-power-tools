@@ -115,6 +115,18 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.11.6 - 2025-11-15
+
+#### Fixed
+- Fixed a Javascript error on non-client-dashboard pages
+
+
+### 1.11.5 - 2025-10-26
+
+#### Changed
+- Now uses updated icons from cpt-theme
+
+
 ### 1.11.4 - 2025-09-29
 
 #### Changed
