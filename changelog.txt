@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com) and uses [semantic versioning](https://semver.org/).
 
 
+### 1.11.7 - 2026-04-17
+
+#### Added
+- PHPCS ruleset with custom capabilities
+
+#### Fixed
+- Fix select field rendering and processing (e.g., in the the edit client and edit project forms)
+- Replace custom settings saved notification with `settings_errors()`
+
+
 ### 1.11.6 - 2025-11-15
 
 #### Fixed

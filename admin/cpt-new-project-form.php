@@ -78,12 +78,7 @@ $projects_label = Common\cpt_get_projects_label();
 	<div class="cpt-row">
 		<div class="form-field span-2">
 			<label for="project_type">Project Type</label>
-			<?php
-			$project_type_select = cpt_get_project_type_select( 'project_type' );
-			if ( $project_type_select ) {
-				echo esc_html( $project_type_select );
-			}
-			?>
+			<?php cpt_get_project_type_select( 'project_type' ); ?>
 		</div>
 		<div class="form-field span-2">
 			<label for="project_stage">
@@ -97,12 +92,7 @@ $projects_label = Common\cpt_get_projects_label();
 				);
 				?>
 			</label>
-			<?php
-			$project_stage_select = cpt_get_project_stage_select( '', 'project_stage' );
-			if ( $project_stage_select ) {
-				echo esc_html( $project_stage_select );
-			}
-			?>
+			<?php cpt_get_project_stage_select( '', 'project_stage' ); ?>
 		</div>
 		<div class="form-field">
 			<label for="project_status">
@@ -116,12 +106,7 @@ $projects_label = Common\cpt_get_projects_label();
 				);
 				?>
 			</label>
-			<?php
-			$project_status_select = cpt_get_status_select( 'cpt_project_statuses', 'project_status', 'cpt_default_project_status' );
-			if ( $project_status_select ) {
-				echo esc_html( $project_status_select );
-			}
-			?>
+			<?php cpt_get_status_select( 'cpt_project_statuses', 'project_status', get_option( 'cpt_default_project_status' ) ); ?>
 		</div>
 	</div>
 	<p class="submit">

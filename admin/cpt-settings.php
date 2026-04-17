@@ -35,18 +35,7 @@ function cpt_settings() {
 			</div>
 			<hr class="wp-header-end">
 
-			<?php
-			if (
-				isset( $_REQUEST['settings-updated'] )
-				&& true === $_REQUEST['settings-updated']
-			) {
-				?>
-				<div class="cpt-notice notice notice-success is-dismissible">
-					<p><?php esc_html_e( 'Settings updated!', 'client-power-tools' ); ?></p>
-				</div>
-				<?php
-			}
-			?>
+			<?php settings_errors(); ?>
 
 			<form method="POST" action="options.php">
 				<?php settings_fields( 'cpt-settings' ); ?>
@@ -214,7 +203,7 @@ function cpt_client_dashboard_addl_pages_children() {
  * Default Client Manager
  */
 function cpt_default_client_manager() {
-	echo esc_html( cpt_get_client_manager_select( 'cpt_default_client_manager', get_option( 'cpt_default_client_manager' ) ) );
+	cpt_get_client_manager_select( 'cpt_default_client_manager', get_option( 'cpt_default_client_manager' ) );
 }
 
 /**
@@ -247,7 +236,7 @@ function cpt_client_statuses() {
  * Default New Client Status
  */
 function cpt_default_client_status() {
-	echo esc_html( cpt_get_status_select( 'cpt_client_statuses', 'cpt_default_client_status' ) );
+	cpt_get_status_select( 'cpt_client_statuses', 'cpt_default_client_status' );
 }
 
 
@@ -678,14 +667,14 @@ if ( get_option( 'cpt_module_projects' ) ) {
 	 * Default Project Status
 	 */
 	function cpt_default_project_status() {
-		echo esc_html( cpt_get_status_select( 'cpt_project_statuses', 'cpt_default_project_status' ) );
+		cpt_get_status_select( 'cpt_project_statuses', 'cpt_default_project_status' );
 	}
 
 	/**
 	 * Default Project Type
 	 */
 	function cpt_default_project_type() {
-		echo esc_html( cpt_get_project_type_select( 'cpt_default_project_type' ) );
+		cpt_get_project_type_select( 'cpt_default_project_type' );
 	}
 }
 

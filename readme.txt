@@ -115,6 +115,16 @@ For more information on how to take advantage of the new and updated features, s
 
 == Changelog ==
 
+### 1.11.7 - 2026-04-17
+
+#### Added
+- PHPCS ruleset with custom capabilities
+
+#### Fixed
+- Fix select field rendering and processing (e.g., in the the edit client and edit project forms)
+- Replace custom settings saved notification with `settings_errors()`
+
+
 ### 1.11.6 - 2025-11-15
 
 #### Fixed
