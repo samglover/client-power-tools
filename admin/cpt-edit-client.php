@@ -28,10 +28,12 @@ function cpt_process_client_update() {
 		exit( esc_html__( 'Missing client ID', 'client-power-tools' ) );
 	}
 
+	$clients_user_id = intval( wp_unslash( $_POST['clients_user_id'] ) );
+
 	$user_data = array_merge(
 		Common\cpt_get_sanitized_userdata_from_post(),
 		array(
-			'ID' => intval( wp_unslash( $_POST['clients_user_id'] ) ),
+			'ID' => $clients_user_id,
 		)
 	);
 
@@ -42,13 +44,13 @@ function cpt_process_client_update() {
 	} else {
 		$user_meta = Common\cpt_get_sanitized_usermeta_from_post();
 		foreach ( $user_meta as $meta_key => $meta_value ) {
-			update_user_meta( $new_client, $meta_key, $meta_value );
+			update_user_meta( $clients_user_id, $meta_key, $meta_value );
 		}
 
 		$custom_fields = Common\cpt_get_sanitized_custom_fields_from_post();
 		if ( $custom_fields ) {
 			foreach ( $custom_fields as $field_key => $field_value ) {
-				update_user_meta( $new_client, $field_key, $field_value );
+				update_user_meta( $clients_user_id, $field_key, $field_value );
 			}
 		}
 
