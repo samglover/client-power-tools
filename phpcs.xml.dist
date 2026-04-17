@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<ruleset name="Client Power Tools">
+	<description>PHP_CodeSniffer rules for Client Power Tools.</description>
+
+	<arg value="sp"/>
+	<arg name="extensions" value="php"/>
+
+	<file>./</file>
+
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+
+	<rule ref="WordPress-Extra"/>
+
+	<rule ref="WordPress.WP.Capabilities">
+		<properties>
+			<property name="custom_capabilities" type="array">
+				<element value="cpt_view_clients"/>
+				<element value="cpt_manage_clients"/>
+				<element value="cpt_manage_team"/>
+				<element value="cpt_view_projects"/>
+				<element value="cpt_manage_projects"/>
+				<element value="cpt_manage_settings"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>
