@@ -35,18 +35,7 @@ function cpt_settings() {
 			</div>
 			<hr class="wp-header-end">
 
-			<?php
-			if (
-				isset( $_REQUEST['settings-updated'] )
-				&& true === $_REQUEST['settings-updated']
-			) {
-				?>
-				<div class="cpt-notice notice notice-success is-dismissible">
-					<p><?php esc_html_e( 'Settings updated!', 'client-power-tools' ); ?></p>
-				</div>
-				<?php
-			}
-			?>
+			<?php settings_errors(); ?>
 
 			<form method="POST" action="options.php">
 				<?php settings_fields( 'cpt-settings' ); ?>
