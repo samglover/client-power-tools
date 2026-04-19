@@ -23,7 +23,7 @@ msgstr ""
 
 #. Plugin URI of the plugin
 #: client-power-tools.php
-msgid "https://clientpowertools.com"
+msgid "https://wordpress.org/support/plugin/client-power-tools/"
 msgstr ""
 
 #. Description of the plugin

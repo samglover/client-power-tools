@@ -24,11 +24,9 @@ function cpt_security_warning() {
 			<p>
 				<?php
 				echo wp_kses_post(
-					sprintf(
-						// Translators: %1$s and %2$s are `<a>` tags for a link to the Client Power Tools website for additional information about this warning.
-						__( 'It doesn\'t look like your website is using SSL (HTTPS). Before using Client Power Tools with your clients, it\'s a good idea to get an SSL certificate for your website and consider additional security measures. %1$sLearn more.%2$s', 'client-power-tools' ),
-						'<a href="https://clientpowertools.com/security/?utm_source=cpt_user&utm_medium=cpt_ssl_warning" target="_blank">',
-						'</a>'
+					__(
+						'It doesn\'t look like your website is using SSL (HTTPS). Before using Client Power Tools with your clients, it\'s a good idea to get an SSL certificate for your website and consider additional security measures.',
+						'client-power-tools'
 					)
 				);
 				?>
@@ -77,9 +75,8 @@ function cpt_welcome_message() {
 					<?php
 					echo wp_kses_post(
 						sprintf(
-							// Translators: %1$s is a link to the Client Power Tools website. %2$s and %3$s are `<a>` tags for a link to the WordPress.org support forum.
-							__( 'You can find options and customizations in the settings, and you can find additional documentation at %1$s. If you need help, please use the %2$sWordPress.org support forum%3$s.', 'client-power-tools' ),
-							'<a href="https://clientpowertools.com/documentation/" target="_blank">clientpowertools.com</a>',
+							// Translators: %1$s and %2$s are `<a>` tags for a link to the WordPress.org support forum.
+							__( 'You can find options and customizations in the settings. If you need help, please use the %1$sWordPress.org support forum%2$s.', 'client-power-tools' ),
 							'<a href="https://wordpress.org/support/plugin/client-power-tools/" target="_blank">',
 							'</a>'
 						)
