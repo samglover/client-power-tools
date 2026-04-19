@@ -97,6 +97,30 @@ You should probably add your client dashboard to your website navigation menu so
 
 To add pages to your knowledge base, just go to the page you want to add (or create a new page) and look for the **Page Attributes** widget in the sidebar. Select your knowledge base page from the **Parent Page** drop-down and save the page. Now the page will appear as a sub-page in your knowledge base.
 
+= How do I customize my client dashboard? =
+
+Client Power Tools is designed to be as “transparent” as possible. For the most part it will inherit your theme styles and adds very little styling of its own. But if you do need to override Client Power Tools styles, you can use `.customize-cpt` before your CSS selectors.
+
+= Are there any shortcodes?
+
+`[client-dashboard]`
+
+Use this shortcode to manually place the client dashboard on the client dashboard page. This should help users who are experiencing wonky page layout issues with their theme or page builder.
+
+`[status-update-request-button]`
+
+Use this shortcode anywhere on your website to show the **Request Status Update button** to logged-in clients.
+
+= Are there any filter hooks? =
+
+`cpt_custom_fields`
+
+The cpt_custom_fields filter expects a returned array with the following key-value pairs:
+
+- `id` (string, required). A slug that will be used to identity the field in the form and the database.
+- `label` (string, required). The public label for the form field.
+- `required` (boolean, optional). True or false. Whether the field is required in the form.
+- `type` (string, required). The html input type (text, email, url, number, etc.).
 
 == Upgrade notice ==
 
@@ -109,6 +133,7 @@ Version 1.9.0 includes a new \[client-dashboard] shortcode (in 1.9.2). This allo
 It also addresses a number of output escaping issues identified by the WordPress Plugin Review Team's [Plugin Check plugin](https://wordpress.org/plugins/plugin-check/), and a cross-site-scripting (XSS) vulnerability.
 
 As usual, there are also lots of smaller updates, improvements, and tweaks. See the changelog for details.
+
 
 == Changelog ==
 
@@ -203,6 +228,15 @@ Automatic installation is the easiest option. To do an automatic install of Clie
 #### Manual
 
 In order to install Client Power Tools manually, you will need to download the plugin here, then upload it to WordPress or use FTP software to upload it to your web server. [Visit the WordPress Codex for manual installation instructions.](https://wordpress.org/support/article/managing-plugins/#manual-upload-via-wordpress-admin)
+
+#### Initial setup
+
+After installing Client Power Tools, you'll probably want to:
+
+1. **Check the settings.** Make sure you have a client dashboard page selected. (Client Power Tools should have created a page called Client Dashboard and selected it automatically.) You can change the page or go to the page itself to change its title.
+2. **Edit your client dashboard page(s).** Edit your client dashboard page in the WordPress editor and add a welcome message to your clients. If you intend to use the knowledge base, start adding information for your clients. You can add sub-pages, as well, to expand the knowledge base.
+3. **Add your client dashboard to your website.** The client dashboard is a regular page on your website, so you can link to it just as you would link to any other page, anywhere on your site, in emails, etc. For starters, you will probably want to add the client dashboard page to one of your nav menus. 
+4. **Add your first client!**
 
 #### Updating
 
